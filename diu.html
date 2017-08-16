@@ -81,21 +81,21 @@
             <tr>
                 <td class="label"><b>Size:</b></td>
                 <td>
-                    <input id="INPUT_SIZE" style="width:32px;" type="text" onchange="update();" oninput="this.onchange();" tabindex="2" autofocus />
+                    <input id="INPUT_SIZE" style="width:32px;" type="text" onchange="update();" oninput="this.onchange();" onfocus="this.select();" tabindex="2" autofocus />
                 </td>
                 <td style="width:100%">
                     <form id="unit_select">
-                        <label style="cursor:pointer; vertical-align:middle"><input name="unit_select" value="in" type="radio" onchange="update();" oninput="this.onchange();" style="cursor:pointer; vertical-align:middle; margin-bottom:3px;" tabindex="1" checked />&nbsp;in</label><br />
-                        <label style="cursor:pointer; vertical-align:middle"><input name="unit_select" value="cm" type="radio" onchange="update();" oninput="this.onchange();" style="cursor:pointer; vertical-align:middle; margin-bottom:3px;" tabindex="1" />&nbsp;cm</label>
+                        <label style="cursor:pointer; vertical-align:middle"><input name="unit_select" value="in" type="radio" onchange="document.getElementById('INPUT_SIZE').focus(); update();" style="cursor:pointer; vertical-align:middle; margin-bottom:3px;" tabindex="1" checked />&nbsp;in</label><br />
+                        <label style="cursor:pointer; vertical-align:middle"><input name="unit_select" value="cm" type="radio" onchange="document.getElementById('INPUT_SIZE').focus(); update();" style="cursor:pointer; vertical-align:middle; margin-bottom:3px;" tabindex="1" />&nbsp;cm</label>
                     </form>
                 </td>
             </tr>
             <tr>
                 <td class="label"><b>Resolution:</b></td>
                 <td colspan="2" style="width:100%">
-                    <input id="INPUT_HRES" class="res_input" style="text-align:right;" type="text" onchange="update();" oninput="this.onchange()" tabindex="3" />
+                    <input id="INPUT_HRES" class="res_input" style="text-align:right;" type="text" onchange="update();" oninput="this.onchange()" onfocus="this.select();" tabindex="3" />
                     <span style="font-size:10px;">&#10005;</span>
-                    <input id="INPUT_VRES" class="res_input" style="text-align:left;" type="text" onchange="update();" oninput="this.onchange()" tabindex="4" />
+                    <input id="INPUT_VRES" class="res_input" style="text-align:left;" type="text" onchange="update();" oninput="this.onchange()" onfocus="this.select();" tabindex="4" />
                 </td>
             </tr>
         </table>
@@ -135,9 +135,9 @@
             <tr>
                 <td class="label">Companion Resolution<br />or Aspect Ratio:</td>
                 <td>
-                    <input id="INPUT_HRES2" style="width:32px; text-align:right;" type="text" onChange="update();" oninput="this.onchange()" />
+                    <input id="INPUT_HRES2" style="width:32px; text-align:right;" type="text" onchange="update();" oninput="this.onchange()" onfocus="this.select();" />
                     <span style="font-size:10px;">&#10005;</span>
-                    <input id="INPUT_VRES2" style="width:32px; text-align:left;"  type="text" onChange="update();" oninput="this.onchange()" />
+                    <input id="INPUT_VRES2" style="width:32px; text-align:left;"  type="text" onchange="update();" oninput="this.onchange()" onfocus="this.select();" />
                 </td>
             </tr>
             <tr id="21_9_warning" style="display:none;">
