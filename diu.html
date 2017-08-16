@@ -1,6 +1,6 @@
 ﻿<!DOCTYPE html>
 
-
+<meta name="viewport" content="width=device-width">
 <style>
     body {
         font-family:Consolas;
@@ -24,6 +24,10 @@
         padding:4px;
         text-align:center;
     }
+    input[type="text"] {
+        border:1px solid #CCCCCC;
+        background-color:#F4F4F8;
+    }
     table {
         margin-left:auto;
         margin-right:auto;
@@ -36,7 +40,7 @@
     }
     td.label {
         font-weight:bold;
-        min-width:180px;
+        min-width:192px;
         text-align:right;
     }
     td.result {
@@ -67,7 +71,7 @@
 </head>
 
 
-<body>
+<body style="min-width:512px;">
     <div class="main">
     <!-- MAIN START -->
 
@@ -169,4 +173,4 @@
 </footer>
 
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
-<script src="Display Info Utility JS.js"></script>
+<script src="diuJS.js"></script>
