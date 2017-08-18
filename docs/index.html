@@ -1,5 +1,15 @@
 <html>
-    <head>
-        <link rel="import" href="https://glenwing.github.io/docs">
-    </head>
+  <head>
+    <link rel="import" href="../docs.html">
+  </head>
+
+  <body id="mainbody">
+  </body>
 </html>
+
+<script>
+  var link = document.querySelector('link[rel="import"]');
+  var content = link.import;
+
+  document.getElementById('mainbody').innerHTML = content.documentElement.innerHTML;
+</script>
