@@ -1,10 +1,28 @@
 ﻿<!DOCTYPE html>
 
 <meta name="viewport" content="width=device-width">
+
 <style>
-    body {
-        font-family:Consolas;
+    html {
+      height: 100%;
+      box-sizing: border-box;
     }
+
+    *,
+    *:before,
+    *:after {
+        box-sizing: inherit;
+    }
+
+    body {
+        positioning:relative;
+        margin:0;
+        font-family:Consolas;
+        font-size:15px;
+        padding:10px;
+        padding-bottom:40px;
+    }
+
     div.title{
         margin-left:auto;
         margin-right:auto;
@@ -13,50 +31,71 @@
         background-color:#DDDDDD;
         padding:8px;
     }
+
     div.main {
-        min-height:calc(100vh - 60px);
+        border:0px solid transparent;
         font-family:Consolas;
         width:512px;
-        border:1px solid transparent;
         margin-left:auto;
         margin-right:auto;
     }
+
+    div.footer {
+        position: absolute;
+        right: 0;
+        bottom: 0;
+        left: 0;
+        vertical-align:middle;
+        background-color:#DDDDDD;
+        vertical-align:middle;
+        cursor:pointer;
+        padding:12px;
+    }
+
     input {
         padding:4px;
         text-align:center;
     }
+
     input[type="text"] {
         border:1px solid #CCCCCC;
         background-color:#F4F4F8;
     }
+
     table {
         margin-left:auto;
         margin-right:auto;
         border:0px solid black;
     }
+
     td {
         padding:8px;
         vertical-align:middle;
         border:solid 1px transparent;
     }
+
     td.label {
         font-weight:bold;
         min-width:192px;
         text-align:right;
     }
+
     td.result {
         min-width:120px;
         width:100%;
     }
+
     input.res_input {
-        width:32px;
+        width:50px;
     }
+
     sup {
         vertical-align: baseline;
         position:relative;
         top:-0.4em;
         line-height:0;
     }
+
     sub {
         vertical-align: baseline;
         position:relative;
@@ -82,7 +121,7 @@
             <tr>
                 <td class="label"><b>Size:</b></td>
                 <td>
-                    <input id="INPUT_SIZE" style="width:32px;" type="text" onchange="update();" oninput="this.onchange();" onfocus="this.select();" tabindex="2" autofocus />
+                    <input id="INPUT_SIZE" style="width:50px;" type="text" onchange="update();" oninput="this.onchange();" onfocus="this.select();" tabindex="2" autofocus />
                 </td>
                 <td style="width:100%">
                     <form id="unit_select">
@@ -136,9 +175,9 @@
             <tr>
                 <td class="label">Companion Resolution<br />or Aspect Ratio:</td>
                 <td>
-                    <input id="INPUT_HRES2" style="width:32px; text-align:right;" type="text" onchange="update();" oninput="this.onchange()" onfocus="this.select();" />
+                    <input class="res_input" id="INPUT_HRES2" style="text-align:right;" type="text" onchange="update();" oninput="this.onchange()" onfocus="this.select();" />
                     <span style="font-size:10px;">&#10005;</span>
-                    <input id="INPUT_VRES2" style="width:32px; text-align:left;"  type="text" onchange="update();" oninput="this.onchange()" onfocus="this.select();" />
+                    <input class="res_input" id="INPUT_VRES2" style="text-align:left;"  type="text" onchange="update();" oninput="this.onchange()" onfocus="this.select();" />
                 </td>
             </tr>
             <tr id="21_9_warning" style="display:none;">
@@ -166,12 +205,12 @@
 
     <!-- MAIN END -->
     </div> 
+
+    <div class="footer" onclick="document.getElementById('profile_link').click();">
+        <a id="profile_link" target="_blank" href="https://linustechtips.com/main/profile/2466-glenwing/" style="color:#888888; text-decoration:none; vertical-align:middle;">Glenwing</a>
+    </div>
 </body>
 </html>
-
-<footer onclick="document.getElementById('profile_link').click();"style="background-color:#DDDDDD; padding:8px; cursor:pointer;">
-    <a id="profile_link" target="_blank" href="https://linustechtips.com/main/profile/2466-glenwing/" style="color:#888888; text-decoration:none;">Glenwing</a>
-</footer>
 
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
 <script src="diuJS.js"></script>

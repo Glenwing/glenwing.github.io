@@ -3,31 +3,53 @@
 <meta name="viewport" content="width=device-width">
 
 <style>
+    html {
+      height: 100%;
+      box-sizing: border-box;
+    }
+
+    *,
+    *:before,
+    *:after {
+        box-sizing: inherit;
+    }
+
     body {
+        positioning:relative;
+        margin: 0;
         font-family:Consolas;
-        font-size:14px;
+        font-size:15px;
+        padding:10px;
+        padding-bottom:40px;
     }
 
     div.main {
-        border:1px solid transparent;
+        border:0px solid transparent;
         font-family:Consolas;
-        font-size:14px;
+        padding:4px;
         margin-left:auto;
         margin-right:auto;
+    }
+
+    div.footer {
+        position: absolute;
+        right: 0;
+        bottom: 0;
+        left: 0;
+        vertical-align:middle;
+        background-color:#DDDDDD;
+        vertical-align:middle;
+        cursor:pointer;
+        padding:12px;
     }
 
     span.title {
         font-weight:bold;
     }
 
-    table {
-        border:1px solid transparent;
-    }
-
-    td {
-        padding:8px;
-        vertical-align:middle;
-        border:1px solid transparent;
+    table, tr, td {
+        padding:4px;
+        border: 0px solid transparent;
     }
 
     a:link {
@@ -50,55 +72,61 @@
 </style>
 
 <html>
+
 <head>
 <title>Display Industry Standards and Specifications</title>
 </head>
+
 <body>
     <div class="main">
         <div style="font-weight:bold; font-size:16px;">Display Industry Standards and Specifications<br /><hr /></div>
         <table>
             <tr><td><span class="title">DisplayPort Standard</span>
                 <ul>
-                    <li><a target="_blank" href="./docs/VESA%20DisplayPort%20Standard%20v1.0.pdf">Version 1.0 (May 1, 2006)</a></li>
-                    <li><a target="_blank" href="./docs/VESA%20DisplayPort%20Standard%20v1.1a.pdf">Version 1.1a (January 11, 2008)</a></li>
-                    <li><a target="_blank" href="./docs/VESA%20DisplayPort%20Standard%20v1.2.pdf">Version 1.2 (January 5, 2010)</a></li>
+                    <li><a target="_blank" href="./docs/VESA%20DisplayPort%20Standard%20v1.0.pdf">Version 1.0&nbsp; (2006 May 1)</a></li>
+                    <li><a target="_blank" href="./docs/VESA%20DisplayPort%20Standard%20v1.1a.pdf">Version 1.1a (2008 January 11)</a></li>
+                    <li><a target="_blank" href="./docs/VESA%20DisplayPort%20Standard%20v1.2.pdf">Version 1.2&nbsp; (2010 January 5)</a></li>
                 </ul>
                 <ul>
-                    <li><a target="_blank" href="./docs/Mini%20DisplayPort%20Connector%20Standard%20v1.0.pdf">Mini DisplayPort Connector Standard Version 1.0 (October 26, 2009)</a></li>
+                    <li><a target="_blank" href="./docs/Mini%20DisplayPort%20Connector%20Standard%20v1.0.pdf">Mini DisplayPort Connector Standard Version 1.0 (2009 October 26)</a></li>
                 </ul>
             </td></tr>
             <tr><td><span class="title">HDMI Specification</span>
                 <ul>
-                    <li><a target="_blank" href="./docs/HDMI%20Specification%20v1.0.pdf">Version 1.0 (September 4, 2003)</a></li>
-                    <li><a target="_blank" href="./docs/HDMI%20Specification%20v1.1.pdf">Version 1.1 (May 20, 2004)</a></li>
-                    <li><a target="_blank" href="./docs/HDMI%20Specification%20v1.2.pdf">Version 1.2 (August 22, 2005)</a></li>
-                    <li><a target="_blank" href="./docs/HDMI%20Specification%20v1.2a.pdf">Version 1.2a (December 14, 2005)</a></li>
-                    <li><a target="_blank" href="./docs/HDMI%20Specification%20v1.3.pdf">Version 1.3 (June 22, 2006)</a></li>
-                    <li><a target="_blank" href="./docs/HDMI%20Specification%20v1.3a.pdf">Version 1.3a (November 10, 2006)</a></li>
-                    <li><a target="_blank" href="./docs/HDMI%20Specification%20v1.4.pdf">Version 1.4 (June 5, 2009)</a></li>
-                    <li><a target="_blank" href="./docs/HDMI%20Specification%20v1.4a.pdf">Version 1.4a (March 4, 2010)</a></li>
-                    <li><a target="_blank" href="./docs/HDMI%20Specification%20v1.4b.pdf">Version 1.4b (October 11, 2011)</a></li>
+                    <li><a target="_blank" href="./docs/HDMI%20Specification%20v1.0.pdf">Version 1.0&nbsp; (2003 September 4)</a></li>
+                    <li><a target="_blank" href="./docs/HDMI%20Specification%20v1.1.pdf">Version 1.1&nbsp; (2004 May 20)</a></li>
+                    <li><a target="_blank" href="./docs/HDMI%20Specification%20v1.2.pdf">Version 1.2&nbsp; (2005 August 22)</a></li>
+                    <li><a target="_blank" href="./docs/HDMI%20Specification%20v1.2a.pdf">Version 1.2a (2005 December 14)</a></li>
+                    <li><a target="_blank" href="./docs/HDMI%20Specification%20v1.3.pdf">Version 1.3&nbsp; (2006 June 22)</a></li>
+                    <li><a target="_blank" href="./docs/HDMI%20Specification%20v1.3a.pdf">Version 1.3a (2006 November 10)</a></li>
+                    <li><a target="_blank" href="./docs/HDMI%20Specification%20v1.4.pdf">Version 1.4&nbsp; (2009 June 5)</a></li>
+                    <li><a target="_blank" href="./docs/HDMI%20Specification%20v1.4a.pdf">Version 1.4a (2010 March 4)</a></li>
+                    <li><a target="_blank" href="./docs/HDMI%20Specification%20v1.4b.pdf">Version 1.4b (2011 October 11)</a></li>
                 </ul>
                 <ul>
-                    <li><a target="_blank" href="./docs/HDMI%20Specification%20v1.4a%203D%20Signaling%20Extract.pdf">Version 1.4a Extraction of 3D Signaling Portion (March 4, 2010)</a></li>
+                    <li><a target="_blank" href="./docs/HDMI%20Specification%20v1.4a%203D%20Signaling%20Extract.pdf">Version 1.4a Extraction of 3D Signaling Portion (2010 March 4)</a></li>
                 </ul>
             </td></tr>
             <tr><td><span class="title">DVI Specification</span>
                 <ul>
-                    <li><a target="_blank" href="./docs/DVI%20Specification%20v1.0.pdf">Version 1.0 (April 2, 1999)</a></li>
+                    <li><a target="_blank" href="./docs/DVI%20Specification%20v1.0.pdf">Version 1.0 (1999 April 2)</a></li>
                 </ul>
             </td></tr>
             <tr><td><span class="title">Additional Documents</span>
                 <ul>
-                    <li><a target="_blank" href="./docs/VESA%20CVT%20Standard%20v1.2.pdf">VESA CVT Standard Version 1.2 (January 5, 2010)</a></li>
+                    <li><a target="_blank" href="./docs/VESA%20CVT%20Standard%20v1.2.pdf">VESA CVT Standard Version 1.2 (2010 January 5)</a></li>
                 </ul>
                 <ul>
-                    <li><a target="_blank" href="./docs/CEA-861-B.pdf">EIA/CEA-861-B (May 2002)</a></li>
-                    <li><a target="_blank" href="./docs/CEA-861-D.pdf">CEA-861-D (July 2006)</a></li>
-                    <li><a target="_blank" href="./docs/CEA-861-E.pdf">CEA-861-E (March 2008)</a></li>
+                    <li><a target="_blank" href="./docs/CEA-861-B.pdf">EIA/CEA-861-B (2002 May)</a></li>
+                    <li><a target="_blank" href="./docs/CEA-861-D.pdf">CEA-861-D (2006 July)</a></li>
+                    <li><a target="_blank" href="./docs/CEA-861-E.pdf">CEA-861-E (2008 March)</a></li>
                 </ul>
             </td></tr>
         </table>
+    </div>
+
+    <div class="footer" onclick="document.getElementById('profile_link').click();">
+        <a id="profile_link" target="_blank" href="https://linustechtips.com/main/profile/2466-glenwing/" style="color:#888888; text-decoration:none; vertical-align:middle;">Glenwing</a>
     </div>
 
 </body>

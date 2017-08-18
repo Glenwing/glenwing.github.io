@@ -1,16 +1,26 @@
 <!DOCTYPE html>
 
+<meta name="viewport" content="width=device-width">
+
 <style>
     html {
       height: 100%;
       box-sizing: border-box;
     }
 
+    *,
+    *:before,
+    *:after {
+        box-sizing: inherit;
+    }
+
     body {
         positioning:relative;
+        margin:0;
         font-family:Consolas;
-        font-size:14px;
-        padding-bottom: 40px;
+        font-size:15px;
+        padding:10px;
+        padding-bottom:40px;
     }
 
     div.main {
@@ -43,10 +53,6 @@
         border: 0px solid transparent;
     }
 
-    td {
-        vertical-align:top;
-    }
-
     a:link {
         color:#777777;
         text-decoration:none;
@@ -67,9 +73,11 @@
 </style>
 
 <html>
+
 <head>
 <title>Display Technology Information Repository and Utilities</title>
 </head>
+
 <body>
     <div class="main">
         <div style="font-weight:bold; font-size:16px;">Display Technology Information Repository and Utilities<br /><hr /></div>
@@ -89,8 +97,9 @@
         </table>
     </div>
 
-<div class="footer" onclick="document.getElementById('profile_link').click();">
-    <a id="profile_link" target="_blank" href="https://linustechtips.com/main/profile/2466-glenwing/" style="color:#888888; text-decoration:none; vertical-align:middle;">Glenwing</a>
-</div>
+    <div class="footer" onclick="document.getElementById('profile_link').click();">
+        <a id="profile_link" target="_blank" href="https://linustechtips.com/main/profile/2466-glenwing/" style="color:#888888; text-decoration:none; vertical-align:middle;">Glenwing</a>
+    </div>
+
 </body>
 </html>
