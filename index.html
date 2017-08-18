@@ -1,18 +1,19 @@
 <!DOCTYPE html>
 
-<meta name="viewport" content="width=device-width">
+<meta name="viewport" content="width=device-width,height=device-height">
 
 <style>
     body {
+        min-height:98vh;
         font-family:Consolas;
         font-size:14px;
     }
 
     div.main {
-        min-height:calc(100vh - 60px);
-        border:1px solid transparent;
+        border:0px solid transparent;
         font-family:Consolas;
         font-size:14px;
+        padding:4px;
         margin-left:auto;
         margin-right:auto;
     }
@@ -21,14 +22,13 @@
         font-weight:bold;
     }
 
-    table {
-        border:1px solid transparent;
+    table, tr, td {
+        padding:0px;
+        border: 0px solid transparent;
     }
 
     td {
-        padding:8px;
-        vertical-align:middle;
-        border:1px solid transparent;
+        vertical-align:top;
     }
 
     a:link {
@@ -55,6 +55,8 @@
 <title>Display Technology Information Repository and Utilities</title>
 </head>
 <body>
+<table style="height:98vh; width:100%;">
+<tr><td>
     <div class="main">
         <div style="font-weight:bold; font-size:16px;">Display Technology Information Repository and Utilities<br /><hr /></div>
         <table>
@@ -66,16 +68,14 @@
             </td></tr>
             <tr><td><span class="title">Information</span>
                 <ul>
-                    <li><a target="_blank" href="./adapters.html">Display Interfaces, Cables, and Adapters</a></li>
-                    <li><a target="_blank" href="./docs.html">Display Industry Standards and Specifications Documents</a></li>
+                    <li><a href="./adapters.html">Display Interfaces, Cables, and Adapters</a></li>
+                    <li><a href="./docs.html">Display Industry Standards and Specifications Documents</a></li>
                 </ul>
             </td></tr>
         </table>
     </div>
-
+</tr></td>
+<tr><td onclick="document.getElementById('profile_link').click();"style="background-color:#DDDDDD; height:32px; cursor:pointer; vertical-align:middle; padding-left:8px;"><a id="profile_link" target="_blank" href="https://linustechtips.com/main/profile/2466-glenwing/" style="color:#888888; text-decoration:none;">Glenwing</a></td></tr>
+</table>
 </body>
 </html>
-
-<footer onclick="document.getElementById('profile_link').click();"style="background-color:#DDDDDD; padding:8px; cursor:pointer;">
-    <a id="profile_link" target="_blank" href="https://linustechtips.com/main/profile/2466-glenwing/" style="color:#888888; text-decoration:none;">Glenwing</a>
-</footer>
