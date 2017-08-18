@@ -1,9 +1,9 @@
-<html>
+<html id="page">
   <head>
     <link rel="import" href="../docs.html">
   </head>
 
-  <body id="mainbody">
+  <body>
   </body>
 </html>
 
@@ -11,5 +11,5 @@
   var link = document.querySelector('link[rel="import"]');
   var content = link.import;
 
-  document.getElementById('mainbody').innerHTML = content.documentElement.innerHTML;
+  document.getElementById('page').innerHTML = content.documentElement.innerHTML;
 </script>
