@@ -3,27 +3,24 @@
 <meta name="viewport" content="width=device-width">
 
 <style>
-    html {
-      height: 100%;
-      box-sizing: border-box;
-    }
-
-    *,
-    *:before,
-    *:after {
-        box-sizing: inherit;
+    html,
+    body {
+        margin:0;
+        height:100%;
+        padding:0;
     }
 
     body {
-        positioning:relative;
-        margin:0;
         font-family:Consolas;
         font-size:15px;
-        padding:10px;
-        padding-bottom:40px;
     }
 
-    div.title{
+    div.wrapper {
+        min-height:100%;
+        position:relative;
+    }
+
+    div.title {
         margin-left:auto;
         margin-right:auto;
         text-align:center;
@@ -41,15 +38,13 @@
     }
 
     div.footer {
-        position: absolute;
-        right: 0;
+        width:100%;
+        position:absolute;
         bottom: 0;
         left: 0;
         vertical-align:middle;
         background-color:#DDDDDD;
-        vertical-align:middle;
         cursor:pointer;
-        padding:12px;
     }
 
     input {
@@ -112,6 +107,7 @@
 
 
 <body style="min-width:512px;">
+<div class="wrapper">
     <div class="main">
     <!-- MAIN START -->
 
@@ -206,9 +202,10 @@
     <!-- MAIN END -->
     </div> 
 
-    <div class="footer" onclick="document.getElementById('profile_link').click();">
-        <a id="profile_link" target="_blank" href="https://linustechtips.com/main/profile/2466-glenwing/" style="color:#888888; text-decoration:none; vertical-align:middle;">Glenwing</a>
+    <div class="footer" onclick="document.getElementById('profile_link').click();" style="padding-top:10px; padding-bottom:10px;">
+        <a id="profile_link" target="_blank" href="https://linustechtips.com/main/profile/2466-glenwing/" style="color:#888888; text-decoration:none; vertical-align:middle; padding:10px;">Glenwing</a>
     </div>
+</div>
 </body>
 </html>
 
