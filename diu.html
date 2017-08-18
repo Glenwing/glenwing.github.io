@@ -1,52 +1,8 @@
 ﻿<!DOCTYPE html>
 
-<meta name="viewport" content="width=device-width">
+<meta name="viewport" content="width=device-width,height=device-height">
 
 <style>
-    html,
-    body {
-        margin:0;
-        height:100%;
-        padding:0;
-    }
-
-    body {
-        font-family:Consolas;
-        font-size:15px;
-    }
-
-    div.wrapper {
-        min-height:100%;
-        position:relative;
-    }
-
-    div.title {
-        margin-left:auto;
-        margin-right:auto;
-        text-align:center;
-        font-weight:bold;
-        background-color:#DDDDDD;
-        padding:8px;
-    }
-
-    div.main {
-        border:0px solid transparent;
-        font-family:Consolas;
-        width:512px;
-        margin-left:auto;
-        margin-right:auto;
-    }
-
-    div.footer {
-        width:100%;
-        position:absolute;
-        bottom: 0;
-        left: 0;
-        vertical-align:middle;
-        background-color:#DDDDDD;
-        cursor:pointer;
-    }
-
     input {
         padding:4px;
         text-align:center;
@@ -98,7 +54,57 @@
         line-height:0;
     }
 
+    html,
+    body {
+        margin:0;
+        height:100%
+        padding:0;
+    }
+
+    body {
+        font-family:Consolas;
+        font-size:15px;
+    }
+
+    div.wrapper {
+        position:absolute;
+        min-height:100%;
+        min-width:512px;
+        width:100%;
+    }
+
+    div.title {
+        margin-left:auto;
+        margin-right:auto;
+        text-align:center;
+        font-weight:bold;
+        background-color:#DDDDDD;
+        padding:8px;
+    }
+
+    div.main {
+        border:0px solid transparent;
+        font-family:Consolas;
+        width:512px;
+        padding-bottom:48px;
+        margin-left:auto;
+        margin-right:auto;
+    }
+
+    div.footer {
+        position:absolute;
+        width:100%;
+        bottom: 0;
+        left: 0;
+        background-color:#DDDDDD;
+        cursor:pointer;
+        margin:0;
+    }
+
 </style>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+<script src="diuJS.js"></script>
 
 <html>
 <head>
@@ -106,7 +112,7 @@
 </head>
 
 
-<body style="min-width:512px;">
+<body>
 <div class="wrapper">
     <div class="main">
     <!-- MAIN START -->
@@ -202,12 +208,9 @@
     <!-- MAIN END -->
     </div> 
 
-    <div class="footer" onclick="document.getElementById('profile_link').click();" style="padding-top:10px; padding-bottom:10px;">
+    <div class="footer" onclick="document.getElementById('profile_link').click();" style="padding-bottom:10px; padding-top:10px;">
         <a id="profile_link" target="_blank" href="https://linustechtips.com/main/profile/2466-glenwing/" style="color:#888888; text-decoration:none; vertical-align:middle; padding:10px;">Glenwing</a>
     </div>
 </div>
 </body>
 </html>
-
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
-<script src="diuJS.js"></script>
