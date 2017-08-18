@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+
+<html id="page">
+  <head>
+    <link rel="import" href="../adapters.html">
+  </head>
+
+  <body>
+  </body>
+</html>
+
+<script>
+  var link = document.querySelector('link[rel="import"]');
+  var content = link.import;
+
+  document.getElementById('page').innerHTML = content.documentElement.innerHTML;
+</script>
