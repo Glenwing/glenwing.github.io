@@ -16,7 +16,7 @@
     var vres2 = $('#INPUT_VRES2').val();
     var ar2 = hres2 / vres2;
     var d_match = Math.sqrt((height * height) * (1 + (ar2 * ar2)));
-    var opt_res = parseInt(vres1 * ar2) + '&nbsp;<span style="font-size:10px; vertical-align:middle;">&#10005;</span>&nbsp;' + vres1;
+    var opt_res = parseInt(vres1 * ar2) + '&nbsp;&times;&nbsp;' + vres1;
 
     var width2 = width * (hres2 / hres1);
     var height2 = height * (vres2 / vres1);
