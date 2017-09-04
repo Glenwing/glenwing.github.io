@@ -3,6 +3,59 @@
 <meta name="viewport" content="width=device-width">
 
 <style>
+    html,
+    body {
+        margin: 0;
+        height: 100%;
+        padding: 0;
+    }
+
+    body {
+        font-family: "Consolas", "Inconsolata", "Lucida Console", Monospace;
+        font-size: 15px;
+        min-height: 100%;
+    }
+
+    div.wrapper {
+        min-height: 100%;
+        position: relative;
+    }
+
+    div.main {
+        border: 0px solid transparent;
+        font-size: 15px;
+        padding-bottom: 48px;
+
+        width: 512px;
+        margin-left: auto;
+        margin-right: auto;
+    }
+
+    div.footer {
+        width: 100%;
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        vertical-align: middle;
+        background-color: #DDDDDD;
+        cursor: pointer;
+
+        min-width: 512px;
+    }
+
+    div.title {
+        margin-left:auto;
+        margin-right:auto;
+        text-align:center;
+        font-weight:bold;
+        background-color:#DDDDDD;
+        padding:8px;
+    }
+
+    span.title {
+        font-weight: bold;
+    }
+
     input {
         padding:4px;
         text-align:center;
@@ -11,6 +64,10 @@
     input[type="text"] {
         border:1px solid #CCCCCC;
         background-color:#F4F4F8;
+    }
+
+    input.res_input {
+        width:50px;
     }
 
     table {
@@ -36,8 +93,24 @@
         width:100%;
     }
 
-    input.res_input {
-        width:50px;
+    a:link {
+        color: #777777;
+        text-decoration: none;
+    }
+
+    a:visited {
+        color: #777777;
+        text-decoration: none;
+    }
+
+    a:hover {
+        color: #000000;
+        text-decoration: underline;
+    }
+
+    a:active {
+        color: #000000;
+        text-decoration: underline;
     }
 
     sup {
@@ -53,163 +126,111 @@
         top:0.3em;
         line-height:0;
     }
-
-    html,
-    body {
-        margin:0;
-        height:100%
-        padding:0;
-    }
-
-    body {
-        font-family: "Consolas", "Inconsolata", "Lucida Console", Monospace;
-        font-size:15px;
-    }
-
-    div.wrapper {
-        position:absolute;
-        min-height:100%;
-        min-width:512px;
-        width:100%;
-    }
-
-    div.title {
-        margin-left:auto;
-        margin-right:auto;
-        text-align:center;
-        font-weight:bold;
-        background-color:#DDDDDD;
-        padding:8px;
-    }
-
-    div.main {
-        border:0px solid transparent;
-        width:512px;
-        padding-bottom:48px;
-        margin-left:auto;
-        margin-right:auto;
-    }
-
-    div.footer {
-        position:absolute;
-        width:100%;
-        bottom: 0;
-        left: 0;
-        background-color:#DDDDDD;
-        cursor:pointer;
-        margin:0;
-    }
-
 </style>
 
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
 <script src="diuJS.js"></script>
 
 <html>
+
 <head>
     <title>Display Info Utility</title>
 </head>
 
-
 <body>
-<div class="wrapper">
-    <div class="main">
-    <!-- MAIN START -->
+    <div class="wrapper">
+        <div class="main">
+            <div style="font-weight:bold; font-size:16px; padding:16px; padding-bottom:0px;"><a href="https://glenwing.github.io" style="text-decoration:none; color:#000000;">Display Info Utility</a><br /><hr /></div>
+            <!-- FIRST SEGMENT -->
+            <div class="title">DISPLAY INFO UTILITY</div>
+            <table>
+                <tr>
+                    <td class="label"><b>Size:</b></td>
+                    <td>
+                        <input id="INPUT_SIZE" style="width:50px;" type="text" onchange="update();" oninput="this.onchange();" onfocus="this.select();" tabindex="2" autofocus />
+                    </td>
+                    <td style="width:100%">
+                        <form id="unit_select">
+                            <label style="cursor:pointer; vertical-align:middle"><input name="unit_select" value="in" type="radio" onchange="document.getElementById('INPUT_SIZE').focus(); update();" style="cursor:pointer; vertical-align:middle; margin-bottom:3px;" tabindex="1" checked />&nbsp;in</label><br />
+                            <label style="cursor:pointer; vertical-align:middle"><input name="unit_select" value="cm" type="radio" onchange="document.getElementById('INPUT_SIZE').focus(); update();" style="cursor:pointer; vertical-align:middle; margin-bottom:3px;" tabindex="1" />&nbsp;cm</label>
+                        </form>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="label"><b>Resolution:</b></td>
+                    <td colspan="2" style="width:100%">
+                        <input id="INPUT_HRES" class="res_input" style="text-align:right;" type="text" onchange="update();" oninput="this.onchange()" onfocus="this.select();" tabindex="3" />
+                        <span style="font-size:10px; font-family:'Courier New';">&#10005;</span>
+                        <input id="INPUT_VRES" class="res_input" style="text-align:left;" type="text" onchange="update();" oninput="this.onchange()" onfocus="this.select();" tabindex="4" />
+                    </td>
+                </tr>
+            </table>
+            <!-- SECOND SEGMENT -->
+            <div class="title">GENERAL INFO</div>
+            <table style="min-width:160px;">
+                <tr>
+                    <td class="label">Ratio:</td>
+                    <td id="RESULT_RATIO" class="result"></td>
+                </tr>
+                <tr>
+                    <td class="label">Total Pixels:</td>
+                    <td id="RESULT_TOTAL_PX" class="result"></td>
+                </tr>
+                <tr>
+                    <td class="label">Pixel Density:</td>
+                    <td id="RESULT_PX_DENSITY" class="result"></td>
+                </tr>
+                <tr>
+                    <td class="label">Width:</td>
+                    <td id="RESULT_WIDTH" class="result"></td>
+                </tr>
+                <tr>
+                    <td class="label">Height:</td>
+                    <td id="RESULT_HEIGHT" class="result"></td>
+                </tr>
+                <tr>
+                    <td class="label">Area:</td>
+                    <td id="RESULT_AREA" class="result"></td>
+                </tr>
+            </table>
+            <!-- THIRD SEGMENT -->
+            <div class="title">COMPANION FORMATS</div>
+            <table>
+                <tr>
+                    <td class="label">Companion Resolution<br />or Aspect Ratio:</td>
+                    <td>
+                        <input class="res_input" id="INPUT_HRES2" style="text-align:right;" type="text" onchange="update();" oninput="this.onchange()" onfocus="this.select();" />
+                        <span style="font-size:10px; font-family:'Courier New';">&#10005;</span>
+                        <input class="res_input" id="INPUT_VRES2" style="text-align:left;" type="text" onchange="update();" oninput="this.onchange()" onfocus="this.select();" />
+                    </td>
+                </tr>
+                <tr id="21_9_warning" style="display:none;">
+                    <td class="label">&nbsp;</td>
+                    <td class="result" style="color:#DD1111;">
+                        <b>Warning: Formats commonly known as "21:9" are not an exact 21:9 ratio</b><br />
+                        &nbsp;&nbsp;2560 <span style="font-size:10px;">&#10005;</span> 1080 is a 64:27 ratio<br />
+                        &nbsp;&nbsp;3440 <span style="font-size:10px;">&#10005;</span> 1440 is a 43:18 ratio<br />
+                        &nbsp;&nbsp;3840 <span style="font-size:10px;">&#10005;</span> 1600 is a 12:5 ratio<br />
+                    </td>
+                </tr>
+                <tr>
+                    <td class="label">Companion Size<br />(Matching Height):</td>
+                    <td id="RESULT_D_MATCH" class="result"></td>
+                </tr>
+                <tr>
+                    <td class="label">(Optimum Resolution):</td>
+                    <td id="RESULT_OPT_RES" class="result"></td>
+                </tr>
+                <tr>
+                    <td class="label">Companion Size<br />(Matching Density):</td>
+                    <td id="RESULT_SIZE" class="result"></td>
+                </tr>
+            </table>
+        </div>
 
-        <!-- FIRST SEGMENT -->
-        <div class="title">DISPLAY INFO UTILITY</div>
-        <table>
-            <tr>
-                <td class="label"><b>Size:</b></td>
-                <td>
-                    <input id="INPUT_SIZE" style="width:50px;" type="text" onchange="update();" oninput="this.onchange();" onfocus="this.select();" tabindex="2" autofocus />
-                </td>
-                <td style="width:100%">
-                    <form id="unit_select">
-                        <label style="cursor:pointer; vertical-align:middle"><input name="unit_select" value="in" type="radio" onchange="document.getElementById('INPUT_SIZE').focus(); update();" style="cursor:pointer; vertical-align:middle; margin-bottom:3px;" tabindex="1" checked />&nbsp;in</label><br />
-                        <label style="cursor:pointer; vertical-align:middle"><input name="unit_select" value="cm" type="radio" onchange="document.getElementById('INPUT_SIZE').focus(); update();" style="cursor:pointer; vertical-align:middle; margin-bottom:3px;" tabindex="1" />&nbsp;cm</label>
-                    </form>
-                </td>
-            </tr>
-            <tr>
-                <td class="label"><b>Resolution:</b></td>
-                <td colspan="2" style="width:100%">
-                    <input id="INPUT_HRES" class="res_input" style="text-align:right;" type="text" onchange="update();" oninput="this.onchange()" onfocus="this.select();" tabindex="3" />
-                    <span style="font-size:10px; font-family:'Courier New';">&#10005;</span>
-                    <input id="INPUT_VRES" class="res_input" style="text-align:left;" type="text" onchange="update();" oninput="this.onchange()" onfocus="this.select();" tabindex="4" />
-                </td>
-            </tr>
-        </table>
-
-        <!-- SECOND SEGMENT -->
-        <div class="title">GENERAL INFO</div>
-        <table style="min-width:160px;">
-            <tr>
-                <td class="label">Ratio:</td>
-                <td id="RESULT_RATIO" class="result"></td>
-            </tr>
-            <tr>
-                <td class="label">Total Pixels:</td>
-                <td id="RESULT_TOTAL_PX" class="result"></td>
-            </tr>
-            <tr>
-                <td class="label">Pixel Density:</td>
-                <td id="RESULT_PX_DENSITY" class="result"></td>
-            </tr>
-            <tr>
-                <td class="label">Width:</td>
-                <td id="RESULT_WIDTH" class="result"></td>
-            </tr>
-            <tr>
-                <td class="label">Height:</td>
-                <td id="RESULT_HEIGHT" class="result"></td>
-            </tr>
-            <tr>
-                <td class="label">Area:</td>
-                <td id="RESULT_AREA" class="result"></td>
-            </tr>
-        </table>
-
-        <!-- THIRD SEGMENT -->
-        <div class="title">COMPANION FORMATS</div>
-        <table>
-            <tr>
-                <td class="label">Companion Resolution<br />or Aspect Ratio:</td>
-                <td>
-                    <input class="res_input" id="INPUT_HRES2" style="text-align:right;" type="text" onchange="update();" oninput="this.onchange()" onfocus="this.select();" />
-                    <span style="font-size:10px; font-family:'Courier New';">&#10005;</span>
-                    <input class="res_input" id="INPUT_VRES2" style="text-align:left;"  type="text" onchange="update();" oninput="this.onchange()" onfocus="this.select();" />
-                </td>
-            </tr>
-            <tr id="21_9_warning" style="display:none;">
-                <td class="label">&nbsp;</td>
-                <td class="result" style="color:#DD1111;">
-                    <b>Warning: Formats commonly known as "21:9" are not an exact 21:9 ratio</b><br />
-                    &nbsp;&nbsp;2560 <span style="font-size:10px;">&#10005;</span> 1080 is a 64:27 ratio<br />
-                    &nbsp;&nbsp;3440 <span style="font-size:10px;">&#10005;</span> 1440 is a 43:18 ratio<br />
-                    &nbsp;&nbsp;3840 <span style="font-size:10px;">&#10005;</span> 1600 is a 12:5 ratio<br />
-                </td>
-            </tr>
-            <tr>
-                <td class="label">Companion Size<br />(Matching Height):</td>
-                <td id="RESULT_D_MATCH" class="result"></td>
-            </tr>
-            <tr>
-                <td class="label">(Optimum Resolution):</td>
-                <td id="RESULT_OPT_RES" class="result"></td>
-            </tr>
-            <tr>
-                <td class="label">Companion Size<br />(Matching Density):</td>
-                <td id="RESULT_SIZE" class="result"></td>
-            </tr>
-        </table>
-
-    <!-- MAIN END -->
-    </div> 
-
-    <div class="footer" onclick="document.getElementById('profile_link').click();" style="padding-bottom:10px; padding-top:10px;">
-        <a id="profile_link" target="_blank" href="https://linustechtips.com/main/profile/2466-glenwing/" style="color:#888888; text-decoration:none; vertical-align:middle; padding:10px;">Glenwing</a>
+        <div class="footer" onclick="document.getElementById('profile_link').click();" style="padding-top:10px; padding-bottom:10px;">
+            <a id="profile_link" target="_blank" href="https://linustechtips.com/main/profile/2466-glenwing/" style="color:#888888; text-decoration:none; vertical-align:middle; padding:10px;">Glenwing</a>
+        </div>
     </div>
-</div>
 </body>
 </html>
