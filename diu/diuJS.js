@@ -6,6 +6,7 @@
     var vres1 = $('#INPUT_VRES').val();
     var ar1 = hres1 / vres1;
     
+    var diag = parseFloat(size);
     var width = size * Math.sin(Math.atan(hres1 / vres1));
     var height = size * Math.cos(Math.atan(hres1 / vres1));
     var area = width * height;
@@ -30,6 +31,7 @@
     */
     display(new UNIT(unit_select),
         [
+            ['RESULT_DIAG',       1, diag.toFixed(3)      , (size != '' && size != 0) ],
             ['RESULT_WIDTH',      1, width.toFixed(3)     , (hres1 != '' && vres1 != '' && size != '' && hres1 != 0 && vres1 != 0 && size != 0) ],
             ['RESULT_HEIGHT',     1, height.toFixed(3)    , (hres1 != '' && vres1 != '' && size != '' && hres1 != 0 && vres1 != 0 && size != 0) ],
             ['RESULT_AREA',       2, area.toFixed(3)      , (hres1 != '' && vres1 != '' && size != '' && hres1 != 0 && vres1 != 0 && size != 0) ],
@@ -171,7 +173,10 @@ function prefixGen(num, precision) {
 function pxPrefix(num, precision) {
     var x = prefixGen(num, precision);
     return (x['num'] + '&nbsp;' + x['prefix'] + 'px');
-}function GCD(a, b) {
+}
+
+
+function GCD(a, b) {
     a = Math.abs(a);
     b = Math.abs(b);
     if (b > a) { var temp = a; a = b; b = temp; }
@@ -181,7 +186,8 @@ function pxPrefix(num, precision) {
         if (a == 0) return b;
         b %= a;
     }
-}
+}
+
 
 function commas(x) {
     var parts = x.toString().split(".");

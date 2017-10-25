@@ -14,6 +14,7 @@
         font-family: "Consolas", "Inconsolata", "Lucida Console", Monospace;
         font-size: 15px;
         min-height: 100%;
+        overflow-y: scroll;
     }
 
     div.wrapper {
@@ -25,7 +26,6 @@
         border: 0px solid transparent;
         font-size: 15px;
         padding-bottom: 48px;
-
         margin-left: auto;
         margin-right: auto;
     }
@@ -38,17 +38,16 @@
         vertical-align: middle;
         background-color: #DDDDDD;
         cursor: pointer;
-
         min-width: 512px;
     }
 
     div.title {
-        margin-left:auto;
-        margin-right:auto;
-        text-align:center;
-        font-weight:bold;
-        background-color:#DDDDDD;
-        padding:8px;
+        margin-left: auto;
+        margin-right: auto;
+        text-align: center;
+        font-weight: bold;
+        background-color: #DDDDDD;
+        padding: 8px;
     }
 
     span.title {
@@ -56,41 +55,41 @@
     }
 
     input {
-        padding:4px;
-        text-align:center;
+        padding: 4px;
+        text-align: center;
     }
 
-    input[type="text"] {
-        border:1px solid #CCCCCC;
-        background-color:#F4F4F8;
-    }
+        input[type="text"] {
+            border: 1px solid #CCCCCC;
+            background-color: #F4F4F8;
+        }
 
-    input.res_input {
-        width:50px;
-    }
+        input.res_input {
+            width: 50px;
+        }
 
     table {
-        margin-left:auto;
-        margin-right:auto;
-        border:0px solid black;
+        margin-left: auto;
+        margin-right: auto;
+        border: 0px solid black;
     }
 
     td {
-        padding:8px;
-        vertical-align:middle;
-        border:solid 1px transparent;
+        padding: 8px;
+        vertical-align: middle;
+        border: solid 1px transparent;
     }
 
-    td.label {
-        font-weight:bold;
-        min-width:192px;
-        text-align:right;
-    }
+        td.label {
+            font-weight: bold;
+            min-width: 192px;
+            text-align: right;
+        }
 
-    td.result {
-        min-width:120px;
-        width:100%;
-    }
+        td.result {
+            min-width: 120px;
+            width: 100%;
+        }
 
     a:link {
         color: #777777;
@@ -114,16 +113,25 @@
 
     sup {
         vertical-align: baseline;
-        position:relative;
-        top:-0.4em;
-        line-height:0;
+        position: relative;
+        top: -0.4em;
+        line-height: 0;
     }
 
     sub {
         vertical-align: baseline;
-        position:relative;
-        top:0.3em;
-        line-height:0;
+        position: relative;
+        top: 0.3em;
+        line-height: 0;
+    }
+
+    span.res_x {
+        font-family: 'Courier New';
+        font-size: 10px;
+        vertical-align: baseline;
+        position: relative;
+        top: -0.1em;
+        line-height: 0;
     }
 </style>
 
@@ -139,7 +147,7 @@
 <body>
     <div class="wrapper">
         <div class="main">
-            <div style="font-weight:bold; font-size:16px; padding:16px; padding-bottom:0px; min-width:480px;"><a href="https://glenwing.github.io" style="text-decoration:none; color:#000000;">Display Info Utility</a><br /><hr /></div>
+            <div style="font-weight:bold; font-size:16px; padding:16px; padding-bottom:0px; min-width:480px;"><a href="https://glenwing.github.io" style="text-decoration:none; color:#000000;" tabindex="1">Display Info Utility</a><br /><hr /></div>
             <div style="width:512px; margin-left:auto; margin-right:auto;">
                 <!-- FIRST SEGMENT -->
                 <div class="title">DISPLAY INFO UTILITY</div>
@@ -147,21 +155,21 @@
                     <tr>
                         <td class="label"><b>Size:</b></td>
                         <td>
-                            <input id="INPUT_SIZE" style="width:50px;" type="text" onchange="update();" oninput="this.onchange();" onfocus="this.select();" tabindex="2" autofocus />
+                            <input id="INPUT_SIZE" style="width:50px;" type="text" onchange="update();" oninput="this.onchange();" onfocus="this.select();" tabindex="3" autofocus />
                         </td>
                         <td style="width:100%">
                             <form id="unit_select">
-                                <label style="cursor:pointer; vertical-align:middle"><input name="unit_select" value="in" type="radio" onchange="document.getElementById('INPUT_SIZE').focus(); update();" style="cursor:pointer; vertical-align:middle; margin-bottom:3px;" tabindex="1" checked />&nbsp;in</label><br />
-                                <label style="cursor:pointer; vertical-align:middle"><input name="unit_select" value="cm" type="radio" onchange="document.getElementById('INPUT_SIZE').focus(); update();" style="cursor:pointer; vertical-align:middle; margin-bottom:3px;" tabindex="1" />&nbsp;cm</label>
+                                <label style="cursor:pointer; vertical-align:middle"><input name="unit_select" value="in" type="radio" onchange="document.getElementById('INPUT_SIZE').focus(); update();" style="cursor:pointer; vertical-align:middle; margin-bottom:3px;" tabindex="2" checked />&nbsp;in</label><br />
+                                <label style="cursor:pointer; vertical-align:middle"><input name="unit_select" value="cm" type="radio" onchange="document.getElementById('INPUT_SIZE').focus(); update();" style="cursor:pointer; vertical-align:middle; margin-bottom:3px;" tabindex="2" />&nbsp;cm</label>
                             </form>
                         </td>
                     </tr>
                     <tr>
                         <td class="label"><b>Resolution:</b></td>
                         <td colspan="2" style="width:100%">
-                            <input id="INPUT_HRES" class="res_input" style="text-align:right;" type="text" onchange="update();" oninput="this.onchange()" onfocus="this.select();" tabindex="3" />
-                            <span style="font-size:10px; font-family:'Courier New';">&#10005;</span>
-                            <input id="INPUT_VRES" class="res_input" style="text-align:left;" type="text" onchange="update();" oninput="this.onchange()" onfocus="this.select();" tabindex="4" />
+                            <input id="INPUT_HRES" class="res_input" style="text-align:right;" type="text" onchange="update();" oninput="this.onchange()" onfocus="this.select();" tabindex="4" />
+                            <span class="res_x">&#10005;</span>
+                            <input id="INPUT_VRES" class="res_input" style="text-align:left;" type="text" onchange="update();" oninput="this.onchange()" onfocus="this.select();" tabindex="5" />
                         </td>
                     </tr>
                 </table>
@@ -179,6 +187,10 @@
                     <tr>
                         <td class="label">Pixel Density:</td>
                         <td id="RESULT_PX_DENSITY" class="result"></td>
+                    </tr>
+                    <tr>
+                        <td class="label">Diagonal:</td>
+                        <td id="RESULT_DIAG" class="result"></td>
                     </tr>
                     <tr>
                         <td class="label">Width:</td>
@@ -200,7 +212,7 @@
                         <td class="label">Companion Resolution<br />or Aspect Ratio:</td>
                         <td>
                             <input class="res_input" id="INPUT_HRES2" style="text-align:right;" type="text" onchange="update();" oninput="this.onchange()" onfocus="this.select();" />
-                            <span style="font-size:10px; font-family:'Courier New';">&#10005;</span>
+                            <span class="res_x">&#10005;</span>
                             <input class="res_input" id="INPUT_VRES2" style="text-align:left;" type="text" onchange="update();" oninput="this.onchange()" onfocus="this.select();" />
                         </td>
                     </tr>
@@ -208,9 +220,9 @@
                         <td class="label">&nbsp;</td>
                         <td class="result" style="color:#DD1111;">
                             <b>Warning: Formats commonly known as "21:9" are not an exact 21:9 ratio</b><br />
-                            &nbsp;&nbsp;2560 <span style="font-size:10px;">&#10005;</span> 1080 is a 64:27 ratio<br />
-                            &nbsp;&nbsp;3440 <span style="font-size:10px;">&#10005;</span> 1440 is a 43:18 ratio<br />
-                            &nbsp;&nbsp;3840 <span style="font-size:10px;">&#10005;</span> 1600 is a 12:5 ratio<br />
+                            &nbsp;&nbsp;2560 <span class="res_x">&#10005;</span> 1080 is a 64:27 ratio<br />
+                            &nbsp;&nbsp;3440 <span class="res_x">&#10005;</span> 1440 is a 43:18 ratio<br />
+                            &nbsp;&nbsp;3840 <span class="res_x">&#10005;</span> 1600 is a 12:5 ratio<br />
                         </td>
                     </tr>
                     <tr>
