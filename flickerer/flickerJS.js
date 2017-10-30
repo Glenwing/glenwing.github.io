@@ -133,3 +133,11 @@ function RunC() {
         requestAnimationFrame(setQ1);
     }
 }
+
+function turnBlack() {
+    box.style.backgroundColor = c1;
+}
+
+function turnWhite() {
+    box.style.backgroundColor = c2;
+}
