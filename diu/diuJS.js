@@ -2,8 +2,8 @@
     
     var size = parseNum($('#INPUT_SIZE').val());
     var unit_select = $('#unit_select input[type="radio"]:checked').val();
-    var hres1 = parseNum($('#INPUT_HRES').val());
-    var vres1 = parseNum($('#INPUT_VRES').val());
+    var hres1 = parseInt(parseNum($('#INPUT_HRES').val()));
+    var vres1 = parseInt(parseNum($('#INPUT_VRES').val()));
     var ar1 = hres1 / vres1;
     
     var diag = parseFloat(size);
@@ -19,8 +19,8 @@
     var d_match = Math.sqrt((height * height) * (1 + (ar2 * ar2)));
     var opt_res = parseInt(vres1 * ar2) + '&nbsp;&times;&nbsp;' + vres1;
 
-    var hres_den = parseNum($('#INPUT_HRES_DENSITY').val());
-    var vres_den = parseNum($('#INPUT_VRES_DENSITY').val());
+    var hres_den = parseInt(parseNum($('#INPUT_HRES_DENSITY').val()));
+    var vres_den = parseInt(parseNum($('#INPUT_VRES_DENSITY').val()));
     var ar_den = hres_den / vres_den;
 
     var width2 = width * (hres_den / hres1);
@@ -34,21 +34,19 @@
     */
     display(new UNIT(unit_select),
         [
-            ['RESULT_DIAG',         1, diag.toFixed(3)      , (size != '' && size != 0) ],
-            ['RESULT_WIDTH',        1, width.toFixed(3)     , (hres1 != '' && vres1 != '' && size != '' && hres1 != 0 && vres1 != 0 && size != 0) ],
-            ['RESULT_HEIGHT',       1, height.toFixed(3)    , (hres1 != '' && vres1 != '' && size != '' && hres1 != 0 && vres1 != 0 && size != 0) ],
-            ['RESULT_AREA',         2, area.toFixed(3)      , (hres1 != '' && vres1 != '' && size != '' && hres1 != 0 && vres1 != 0 && size != 0) ],
-            ['RESULT_PX_DENSITY',   3, px_density.toFixed(3), (hres1 != '' && vres1 != '' && size != '' && hres1 != 0 && vres1 != 0 && size != 0) ],
-            ['RESULT_D_MATCH',      1, d_match.toFixed(3)   , (hres1 != '' && vres1 != '' && size != '' && hres2 != '' && vres2 != '' && hres1 != 0 && vres1 != 0 && size != 0 && hres2 != 0 && vres2 != 0) ],
-            ['RESULT_DENSITY_SIZE', 1, size2.toFixed(3)     , (hres1 != '' && vres1 != '' && size != '' && hres_den != '' && vres_den != '' && hres1 != 0 && vres1 != 0 && size != 0 && hres_den != 0 && vres_den != 0)],
+            ['RESULT_DIAG',         1, diag.toFixed(3)      , (isPositive(size)) ],
+            ['RESULT_WIDTH',        1, width.toFixed(3)     , (isPositive([size, hres1, vres1])) ],
+            ['RESULT_HEIGHT',       1, height.toFixed(3)    , (isPositive([size, hres1, vres1])) ],
+            ['RESULT_AREA',         2, area.toFixed(3)      , (isPositive([size, hres1, vres1])) ],
+            ['RESULT_PX_DENSITY',   3, px_density.toFixed(3), (isPositive([size, hres1, vres1])) ],
+            ['RESULT_D_MATCH',      1, d_match.toFixed(3)   , (isPositive([size, hres1, vres1, hres2, vres2])) ],
+            ['RESULT_DENSITY_SIZE', 1, size2.toFixed(3)     , (isPositive([size, hres1, vres1, hres_den, vres_den])) ],
         ]
     );
 
 
-    if (size != '' && hres1 != '' && vres1 != '' && hres2 != '' && vres2 != '' &&
-        size != 0  && hres1 != 0  && vres1 != 0  && hres2 != 0  && vres2 != 0  &&
-        isNaN(size) == false && isNaN(hres1) == false && isNaN(vres1) == false && isNaN(hres2) == false && isNaN(vres2) == false)
-        { $('#RESULT_OPT_RES').html(opt_res); 
+    if (isNum([size, hres1, vres1, hres2, vres2]) && isPositive([size, hres1, vres1, hres2, vres2])) {
+        $('#RESULT_OPT_RES').html(opt_res);
         if (hres2 == '21' && vres2 == '9') {
             $('#21_9_warning').css('display', 'table-row');
         }
@@ -61,7 +59,7 @@
 
 
     //if (hres1 != '' && vres1 != '' && hres1 != 0 && vres1 != 0 && isNaN(hres1) == false && isNaN(vres1) == false) {
-    if (Number.isNaN(parseNum(hres1)) == false && Number.isNaN(parseNum(vres1)) == false) {
+    if (isNum([hres1, vres1]) && isPositive([hres1, vres1])) {
         $('#RESULT_RATIO').html(commas(ar1.toFixed(3)) + ' (' + parseInt(hres1 / GCD(hres1, vres1)) + '<span style="vertical-align:baseline; position:relative; top:-0.05em;">:</span>' + parseInt(vres1 / GCD(hres1, vres1)) + ')');
         $('#RESULT_TOTAL_PX').html(commas(total_px) + ' (' + prefixGen(total_px, 2)['num'] + ' ' + prefixGen(total_px, 2)['prefix'] + 'px)');
     }
@@ -73,8 +71,8 @@
 
     
     //!= '' && vres1 != '' && hres1 != 0 && vres1 != 0 && isNaN(hres1) == false && isNaN(vres1) == false
-    if (isInt(hres1) && isInt(vres1) && isInt(hres_den) && isInt(vres_den)) {
-        $('#RESULT_DENSITY_RATIO').html(commas(ar1.toFixed(3)) + ' (' + parseInt(hres_den / GCD(hres_den, vres_den)) + '<span style="vertical-align:baseline; position:relative; top:-0.05em;">:</span>' + parseInt(vres_den / GCD(hres_den, vres_den)) + ')');
+    if (isInt([hres1, vres1, hres_den, vres_den]) && isPositive([hres1, vres1, hres_den, vres_den])) {
+        $('#RESULT_DENSITY_RATIO').html(commas(ar_den.toFixed(3)) + ' (' + parseInt(hres_den / GCD(hres_den, vres_den)) + '<span style="vertical-align:baseline; position:relative; top:-0.05em;">:</span>' + parseInt(vres_den / GCD(hres_den, vres_den)) + ')');
     }
     else {
         $('#RESULT_DENSITY_RATIO').html('');
@@ -85,24 +83,77 @@
 }
 
 
+// Returns false if input is a non-integer number or NaN
 function isInt(num) {
-    return Number.isInteger(num);
+    if (Array.isArray(num) == true) {
+        for (a = 0; a < num.length; a++) {
+            if (Number.isInteger(num[a]) == false) {
+                return false;
+            }
+            return true;
+        }
+    }
+    else
+        return Number.isInteger(num);
 }
 
+// Returns false if input is not a positive number (zero, negative number, or NaN)
+function isPositive(num) {
+    if (Array.isArray(num) == true) {
+        for (a = 0; a < num.length; a++) {
+            if (Number.isNaN(parseNum(num[a])) == true)
+                return false;
+            else if (num[a] <= 0)
+                return false;
+        }
+        return true;
+    }
+    else {
+        if (Number.isNaN(parseNum(num)) == true)
+            return false;
+        else if (num > 0)
+            return true;
+    }
+}
+
+// Returns false if input is NaN
+function isNum(num) {
+    if (Array.isArray(num) == true) {
+        for (a = 0; a < num.length; a++) {
+            if (Number.isNaN(parseNum(num[a])) == true) {
+                return false;
+            }
+            return true;
+        }
+    }
+    else {
+        return !Number.isNaN(parseNum(num));
+    }
+}
+
+// Converts string to floating point if it has a decimal point, or integer if there is no decimal point. Also strips commas and spaces, and optionally applies absolute value.
+// Cannot handle inputs with negative signs in the wrong position.
 function parseNum(str) {
     if (typeof str === "string") {
-        str = str.replace(/[^0-9.]/g, '');
-        if (str == '')
+        str = str.replace(/[^0-9\. ]/g, ''); // Apply absolute value
+        // str = str.replace(/[^0-9\. -]/g, ''); // Allow negative numbers
+        
+        // Return NaN if...
+        if (str == '' // input is blank
+            || str.indexOf('.') != str.lastIndexOf('.') // input contains multiple decimal places
+            || str.indexOf('-') != str.lastIndexOf('-') // input contains multiple minus signs
+            || (str.indexOf('-') != -1 && str.indexOf('-') != 0)) { // input contains a minus sign in a position other than the first character
+            
             return NaN;
-        else
+        }
+
+        else {
             if (str.indexOf('.') == -1)
                 return parseInt(str);
             else {
-                if (str.indexOf('.') == str.lastIndexOf('.'))
-                    return parseFloat(str);
-                else
-                    return NaN;
+                return parseFloat(str);
             }
+        }
     }
     else if (Number.isNaN(str))
         return NaN;
