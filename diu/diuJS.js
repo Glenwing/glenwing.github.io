@@ -1,9 +1,9 @@
 ﻿function update() {
     
-    var size = $('#INPUT_SIZE').val();
+    var size = parseNum($('#INPUT_SIZE').val());
     var unit_select = $('#unit_select input[type="radio"]:checked').val();
-    var hres1 = $('#INPUT_HRES').val();
-    var vres1 = $('#INPUT_VRES').val();
+    var hres1 = parseNum($('#INPUT_HRES').val());
+    var vres1 = parseNum($('#INPUT_VRES').val());
     var ar1 = hres1 / vres1;
     
     var diag = parseFloat(size);
@@ -13,31 +13,34 @@
     var px_density = hres1 / width;
     var total_px = hres1 * vres1;
 
-    var hres2 = $('#INPUT_HRES2').val();
-    var vres2 = $('#INPUT_VRES2').val();
+    var hres2 = parseNum($('#INPUT_HRES2').val());
+    var vres2 = parseNum($('#INPUT_VRES2').val());
     var ar2 = hres2 / vres2;
     var d_match = Math.sqrt((height * height) * (1 + (ar2 * ar2)));
     var opt_res = parseInt(vres1 * ar2) + '&nbsp;&times;&nbsp;' + vres1;
 
-    var width2 = width * (hres2 / hres1);
-    var height2 = height * (vres2 / vres1);
+    var hres_den = parseNum($('#INPUT_HRES_DENSITY').val());
+    var vres_den = parseNum($('#INPUT_VRES_DENSITY').val());
+    var ar_den = hres_den / vres_den;
+
+    var width2 = width * (hres_den / hres1);
+    var height2 = height * (vres_den / vres1);
     var size2 = Math.sqrt((width2 * width2) + (height2 * height2));
 
     /* Conversion Codes:
-    0: Special Handling
-    1: Secondary units with normal conversion factor
-    2: Secondary units with squared conversion factor
-    3: Secondary units with reciprocal conversion factor
+    1: Secondary units have normal conversion factor
+    2: Secondary units have squared conversion factor
+    3: Secondary units have reciprocal conversion factor
     */
     display(new UNIT(unit_select),
         [
-            ['RESULT_DIAG',       1, diag.toFixed(3)      , (size != '' && size != 0) ],
-            ['RESULT_WIDTH',      1, width.toFixed(3)     , (hres1 != '' && vres1 != '' && size != '' && hres1 != 0 && vres1 != 0 && size != 0) ],
-            ['RESULT_HEIGHT',     1, height.toFixed(3)    , (hres1 != '' && vres1 != '' && size != '' && hres1 != 0 && vres1 != 0 && size != 0) ],
-            ['RESULT_AREA',       2, area.toFixed(3)      , (hres1 != '' && vres1 != '' && size != '' && hres1 != 0 && vres1 != 0 && size != 0) ],
-            ['RESULT_PX_DENSITY', 3, px_density.toFixed(3), (hres1 != '' && vres1 != '' && size != '' && hres1 != 0 && vres1 != 0 && size != 0) ],
-            ['RESULT_D_MATCH',    1, d_match.toFixed(3)   , (hres1 != '' && vres1 != '' && size != '' && hres2 != '' && vres2 != '' && hres1 != 0 && vres1 != 0 && size != 0 && hres2 != 0 && vres2 != 0) ],
-            ['RESULT_SIZE',       1, size2.toFixed(3)     , (hres1 != '' && vres1 != '' && size != '' && hres2 != '' && vres2 != '' && hres1 != 0 && vres1 != 0 && size != 0 && hres2 != 0 && vres2 != 0) ],
+            ['RESULT_DIAG',         1, diag.toFixed(3)      , (size != '' && size != 0) ],
+            ['RESULT_WIDTH',        1, width.toFixed(3)     , (hres1 != '' && vres1 != '' && size != '' && hres1 != 0 && vres1 != 0 && size != 0) ],
+            ['RESULT_HEIGHT',       1, height.toFixed(3)    , (hres1 != '' && vres1 != '' && size != '' && hres1 != 0 && vres1 != 0 && size != 0) ],
+            ['RESULT_AREA',         2, area.toFixed(3)      , (hres1 != '' && vres1 != '' && size != '' && hres1 != 0 && vres1 != 0 && size != 0) ],
+            ['RESULT_PX_DENSITY',   3, px_density.toFixed(3), (hres1 != '' && vres1 != '' && size != '' && hres1 != 0 && vres1 != 0 && size != 0) ],
+            ['RESULT_D_MATCH',      1, d_match.toFixed(3)   , (hres1 != '' && vres1 != '' && size != '' && hres2 != '' && vres2 != '' && hres1 != 0 && vres1 != 0 && size != 0 && hres2 != 0 && vres2 != 0) ],
+            ['RESULT_DENSITY_SIZE', 1, size2.toFixed(3)     , (hres1 != '' && vres1 != '' && size != '' && hres_den != '' && vres_den != '' && hres1 != 0 && vres1 != 0 && size != 0 && hres_den != 0 && vres_den != 0)],
         ]
     );
 
@@ -57,7 +60,8 @@
         { $('#RESULT_OPT_RES').html(''); }
 
 
-    if (hres1 != '' && vres1 != '' && hres1 != 0 && vres1 != 0 && isNaN(hres1) == false && isNaN(vres1) == false) {
+    //if (hres1 != '' && vres1 != '' && hres1 != 0 && vres1 != 0 && isNaN(hres1) == false && isNaN(vres1) == false) {
+    if (Number.isNaN(parseNum(hres1)) == false && Number.isNaN(parseNum(vres1)) == false) {
         $('#RESULT_RATIO').html(commas(ar1.toFixed(3)) + ' (' + parseInt(hres1 / GCD(hres1, vres1)) + '<span style="vertical-align:baseline; position:relative; top:-0.05em;">:</span>' + parseInt(vres1 / GCD(hres1, vres1)) + ')');
         $('#RESULT_TOTAL_PX').html(commas(total_px) + ' (' + prefixGen(total_px, 2)['num'] + ' ' + prefixGen(total_px, 2)['prefix'] + 'px)');
     }
@@ -67,7 +71,44 @@
     }
 
 
+    
+    //!= '' && vres1 != '' && hres1 != 0 && vres1 != 0 && isNaN(hres1) == false && isNaN(vres1) == false
+    if (isInt(hres1) && isInt(vres1) && isInt(hres_den) && isInt(vres_den)) {
+        $('#RESULT_DENSITY_RATIO').html(commas(ar1.toFixed(3)) + ' (' + parseInt(hres_den / GCD(hres_den, vres_den)) + '<span style="vertical-align:baseline; position:relative; top:-0.05em;">:</span>' + parseInt(vres_den / GCD(hres_den, vres_den)) + ')');
+    }
+    else {
+        $('#RESULT_DENSITY_RATIO').html('');
+    }
+
+
     return;
+}
+
+
+function isInt(num) {
+    return Number.isInteger(num);
+}
+
+function parseNum(str) {
+    if (typeof str === "string") {
+        str = str.replace(/[^0-9.]/g, '');
+        if (str == '')
+            return NaN;
+        else
+            if (str.indexOf('.') == -1)
+                return parseInt(str);
+            else {
+                if (str.indexOf('.') == str.lastIndexOf('.'))
+                    return parseFloat(str);
+                else
+                    return NaN;
+            }
+    }
+    else if (Number.isNaN(str))
+        return NaN;
+    else if (typeof str === "number") {
+        return str;
+    }
 }
 
 function display(units, list) {

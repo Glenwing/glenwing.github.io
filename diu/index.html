@@ -189,7 +189,7 @@
                         <td id="RESULT_PX_DENSITY" class="result"></td>
                     </tr>
                     <tr>
-                        <td class="label">Diagonal:</td>
+                        <td class="label">Diagonal Size:</td>
                         <td id="RESULT_DIAG" class="result"></td>
                     </tr>
                     <tr>
@@ -206,13 +206,13 @@
                     </tr>
                 </table>
                 <!-- THIRD SEGMENT -->
-                <div class="title">COMPANION FORMATS</div>
+                <div class="title">SECONDARY DISPLAY WITH MATCHING HEIGHT</div>
                 <table>
                     <tr>
-                        <td class="label">Companion Resolution<br />or Aspect Ratio:</td>
+                        <td class="label">Secondary Display<br />Aspect Ratio:</td>
                         <td>
                             <input class="res_input" id="INPUT_HRES2" style="text-align:right;" type="text" onchange="update();" oninput="this.onchange()" onfocus="this.select();" />
-                            <span class="res_x">&#10005;</span>
+                            <span>:</span>
                             <input class="res_input" id="INPUT_VRES2" style="text-align:left;" type="text" onchange="update();" oninput="this.onchange()" onfocus="this.select();" />
                         </td>
                     </tr>
@@ -226,16 +226,36 @@
                         </td>
                     </tr>
                     <tr>
-                        <td class="label">Companion Size<br />(Matching Height):</td>
+                        <td class="label">Diagonal Size:</td>
                         <td id="RESULT_D_MATCH" class="result"></td>
                     </tr>
                     <tr>
-                        <td class="label">(Optimum Resolution):</td>
+                        <td class="label">Optimum Resolution:<br />(to also match density)</td>
                         <td id="RESULT_OPT_RES" class="result"></td>
                     </tr>
-                    <tr>
+                    <!----<tr>
                         <td class="label">Companion Size<br />(Matching Density):</td>
                         <td id="RESULT_SIZE" class="result"></td>
+                    </tr>-->
+                </table>
+                <!-- FOURTH SEGMENT -->
+                <div class="title">SECONDARY DISPLAY WITH MATCHING PIXEL DENSITY</div>
+                <table>
+                    <tr>
+                        <td class="label">Secondary Display<br />Resolution:</td>
+                        <td>
+                            <input class="res_input" id="INPUT_HRES_DENSITY" style="text-align:right;" type="text" onchange="update();" oninput="this.onchange()" onfocus="this.select();" />
+                            <span class="res_x">&#10005;</span>
+                            <input class="res_input" id="INPUT_VRES_DENSITY" style="text-align:left;" type="text" onchange="update();" oninput="this.onchange()" onfocus="this.select();" />
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="label">Companion Size:</td>
+                        <td id="RESULT_DENSITY_SIZE" class="result"></td>
+                    </tr>
+                    <tr>
+                        <td class="label">Ratio:</td>
+                        <td id="RESULT_DENSITY_RATIO" class="result"></td>
                     </tr>
                 </table>
             </div>

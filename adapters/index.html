@@ -52,7 +52,7 @@
     <div style="display:none;" hidden>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <br /></div>
     <div style="display:none;" hidden>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <br /></div>
     <div style="display:none;" hidden>
-        This Revision: 2.3.8b (2017-10-19)
+        This Revision: 2.4.1 (2017-12-01)
     <br /><br /></div>
     <div style="display:none;" hidden>
     (If you can see this message without needing to examine the page source, then something somewhere has gone terribly wrong)
@@ -1662,7 +1662,7 @@
 
                 Since many people seem to be having trouble finding quality DisplayPort cables, here are some recommendations:<br /><br />
                 Accell DisplayPort to DisplayPort cable (VESA-certified):<br />
-                <a target="_blank" href="https://www.amazon.com/dp/B00CD1FB3A/?tag=linus21-20">B142C-007B-2 (2.0 meters / 6.6 feet)</a><br />
+                <a target="_blank" href="https://www.amazon.com/dp/B0098HVZBE/?tag=linus21-20">B142C-007B-2 (2.0 meters / 6.6 feet)</a><br />
                 <a target="_blank" href="https://www.amazon.com/dp/B00CD1FB4E/?tag=linus21-20">B142C-010B-2 (3.0 meters / 9.8 feet)</a><br /><br />
                 Accell DisplayPort to Mini DisplayPort cable (VESA-certified):<br />
                 <a target="_blank" href="https://www.amazon.com/dp/B0163LQUH6/?tag=linus21-20">B143B-007B (2.0 meters / 6.6 feet)</a><br /><br />
@@ -1777,9 +1777,9 @@
 
                 There are two types of passive DisplayPort to HDMI adapters which support different speeds:
                 <ul>
-                    <li><b>Type 1 passive adapters</b> support up to 4.95&nbsp;Gbit/s (<b>HDMI&nbsp;1.2</b> speed; up to 1080p 60&nbsp;Hz)</li>
+                    <li><b>Type 1 passive adapters</b> support up to 4.95&nbsp;Gbit/s (<b>HDMI&nbsp;1.2</b> speed; up to 1080p 60&nbsp;Hz / 1440p 30&nbsp;Hz)</li>
                     <li>
-                        <b>Type 2 passive adapters</b> support up to 9.0&nbsp;Gbit/s (<b>≈HDMI&nbsp;1.4</b> speed; up to 1080p 120&nbsp;Hz / 4K 30&nbsp;Hz)<br />
+                        <b>Type 2 passive adapters</b> support up to 9.0&nbsp;Gbit/s (<b>≈HDMI&nbsp;1.4</b> speed; up to 1080p 120&nbsp;Hz / 1440p 60&nbsp;Hz / 4K 30&nbsp;Hz)<br />
                         (For a more detailed list of resolutions and refresh rates supported by each type, refer to the <a style="text-decoration:underline; cursor:pointer;" onclick="document.getElementById('DP_TO_HDMI_LINK').click();">table above</a>)
                     </li>
                 </ul>
@@ -1852,7 +1852,7 @@
 
             <table id="dp_hdmi_adapter_note" style="width:100%; padding:8px; border-collapse:collapse; border:1px solid RGBA(192,192,192,0.25); table-layout:fixed;">
                 <tr onclick="toggleSpoiler(this)" style="background-color:RGBA(0,0,0,0.16); cursor:pointer;">
-                    <td style="max-width:20px; min-width:20px; width:20px; text-align:center; vertical-align:middle; padding-left:12px; line-height:0; position:relative;"><span style="font-size:22px; position:relative; bottom:0em;">&#8250;</span></td>
+                    <td style="max-width:20px; min-width:20px; width:20px; text-align:center; vertical-align:middle; padding-left:12px;"><span style="font-size: 22px; position:relative; top:-0.05em;">&#8250;</span></td>
                     <td style="padding:8px; padding-left:12px; font-weight:bold;">
                         Click to expand
                     </td>
@@ -1936,7 +1936,7 @@
             <div style="padding-left:20px;">
                 A passive adapter can be used to connect a DisplayPort output to a DVI input. This is equivalent to a <b><span style="white-space:nowrap;">Single-Link</span> <span style="white-space:nowrap;">DVI-D</span></b> connection. Inline audio is not supported. These adapters can still be used to connect to monitors that have <span style="white-space:nowrap">Dual-Link</span> DVI ports, but the connection will be limited to the capabilities of <span style="white-space:nowrap">Single-Link</span> DVI as outlined in the table above (<a style="text-decoration:underline; cursor:pointer;" onclick="document.getElementById('DP_TO_DVI_LINK').click();">click here</a>).<br /><br />
 
-                <b>All DisplayPort to DVI passive adapters are <u>Single-Link only</u></b>. DisplayPort to <span style="white-space:nowrap">Dual-Link</span> DVI passive adapters <b>do not exist</b>. Although most DisplayPort to DVI passive adapters are advertised as "Dual-Link" and may appear to have "Dual-Link" connectors on them, please be warned that these are fake. The extra pins on these DVI connectors are dummy pins which are not connected to anything, and the adapter will still only function as a <span style="white-space:nowrap">Single-Link</span> DVI adapter. It is physically impossible to create a passive DisplayPort to <span style="white-space:nowrap">Dual-Link</span> DVI adapter due to an insufficient number of pins on the DisplayPort connector.<br /><br />
+                <b>All DisplayPort to DVI passive adapters are <u>Single-Link only</u></b>. DisplayPort to <span style="white-space:nowrap">Dual-Link</span> DVI passive adapters <b>do not exist</b>. Although most DisplayPort to DVI passive adapters are advertised as <span style="white-space:nowrap;">"Dual-Link"</span> and may appear to have <span style="white-space:nowrap;">"Dual-Link"</span> connectors on them, please be warned that these are fake. The extra pins on these DVI connectors are dummy pins which are not connected to anything, and the adapter will still only function as a <span style="white-space:nowrap">Single-Link</span> DVI adapter. It is physically impossible to create a passive DisplayPort to <span style="white-space:nowrap">Dual-Link</span> DVI adapter due to an insufficient number of pins on the DisplayPort connector.<br /><br />
 
                 DisplayPort to DVI passive adapters are not bi-directional, so they cannot be used to connect a DVI source to a DisplayPort display.<br /><br />
 
@@ -1960,7 +1960,7 @@
             <b>Active Adapters (Single-Link DVI)</b><br /><br />
 
             <div style="padding-left:20px;">
-                Inexpensive DisplayPort to <b><span style="white-space:nowrap;">Single-Link</span> DVI</b> active adapters exist. These are intended for multi-monitor configurations on some older graphics cards which do not support more than two monitors through DVI / HDMI, including DisplayPort to DVI / HDMI passive adapters; these graphics cards are identified <a href=".?section=active_adapters_for_multi_display">here</a>. Generally speaking, any inexpensive DisplayPort to DVI active adapter is <b><u>Single-Link-only</u></b>. As with passive adapters, these may appear to have "Dual-Link" connectors on them and may be advertised as "Dual-Link", so it is advised to read the description carefully to look for the maximum resolution and refresh frequency that the adapter claims to support. <span style="white-space:nowrap">Single-Link</span> DVI adapters will be limited to 1920×1200&nbsp;@&nbsp;60&nbsp;Hz or 2560×1600&nbsp;@&nbsp;30&nbsp;Hz.<br /><br />
+                Inexpensive DisplayPort to <b><span style="white-space:nowrap;">Single-Link</span> DVI</b> active adapters exist. These are intended for multi-monitor configurations on some older graphics cards which do not support more than two monitors through DVI / HDMI, including DisplayPort to DVI / HDMI passive adapters; these graphics cards are identified <a href=".?section=active_adapters_for_multi_display">here</a>. Generally speaking, any inexpensive DisplayPort to DVI active adapter is <b><u>Single-Link-only</u></b>. As with passive adapters, these may appear to have <span style="white-space:nowrap;">"Dual-Link"</span> connectors on them and may be advertised as <span style="white-space:nowrap;">"Dual-Link"</span>, so it is advised to read the description carefully to look for the maximum resolution and refresh frequency that the adapter claims to support. <span style="white-space:nowrap">Single-Link</span> DVI adapters will be limited to 1920×1200&nbsp;@&nbsp;60&nbsp;Hz or 2560×1600&nbsp;@&nbsp;30&nbsp;Hz.<br /><br />
 
                 DisplayPort to <span style="white-space:nowrap">Single-Link</span> DVI active adapter dongle (use with DVI cable):
                 &nbsp; <a target="_blank" href="https://www.amazon.com/dp/B00OQQ2HDC/?tag=linus21-20">Amazon US (1)</a>
@@ -1972,11 +1972,12 @@
             <b>Active Adapters (Dual-Link DVI)</b><br /><br />
 
             <div style="padding-left:20px;">
-                A more complex active adapter is required to convert DisplayPort to a full <b><span style="white-space:nowrap;">Dual-Link</span> DVI</b> connection. Please note that DisplayPort to <span style="white-space:nowrap">Dual-Link</span> DVI active adapters are expensive and generally unreliable, so these should only be considered as a last resort. Even if your monitor has a <span style="white-space:nowrap">Dual-Link</span> DVI port, it is usually not necessary to have a <span style="white-space:nowrap">Dual-Link</span> DVI connection. Passive and active DisplayPort to <span style="white-space:nowrap">Single-Link</span> DVI adapters still function in <span style="white-space:nowrap">Dual-Link</span> DVI ports. <span style="white-space:nowrap">Dual-Link</span> DVI active adapters should avoided unless the monitor's specifications exceed the limits of <span style="white-space:nowrap">Single-Link</span> DVI (listed in the table above).<br /><br />
+                A more complex active adapter is required to convert DisplayPort to a full <b><span style="white-space:nowrap;">Dual-Link</span> DVI</b> connection. Please note that DisplayPort to <span style="white-space:nowrap">Dual-Link</span> DVI active adapters can be somewhat unreliable, so these should only be considered as a last resort.<br /><br />
 
                 DisplayPort to Dual-Link DVI active adapter dongle (use with DVI cable):
-                &nbsp; <a target="_blank" href="https://www.amazon.com/dp/B002ISVI3U/?tag=linus21-20">Amazon US (1)</a>
-                &nbsp; <a target="_blank" href="https://www.amazon.com/dp/B00A493CNY/?tag=linus21-20">Amazon US (2)</a>
+                &nbsp; <a target="_blank" href="https://www.amazon.com/dp/B00DYRQXMK/?tag=linus21-20">Amazon US (1)</a>
+                &nbsp; <a target="_blank" href="https://www.amazon.com/dp/B002ISVI3U/?tag=linus21-20">Amazon US (2)</a>
+                &nbsp; <a target="_blank" href="https://www.amazon.com/dp/B00A493CNY/?tag=linus21-20">Amazon US (3)</a>
                 <br />
                 Mini DisplayPort to Dual-Link DVI active adapter dongle (use with DVI cable):
                 &nbsp; <a target="_blank" href="https://www.amazon.com/dp/B0030XMREG/?tag=linus21-20">Amazon US (1)</a>
@@ -1989,7 +1990,7 @@
 
             <table id="dp_dvi_adapter_note" style="width:100%; padding:8px; border-collapse:collapse; border:1px solid RGBA(192,192,192,0.25); table-layout:fixed;">
                 <tr onclick="toggleSpoiler(this)" style="background-color:RGBA(0,0,0,0.16); cursor:pointer;">
-                    <td style="max-width:20px; min-width:20px; width:20px; text-align:center; vertical-align:middle; padding-left:12px; line-height:0; position:relative;"><span style="font-size:22px; position:relative; bottom:0em;">&#8250;</span></td>
+                    <td style="max-width:20px; min-width:20px; width:20px; text-align:center; vertical-align:middle; padding-left:12px;"><span style="font-size: 22px; position:relative; top:-0.05em;">&#8250;</span></td>
                     <td style="padding:8px; padding-left:12px; font-weight:bold;">
                         Click to expand
                     </td>
@@ -2418,13 +2419,13 @@
 
                 HDMI to DVI passive adapters are bi-directional, so the same adapter can be used both from an HDMI source to a DVI display, and from a DVI source to an HDMI display.<br /><br />
 
-                Standard Speed HDMI to <span style="white-space:nowrap">Single-Link</span> <span style="white-space:nowrap">DVI-D</span> passive adapter dongle (use with HDMI cable):
+                HDMI to <span style="white-space:nowrap">Single-Link</span> <span style="white-space:nowrap">DVI-D</span> passive adapter dongle (use with HDMI cable):
                 &nbsp; <a target="_blank" href="https://www.amazon.com/dp/B00B2HORS6/?tag=linus21-20">Amazon US</a>
                 <br />
-                Standard Speed HDMI to <span style="white-space:nowrap">Single-Link</span> <span style="white-space:nowrap">DVI-D</span> passive adapter dongle (use with DVI cable):
+                HDMI to <span style="white-space:nowrap">Single-Link</span> <span style="white-space:nowrap">DVI-D</span> passive adapter dongle (use with DVI cable):
                 &nbsp; <a target="_blank" href="https://www.amazon.com/dp/B00B2HP9T2/?tag=linus21-20">Amazon US</a>
                 <br />
-                High Speed HDMI to <span style="white-space:nowrap">Single-Link</span> <span style="white-space:nowrap">DVI-D</span> passive adapter cable (2.0&nbsp;meters):
+                HDMI to <span style="white-space:nowrap">Single-Link</span> <span style="white-space:nowrap">DVI-D</span> passive adapter cable (2.0&nbsp;meters):
                 &nbsp; <a target="_blank" href="https://www.amazon.com/dp/B004S4R5CK/?tag=linus21-20">Amazon US</a>
                 <br />
                 <br />
@@ -3294,7 +3295,7 @@
 
                 USB <span style="white-space:nowrap">Type-C</span> to DisplayPort adapters operate passively via the <i>USB <span style="white-space:nowrap">Type-C</span> DisplayPort Alternate Mode</i> protocol, which allows native DisplayPort signals to be sent through the USB <span style="white-space:nowrap">Type-C</span> interface. These adapters do have a chip inside to negotiate the initial USB connection and switch the host port to DisplayPort output mode, so it is more expensive than a typical passive adapter, but there is no active format conversion involved with the actual video transmission.<br /><br />
 
-                USB <span style="white-space:nowrap">Type-C</span> adapters provide a complete DisplayPort signal, with all the capabilities that a standard DisplayPort connection has, including audio. Current adapters support the full bandwidth of DisplayPort&nbsp;1.2 (21.6&nbsp;Gbit/s; see <a style="text-decoration:underline; cursor:pointer;" onclick="document.getElementById('USBDP_TO_DP_LINK').click();">here</a>). The image produced is identical to that of a native DisplayPort connection. Using an adapter does not compromise any aspect of the connection.<br /><br />
+                USB <span style="white-space:nowrap">Type-C</span> adapters provide a complete DisplayPort signal, with all the capabilities that a standard DisplayPort connection has, including audio. Current adapters support the full bandwidth of DisplayPort&nbsp;1.2 (21.6&nbsp;Gbit/s; see <a style="text-decoration:underline; cursor:pointer;" onclick="document.getElementById('USBCDP_TO_DP_LINK').click();">here</a>). The image produced is identical to that of a native DisplayPort connection. Using an adapter does not compromise any aspect of the connection.<br /><br />
 
                 A USB <span style="white-space:nowrap">Type-C</span> to DisplayPort adapter can only provide a DisplayPort signal, it cannot switch modes to output DVI or HDMI signals like a normal DisplayPort port can. For this reason, DisplayPort to DVI and DisplayPort to HDMI passive adapters will not function when chained from a USB <span style="white-space:nowrap">Type-C</span> to DisplayPort adapter, since they rely on that capability to operate.<br /><br />
 
@@ -4590,29 +4591,35 @@
                             <span id="120Hz_no_DP_output"><b>Can I connect a DVI or HDMI computer&nbsp;/&nbsp;source to a DisplayPort display?</b></span><br /><br />
 
                             <div style="padding-left:20px;">
-                                No. Although this is not theoretically impossible, it is practically impossible at the moment, as there are no adapters (at the time of writing) from DVI or HDMI to DisplayPort that are capable of 120&nbsp;Hz. DVI/HDMI to DisplayPort adapters are uncommon and unreliable even for standard 60&nbsp;Hz video.<br /><br />
+                                Yes. An <b>HDMI to DisplayPort</b> active adapter is required. Please note this is <b>NOT</b> the same as a <b>DisplayPort to HDMI</b> adapter. Standard DisplayPort to HDMI adapters are for connecting DisplayPort sources to HDMI displays, not for connecting to DisplayPort displays.<br /><br />
 
-                                Please note that the inexpensive DisplayPort to HDMI and DisplayPort to DVI adapters and cables that can be commonly found will only function from a DisplayPort source to a DVI/HDMI display. They cannot be used to connect a DVI/HDMI source to a DisplayPort display. A much more expensive converter device is required for this, and I do not know of any that support >60&nbsp;Hz video.<br /><br />
+                                I have tested this adapter to work up to a maximum of 1920&nbsp;×&nbsp;1080 @ 120&nbsp;Hz:<br />
+                                <a href="https://www.amazon.com/dp/B01BXMOREI/">https://www.amazon.com/dp/B01BXMOREI/</a><br />
+                                HDMI&nbsp;1.4 or above is sufficient. HDMI&nbsp;2.0 support is not required.<br /><br />
+
+                                I tested this adapter with an AOC G2460PF and a ViewSonic XG2401, using a Radeon RX 480 and a GeForce GTX 1080. Please note that active adapters tend to be unreliable, and I cannot guarantee the adapter will work on any system.<br /><br />
+
+                                For DVI outputs, there are no DVI to DisplayPort adapters capable of 120+&nbsp;Hz.<br /><br />
                             </div>
 
                             <span id="120Hz_no_DP"><b>I have a BenQ XL2411Z / Acer GN246HL or another 120+&nbsp;Hz monitor with no DisplayPort input. What should I do?</b></span><br /><br />
 
                             <div style="padding-left:20px;">
-                                Some 1080p 144&nbsp;Hz displays, such as the BenQ/Zowie XL2411Z and Acer GN246HL, only have DVI and HDMI inputs, they do not have DisplayPort. Furthermore, the HDMI ports on these monitors are limited to 60&nbsp;Hz, which means that <span style="white-space:nowrap">Dual-Link</span> DVI <b>must</b> be used in order to reach 144&nbsp;Hz on these monitors.<br /><br />
+                                Some 1080p 144&nbsp;Hz displays, such as the BenQ/Zowie XL2411Z and Acer GN246HL, only have DVI and HDMI inputs, they do not have DisplayPort. Furthermore, the HDMI ports on these monitors are limited to 60&nbsp;Hz, which means that the <span style="white-space:nowrap">Dual-Link</span> DVI port <b>must</b> be used in order to reach 144&nbsp;Hz on these monitors.<br /><br />
 
-                                This can be problematic for people that want to use these monitors with laptops, or with newer graphics cards that don't have native DVI outputs. HDMI-to-DVI and DisplayPort-to-DVI passive adapters will <b>not</b> work, because HDMI and DisplayPort only support passive adapters to <b><span style="white-space:nowrap">Single-Link</span> DVI</b>, which only supports 1080p 60&nbsp;Hz. A <b><span style="white-space:nowrap">Dual-Link</span></b> DVI connection is required for 1080p 144&nbsp;Hz.<br /><br />
+                                This can be problematic for people that want to use these monitors with laptops, or with newer graphics cards that don't have native DVI outputs, or want to set up multiple monitors but don't have enough DVI ports. HDMI-to-DVI and DisplayPort-to-DVI passive adapters will <b>not</b> work, because HDMI and DisplayPort only support passive adapters to <b><span style="white-space:nowrap">Single-Link</span> DVI</b>, which has a maximum of 60&nbsp;Hz at 1080p. A <b><span style="white-space:nowrap">Dual-Link</span></b> DVI connection is required for 1080p 120+&nbsp;Hz.<br /><br />
 
                                 Please also note that many HDMI-to-DVI and DisplayPort-to-DVI passive adapters will be disguised and falsely advertised as "<span style="white-space:nowrap">Dual-Link</span> DVI" adapters, so if you think you've found one, you haven't. HDMI and DisplayPort <b>do not support</b> passive adapters to <span style="white-space:nowrap">Dual-Link</span> DVI, they are <b>all</b> <span style="white-space:nowrap">Single-Link</span> DVI adapters no matter what they say or what they look like.<br /><br />
 
-                                If your computer does not have a <b>native <span style="white-space:nowrap">Dual-Link</span> DVI output</b>, then the only other way of getting a <span style="white-space:nowrap">Dual-Link</span> DVI connection is with a DisplayPort to <b><span style="white-space:nowrap">Dual-Link</span> DVI active adapter</b>, which usually costs around $100 and are generally not very reliable. Also note that not just any DP-to-DVI active adapter will work, it must be a <b><span style="white-space:nowrap">Dual-Link</span></b> active adapter. There are active adapters which only support <span style="white-space:nowrap">Single-Link</span> DVI, intended for multi-monitor configurations on some older AMD graphics cards (detailed <a style="cursor:pointer; text-decoration:underline;" onclick="openSpoiler('active_adapters_for_multi_display', { 'scroll': true, 'this is the': 'table id' });">here</a>), and these adapters will not work for 1080p 120+&nbsp;Hz.<br /><br />
+                                If your computer does not have a <b>native <span style="white-space:nowrap">Dual-Link</span> DVI output</b>, then the only other way of getting a <span style="white-space:nowrap">Dual-Link</span> DVI connection is with a DisplayPort to <b><span style="white-space:nowrap">Dual-Link</span> DVI active adapter</b>. Please note that not just any DP-to-DVI active adapter will work; it must be a <b><span style="white-space:nowrap">Dual-Link</span></b> DVI active adapter. There <i>are</i> active adapters which only support <span style="white-space:nowrap">Single-Link</span> DVI, intended for multi-monitor configurations on some older AMD graphics cards (detailed <a style="cursor:pointer; text-decoration:underline;" onclick="openSpoiler('active_adapters_for_multi_display', { 'scroll': true, 'this is the': 'table id' });">here</a>), and these adapters will not work for 1080p 120+&nbsp;Hz.<br /><br />
 
-                                DisplayPort to <span style="white-space:nowrap">Dual-Link</span> DVI active adapters are expensive and unreliable, and should only be used as a last resort if you have no other method of connecting. If you have not purchased your monitor yet I suggest you do not buy the XL2411Z or GN246HL, but instead get a monitor that has DisplayPort input instead. The cost of a DP-to-DL-DVI adapters is greater than the price difference for purchasing a monitor that has a DisplayPort input to begin with.<br /><br />
+                                DisplayPort to <span style="white-space:nowrap">Dual-Link</span> DVI active adapters tend to be unreliable, and should only be used as a last resort if you have no other method of connecting. If you have not purchased your monitor yet I suggest you do not buy the XL2411Z or GN246HL, but instead get a monitor that has a DisplayPort input.<br /><br />
 
-                                DisplayPort to Dual-Link DVI active adapters:<br /><br />
+                                I have tested this adapter to work up to 1920&nbsp;×&nbsp;1080 @ 144&nbsp;Hz:<br />
+                                <a href="https://www.amazon.com/dp/B00DYRQXMK/">https://www.amazon.com/dp/B00DYRQXMK/</a><br />
+                                However, at 144&nbsp;Hz I did experience loss of signal when turning the monitor off and then on again, or putting the computer to sleep and waking it up again. I did not experience any issues when running at 1080p 120&nbsp;Hz instead though.<br /><br />
 
-                                DisplayPort&nbsp;1.1 to Dual-Link DVI active adapter:&nbsp;<a target="_blank" href="https://www.amazon.com/Accell-B087B-002B-UltraAV-DisplayPort-Dual-Link/dp/B002ISVI3U/">Amazon US</a><br />
-                                DisplayPort&nbsp;1.1 to Dual-Link DVI active adapter:&nbsp;<a target="_blank" href="https://www.amazon.com/StarTech-com-DisplayPort-Active-Adapter-Converter/dp/B00A493CNY/">Amazon US</a><br />
-                                Mini DisplayPort&nbsp;1.1 to Dual-Link DVI active adapter:&nbsp;<a target="_blank" href="https://www.amazon.com/StarTech-com-MDP2DVID-DisplayPort-Dual-Link-Powered/dp/B004I6L6DW/">Amazon US</a><br /><br />
+                                As always, active adapters tend to be very finicky and I cannot guarantee that the adapter will behave the same on your system. My testing was done with an AOC G2460PF and a Radeon RX 480 and GeForce GTX 1080.<br /><br />
                             </div>
                         </div>
                     </td>
@@ -4949,7 +4956,7 @@
 
                                 For example, if you want to know whether or not DVI ports can support passive adapters to VGA, DVI being a digital format doesn't have anything to do with VGA adapter support, because the DVI format isn't being used when you're using a passive adapter. The correct question is, "are DVI ports capable of sending VGA signals instead of DVI signals?", and the answer is "yes, if it's a <span style="white-space:nowrap;">DVI-I</span> port". Thus, passive DVI to VGA adapters are possible, despite the DVI format itself being digital.<br /><br />
 
-                                Likewise, if you want to know whether DisplayPort to VGA passive adapters exist or not, asking "is the DisplayPort format digital or analog" is completely irrelevant, because there aren't any DisplayPort signals involved when a passive adapters is used. The question is "are DisplayPort ports capable of sending VGA signals instead of DisplayPort signals?", and the answer is "no", so DisplayPort to VGA signals are therefore not possible. It has nothing to do with the DisplayPort format being digital, DisplayPort simply wasn't designed with the ability to alternatively send VGA signals, while DVI was.<br /><br />
+                                Likewise, if you want to know whether DisplayPort to VGA passive adapters exist or not, asking "is the DisplayPort format digital or analog" is completely irrelevant, because there aren't any DisplayPort signals involved when a passive adapter is used. The question is "are DisplayPort ports capable of sending VGA signals instead of DisplayPort signals?", and the answer is "no", so DisplayPort to VGA signals are therefore not possible. It has nothing to do with the DisplayPort format being digital, DisplayPort simply wasn't designed with the ability to alternatively send VGA signals, while DVI was.<br /><br />
 
                                 There are no rules of thumb, like "digital to digital is possible passively, analog to digital isn't". The compatibility of passive adapters is completely arbitrary and just comes down to what capabilities each video standard was designed with.<br /><br />
                             </div>
@@ -5070,6 +5077,8 @@
                                 <li>DisplayPort / Mini DisplayPort</li>
                                 <li>DisplayPort to VGA / DVI / HDMI active adapter</li>
                             </ul><br />
+
+                            Please note that the convention for talking about mixed display interfaces is "[source] to [display]", so for example the term "DisplayPort to DVI adapter" means an adapter that connects a DisplayPort output (PC/laptop/etc.) to a DVI display, not the other way around. Most adapters are not reversible, so a DisplayPort to DVI adapter is not the same thing as a DVI to DisplayPort adapter.<br /><br />
 
                             <b>The&nbsp;following graphics cards are subject to the&nbsp;limitation described above:</b><br />
                             <ul>
@@ -6362,18 +6371,23 @@
         /* NAVIGATION AND ELEMENT CONTROL */
 
         function scrollToEl(elementID) {
+            console.log('scrollTo flag 1');
             obj = document.getElementById(elementID);
             if (obj == null) { console.log(arguments.callee.name, '::', 'No such element "' + elementID + '" found; function aborted'); return; }
             offset = 50;
 
             var curtop = 0 - offset;
+            console.log('scrollTo flag 2');
             if (obj.offsetParent) {
                 do {
+                    console.log('scrollTo flag 3');
                     curtop += obj.offsetTop;
                 } while (obj = obj.offsetParent);
                 y = [curtop];
+                console.log('scrollTo flag 4');
             }
 
+            console.log('scrollTo flag 5');
             window.scroll(0, y);
 
             return;
@@ -6559,10 +6573,10 @@
             footer = null;
             if (spoiler.rows.length > 2) { footer = spoiler.rows[2]; }
 
+            $(spoiler.rows[0].cells[0]).css({ "-webkit-transform": "rotate(90deg)", "bottom": "0.35em", "left": "6px" });
+
             body.style.display   = 'table-row';
             footer.style.display = 'table-row';
-
-            $(spoiler.rows[0].cells[0]).css({ "-webkit-transform": "rotate(90deg)", "bottom": "0.35em", "left": "6px" });
 
             if (options['scroll'] == true) {
                 if (options['up_only'] == true) { scrollUp(id); }
