@@ -15,25 +15,58 @@
         font-size: 15px;
     }
 
+    .number {
+        font-family:        "Consolas", "Inconsolata", "Lucida Console", Monospace;
+        font-size:          15px;
+    }
+
     div.wrapper {
         min-height: 100%;
         position: relative;
     }
 
     div.main {
-        border: 0px solid transparent;
-        padding: 16px;
-        padding-bottom: 48px;
+        border:             0px solid transparent;
+        font-size:          15px;
+        padding-bottom:     48px;
+        margin-left:        auto;
+        margin-right:       auto;
     }
 
     div.footer {
-        width: 100%;
-        position: absolute;
-        bottom: 0;
-        left: 0;
-        vertical-align: middle;
-        background-color: #DDDDDD;
-        cursor: pointer;
+        width:              100%;
+        position:           absolute;
+        bottom:             0;
+        left:               0;
+        vertical-align:     middle;
+        background-color:   #DDDDDD;
+        cursor:             pointer;
+        min-width:          512px;
+        padding-top:        10px;
+        padding-bottom:     10px;
+        font-family:        "Consolas", "Inconsolata", "Lucida Console", Monospace;
+        font-size:          15px;
+    }
+    div.footer a {
+        color:              #888888;
+        text-decoration:    none;
+        vertical-align:     middle;
+        padding:            10px;
+    }
+
+    div.header {
+        font-weight:        bold;
+        font-size:          16px;
+        padding-left:       16px;
+        padding-right:      16px;
+        padding-top:        12px;
+        padding-bottom:     0px;
+        min-width:          480px;
+    }
+    div.header span {
+        cursor:             pointer;
+        text-decoration:    none;
+        color:              #000000;
     }
 
     span.title {
@@ -80,8 +113,11 @@
 <body>
 <div class="wrapper">
     <div class="main">
-        <div style="font-weight:bold; font-size:16px;">Display Technology Information Repository and Utilities<br /><hr /></div>
-        <table>
+        <div class="header number">
+            <span>Display Technology Information Repository and Utilities</span>
+            <hr />
+        </div>
+        <table style="padding-left:20px;">
             <tr><td><span class="title">Utilities</span>
                 <ul>
                     <li><a href="./diu/">Display Info Utility</a></li>
@@ -97,8 +133,8 @@
         </table>
     </div>
 
-    <div class="footer" onclick="document.getElementById('profile_link').click();" style="padding-top:10px; padding-bottom:10px;">
-        <a id="profile_link" target="_blank" href="https://linustechtips.com/main/profile/2466-glenwing/" style="color:#888888; text-decoration:none; vertical-align:middle; padding:10px;">Glenwing</a>
+    <div class="footer" onclick="document.getElementById('profile_link').click();">
+        <a id="profile_link" target="_blank" href="https://linustechtips.com/main/profile/2466-glenwing/">Glenwing</a>
     </div>
 </div>
 </body>
