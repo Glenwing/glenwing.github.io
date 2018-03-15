@@ -1,0 +1,166 @@
+﻿html,
+body {
+    margin:             0;
+    height:             100%;
+    padding:            0;
+}
+
+body {
+    font-family:        "Consolas", "Inconsolata", "Lucida Console", Monospace;
+    font-size:          15px;
+    min-height:         100%;
+    overflow-y:         scroll;
+}
+
+.number {
+    font-family:        "Consolas", "Inconsolata", "Lucida Console", Monospace;
+    font-size:          15px;
+}
+
+div.wrapper {
+    min-height:         100%;
+    position:           relative;
+}
+
+div.main {
+    border:             0px solid transparent;
+    font-size:          15px;
+    padding-bottom:     48px;
+    margin-left:        auto;
+    margin-right:       auto;
+}
+
+div.footer {
+    width:              100%;
+    position:           absolute;
+    bottom:             0;
+    left:               0;
+    vertical-align:     middle;
+    background-color:   #DDDDDD;
+    cursor:             pointer;
+    min-width:          512px;
+    padding-top:        10px;
+    padding-bottom:     10px;
+    font-family:        "Consolas", "Inconsolata", "Lucida Console", Monospace;
+    font-size:          15px;
+}
+div.footer a {
+    color:              #888888;
+    text-decoration:    none;
+    vertical-align:     middle;
+    padding:            10px;
+}
+
+div.header {
+    font-weight:        bold;
+    font-size:          16px;
+    padding:            16px;
+    padding-bottom:     0px;
+    min-width:          480px;
+}
+div.header a {
+    cursor:             pointer;
+    text-decoration:    none;
+    color:              #000000;
+}
+div.header span.arrow {
+    font-size:          20px;
+    line-height:        0;
+    top:                0.1em;
+    vertical-align:     baseline;
+    position:           relative;
+}
+
+div.title {
+    margin-left:        auto;
+    margin-right:       auto;
+    text-align:         center;
+    font-weight:        bold;
+    background-color:   #DDDDDD;
+    padding:            8px;
+}
+
+span.title {
+    font-weight:        bold;
+}
+
+input {
+    padding:            4px;
+    text-align:         center;
+}
+
+input[type="text"] {
+    border:             1px solid #CCCCCC;
+    background-color:   #F4F4F8;
+}
+
+input.res_input {
+    width:              50px;
+}
+
+table {
+    margin-left:        auto;
+    margin-right:       auto;
+    border:             0px solid black;
+}
+
+td {
+    padding:            8px;
+    vertical-align:     middle;
+    border:             solid 1px transparent;
+}
+
+td.label {
+    font-weight:        bold;
+    min-width:          192px;
+    text-align:         right;
+}
+
+td.result {
+    min-width:          120px;
+    width:              100%;
+}
+
+a:link {
+    color:              #777777;
+    text-decoration:    none;
+}
+
+a:visited {
+    color:              #777777;
+    text-decoration:    none;
+}
+
+a:hover {
+    color:              #000000;
+    text-decoration:    underline;
+}
+
+a:active {
+    color:              #000000;
+    text-decoration:    underline;
+}
+
+sup {
+    vertical-align:     baseline;
+    position:           relative;
+    top:                -0.45em;
+    line-height:        0;
+    font-size:          75%;
+}
+
+sub {
+    vertical-align:     baseline;
+    position:           relative;
+    top:                0.3em;
+    line-height:        0;
+}
+
+span.res_x {
+    font-family:        'Courier New';
+    font-size:          10px;
+    vertical-align:     baseline;
+    position:           relative;
+    top:                -0.1em;
+    line-height:        0;
+}
