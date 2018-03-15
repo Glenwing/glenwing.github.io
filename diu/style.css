@@ -54,7 +54,9 @@ div.footer a {
 div.header {
     font-weight:        bold;
     font-size:          16px;
-    padding:            16px;
+    padding-left:       16px;
+    padding-right:      16px;
+    padding-top:        12px;
     padding-bottom:     0px;
     min-width:          480px;
 }
@@ -63,12 +65,11 @@ div.header a {
     text-decoration:    none;
     color:              #000000;
 }
-div.header span.arrow {
-    font-size:          20px;
-    line-height:        0;
-    top:                0.1em;
-    vertical-align:     baseline;
-    position:           relative;
+div.header i.back_arrow {
+    transform:rotate(90deg) scale(0.75);
+    line-height:0;
+    position:relative;
+    bottom:-0.2em;
 }
 
 div.title {
@@ -163,4 +164,11 @@ span.res_x {
     position:           relative;
     top:                -0.1em;
     line-height:        0;
+}
+
+hr {
+    height:             1px;
+    border-width:       0;
+    color:              #888888;
+    background-color:   #888888;
 }

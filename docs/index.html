@@ -14,6 +14,13 @@
         font-family: "Consolas", "Inconsolata", "Lucida Console", Monospace;
         font-size:15px;
         min-height:100%;
+        line-height:        120%;
+        overflow-y:         scroll;
+    }
+
+    .number {
+        font-family:        "Consolas", "Inconsolata", "Lucida Console", Monospace;
+        font-size:          15px;
     }
 
     div.wrapper {
@@ -22,20 +29,53 @@
     }
 
     div.main {
-        border:0px solid transparent;
-        font-size:15px;
-        padding:16px;
-        padding-bottom:48px;
+        border:             0px solid transparent;
+        font-size:          15px;
+        padding-bottom:     48px;
+        margin-left:        auto;
+        margin-right:       auto;
     }
 
     div.footer {
-        width:100%;
-        position:absolute;
-        bottom: 0;
-        left: 0;
-        vertical-align:middle;
-        background-color:#DDDDDD;
-        cursor:pointer;
+        width:              100%;
+        position:           absolute;
+        bottom:             0;
+        left:               0;
+        vertical-align:     middle;
+        background-color:   #DDDDDD;
+        cursor:             pointer;
+        min-width:          512px;
+        padding-top:        10px;
+        padding-bottom:     10px;
+        font-family:        "Consolas", "Inconsolata", "Lucida Console", Monospace;
+        font-size:          15px;
+    }
+    div.footer a {
+        color:              #888888;
+        text-decoration:    none;
+        vertical-align:     middle;
+        padding:            10px;
+    }
+
+    div.header {
+        font-weight:        bold;
+        font-size:          16px;
+        padding-left:       16px;
+        padding-right:      16px;
+        padding-top:        12px;
+        padding-bottom:     0px;
+        min-width:          480px;
+    }
+    div.header a {
+        cursor:             pointer;
+        text-decoration:    none;
+        color:              #000000;
+    }
+    div.header i.back_arrow {
+        transform:rotate(90deg) scale(0.75);
+        line-height:0;
+        position:relative;
+        bottom:-0.2em;
     }
 
     span.title {
@@ -63,6 +103,13 @@
         color:#000000;
         text-decoration:underline;
     }
+
+    hr {
+        height:             1px;
+        border-width:       0;
+        color:              #888888;
+        background-color:   #888888;
+    }
         
 </style>
 
@@ -70,12 +117,16 @@
 
 <head>
     <title>Display Industry Standards and Specifications</title>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons" />
 </head>
 
 <body>
 <div class="wrapper">
     <div class="main">
-        <div style="font-weight:bold; font-size:16px;"><a href="https://glenwing.github.io" style="text-decoration:none; color:#000000">Display Industry Standards Archive</a><br /><hr /></div>
+        <div class="header number">
+            <a href="https://glenwing.github.io"><i class="material-icons back_arrow">subdirectory_arrow_left</i>&nbsp;Display Industry Standards Archive</a>
+            <hr />
+        </div>
         <table>
             <tr><td><span class="title">DisplayPort Standard</span>
                 <ul>
@@ -188,12 +239,13 @@
                 <ul>
                     <li><a target="_blank" href="https://glenwing.github.io/docs/VESA-EDDC-1.2.pdf">E-DDC Version 1.2</a> (2007&nbsp;December&nbsp;26)</li>
                     <li><a target="_blank" href="https://glenwing.github.io/docs/VESA-DDCCI-1.1.pdf">DDC/CI Version 1.1</a> (2004&nbsp;October&nbsp;29)</li>
+                </ul>
             </td></tr>
         </table>
     </div>
 
-    <div class="footer" onclick="document.getElementById('profile_link').click();" style="padding-top:10px; padding-bottom:10px;">
-        <a id="profile_link" target="_blank" href="https://linustechtips.com/main/profile/2466-glenwing/" style="color:#888888; text-decoration:none; vertical-align:middle; padding:10px;">Glenwing</a>
+    <div class="footer" onclick="document.getElementById('profile_link').click();">
+        <a id="profile_link" target="_blank" href="https://linustechtips.com/main/profile/2466-glenwing/">Glenwing</a>
     </div>
 </div>
 </body>
