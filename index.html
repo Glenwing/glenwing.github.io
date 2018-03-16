@@ -13,6 +13,8 @@
     body {
         font-family: "Consolas", "Inconsolata", "Lucida Console", Monospace;
         font-size: 15px;
+        line-height:        120%;
+        min-height:         100%;
     }
 
     .number {
@@ -55,6 +57,8 @@
     }
 
     div.header {
+        font-family:        "Consolas", "Inconsolata", "Lucida Console", Monospace;
+        line-height:        120%;
         font-weight:        bold;
         font-size:          16px;
         padding-left:       16px;
@@ -64,9 +68,13 @@
         min-width:          480px;
     }
     div.header span {
-        cursor:             pointer;
-        text-decoration:    none;
         color:              #000000;
+    }
+    div.header i.back_arrow {
+        transform:rotate(90deg) scale(0.75);
+        line-height:0;
+        position:relative;
+        bottom:-0.2em;
     }
 
     span.title {
@@ -107,14 +115,15 @@
 <html>
 
 <head>
-    <title>Display Technology Information Repository and Utilities</title>
+    <title>Display Technology Utilities and Information Repository</title>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons" />
 </head>
 
 <body>
 <div class="wrapper">
     <div class="main">
-        <div class="header number">
-            <span>Display Technology Information Repository and Utilities</span>
+        <div class="header">
+            Display Technology Information Repository and Utilities
             <hr />
         </div>
         <table style="padding-left:20px;">

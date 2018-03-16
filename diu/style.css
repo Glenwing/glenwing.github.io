@@ -8,6 +8,7 @@ body {
 body {
     font-family:        "Consolas", "Inconsolata", "Lucida Console", Monospace;
     font-size:          15px;
+    line-height:        120%;
     min-height:         100%;
     overflow-y:         scroll;
 }
@@ -52,6 +53,8 @@ div.footer a {
 }
 
 div.header {
+    font-family:        "Consolas", "Inconsolata", "Lucida Console", Monospace;
+    line-height:        120%;
     font-weight:        bold;
     font-size:          16px;
     padding-left:       16px;
