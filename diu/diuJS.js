@@ -85,6 +85,7 @@
 
 // Returns false if input is a non-integer number or NaN
 function isInt(num) {
+    num = parseNum(num);
     if (Array.isArray(num) == true) {
         for (a = 0; a < num.length; a++) {
             if (Number.isInteger(num[a]) == false) {
@@ -96,6 +97,22 @@ function isInt(num) {
     else
         return Number.isInteger(num);
 }
+
+
+function isFloat(num) {
+    num = parseNum(num);
+    if (Array.isArray(num) == true) {
+        for (a = 0; a < num.length; a++) {
+            if (Number.isInteger(num[a]) == true || Number.isNaN(num[a]) == true) {
+                return false;
+            }
+            return true;
+        }
+    }
+    else
+        return !(Number.isInteger(num) || Number.isNaN(num));
+}
+
 
 // Returns false if input is not a positive number (zero, negative number, or NaN)
 function isPositive(num) {
@@ -113,6 +130,30 @@ function isPositive(num) {
             return false;
         else if (num > 0)
             return true;
+        else {
+            return false;
+        }
+    }
+}
+
+function isNonNegative(num) {
+    if (Array.isArray(num) == true) {
+        for (a = 0; a < num.length; a++) {
+            if (Number.isNaN(parseNum(num[a])) == true)
+                return false;
+            else if (num[a] < 0)
+                return false;
+        }
+        return true;
+    }
+    else {
+        if (Number.isNaN(parseNum(num)) == true)
+            return false;
+        else if (num >= 0)
+            return true;
+        else {
+            return false;
+        }
     }
 }
 

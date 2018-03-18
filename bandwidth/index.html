@@ -1,0 +1,435 @@
+﻿<!DOCTYPE html>
+
+<meta name="viewport" content="width=device-width">
+
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+<script src='https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.2/MathJax.js?config=TeX-MML-AM_CHTML'></script>
+<script src="https://ajax.googleapis.com/ajax/libs/webfont/1.6.26/webfont.js"></script>
+<script>
+    MathJax.Hub.Config({
+        jax: ["input/TeX", "output/HTML-CSS"],
+        displayAlign: "left"
+    });
+    WebFont.load({
+        google: { families: ['Inconsolata'] }
+    });
+</script>
+<!----<script src="nice-select.js"></script>-->
+
+
+
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="utf-8" />
+    <title>Bandwidth Calculator</title>
+    <link rel="stylesheet" type="text/css" href="./style.css" />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons" />
+</head>
+
+<body>
+    <div class="wrapper">
+        <div class="main">
+            <div class="header">
+                <a href="https://glenwing.github.io"><i class="material-icons back_arrow">subdirectory_arrow_left</i>&nbsp;Video Bandwidth Calculator</a>
+                <hr />
+            </div>
+
+            <div class="spoiler">
+                <table id="video_format" class="spoiler">
+                    <tr class="header">
+                        <td class="arrow"><span class="arrow"></span></td>
+                        <td class="title">
+                            Video Format
+                        </td>
+                        <td class="link number"></td>
+                    </tr>
+                    <tr id="video_format_body" style="display:table-row;">
+                        <td colspan="3" class="body">
+                            <table>
+                                <tr>
+                                    <td>
+                                        <div align="center">
+                                            <input id="INPUT_HRES" class="res_input number" style="text-align:right;" type="text" onchange="submitVar(this.id, this.value); calcMain();" oninput="this.onchange()" onfocus="this.select();" tabindex="2" autofocus />
+                                            <span class="res_x">&#10005;</span>
+                                            <input id="INPUT_VRES" class="res_input number" style="text-align:left;" type="text" onchange="submitVar(this.id, this.value); calcMain();" oninput="this.onchange()" onfocus="this.select();" tabindex="2" />
+                                            <span>@</span>
+                                            <input id="INPUT_F" class="freq_input number" type="text" onchange="submitVar(this.id, this.value), calcMain();" oninput="this.onchange()" onfocus="this.select();" tabindex="3" />
+                                            <span>Hz</span>
+                                        </div>
+                                        <div id="warning_box" style="text-align:left; width:400px; margin-top:32px; border:1px solid black; padding:16px;">
+                                            <b>Warning: Non-Standard Refresh Rate</b><br />
+                                            <div style="padding:8px;">
+                                                The CTA-861 standard only defines timing parameters for this resolution at the following refresh rates:<br />
+                                                <ul>
+                                                    <li>50.000 Hz (VIC: 24)</li>
+                                                    <li>59.940 Hz (VIC: 25)</li>
+                                                    <li>60.000 Hz (VIC: 26)</li>
+                                                </ul>
+                                                This calculator uses the timing parameters from 60 Hz for non-standard refresh rates.
+                                            </div>
+                                        </div>
+                                    </td>
+                                </tr>
+                            </table>
+                        </td>
+                    </tr>
+                </table>
+            </div>
+
+
+            <div class="spoiler">
+                <table id="advanced_settings" class="spoiler">
+                    <tr onclick="toggleSpoiler(this)" class="header clickable">
+                        <td class="arrow"><span class="arrow">&#8250;</span></td>
+                        <td class="title">
+                            Advanced Settings
+                        </td>
+                        <td class="link"></td>
+                    </tr>
+                    <tr id="advanced_settings_body" style="display:table-row;">
+                        <td colspan="3" class="body">
+                            <table class="adv_options">
+                                <tr style="vertical-align:top;">
+                                    <td>
+                                        <b>Color Depth:</b><br />
+                                        <form id="COLOR_DEPTH_FORM" onchange="submitVar(this.id, $('input[name=COLOR_DEPTH_SLCT]:checked').val()); calcMain();">
+                                            <label><input type="radio" name="COLOR_DEPTH_SLCT" value="24" checked />&nbsp;&nbsp;8 bpc (24 bit/px)</label><br />
+                                            <label><input type="radio" name="COLOR_DEPTH_SLCT" value="30" />10 bpc (30 bit/px)</label><br />
+                                            <label><input type="radio" name="COLOR_DEPTH_SLCT" value="36" />12 bpc (36 bit/px)</label><br />
+                                            <label><input type="radio" name="COLOR_DEPTH_SLCT" value="48" />16 bpc (48 bit/px)</label><br />
+                                            <label><input type="radio" name="COLOR_DEPTH_SLCT" value="Custom" />Custom:</label><br />
+                                        </form>
+                                        <div class="table">
+                                            <div class="trow">
+                                                <div class="tcell" style="vertical-align:middle; line-height:125%;">
+                                                    <input id="CUSTOM_COLOR_DEPTH" class="color_depth_input number" type="text" onchange="submitVar('COLOR_DEPTH_FORM', $('input[name=COLOR_DEPTH_SLCT]:checked').val()); calcMain();" oninput="this.onchange();" onfocus="this.select();" disabled />
+                                                </div>
+                                                <div class="tcell" style="padding-left:4px; vertical-align:middle; line-height:125%; width:100%;">
+                                                    <form id="CD_UNIT_FORM" style="line-height:100%;" onchange="document.getElementById('CUSTOM_COLOR_DEPTH').focus(); submitVar('COLOR_DEPTH_FORM', $('input[name=COLOR_DEPTH_SLCT]:checked').val()); calcMain();" disabled>
+                                                        <label><input type="radio" name="CD_UNIT_SLCT" value="bpc" checked />&nbsp;bpc</label><br />
+                                                        <label><input type="radio" name="CD_UNIT_SLCT" value="bpp" />&nbsp;bit/px</label>
+                                                    </form>
+                                                </div>
+                                            </div>    
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <b>Pixel Format:</b><br />
+                                        <form id="PIXEL_FORMAT_FORM" onchange="submitVar(this.id, $('input[name=PX_FORMAT_SLCT]:checked').val()); calcMain();">
+                                            <label><input type="radio" name="PX_FORMAT_SLCT" value="RGB" checked />RGB</label><br />
+                                            <label><input type="radio" name="PX_FORMAT_SLCT" value="YCBCR 4:4:4" />YC<sub>B</sub>C<sub>R</sub> 4:4:4</label><br />
+                                            <label><input type="radio" name="PX_FORMAT_SLCT" value="YCBCR 4:2:2" />YC<sub>B</sub>C<sub>R</sub> 4:2:2</label><br />
+                                            <label><input type="radio" name="PX_FORMAT_SLCT" value="YCBCR 4:2:0" />YC<sub>B</sub>C<sub>R</sub> 4:2:0</label><br />
+                                        </form>
+                                    </td>
+                                    <td>
+                                        <b>Compression:</b><br />
+                                        <form id="COMPRESSION_FORM" onchange="submitVar(this.id, $('input[name=COMPRESSION_SLCT]:checked').val()); calcMain();">
+                                            <label><input type="radio" name="COMPRESSION_SLCT" value="Uncompressed" checked />Uncompressed</label><br />
+                                            <label><input type="radio" name="COMPRESSION_SLCT" value="DSC 2.0x" />DSC (2.0×)</label><br />
+                                            <label><input type="radio" name="COMPRESSION_SLCT" value="DSC 2.5x" />DSC (2.5×)</label><br />
+                                            <label><input type="radio" name="COMPRESSION_SLCT" value="DSC 3.0x" />DSC (3.0×)</label><br />
+                                        </form>
+                                    </td>
+                                    <td>
+                                        <b>Scan Type:</b><br />
+                                        <form id="SCAN_FORM" onchange="submitVar(this.id, $('input[name=SCAN_SLCT]:checked').val()); calcMain();">
+                                            <label><input type="radio" name="SCAN_SLCT" value="p" checked />Progressive</label><br />
+                                            <label><input type="radio" name="SCAN_SLCT" value="i" />Interlaced</label><br />
+                                        </form>
+                                    </td>
+                                    <td>
+                                        <b>Margins:</b><br />
+                                        <form id="MARGINS_FORM" onchange="submitVar(this.id, $('input[name=MARGINS_SLCT]:checked').val()); calcMain();">
+                                            <label><input type="radio" name="MARGINS_SLCT" value="n" checked />No</label><br />
+                                            <label><input type="radio" name="MARGINS_SLCT" value="y" />Yes</label><br />
+                                        </form>
+                                        <input id="CUSTOM_MARGINS" class="margins_input number" type="text" onchange="submitVar('MARGINS_FORM', $('input[name=MARGINS_SLCT]:checked').val()); calcMain();" disabled />&nbsp;%
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td colspan="5">
+                                        <table class="timing_format">
+                                            <tr>
+                                                <td rowspan="4" style="text-align:left;">
+                                                    <b>Timing Format:</b><br />
+                                                    <select id="TIMING_DROP" onchange="submitVar(this.id, this.value); calcMain();" style="padding:4px; margin-top:8px;">
+                                                        <option value="None">None</option>
+                                                        <option value="DMT">DMT</option>
+                                                        <option value="GTF">GTF</option>
+                                                        <option value="CVT">CVT</option>
+                                                        <option value="CTA-861">CTA-861</option>
+                                                        <option value="CVT-RB">CVT-RB</option>
+                                                        <option value="CVT-R2" selected>CVT-R2</option>
+                                                        <option value="Custom">Custom</option>
+                                                    </select><br />
+                                                    <div style="padding:4px;">
+                                                        <b>VIC: </b><span id="TIMING_VIC">218</span>
+                                                    </div>
+                                                    
+                                                </td>
+                                                <td></td>
+                                                <td>Front Porch:</td>
+                                                <td>Sync Width:</td>
+                                                <td>Back Porch:</td>
+                                                <td>Total:</td>
+                                            </tr>
+                                            <tr style="height:30px;">
+                                                <td style="text-align:right; width:100px; padding-right:8px;">
+                                                    H<sub>blank</sub>
+                                                </td>
+                                                <td class="timing_field">
+                                                    <input id="H_FP" class="timing_param" oldvalue="" onchange="submitVar(this.id, this.value); calcMain();" oninput="this.onchange();" onfocus="this.select();" disabled />&nbsp;px
+                                                </td>
+                                                <td class="timing_field">
+                                                    <input id="H_SW" class="timing_param" oldvalue="" onchange="submitVar(this.id, this.value); calcMain();" oninput="this.onchange();" onfocus="this.select();" disabled />&nbsp;px
+                                                </td>
+                                                <td class="timing_field">
+                                                    <input id="H_BP" class="timing_param" oldvalue="" onchange="submitVar(this.id, this.value); calcMain();" oninput="this.onchange();" onfocus="this.select();" disabled />&nbsp;px
+                                                </td>
+                                                <td style="text-align:right; min-width:60px;">
+                                                    <span id="H_BLANK">1234</span>&nbsp;px
+                                                </td>
+                                            </tr>
+                                            <tr style="height:30px;">
+                                                <td id="V_BLANK_EVEN_LABEL" style="text-align:right; width:100px; padding-right:8px;">
+                                                    V<sub>blank</sub>
+                                                </td>
+                                                <td class="timing_field">
+                                                    <input id="V_FP" class="timing_param" oldvalue="" onchange="submitVar(this.id, this.value); calcMain();"  oninput="this.onchange();" onfocus="this.select();" disabled />&nbsp;px
+                                                </td>
+                                                <td class="timing_field">
+                                                    <input id="V_SW" class="timing_param" oldvalue="" onchange="submitVar(this.id, this.value); calcMain();" oninput="this.onchange();" onfocus="this.select();" disabled />&nbsp;px
+                                                </td>
+                                                <td class="timing_field">
+                                                    <input id="V_BP" class="timing_param" oldvalue="" onchange="submitVar(this.id, this.value); calcMain();"  oninput="this.onchange();" onfocus="this.select();" disabled />&nbsp;px
+                                                </td>
+                                                <td style="text-align:right; width:100px;">
+                                                    <span id="V_BLANK">0</span>&nbsp;px
+                                                </td>
+                                            </tr>
+                                            <tr id="Interlaced_Timing_Row" style="height:30px;">
+                                                <td id="V_BLANK_ODD_LABEL" style="text-align:right; width:100px; padding-right:8px;">
+                                                    (Odd)&nbsp;V<sub>blank</sub>
+                                                </td>
+                                                <td id="V_FP_ODD_CONTAINER">
+                                                    <input id="V_FP_ODD" class="timing_param" oldvalue="" onchange="submitVar(this.id, this.value); calcMain();" oninput="this.onchange();" onfocus="this.select();" disabled />&nbsp;px
+                                                </td>
+                                                <td id="V_SW_ODD_CONTAINER">
+                                                    <input id="V_SW_ODD" class="timing_param" oldvalue="" onchange="submitVar(this.id, this.value); calcMain();" oninput="this.onchange();" onfocus="this.select();" disabled />&nbsp;px
+                                                </td>
+                                                <td id="V_BP_ODD_CONTAINER">
+                                                    <input id="V_BP_ODD" class="timing_param" oldvalue="" onchange="submitVar(this.id, this.value); calcMain();" oninput="this.onchange();" onfocus="this.select();" disabled />&nbsp;px
+                                                </td>
+                                                <td id="V_BLANK_ODD_CONTAINER" style="text-align:right; width:100px;">
+                                                    <span id="V_BLANK_ODD">0</span>&nbsp;px
+                                                </td>
+                                            </tr>
+                                        </table>
+                                    </td>
+                                </tr>
+                            </table>
+                        </td>
+                    </tr>
+                </table>
+            </div>
+
+
+            <div class="spoiler">
+                <table id="results" class="spoiler">
+                    <tr class="header">
+                        <td class="arrow"><span class="arrow"></span></td>
+                        <td class="title">
+                            Detailed Results
+                        </td>
+                        <td class="link"></td>
+                    </tr>
+                    <tr id="results_body" style="display:table-row;">
+                        <td colspan="3" class="body">
+                            <table style="border-collapse:collapse; border:0px solid transparent; padding:0px;">
+                                <tr>
+                                    <td style="overflow-x:auto; white-space:nowrap; vertical-align:top; width:300px; padding:12px; background-color:#E0E0E0;">
+                                        <b>Video Format:</b><br />
+                                        <div style="padding-left:16px; padding-top:8px; line-height:140%;">
+                                            4096 × 2560 (8:5 ratio), progressive scan<br />
+                                            120 Hz vertical refresh rate (frame rate)<br />
+                                            10 bpc (30 bit/px) color depth (1,073,741,824 colors)<br />
+                                            YC<sub>B</sub>C<sub>R</sub> 4:4:4 pixel format<br />
+                                            Uncompressed<br />
+                                            CTA-861 timing (VIC: 63)<br />
+                                        </div>
+                                    </td>
+                                </tr>
+                            </table>
+                            <br />
+                            <table class="results">
+                                <tr>
+                                    <td class="label">
+                                        Data Rate:
+                                    </td>
+                                    <td class="value"><b>37.75</b></td>
+                                    <td class="unit"><b>Gbit/s</b></td>
+                                </tr>
+                                <tr class="addon">
+                                    <td>
+                                        Blanking Overhead:
+                                    </td>
+                                    <td class="value">10.3</td>
+                                    <td class="unit">%</td>
+                                </tr>
+                                <tr>
+                                    <td class="label" colspan="3">
+                                        Bandwidth:
+                                    </td>
+                                </tr>
+                                <tr class="addon">
+                                    <td>
+                                        8b/10b Encoding:
+                                    </td>
+                                    <td class="value">45.30</td>
+                                    <td class="unit">Gbit/s</td>
+                                </tr>
+                                <tr class="addon">
+                                    <td>
+                                        16b/18b Encoding:
+                                    </td>
+                                    <td class="value">51.20</td>
+                                    <td class="unit">Gbit/s</td>
+                                </tr>
+                                <tr>
+                                    <td class="label">
+                                        Character Rate ("Pixel Clock"):
+                                    </td>
+                                    <td class="value">1.26</td>
+                                    <td class="unit">GHz</td>
+                                </tr>
+                                <tr>
+                                    <td class="label">
+                                        Pixel Rate (Actual):
+                                    </td>
+                                    <td class="value">1.26</td>
+                                    <td class="unit">Gpx/s</td>
+                                </tr>
+                                <tr>
+                                    <td class="label">
+                                        Pixel Rate (Incl. Blank):
+                                    </td>
+                                    <td class="value">1.58</td>
+                                    <td class="unit">Gpx/s</td>
+                                </tr>
+                                <tr>
+                                    <td class="label">
+                                        Vertical Refresh Frequency (Actual):
+                                    </td>
+                                    <td class="value">120.001</td>
+                                    <td class="unit">Hz</td>
+                                </tr>
+                                <tr class="addon">
+                                    <td>
+                                        Deviation:
+                                    </td>
+                                    <td class="value">0.001</td>
+                                    <td class="unit">%</td>
+                                </tr>
+                                <tr class="addon">
+                                    <td>
+                                        Period:
+                                    </td>
+                                    <td class="value">8.333</td>
+                                    <td class="unit">ms</td>
+                                </tr>
+                                <tr>
+                                    <td class="label">
+                                        Horizontal Refresh Frequency:
+                                    </td>
+                                    <td class="value">161.25</td>
+                                    <td class="unit">kHz</td>
+                                </tr>
+                                <tr class="addon">
+                                    <td>Period:</td>
+                                    <td class="value">15.2</td>
+                                    <td class="unit">µs</td>
+                                </tr>
+                            </table>
+                        </td>
+                    </tr>
+                </table>
+            </div>
+
+
+            <div class="spoiler">
+                <table id="calculations" class="spoiler">
+                    <tr class="header clickable">
+                        <td class="arrow"><span class="arrow">&#8250;</span></td>
+                        <td class="title">
+                            Calculations
+                        </td>
+                        <td class="link"></td>
+                    </tr>
+                    <tr id="calculations_body" style="display:table-row;">
+                        <td colspan="3" class="body" style="vertical-align:top;">
+                            <div style="overflow-x:auto; white-space:nowrap;">
+                                $$\texttt{Pixels per frame:}$$
+                                <div style="padding-left:20px;">$$\texttt{4,096} \times \texttt{2,560 lines} = \texttt{10,485,760 px (10.5 Mpx)}$$</div>
+                                $$\texttt{Pixels per second:}$$
+                                <div style="padding-left:20px;">$$10\,485\,760\;\mathtt{px/frame} \times 120\;\mathtt{frame/s} = 1\,258\,291\,200\;\mathtt{px/s}\;(1.26\;\mathtt{Gpx/s})$$</div>
+                                $$\texttt{Bits per second:}$$
+                                <div style="padding-left:20px;">$$1\,258\,291\,200\;\mathtt{px/s} \times 30\;\mathtt{bit/px} = 37\,748\,736\,000\;\mathtt{bit/s}\;(37.7\;\mathtt{Gbit/s})$$</div>
+                                <br /><hr /><br />
+                                $$\texttt{Timing Formula:}$$
+                                <div style="padding-left:20px;">
+                                    $$\texttt{Constants:}$$
+                                    $$\texttt{H = 4,096 px}$$
+                                    $$\texttt{V = 2,560 px}$$
+                                    $$\texttt{F = 120 Hz}$$
+                                </div>
+                                $$\texttt{Formula:}$$
+                                <div style="padding-left:20px;">$$\texttt{V}_{\texttt{blank}} \texttt{ = } {{\texttt{V × V}_{\texttt{min}}} \over {{\texttt{1} \over \texttt{F}} - \texttt{V}_{\texttt{min}}}}$$</div>
+                            </div>
+                            <div style="padding-left:20px; max-width:100%;">The timing parameters used for these calculations are defined by the <a>CTA-861</a> standard. The definitions for this format are listed under Video Identification Code (VIC) #98, first defined in <a style="white-space:nowrap;">CTA-861-F</a> (formerly CEA-861-F).</div>
+                        </td>
+                    </tr>
+                </table>
+            </div>
+
+
+            <div class="spoiler">
+                <table id="max_refresh" class="spoiler">
+                    <tr class="header clickable">
+                        <td class="arrow"><span class="arrow">&#8250;</span></td>
+                        <td class="title">
+                            Interface Support
+                        </td>
+                        <td class="link"></td>
+                    </tr>
+                    <tr id="max_refresh_body" style="display:table-row;">
+                        <td colspan="3" class="body">
+                            <table class="interface" id="interface_support_table">
+                                <!-- Filled in on page load by JS -->
+                            </table>
+                        </td>
+                    </tr>
+                </table>
+            </div>
+            <br />
+            <br />
+
+        </div>
+        <div class="footer" onclick="document.getElementById('profile_link').click();">
+            <a id="profile_link" target="_blank" href="https://linustechtips.com/main/profile/2466-glenwing/">Glenwing</a>
+        </div>
+    </div>
+</body>
+</html>
+
+<script src="DebugControl.js"></script>
+<script src="jquery.csv.js"></script>
+<script src="bandwidth.js"></script>
+
+<!----
+<script>
+    $(document).ready(function () {
+        $('select').niceSelect();
+    });
+</script><!---->
