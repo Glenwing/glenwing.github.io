@@ -661,8 +661,13 @@ function CVT_R(R) { // Variable R is an integer representing the reduced blankin
 }
 
 
-function CTA() {
+function CVT() {
+    return;
+}
 
+
+function CTA() {
+    return;
 }
 
 
