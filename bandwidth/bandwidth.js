@@ -1062,12 +1062,12 @@ function Load_CTA_861() {
     // Loads the timing definitions for the CTA-861 standard from a csv file
     fetch('CTA861.txt')
         .then(
-            function(response) {
+            function(response, data) {
                 if (response.status !== 200 && response.status !== 0) {
                     console.log('Response code:', response.status);
                     return;
                 }
-                CTA861 = response.data;
+                CTA861 = data;
             }
         ).then(
             function() {
