@@ -1067,7 +1067,7 @@ function Load_CTA_861() {
                     console.log('Response code:', response.status);
                     return;
                 }
-                CTA861 = data;
+                CTA861 = response.data;
             }
         ).then(
             function() {
