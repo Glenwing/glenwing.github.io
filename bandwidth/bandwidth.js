@@ -1060,18 +1060,18 @@ function SI_set_precision(SI_options, prefixDef, pre2num) {
 
 function LoadCTA861(){
     // read text from URL location
-    DEBUG('CTA Test 9');
+    DEBUG('CTA Test 10');
     var request = new XMLHttpRequest();
     request.open('GET', 'CTA861.txt', true);
     request.send(null);
     request.onreadystatechange = function () {
+        DEBUG('request.status:', request.status)
         if (request.readyState === 4 && request.status === 200) {
-            var type = request.getResponseHeader('Content-Type');
-            if (type.indexOf("text") !== 1) {
-                return request.responseText;
-            }
+            DEBUG(request.responseText);
+            return request.responseText;
         }
     }
+    DEBUG('Finished');
 }
 
 
