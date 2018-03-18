@@ -1059,6 +1059,7 @@ function SI_set_precision(SI_options, prefixDef, pre2num) {
 
 
 async function Load_CTA_861() {
+    DEBUG('CTA Test 6');
     // Loads the timing definitions for the CTA-861 standard from a csv file
     response = await fetch('CTA861.txt');
     CTA861 = await response.text();
