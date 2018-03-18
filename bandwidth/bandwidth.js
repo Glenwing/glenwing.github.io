@@ -1060,6 +1060,7 @@ function SI_set_precision(SI_options, prefixDef, pre2num) {
 
 function LoadCTA861(){
     // read text from URL location
+    DEBUG('CTA Test 9');
     var request = new XMLHttpRequest();
     request.open('GET', 'CTA861.txt', true);
     request.send(null);
@@ -1075,7 +1076,7 @@ function LoadCTA861(){
 
 
 async function LoadCTA861_Async() {
-    DEBUG('CTA Test 7');
+    DEBUG('CTA Test 8');
     // Loads the timing definitions for the CTA-861 standard from a txt file
     response = await fetch('CTA861.txt');
     CTA861 = $.csv.toObjects(await response.text());
