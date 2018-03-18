@@ -1058,22 +1058,11 @@ function SI_set_precision(SI_options, prefixDef, pre2num) {
 }
 
 
-function Load_CTA_861() {
+async function Load_CTA_861() {
     // Loads the timing definitions for the CTA-861 standard from a csv file
-    fetch('CTA861.txt')
-        .then(
-            function(response, data) {
-                if (response.status !== 200 && response.status !== 0) {
-                    console.log('Response code:', response.status);
-                    return;
-                }
-                CTA861 = data;
-            }
-        ).then(
-            function() {
-                DEBUG(CTA861);
-            }
-        )
+    response = await fetch('CTA861.txt');
+    CTA861 = await response.text();
+    DEBUG(await response.text());
 }
 
 
