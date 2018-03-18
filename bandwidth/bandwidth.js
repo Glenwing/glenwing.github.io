@@ -1060,7 +1060,7 @@ function SI_set_precision(SI_options, prefixDef, pre2num) {
 
 function LoadCTA861(){
     // read text from URL location
-    DEBUG('CTA Test 10');
+    DEBUG('CTA Test 11');
     var request = new XMLHttpRequest();
     request.open('GET', 'CTA861.txt', true);
     request.send(null);
@@ -1068,7 +1068,8 @@ function LoadCTA861(){
         DEBUG('request.status:', request.status)
         if (request.readyState === 4 && request.status === 200) {
             DEBUG(request.responseText);
-            return request.responseText;
+            CTA861 = $.csv.toObjects(request.responseText);
+            DEBUG(CTA861);
         }
     }
     DEBUG('Finished');
@@ -1451,7 +1452,7 @@ function isFloat(num) {
 
 window.onpageshow = function() {
     generate_table('Interface Support', -1);
-    CTA861 = LoadCTA861();
+    LoadCTA861();
     $('#INPUT_HRES')[0].onchange();
     $('#INPUT_VRES')[0].onchange();
     $('#INPUT_F')[0].onchange();
