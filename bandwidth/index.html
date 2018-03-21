@@ -50,11 +50,11 @@
                                 <tr>
                                     <td>
                                         <div align="center">
-                                            <input id="INPUT_HRES" class="res_input number" style="text-align:right;" type="text" onchange="submitVar(this.id, this.value); calcMain();" oninput="this.onchange()" onfocus="this.select();" tabindex="2" autofocus />
+                                            <input id="INPUT_HRES" class="res_input number" style="text-align:right;" type="text" onchange="submitVar(this.id, this.value); calcMain();" oninput="this.onchange()" onfocus="this.select();" autofocus />
                                             <span class="res_x">&#10005;</span>
-                                            <input id="INPUT_VRES" class="res_input number" style="text-align:left;" type="text" onchange="submitVar(this.id, this.value); calcMain();" oninput="this.onchange()" onfocus="this.select();" tabindex="2" />
+                                            <input id="INPUT_VRES" class="res_input number" style="text-align:left;" type="text" onchange="submitVar(this.id, this.value); calcMain();" oninput="this.onchange()" onfocus="this.select();" />
                                             <span>@</span>
-                                            <input id="INPUT_F" class="freq_input number" type="text" onchange="submitVar(this.id, this.value), calcMain();" oninput="this.onchange()" onfocus="this.select();" tabindex="3" />
+                                            <input id="INPUT_F" class="freq_input number" type="text" onchange="submitVar(this.id, this.value), calcMain();" oninput="this.onchange()" onfocus="this.select();" />
                                             <span>Hz</span>
                                         </div>
                                         <div id="warning_box" style="text-align:left; width:400px; margin-top:32px; border:1px solid black; padding:16px;">
@@ -165,7 +165,7 @@
                                                         <option value="Custom">Custom</option>
                                                     </select><br />
                                                     <div style="padding:4px;">
-                                                        <b>VIC: </b><span id="TIMING_VIC">218</span>
+                                                        <span id="TIMING_FORMAT_NAME"></span>
                                                     </div>
                                                     
                                                 </td>
@@ -210,20 +210,20 @@
                                                 </td>
                                             </tr>
                                             <tr id="Interlaced_Timing_Row" style="height:30px;">
-                                                <td id="V_BLANK_ODD_LABEL" style="text-align:right; width:100px; padding-right:8px;">
+                                                <td id="V_BLANK_INT_LABEL" style="text-align:right; width:100px; padding-right:8px;">
                                                     (Odd)&nbsp;V<sub>blank</sub>
                                                 </td>
-                                                <td id="V_FP_ODD_CONTAINER">
-                                                    <input id="V_FP_ODD" class="timing_param" oldvalue="" onchange="submitVar(this.id, this.value); calcMain();" oninput="this.onchange();" onfocus="this.select();" disabled />&nbsp;px
+                                                <td id="V_FP_INT_CONTAINER">
+                                                    <input id="V_FP_INT" class="timing_param" oldvalue="" onchange="submitVar(this.id, this.value); calcMain();" oninput="this.onchange();" onfocus="this.select();" disabled />&nbsp;px
                                                 </td>
-                                                <td id="V_SW_ODD_CONTAINER">
-                                                    <input id="V_SW_ODD" class="timing_param" oldvalue="" onchange="submitVar(this.id, this.value); calcMain();" oninput="this.onchange();" onfocus="this.select();" disabled />&nbsp;px
+                                                <td id="V_SW_INT_CONTAINER">
+                                                    <input id="V_SW_INT" class="timing_param" oldvalue="" onchange="submitVar(this.id, this.value); calcMain();" oninput="this.onchange();" onfocus="this.select();" disabled />&nbsp;px
                                                 </td>
-                                                <td id="V_BP_ODD_CONTAINER">
-                                                    <input id="V_BP_ODD" class="timing_param" oldvalue="" onchange="submitVar(this.id, this.value); calcMain();" oninput="this.onchange();" onfocus="this.select();" disabled />&nbsp;px
+                                                <td id="V_BP_INT_CONTAINER">
+                                                    <input id="V_BP_INT" class="timing_param" oldvalue="" onchange="submitVar(this.id, this.value); calcMain();" oninput="this.onchange();" onfocus="this.select();" disabled />&nbsp;px
                                                 </td>
-                                                <td id="V_BLANK_ODD_CONTAINER" style="text-align:right; width:100px;">
-                                                    <span id="V_BLANK_ODD">0</span>&nbsp;px
+                                                <td id="V_BLANK_INT_CONTAINER" style="text-align:right; width:100px;">
+                                                    <span id="V_BLANK_INT">0</span>&nbsp;px
                                                 </td>
                                             </tr>
                                         </table>

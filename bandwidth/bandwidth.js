@@ -9,6 +9,7 @@ DebugConfig({
 
 
 CTA861 = {};
+DMT_List = {};
 
 
 // The intepreted current state of all input fields is stored here
@@ -217,7 +218,7 @@ function submitVar(id, val) {
 
     else if (id == 'V_FP' || id == 'V_BP' || id == 'V_SW' ||
         id == 'H_FP' || id == 'H_BP' || id == 'H_SW' ||
-        id == 'V_FP_ODD' || id == 'V_SW_ODD' || id == 'V_BP_ODD') {
+        id == 'V_FP_INT' || id == 'V_SW_INT' || id == 'V_BP_INT') {
         GlobalVars_Key = id;
         val = parseFloat(parseNum(val));
         if (isNum(val)) {
@@ -226,7 +227,7 @@ function submitVar(id, val) {
             $('#' + id).val(val);
             $('#V_BLANK').html(Global_InputVars['V_FP'] + Global_InputVars['V_BP'] + Global_InputVars['V_SW']);
             $('#H_BLANK').html(Global_InputVars['H_FP'] + Global_InputVars['H_BP'] + Global_InputVars['H_SW']);
-            $('#V_BLANK_ODD').html(Global_InputVars['V_FP_ODD'] + Global_InputVars['V_BP_ODD'] + Global_InputVars['V_SW_ODD']);
+            $('#V_BLANK_INT').html(Global_InputVars['V_FP_INT'] + Global_InputVars['V_BP_INT'] + Global_InputVars['V_SW_INT']);
         }
         else {
             DEBUG(id + ' input is not a number:', val);
@@ -234,7 +235,7 @@ function submitVar(id, val) {
             $('#' + id).val('');
             $('#V_BLANK').html('');
             $('#H_BLANK').html('');
-            $('#V_BLANK_ODD').html('');
+            $('#V_BLANK_INT').html('');
         }
         DEBUG("Global_InputVars['" + GlobalVars_Key + "'] was set to", Global_InputVars[GlobalVars_Key]);
 
@@ -368,6 +369,7 @@ function calcMain() {
 
     // Get timing parameters
     Timing = getTiming(timing_standard);
+    if (!Timing) { clearResults(); return; } // Abort if getTiming returns false, it indicates the format is not defined for that timing standard.
     DEBUG('Timing:', Timing);
     
     var results = {
@@ -425,6 +427,10 @@ function getTiming(timing_standard) {
             'H_BP': '',
             'H_SW': '',
 
+            'V_FP_INT': '',
+            'V_BP_INT': '',
+            'V_SW_INT': '',
+
             'V_BL': '',
             'H_BL': '',
 
@@ -435,21 +441,39 @@ function getTiming(timing_standard) {
     if (timing_standard != 'Custom') {
         if (timing_standard == 'CVT-R2') {
             Timing = CVT_R(2);
+            $('#TIMING_FORMAT_NAME').html('<b>VESA Name:</b> ' + (Global_InputVars['HRES'] * Global_InputVars['VRES'] / 1000000).toFixed(2) + 'M' + Timing['VESA_AR'] + '-R');
         }
         else if (timing_standard == 'CVT-RB') {
             Timing = CVT_R(1);
+            $('#TIMING_FORMAT_NAME').html('<b>VESA Name:</b> ' + (Global_InputVars['HRES'] * Global_InputVars['VRES'] / 1000000).toFixed(2) + 'M' + Timing['VESA_AR'] + '-R');
         }
         else if (timing_standard == 'CVT') {
             Timing = CVT();
+            $('#TIMING_FORMAT_NAME').html('<b>VESA Name:</b> ' + (Global_InputVars['HRES'] * Global_InputVars['VRES'] / 1000000).toFixed(2) + 'M' + Timing['VESA_AR']);
         }
         else if (timing_standard == 'GTF') {
             Timing = GTF();
+            $('#TIMING_FORMAT_NAME').html('');
         }
         else if (timing_standard == 'DMT') {
             Timing = DMT();
+            if (!Timing) {
+                DEBUG ('Not a DMT Format. DMT Function returned false.');
+                $('#TIMING_FORMAT_NAME').html('');
+                return false; }
+            else {
+                $('#TIMING_FORMAT_NAME').html('<b>DMT ID:</b> ' + Timing['ID']);
+            }
         }
         else if (timing_standard == 'CTA-861') {
             Timing = CTA();
+            if (!Timing) {
+                DEBUG ('Not a CTA Format. CTA Function returned false.');
+                $('#TIMING_FORMAT_NAME').html('');
+                return false; }
+            else {
+                $('#TIMING_FORMAT_NAME').html('<b>CTA VIC:</b> ' + Timing['VIC']);
+            }
         }
         else if (timing_standard == 'None') {
             Timing = {
@@ -460,16 +484,21 @@ function getTiming(timing_standard) {
                 'H_BP': 0,
                 'H_SW': 0,
 
-                'V_FP_ODD': 0,
-                'V_BP_ODD': 0,
-                'V_SW_ODD': 0,
+                'V_FP_INT': 0,
+                'V_BP_INT': 0,
+                'V_SW_INT': 0,
 
                 'V_BL': 0,
                 'H_BL': 0,
 
+                'V_EFF': Global_InputVars['VRES'],
+                'H_EFF': Global_InputVars['HRES'],
+
                 'F_ACTUAL': Global_InputVars['FREQ'],
             }
+            $('#TIMING_FORMAT_NAME').html('');
         }
+
         // Update UI timing parameter fields with the newly generated timings
         submitVar('V_FP', Timing['V_FP']);
         submitVar('V_BP', Timing['V_BP']);
@@ -477,9 +506,10 @@ function getTiming(timing_standard) {
         submitVar('H_FP', Timing['H_FP']);
         submitVar('H_BP', Timing['H_BP']);
         submitVar('H_SW', Timing['H_SW']);
-        submitVar('V_FP_ODD', Timing['V_FP_ODD']);
-        submitVar('V_SW_ODD', Timing['V_SW_ODD']);
-        submitVar('V_BP_ODD', Timing['V_BP_ODD']);
+        submitVar('V_FP_INT', Timing['V_FP_INT']);
+        submitVar('V_SW_INT', Timing['V_SW_INT']);
+        submitVar('V_BP_INT', Timing['V_BP_INT']);
+
     }
 
     else if (timing_standard == 'Custom') {
@@ -490,9 +520,9 @@ function getTiming(timing_standard) {
         submitVar('H_FP', $('#H_FP').val());
         submitVar('H_BP', $('#H_BP').val());
         submitVar('H_SW', $('#H_SW').val());
-        submitVar('V_FP_ODD', Global_InputVars['V_FP'] + 0.5);
-        submitVar('V_SW_ODD', Global_InputVars['V_SW']);
-        submitVar('V_BP_ODD', Global_InputVars['V_BP'] + 0.5);
+        submitVar('V_FP_INT', Global_InputVars['V_FP'] + 0.5);
+        submitVar('V_SW_INT', Global_InputVars['V_SW']);
+        submitVar('V_BP_INT', Global_InputVars['V_BP'] + 0.5);
 
         Timing = {
             'V_FP': Global_InputVars['V_FP'],
@@ -502,15 +532,19 @@ function getTiming(timing_standard) {
             'H_BP': Global_InputVars['H_BP'],
             'H_SW': Global_InputVars['H_SW'],
 
-            'V_FP_ODD': Global_InputVars['V_FP_ODD'],
-            'V_BP_ODD': Global_InputVars['V_BP_ODD'],
-            'V_SW_ODD': Global_InputVars['V_SW_ODD'],
+            'V_FP_INT': Global_InputVars['V_FP_INT'],
+            'V_BP_INT': Global_InputVars['V_BP_INT'],
+            'V_SW_INT': Global_InputVars['V_SW_INT'],
 
             'V_BL': Global_InputVars['V_FP'] + Global_InputVars['V_BP'] + Global_InputVars['V_SW'],
             'H_BL': Global_InputVars['H_FP'] + Global_InputVars['H_BP'] + Global_InputVars['H_SW'],
 
+            'V_EFF': Global_InputVars['VRES'] + Global_InputVars['V_FP'] + Global_InputVars['V_BP'] + Global_InputVars['V_SW'],
+            'H_EFF': Global_InputVars['HRES'] + Global_InputVars['H_FP'] + Global_InputVars['H_BP'] + Global_InputVars['H_SW'],
+
             'F_ACTUAL': Global_InputVars['FREQ'],
         }
+        $('#TIMING_FORMAT_NAME').html('');
     }
 
     $('#V_BLANK').html(Timing['V_BL']);
@@ -526,6 +560,8 @@ function CVT_R(R) { // Variable R is an integer representing the reduced blankin
     var F = Global_InputVars['FREQ']; // Nominal vertical refresh frequency
     var S = Global_InputVars['SCAN']; // 1 for progressive scan, 2 for interlaced
     var M = Global_InputVars['MARGINS']; // Margins (%)
+
+    var I = (S - 1) / 2; // 0 for progressive, 0.5 for interlaced
 
     // Declaring variables for all results
     var V_FP; // Vertical front porch
@@ -561,25 +597,29 @@ function CVT_R(R) { // Variable R is an integer representing the reduced blankin
 
         // Determine vertical sync width (V_SW) from table of magic numbers defined in VESA CVT standard
         var V_SYNC_TABLE = [
-            [4/3,  4],
-            [16/9, 5],
-            [8/5,  6],
-            [5/3,  7],
-            [5/4,  7],
+            [4/3,  4, '3'],
+            [16/9, 5, '9'],
+            [8/5,  6, 'A'],
+            [5/3,  7, '9'],
+            [5/4,  7, '4'],
         ]
+        var AR_NAME = '';
         V_SW = 10; // default value defined in standard
         for (var i = 0; i < V_SYNC_TABLE.length; i++) {
-            if ((H / V) - V_SYNC_TABLE[i][0] < 0.05) { // Check if aspect ratio of image (H/V) matches an aspect ratio defined in table, within 0.05
+            if (Math.abs((H / V) - V_SYNC_TABLE[i][0]) < 0.05) { // Check if aspect ratio of image (H/V) matches an aspect ratio defined in table, within 0.05
                 V_SW = V_SYNC_TABLE[i][1];
+                AR_NAME = V_SYNC_TABLE[i][2];
+                DEBUG('AR_NAME', AR_NAME)
+                break;
             }
         }
 
         // V_BP is determined in reverse, by calculating V_BLANK first (the sum of V_FP, V_SW, and V_BP) and subtracting out V_FP and V_SW.
 
-        var CellGran = 8; // Cell granularity constant defined by CVT standard
-        var H_RND = Math.floor(H / CellGran) * CellGran; // Round down horizontal resolution to be a multiple 8
+        var G = 8; // Cell granularity constant defined by CVT standard
+        var H_RND = Math.floor(H / G) * G; // Round down horizontal resolution to be a multiple 8
         var V_MARGIN = Math.floor(M / 100) * V_LINES; // If margins percent (M) is 0, this result is 0
-        var H_MARGIN = Math.floor(H_RND * M / 100 / CellGran) * CellGran; // If margins percent (M) is 0, this result is 0
+        var H_MARGIN = Math.floor(H_RND * M / 100 / G) * G; // If margins percent (M) is 0, this result is 0
 
         var H_PER_EST = ((1 / F) - V_PER_MIN) / (V_LINES + (2 * V_MARGIN)); // Horizontal blanking period estimate
         V_BLANK = Math.floor((V_PER_MIN / H_PER_EST) + 1);
@@ -589,7 +629,7 @@ function CVT_R(R) { // Variable R is an integer representing the reduced blankin
 
         V_BP = V_BLANK - (V_FP + V_SW);
 
-        V_EFF = V_LINES + V_BLANK + V_MARGIN + ((S - 1)/2); // (S-1)/2 = 0 for progressive, 0.5 for interlaced
+        V_EFF = V_LINES + V_BLANK + V_MARGIN + I; // (S-1)/2 = 0 for progressive, 0.5 for interlaced
         H_EFF = H_RND + H_BLANK + H_MARGIN;
 
         // Calculate pixel clock, to enforce pixel clock rounding to the nearest 250 kHz, as required by the CVT standard
@@ -613,7 +653,7 @@ function CVT_R(R) { // Variable R is an integer representing the reduced blankin
         // V_FP is determined in reverse, by calculating V_BLANK first (the sum of V_FP, V_SW, and V_BP) and subtracting V_SW and V_BP out.
 
         var V_MARGIN = Math.floor(M / 100) * V_LINES; // If margins percent (M) is 0, this result is 0
-        var H_MARGIN = Math.floor(H * M / 100); // If margins percent (M) is 0, this result is 0
+        var H_MARGIN = Math.floor(H * (M / 100)); // If margins percent (M) is 0, this result is 0
 
         var H_PER_EST = ((1 / F) - V_PER_MIN) / (V_LINES + (2 * V_MARGIN)); // Horizontal blanking period estimate
         V_BLANK = Math.floor((V_PER_MIN / H_PER_EST) + 1);
@@ -623,7 +663,7 @@ function CVT_R(R) { // Variable R is an integer representing the reduced blankin
 
         V_FP = V_BLANK - (V_BP + V_SW);
 
-        V_EFF = V_LINES + V_BLANK + V_MARGIN + ((S - 1)/2); // (S-1)/2 = 0 for progressive, 0.5 for interlaced
+        V_EFF = V_LINES + V_BLANK + V_MARGIN + I; // (S-1)/2 = 0 for progressive, 0.5 for interlaced
         H_EFF = H + H_BLANK + H_MARGIN;
     
         // Calculate pixel clock, to enforce pixel clock rounding to the nearest 1 kHz, as required by the CVT standard
@@ -632,6 +672,20 @@ function CVT_R(R) { // Variable R is an integer representing the reduced blankin
 
         F_HOR = CLK / (H_EFF); // Horizontal refresh frequency (Hz)
         F_ACTUAL = F_HOR / (V_EFF);
+
+        var V_SYNC_TABLE = [
+            [4/3,  4, '3'],
+            [16/9, 5, '9'],
+            [8/5,  6, 'A'],
+            [5/3,  7, '9'],
+            [5/4,  7, '4'],
+        ]
+        var AR_NAME = '';
+        for (var i = 0; i < V_SYNC_TABLE.length; i++) {
+            if (Math.abs((H / V) - V_SYNC_TABLE[i][0]) < 0.05) {
+                AR_NAME = V_SYNC_TABLE[i][2];
+            }
+        }
     }
     //DEBUG('CLK', CLK);
     //DEBUG('F_HOR', F_HOR);
@@ -639,35 +693,379 @@ function CVT_R(R) { // Variable R is an integer representing the reduced blankin
 
     //DEBUG(V_BLANK);
     return {
-        V_FP: V_FP, // For interlaced, these vertical timing are used for the even fields
-        V_BP: V_BP,
-        V_SW: V_SW,
-        H_FP: H_FP,
-        H_BP: H_BP,
-        H_SW: H_SW,
+        'V_FP': V_FP, // For interlaced, these vertical timing are used for the odd fields
+        'V_BP': V_BP,
+        'V_SW': V_SW,
+        'H_FP': H_FP,
+        'H_BP': H_BP,
+        'H_SW': H_SW,
 
-        V_FP_ODD: V_FP + 0.5, // For interlaced, V_FP and V_BP are 0.5 higher for odd fields (V_SW is same)
-        V_SW_ODD: V_SW,
-        V_BP_ODD: V_BP + 0.5,
+        'V_FP_INT': V_FP + I, // For interlaced, V_FP and V_BP are 0.5 higher for even fields (V_SW is same)
+        'V_BP_INT': V_BP + I,
+        'V_SW_INT': V_SW,
 
-        V_BL: V_BLANK,
-        H_BL: H_BLANK,
+        'V_BL': V_BLANK,
+        'H_BL': H_BLANK,
 
-        V_EFF: V_EFF,
-        H_EFF: H_EFF,
+        'V_EFF': V_EFF,
+        'H_EFF': H_EFF,
 
-        F_ACTUAL: F_ACTUAL,
+        'F_ACTUAL': F_ACTUAL,
+        'VESA_AR': AR_NAME,
     };
 }
 
 
 function CVT() {
-    return;
+    var H = Global_InputVars['HRES']; // Horizontal active pixels
+    var V = Global_InputVars['VRES']; // Vertical active pixels
+    var F = Global_InputVars['FREQ']; // Nominal vertical refresh frequency
+    var S = Global_InputVars['SCAN']; // 1 for progressive scan, 2 for interlaced
+    var M = Global_InputVars['MARGINS']; // Margins (%)
+
+    var INTERLACE = (S - 1) / 2;
+
+    // Declaring variables for all results
+    var V_FP; // Vertical front porch
+    var V_SW; // Vertical sync width
+    var V_BP; // Vertical back porch
+
+    var H_FP; // Horizontal front porch
+    var H_SW; // Horizontal sync width
+    var H_BP; // Horizontal back porch
+
+    var V_BLANK; // Total vertical blanking (V_FP + V_SW + V_BP)
+    var H_BLANK; // Total horizontal blanking (H_FP + H_SW + H_BP)
+    var V_EFF;   // V + V_Blank + V_Margins
+    var H_EFF;   // H + H_Blank + H_Margins
+
+    var F_ACTUAL; // Actual vertical refresh frequency (after pixel clock rounding)
+    var F_HOR; // Horizontal refresh frequency
+
+    // Constants
+    var V_SBP_MIN = 0.00055; /* Minimum duration of vertical sync + back porch (seconds) */
+    var V_BP_MIN = 6; // Minimum vertical back porch value (lines)
+    var V_LINES = Math.floor(V / S) // If progressive scan, S = 1 and V_LINES = V. If interlaced, V_LINES = floor(V / 2).
+    V_FP = 3; // Vertical front porch value (lines)
+
+    var G = 8; // Cell Granularity constant
+    var H_RND = Math.floor(H / G) * G;
+    var V_MARGIN = Math.floor(M / 100 * V_LINES); // If margins percent (M) is 0, this result is 0
+    var H_MARGIN = Math.floor(H_RND * M / 100 / G) * G; // If margins percent (M) is 0, this result is 0
+    var H_SYNC_TARGET_WIDTH = 0.08 // Nominal horizontal sync pulse duration (percent of horizontal draw period)
+
+    // Determine V_SW from table
+    var V_SYNC_TABLE = [
+            [4/3,  4, '3'],
+            [16/9, 5, '9'],
+            [8/5,  6, 'A'],
+            [5/3,  7, '9'],
+            [5/4,  7, '4'],
+    ]
+    var AR_NAME = '';
+    V_SW = 10; // default value defined in standard
+    for (var i = 0; i < V_SYNC_TABLE.length; i++) {
+        if (Math.abs((H / V) - V_SYNC_TABLE[i][0]) < 0.05) { // Check if aspect ratio of image (H/V) matches an aspect ratio defined in table, within 0.05
+            V_SW = V_SYNC_TABLE[i][1];
+            AR_NAME = V_SYNC_TABLE[i][2];
+        }
+    }
+
+    // Estimate horizontal refresh period (seconds)
+    var H_EST = ((1/F) - V_SBP_MIN) / (V_LINES + (2 * V_MARGIN) + V_FP + INTERLACE)
+
+    // Estimate vertical sync + vertical back porch (lines), subtract V_SW to get V_BP
+    var V_BP = (Math.floor(V_SBP_MIN / H_EST) + 1) - V_SW;
+    if (V_BP < V_BP_MIN) { V_BP = V_BP_MIN; } // Enforce minimum value for V_BP
+
+    // Total vertical resolution including blanking and margins
+    V_EFF = V_LINES + (2 * V_MARGIN) + V_FP + V_SW + V_BP + INTERLACE;
+
+    // Horizontal blanking is determined by formula from GTF standard
+    // Calculate Ideal Duty Cycle (%) from GTF formula
+    var IDC = 30 - (300000 * H_EST);
+    if (IDC < 20) { IDC = 20; } // Enforce minimum value for IDC
+    // Calculate horizontal blanking time (to next lowest character cell)
+    H_BLANK = Math.floor((H_RND + (2 * H_MARGIN)) * IDC / (100 - IDC) / (2 * G)) * (2 * G);
+
+    // Total horizontal resolution including blanking and margins
+    H_EFF = H_RND + (2 * H_MARGIN) + H_BLANK;
+
+    // Determing horizontal timing parameters from magic formulas defined by standard
+    H_BP = H_BLANK / 2;
+    H_SW = Math.floor((H_SYNC_TARGET_WIDTH * H_EFF) / G) * G;
+    H_FP = H_BLANK - (H_BP + H_SW);
+
+    // Calculate Pixel Clock (Hz)
+    var CLK = H_EFF / H_EST;
+    CLK = Math.floor(CLK / 250000) * 250000; // Enforce pixel clock rounding to nearest 0.25 MHz (250,000 Hz)
+
+    // Calculate Horizontal Refresh Frequency (Hz)
+    F_HOR = CLK / H_EFF;
+
+    // Calculate Vertical Refresh Frequency (Hz) after adjusting for pixel clock rounding
+    F_ACTUAL = F_HOR / V_EFF;
+
+    return {
+        'V_FP': V_FP, // For interlaced, these vertical timing are used for the odd fields
+        'V_BP': V_BP,
+        'V_SW': V_SW,
+        'H_FP': H_FP,
+        'H_BP': H_BP,
+        'H_SW': H_SW,
+
+        'V_FP_INT': V_FP + INTERLACE, // For interlaced, V_FP and V_BP are 0.5 higher for even fields (V_SW is same)
+        'V_BP_INT': V_BP + INTERLACE,
+        'V_SW_INT': V_SW,
+
+        'V_BL': V_BLANK,
+        'H_BL': H_BLANK,
+
+        'V_EFF': V_EFF,
+        'H_EFF': H_EFF,
+
+        'F_ACTUAL': F_ACTUAL,
+        'VESA_AR': AR_NAME,
+    };
 }
 
 
 function CTA() {
-    return;
+    DEBUG('Starting CTA');
+    var H = Global_InputVars['HRES'];
+    var V = Global_InputVars['VRES'];
+    var F = Global_InputVars['FREQ'];
+    var S = Global_InputVars['SCAN'];
+
+    // No CTA formats are below these points, no need to search entire list
+    if (H < 640 || V < 240 || F < 23.9) { DEBUG('Search aborted, one or more inputs is below the minimum value found in CTA.', H, V, F); return false; }
+
+    if (S == 1) { S = 'p'; }
+    else if (S == 2) { S = 'i'; }
+    
+    DEBUG('Input:', H, V, F, S);
+
+    var CTA_H;
+    var CTA_V;
+    var CTA_F;
+    var CTA_S;
+
+    for (var i = 0; i < CTA861.length; i++) {
+        CTA_H = parseFloat(CTA861[i]['H']);
+        CTA_V = parseFloat(CTA861[i]['V']);
+        CTA_F = parseFloat(CTA861[i]['V_FREQ']);
+        CTA_S = CTA861[i]['SCAN'];
+
+        DEBUG('Parsing: VIC', CTA861[i]['VIC'], '|', CTA_H, (H == CTA_H), '|', CTA_V, (V == CTA_V), '|' , (CTA_F).toFixed(3), (Math.abs(F - CTA_F) < 0.01), '|', CTA_S, (S == CTA_S));
+        
+        //DEBUG( (V == CTA_V), (Math.abs(F - CTA_F) < 0.01), (S == CTA_S))
+        if ((H == CTA_H) && (V == CTA_V) && (Math.abs(F - CTA_F) < 0.01) && (S == CTA_S)) {
+            DEBUG('Match Found');
+
+            // Special modifications to values based on whether interlacing is selected or not
+            if (S == 'p') { S = 0; }
+            else if (S == 'i') { S = 0.5; }
+
+
+            return {
+                'V_FP': parseFloat(CTA861[i]['V_FP']),
+                'V_BP': parseFloat(CTA861[i]['V_BP']),
+                'V_SW': parseFloat(CTA861[i]['V_SW']),
+                'H_FP': parseFloat(CTA861[i]['H_FP']),
+                'H_BP': parseFloat(CTA861[i]['H_BP']),
+                'H_SW': parseFloat(CTA861[i]['H_SW']),
+
+                'V_FP_INT': parseFloat(CTA861[i]['V_FP']) + S,
+                'V_BP_INT': parseFloat(CTA861[i]['V_BP']) + S,
+                'V_SW_INT': parseFloat(CTA861[i]['V_SW']),
+
+                'V_BL': parseFloat(CTA861[i]['V_BLANK']) - S,
+                'H_BL': parseFloat(CTA861[i]['H_BLANK']),
+
+                'V_EFF': parseFloat(CTA861[i]['V_EFF']) * (1 - S),
+                'H_EFF': parseFloat(CTA861[i]['H_EFF']),
+
+                'F_ACTUAL': parseFloat(CTA861[i]['V_FREQ']),
+                'VIC': parseFloat(CTA861[i]['VIC']),
+                'CTA_REV': CTA861[i]['CTA'],
+            }
+        }
+    }
+
+    // Not found in CTA list
+    return false;
+}
+
+
+function GTF() {
+    // Input Variables
+
+    var V_FREQ_NOM = Global_InputVars['FREQ'];
+    var H = Global_InputVars['HRES'];
+    var V = Global_InputVars['VRES'];
+    var S = Global_InputVars['SCAN'];
+    var MARGINS = Global_InputVars['MARGINS'];
+
+    // Constants
+
+    var V_SW = 3; // Vertical sync pulse width (lines)
+    var V_FP = 1; // Vertical front porch (lines)
+    var V_MIN = 0.00055; // Min V_Blank period (seconds)
+    var G = 8; // Cell granularity (pixels)
+    var H_SYNC_WIDTH_TARGET = 0.08; // Nominal horizontal sync pulse duration (percent of horizontal draw period)
+    var INTERLACE = (S - 1) / 2; // 0 for progressive, 0.5 for interlaced
+
+    // var m = 600 // Gradient (%/kHz)
+    // var c = 40 // offset (%)
+    // var k = 128 // blanking time scaling factor
+    // var j = 20 // scaling factor weighting
+
+    var M = 300 // m * (k / 256); // "M prime"
+    var C = 30 // (((c - j) * k) / 256) + j; // "C prime"
+
+    // Result Variables
+
+    var V_BP;
+    var H_FP;
+    var H_SW;
+    var H_BP;
+
+    var H_EFF
+    var V_EFF;
+    var V_BLANK;
+    var H_BLANK;
+
+    // Calculations
+
+    var V_LINES = Math.round(V / S);
+    var V_MARGIN = Math.round((MARGINS / 100) * V_LINES);
+
+    var H_EST = ((1 / V_FREQ_NOM) - V_MIN) / (V_LINES + (2 * V_MARGIN) + V_FP + INTERLACE); // Horizontal refresh period estimate (seconds)
+
+        V_BP = Math.round(V_MIN / H_EST) - V_SW;
+        V_BLANK = V_FP + V_SW + V_BP;
+        V_EFF = V_LINES + V_BLANK + (2 * V_MARGIN) + INTERLACE; // Total lines
+    //var V_FREQ_EST = 1 / (H_EST * V_EFF); // Hz
+    //var H_PER = (H_EST * V_FREQ_EST) / V_FREQ_NOM 
+
+    var H_PER = 1 / (V_EFF * V_FREQ_NOM); // Actual horizontal refresh period (seconds)
+    //var V_FREQ_ACT = 1 / (H_PER * V_EFF); // Hz
+    var IDC = C - (M * H_PER * 1000);
+    DEBUG('IDC:', IDC);
+
+    var H_MARGIN = Math.round((H * (MARGINS / 100)) / G) * G;
+        H_BLANK = Math.round((((H + (2 * H_MARGIN)) * IDC)/(100 - IDC)) / (2 * G)) * (2 * G);
+        H_EFF = (H + H_BLANK + (2 * H_MARGIN));
+
+        H_SW = Math.round((H_EFF * H_SYNC_WIDTH_TARGET) / G) * G;
+        H_BP = (H_BLANK / 2);
+        H_FP = H_BP - H_SW;
+
+    //var CLK = H_EFF / H_PER;
+    //var H_FREQ = 1 / H_PER;
+
+
+    return {
+        'V_FP': V_FP,
+        'V_BP': V_BP,
+        'V_SW': V_SW,
+        'H_FP': H_FP,
+        'H_BP': H_BP,
+        'H_SW': H_SW,
+
+        'V_FP_INT': V_FP + INTERLACE,
+        'V_BP_INT': V_BP + INTERLACE,
+        'V_SW_INT': V_SW,
+
+        'H_BLANK': H_BLANK,
+        'V_BLANK': V_BLANK,
+        'H_EFF': H_EFF,
+        'V_EFF': V_EFF,
+
+        'F_ACTUAL': V_FREQ_NOM,
+    };
+}
+
+
+function DMT() {
+    DEBUG('Starting DMT Search');
+    var H = Global_InputVars['HRES'];
+    var V = Global_InputVars['VRES'];
+    var F = Global_InputVars['FREQ'];
+    var S = Global_InputVars['SCAN'];
+
+    // No DMT formats are below these points, no need to search entire list
+    if (H < 640 || V < 350 || F < 43) { DEBUG('Search aborted, one or more inputs is below the minimum value found in DMT.', H, V, F); return false; }
+
+    if (S == 1) { S = 'p'; }
+    else if (S == 2) { S = 'i'; }
+    
+    DEBUG('Input:', H, V, F, S);
+
+    var DMT_H;
+    var DMT_V;
+    var DMT_F;
+    var DMT_S;
+
+    for (var i = 0; i < DMT_List.length; i++) {
+        DMT_H = parseFloat(DMT_List[i]['H']);
+        DMT_V = parseFloat(DMT_List[i]['V']);
+        DMT_F = parseFloat(DMT_List[i]['NOM_FREQ']);
+        DMT_F_ACTUAL = parseFloat(DMT_List[i]['V_FREQ'])
+        DMT_S = DMT_List[i]['SCAN'];
+
+        DEBUG('Parsing: DMT ID', DMT_List[i]['ID'], '|', DMT_H, (H == DMT_H), '|', DMT_V, (V == DMT_V), '|' , (DMT_F).toFixed(3), (Math.abs(F - DMT_F) < 0.01), '|', DMT_S, (S == DMT_S));
+        
+        //DEBUG( (V == DMT_V), (Math.abs(F - DMT_F) < 0.01), (S == DMT_S))
+        if ((H == DMT_H) && (V == DMT_V) && ((F == DMT_F) || (Math.abs(F - DMT_F_ACTUAL) < 0.01)) && (S == DMT_S)) {
+            DEBUG('Match Found');
+
+            // Special modifications to values based on whether interlacing is selected or not
+            if (S == 'p') { S = 0; }
+            else if (S == 'i') { S = 0.5; }
+
+            var Timing;
+
+            if (DMT_List[i]['STD'] == 'CVT') {
+                Timing = CVT();
+                Timing['ID'] = DMT_List[i]['ID'];
+            }
+            else if (DMT_List[i]['STD'] == 'CVTRB') {
+                Timing = CVT_R(1);
+                Timing['ID'] = DMT_List[i]['ID'];
+            }
+            else if (DMT_List[i]['STD'] == 'CVTR2') {
+                Timing = CVT_R(2);
+                Timing['ID'] = DMT_List[i]['ID'];
+            }
+            else {
+                Timing = {
+                    'V_FP': parseFloat(DMT_List[i]['V_FP']),
+                    'V_BP': parseFloat(DMT_List[i]['V_BP']),
+                    'V_SW': parseFloat(DMT_List[i]['V_SW']),
+                    'H_FP': parseFloat(DMT_List[i]['H_FP']),
+                    'H_BP': parseFloat(DMT_List[i]['H_BP']),
+                    'H_SW': parseFloat(DMT_List[i]['H_SW']),
+
+                    'V_FP_INT': parseFloat(DMT_List[i]['V_FP']) + S,
+                    'V_BP_INT': parseFloat(DMT_List[i]['V_BP']) + S,
+                    'V_SW_INT': parseFloat(DMT_List[i]['V_SW']),
+
+                    'V_BL': parseFloat(DMT_List[i]['V_BLANK']) - S,
+                    'H_BL': parseFloat(DMT_List[i]['H_BLANK']),
+
+                    'V_EFF': parseFloat(DMT_List[i]['V_EFF']) * (1 - S),
+                    'H_EFF': parseFloat(DMT_List[i]['H_EFF']),
+
+                    'F_ACTUAL': parseFloat(DMT_List[i]['V_FREQ']),
+                    'ID': parseFloat(DMT_List[i]['ID']),
+                }
+            }
+            return Timing;
+        }
+    }
+    // Not found in DMT list
+    return false;
 }
 
 
@@ -711,19 +1109,19 @@ function timingUIChange() {
     }
     value = $('input[name=SCAN_SLCT]:checked').val();
     if (value == 'i') {
-        $('#V_BLANK_ODD_LABEL').css('display', 'table-cell');
-        $('#V_FP_ODD_CONTAINER').css('display', 'table-cell');
-        $('#V_BP_ODD_CONTAINER').css('display', 'table-cell');
-        $('#V_SW_ODD_CONTAINER').css('display', 'table-cell');
-        $('#V_BLANK_ODD_CONTAINER').css('display', 'table-cell');
+        $('#V_BLANK_INT_LABEL').css('display', 'table-cell');
+        $('#V_FP_INT_CONTAINER').css('display', 'table-cell');
+        $('#V_BP_INT_CONTAINER').css('display', 'table-cell');
+        $('#V_SW_INT_CONTAINER').css('display', 'table-cell');
+        $('#V_BLANK_INT_CONTAINER').css('display', 'table-cell');
         $('#V_BLANK_EVEN_LABEL').html('(Even)&nbsp;V<sub>blank</sub>');
     }
     else if (value == 'p') {
-        $('#V_BLANK_ODD_LABEL').css('display', 'none');
-        $('#V_FP_ODD_CONTAINER').css('display', 'none');
-        $('#V_BP_ODD_CONTAINER').css('display', 'none');
-        $('#V_SW_ODD_CONTAINER').css('display', 'none');
-        $('#V_BLANK_ODD_CONTAINER').css('display', 'none');
+        $('#V_BLANK_INT_LABEL').css('display', 'none');
+        $('#V_FP_INT_CONTAINER').css('display', 'none');
+        $('#V_BP_INT_CONTAINER').css('display', 'none');
+        $('#V_SW_INT_CONTAINER').css('display', 'none');
+        $('#V_BLANK_INT_CONTAINER').css('display', 'none');
         $('#V_BLANK_EVEN_LABEL').html('V<sub>blank</sub>');
     }
     else {
@@ -1059,15 +1457,14 @@ function SI_set_precision(SI_options, prefixDef, pre2num) {
 
 
 function LoadCTA861(){
-    // read text from URL location
-    DEBUG('CTA Test 11');
+    // Loads the timing definitions for the CTA-861 standard from a txt file
+    //DEBUG('CTA Test 11');
     var request = new XMLHttpRequest();
     request.open('GET', 'CTA861.txt', true);
     request.send(null);
     request.onreadystatechange = function () {
         DEBUG('request.status:', request.status)
-        if (request.readyState === 4 && request.status === 200) {
-            DEBUG(request.responseText);
+        if (request.readyState === 4 && (request.status === 200 || request.status === 0)) {
             CTA861 = $.csv.toObjects(request.responseText);
             DEBUG(CTA861);
         }
@@ -1076,11 +1473,20 @@ function LoadCTA861(){
 }
 
 
-async function LoadCTA861_Async() {
-    DEBUG('CTA Test 8');
-    // Loads the timing definitions for the CTA-861 standard from a txt file
-    response = await fetch('CTA861.txt');
-    CTA861 = $.csv.toObjects(await response.text());
+function LoadDMT(){
+    // Loads the timing definitions for the DMT standard from a txt file
+    DEBUG('DMT Test 1');
+    var request = new XMLHttpRequest();
+    request.open('GET', 'DMT.txt', true);
+    request.send(null);
+    request.onreadystatechange = function () {
+        DEBUG('request.status:', request.status)
+        if (request.readyState === 4 && (request.status === 200 || request.status === 0)) {
+            DMT_List = $.csv.toObjects(request.responseText);
+            //DEBUG(CTA861);
+        }
+    }
+    DEBUG('Finished');
 }
 
 
@@ -1453,6 +1859,7 @@ function isFloat(num) {
 window.onpageshow = function() {
     generate_table('Interface Support', -1);
     LoadCTA861();
+    LoadDMT();
     $('#INPUT_HRES')[0].onchange();
     $('#INPUT_VRES')[0].onchange();
     $('#INPUT_F')[0].onchange();
