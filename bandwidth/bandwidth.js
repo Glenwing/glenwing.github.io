@@ -1,10 +1,25 @@
 DebugConfig({
     //all:                true,
+    calcMain:           0,
+    submitVar:          0,
+    input_ok:           0,
+    updateDisplay:      0,
+    getTiming:          0,
+
+    marginsUIChange:    0,
+    timingUIChange:     0,
     generate_table:     0,
-    SI:                 1,
-    SI_set_options:     1,
+
+    SI:                 0,
+    SI_include_exclude: 0,
+    SI_set_options:     0,
     SI_set_precision:   0,
-    timingUIChange:     1,
+    
+    CTA:                0,
+    DMT:                0,
+    CVT:                0,
+    CVT_R:              0,
+    GTF:                0,
 });
 
 
@@ -29,6 +44,13 @@ Global_InputVars = {
     'H_FP': '',
     'H_BP': '',
     'H_SW': '',
+    'V_FP_INT': '',
+    'V_BP_INT': '',
+    'V_SW_INT': '',
+}
+
+Detailed_Results = {
+
 }
 
 
@@ -214,28 +236,37 @@ function submitVar(id, val) {
         DEBUG("Global_InputVars['" + GlobalVars_Key + "'] was set to", Global_InputVars[GlobalVars_Key]);
 
         timingUIChange();
+
+        if (val != 'Custom' && val != 'None') {
+            if (Global_InputVars['HRES'] == '' || Global_InputVars['VRES'] == '' || Global_InputVars['FREQ'] == '') {
+                $('#TIMING_FORMAT_NAME').html('');
+                clearTiming();
+            }
+        }
     }
 
     else if (id == 'V_FP' || id == 'V_BP' || id == 'V_SW' ||
         id == 'H_FP' || id == 'H_BP' || id == 'H_SW' ||
         id == 'V_FP_INT' || id == 'V_SW_INT' || id == 'V_BP_INT') {
         GlobalVars_Key = id;
-        val = parseFloat(parseNum(val));
+        //val = Math.abs(parseNum(val));
         if (isNum(val)) {
-            val = Math.abs(val);
-            Global_InputVars[id] = val;
+            Global_InputVars[id] = Math.abs(val);
             $('#' + id).val(val);
-            $('#V_BLANK').html(Global_InputVars['V_FP'] + Global_InputVars['V_BP'] + Global_InputVars['V_SW']);
-            $('#H_BLANK').html(Global_InputVars['H_FP'] + Global_InputVars['H_BP'] + Global_InputVars['H_SW']);
-            $('#V_BLANK_INT').html(Global_InputVars['V_FP_INT'] + Global_InputVars['V_BP_INT'] + Global_InputVars['V_SW_INT']);
+            if (Global_InputVars['V_FP'] != '' && Global_InputVars['V_BP'] != '' && Global_InputVars['V_SW'] != '') {
+                $('#V_BLANK').html(Global_InputVars['V_FP'] +Global_InputVars['V_BP'] + Global_InputVars['V_SW']); }
+            if (Global_InputVars['H_FP'] != '' && Global_InputVars['H_BP'] != '' && Global_InputVars['H_SW'] != '') {
+                $('#H_BLANK').html(Global_InputVars['H_FP'] + Global_InputVars['H_BP'] + Global_InputVars['H_SW']); }
+            if (Global_InputVars['V_FP_INT'] != '' && Global_InputVars['V_BP_INT'] != '' && Global_InputVars['V_SW_INT'] != '') {
+                $('#V_BLANK_INT').html(Global_InputVars['V_FP_INT'] + Global_InputVars['V_BP_INT'] + Global_InputVars['V_SW_INT']); }
         }
         else {
             DEBUG(id + ' input is not a number:', val);
             Global_InputVars[id] = '';
             $('#' + id).val('');
-            $('#V_BLANK').html('');
-            $('#H_BLANK').html('');
-            $('#V_BLANK_INT').html('');
+            if (id == 'V_FP' || id == 'V_BP' || id == 'V_SW') { $('#V_BLANK').html(''); }
+            if (id == 'H_FP' || id == 'H_BP' || id == 'H_SW') { $('#H_BLANK').html(''); }
+            if (id == 'V_FP_INT' || id == 'V_SW_INT' || id == 'V_BP_INT') { $('#V_BLANK_INT').html(''); }
         }
         DEBUG("Global_InputVars['" + GlobalVars_Key + "'] was set to", Global_InputVars[GlobalVars_Key]);
 
@@ -319,6 +350,11 @@ function input_ok() {
         }
     }
 
+    if (!isNum(Global_InputVars['COLOR_DEPTH'])) {
+        var abort = true;
+        DEBUG('Calculation aborted. Color Depth has not yet been defined.');
+        return false;
+    }
     if ($('input[name=COLOR_DEPTH_SLCT]:checked').val() == 'Custom') {
         val = Global_InputVars['COLOR_DEPTH'];
         if (!(isPositive(val))) {
@@ -327,7 +363,18 @@ function input_ok() {
         }
     }
 
-    if (Global_InputVars['TIMING_STD'] == 'Custom') {
+    if (Global_InputVars['PIXEL_FORMAT'] == '') {
+        var abort = true;
+        DEBUG('Calculation aborted. Pixel Format has not yet been defined.');
+        return false;
+    }
+
+    if (Global_InputVars['TIMING_STD'] == '') {
+        var abort = true;
+        DEBUG('Calculation aborted. Timing Standard has not yet been defined.');
+        return false;
+    }
+    else if (Global_InputVars['TIMING_STD'] == 'Custom') {
         checklist = ['V_FP', 'V_BP', 'V_SW', 'H_FP', 'H_BP', 'H_SW'];
         var abort = false;
         for (var i = 0; i < checklist.length; i++) {
@@ -342,6 +389,23 @@ function input_ok() {
         }
     }
 
+    if (!isNum(Global_InputVars['COMP'])) {
+        var abort = true;
+        DEBUG('Calculation aborted. COMPRESSION has not yet been defined.');
+        return false;
+    }
+
+    if (!isNum(Global_InputVars['SCAN'])) {
+        var abort = true;
+        DEBUG('Calculation aborted. SCAN TYPE has not yet been defined.');
+        return false;
+    }
+
+    if (!isNum(Global_InputVars['MARGINS'])) {
+        var abort = true;
+        DEBUG('Calculation aborted. Margins have not yet been defined.');
+        return false;
+    }
     if ($('input[name=MARGINS_SLCT]:checked').val() == 'y') {
         val = Global_InputVars['MARGINS'];
         if (!(isPositiveZ(val))) {
@@ -355,6 +419,28 @@ function input_ok() {
 
 
 function calcMain() {
+    /*
+    if(Global_InputVars['HRES'] == '')          { submitVar('INPUT_HRES') }
+    if(Global_InputVars['VRES'] == '')          { submitVar('INPUT_VRES') }
+    if(Global_InputVars['FREQ'] == '')          { submitVar('INPUT_F') }
+    if(Global_InputVars['COLOR_DEPTH'] == '')   { submitVar('COLOR_DEPTH_FORM') }
+    if(Global_InputVars['PIXEL_FORMAT'] == '')  { submitVar('PIXEL_FORMAT_FORM') }
+    if(Global_InputVars['COMP'] == '')          { submitVar('COMPRESSION_FORM') }
+    if(Global_InputVars['SCAN'] == '')          { submitVar('SCAN_FORM') }
+    if(Global_InputVars['MARGINS'] == '')       { submitVar('MARGINS_FORM') }
+    if(Global_InputVars['TIMING_STD'] == '')    { submitVar('TIMING_DROP') }
+    
+    if(Global_InputVars['V_FP'] == '')          { submitVar('V_FP') }
+    if(Global_InputVars['V_BP'] == '')          { submitVar('V_BP') }
+    if(Global_InputVars['V_SW'] == '')          { submitVar('V_SW') }
+    if(Global_InputVars['H_FP'] == '')          { submitVar('H_FP') }
+    if(Global_InputVars['H_BP'] == '')          { submitVar('H_BP') }
+    if(Global_InputVars['H_SW'] == '')          { submitVar('H_SW') }
+    if(Global_InputVars['V_FP_INT'] == '')      { submitVar('V_FP_INT') }
+    if(Global_InputVars['V_BP_INT'] == '')      { submitVar('V_BP_INT') }
+    if(Global_InputVars['V_SW_INT'] == '')      { submitVar('V_SW_INT') }
+    */
+
     if (!input_ok()) { clearResults(); return; }
 
     var hres = Global_InputVars['HRES'];
@@ -372,6 +458,11 @@ function calcMain() {
     if (!Timing) { clearResults(); return; } // Abort if getTiming returns false, it indicates the format is not defined for that timing standard.
     DEBUG('Timing:', Timing);
     
+    var h_eff = Timing['H_EFF']
+    var v_eff = Timing['V_EFF'] * scan
+    var freq_act = Timing['F_ACTUAL'];
+
+    /*
     var results = {
         hres:       hres,
         vres:       vres,
@@ -406,10 +497,146 @@ function calcMain() {
 
         // Raw bit rate
         bits_per_sec_eff: (Timing['H_EFF']) * (Timing['V_EFF']) * color_depth * Timing['F_ACTUAL'],
-    };
+    };*/
 
-    DEBUG('Results:', SI(results['bits_per_sec_eff'], 'bit/s', 2), results);
-    updateDisplay(results);
+    Detailed_Results['data_rate'] = SI(
+        (h_eff * v_eff * freq_act * color_depth / px_format / scan / comp),
+        'bit/s',
+        {'p':2, 'output':'split'},
+    );
+
+    Detailed_Results['8b10b'] = SI(
+        (h_eff * v_eff * freq_act * color_depth / px_format / scan / comp) * (1.25),
+        'bit/s',
+        {'p':2, 'output':'split'},
+    );
+
+    Detailed_Results['16b18b'] = SI(
+        (h_eff * v_eff * freq_act * color_depth / px_format / scan / comp) * (1.125),
+        'bit/s',
+        {'p':2, 'output':'split'},
+    );
+
+    Detailed_Results['pixel_rate'] = SI(
+        (h_eff * v_eff * freq_act / scan),
+        'px/s',
+        {'p':[3, 'b1', 'k1', 'M1'], 'output':'split'},
+    );
+
+    Detailed_Results['pixel_rate_active'] = SI(
+        (hres * vres * freq_act / scan),
+        'px/s',
+        {'p':[3, 'b1', 'k1', 'M1'], 'output':'split'},
+    );
+
+    Detailed_Results['active_px'] = {
+        'h':    hres,
+        'v':    vres,
+        't':    SI(hres * vres, 'px', {'p':0, 'output':'split', 'include': ['b']}),
+    }
+
+    Detailed_Results['blank_px'] = {
+        'h':    h_eff - hres,
+        'v':    v_eff - vres,
+        't':    SI((h_eff * v_eff) - (hres * vres), 'px', {'p':0, 'output':'split', 'include': ['b']}),
+    }
+
+    Detailed_Results['total_px'] = {
+        'h':    h_eff,
+        'v':    v_eff,
+        't':    SI(h_eff * v_eff, 'px', {'p':0, 'output':'split', 'exclude': ['<B', '>B']}),
+    }
+
+    Detailed_Results['overhead_px'] = {
+        'h':    SI(100 * ((h_eff / hres) - 1), '%', {'p':2, 'output':'split',  'exclude': ['<B', '>B']}),
+        'v':    SI(100 * ((v_eff / vres) - 1), '%', {'p':2, 'output':'split',  'exclude': ['<B', '>B']}),
+        't':    SI(100 * (((h_eff * v_eff) / (hres * vres)) - 1), '%', {'p':2, 'output':'split', 'exclude': ['<B', '>B']}),
+    }
+
+    if ($('input[name=COLOR_DEPTH_SLCT]:checked').val() == 'Custom') {
+        if (color_depth % 3 == 0) { Detailed_Results['bpc'] = { 'val': color_depth / 3, 'unit':'bpc' }; }
+        else { Detailed_Results['bpc'] = { 'val': '-', 'unit': '' }; }
+    }
+    else {
+        Detailed_Results['bpc'] = { 'val': color_depth / 3, 'unit':'bpc' }
+    }
+    Detailed_Results['bpp'] = { 'val': color_depth, 'unit': 'bit/px' };
+
+    Detailed_Results['palette'] = SI(Math.pow(2, color_depth), 'colors', {'p':0, 'output':'split', 'include':['b']});
+
+    if ($('input[name=PX_FORMAT_SLCT]:checked').val() == 'RGB') { Detailed_Results['px_format'] = 'RGB'; }
+    else if ($('input[name=PX_FORMAT_SLCT]:checked').val() == 'YCBCR 4:4:4') { Detailed_Results['px_format'] = 'YC<sub>B</sub>C<sub>R</sub> 4:4:4'; }
+    else if ($('input[name=PX_FORMAT_SLCT]:checked').val() == 'YCBCR 4:2:2') { Detailed_Results['px_format'] = 'YC<sub>B</sub>C<sub>R</sub> 4:2:2'; }
+    else if ($('input[name=PX_FORMAT_SLCT]:checked').val() == 'YCBCR 4:2:0') { Detailed_Results['px_format'] = 'YC<sub>B</sub>C<sub>R</sub> 4:2:0'; }
+
+    if (scan == 1) { Detailed_Results['scan'] = 'Progressive'; }
+    if (scan == 2) { Detailed_Results['scan'] = 'Interlaced'; }
+
+    Detailed_Results['v_freq'] = SI(
+        freq,
+        'Hz',
+        {'p':3, 'output':'split', 'include':['>=b']},
+    );
+
+    Detailed_Results['v_freq_actual'] = SI(
+        Timing['F_ACTUAL'],
+        'Hz',
+        {'p':3, 'output':'split', 'include':['>=b']},
+    );
+
+    DEBUG('freq:', typeof(freq), freq)
+    DEBUG('f_actual', typeof(Timing['F_ACTUAL']), Timing['F_ACTUAL'])
+    DEBUG('f - fa', freq - Timing['F_ACTUAL'])
+    Detailed_Results['v_freq_dev'] = SI(
+        Math.abs(freq - Timing['F_ACTUAL']),
+        'Hz',
+        {'p':6, 'output':'split', 'include':['>=b']},
+    );
+
+    Detailed_Results['v_freq_dev_perc'] = SI(
+        Math.abs(100 * ((freq - Timing['F_ACTUAL']) / freq)),
+        '%',
+        {'p':6, 'output':'split', 'include':['b']},
+    );
+
+    Detailed_Results['v_per'] = SI(
+        1 / freq,
+        's',
+        {'p':3, 'output':'split', 'include':['<=b']},
+    );
+
+    Detailed_Results['v_per_actual'] = SI(
+        1 / Timing['F_ACTUAL'],
+        's',
+        {'p':3, 'output':'split', 'include':['<=b']},
+    );
+
+    Detailed_Results['v_per_dev'] = SI(
+        Math.abs((1 / freq) - (1 / Timing['F_ACTUAL'])),
+        's',
+        {'p':3, 'output':'split', 'include':['<=b']},
+    );
+
+    Detailed_Results['v_per_dev_perc'] = SI(
+        Math.abs(100 * ((1 / freq) - (1 / Timing['F_ACTUAL'])) / (1 / freq)),
+        '%',
+        {'p':6, 'output':'split', 'include':['b']},
+    );
+
+    Detailed_Results['h_freq'] = SI(
+        (v_eff * Timing['F_ACTUAL']) / scan,
+        'Hz',
+        {'p':3, 'output':'split', 'include':['>=b']},
+    );
+    
+    Detailed_Results['h_per'] = SI(
+        scan / (v_eff * Timing['F_ACTUAL']),
+        's',
+        {'p':3, 'output':'split', 'include':['<=b']},
+    );
+
+    //DEBUG('Results:', SI(results['bits_per_sec_eff'], 'bit/s', 2), results);
+    updateDisplay();
 }
 
 
@@ -438,28 +665,56 @@ function getTiming(timing_standard) {
         };
     }
 
+    DEBUG('Timing Standard:', timing_standard)
     if (timing_standard != 'Custom') {
         if (timing_standard == 'CVT-R2') {
+            DEBUG('Fetching CVT-R2 Timing...')
             Timing = CVT_R(2);
-            $('#TIMING_FORMAT_NAME').html('<b>VESA Name:</b> ' + (Global_InputVars['HRES'] * Global_InputVars['VRES'] / 1000000).toFixed(2) + 'M' + Timing['VESA_AR'] + '-R');
+            if (!Timing) {
+                DEBUG ('CVT-R2 calculation error.');
+                clearTiming();
+                return false; }
+            else {
+                $('#TIMING_FORMAT_NAME').html('<b>VESA Name:</b> ' + (Global_InputVars['HRES'] * Global_InputVars['VRES'] / 1000000).toFixed(2) + 'M' + Timing['VESA_AR'] + '-R');
+            }
         }
         else if (timing_standard == 'CVT-RB') {
             Timing = CVT_R(1);
-            $('#TIMING_FORMAT_NAME').html('<b>VESA Name:</b> ' + (Global_InputVars['HRES'] * Global_InputVars['VRES'] / 1000000).toFixed(2) + 'M' + Timing['VESA_AR'] + '-R');
+            if (!Timing) {
+                DEBUG ('CVT-RB calculation error.');
+                $('#TIMING_FORMAT_NAME').html('');
+                clearTiming();
+                return false; }
+            else {
+                $('#TIMING_FORMAT_NAME').html('<b>VESA Name:</b> ' + (Global_InputVars['HRES'] * Global_InputVars['VRES'] / 1000000).toFixed(2) + 'M' + Timing['VESA_AR'] + '-R');
+            }
         }
         else if (timing_standard == 'CVT') {
             Timing = CVT();
-            $('#TIMING_FORMAT_NAME').html('<b>VESA Name:</b> ' + (Global_InputVars['HRES'] * Global_InputVars['VRES'] / 1000000).toFixed(2) + 'M' + Timing['VESA_AR']);
+            if (!Timing) {
+                DEBUG ('CVT calculation error.');
+                $('#TIMING_FORMAT_NAME').html('');
+                clearTiming();
+                return false; }
+            else {
+                $('#TIMING_FORMAT_NAME').html('<b>VESA Name:</b> ' + (Global_InputVars['HRES'] * Global_InputVars['VRES'] / 1000000).toFixed(2) + 'M' + Timing['VESA_AR']);
+            }
         }
         else if (timing_standard == 'GTF') {
             Timing = GTF();
             $('#TIMING_FORMAT_NAME').html('');
+            if (!Timing) {
+                DEBUG ('GTF calculation error.');
+                clearTiming();
+                return false;
+            }
         }
         else if (timing_standard == 'DMT') {
             Timing = DMT();
             if (!Timing) {
                 DEBUG ('Not a DMT Format. DMT Function returned false.');
-                $('#TIMING_FORMAT_NAME').html('');
+                $('#TIMING_FORMAT_NAME').html('Not a DMT format');
+                clearTiming();
                 return false; }
             else {
                 $('#TIMING_FORMAT_NAME').html('<b>DMT ID:</b> ' + Timing['ID']);
@@ -469,7 +724,8 @@ function getTiming(timing_standard) {
             Timing = CTA();
             if (!Timing) {
                 DEBUG ('Not a CTA Format. CTA Function returned false.');
-                $('#TIMING_FORMAT_NAME').html('');
+                $('#TIMING_FORMAT_NAME').html('Not a CTA format');
+                clearTiming();
                 return false; }
             else {
                 $('#TIMING_FORMAT_NAME').html('<b>CTA VIC:</b> ' + Timing['VIC']);
@@ -554,6 +810,20 @@ function getTiming(timing_standard) {
 }
 
 
+function clearTiming() {
+    submitVar('V_FP', '');
+    submitVar('V_BP', '');
+    submitVar('V_SW', '');
+    submitVar('H_FP', '');
+    submitVar('H_BP', '');
+    submitVar('H_SW', '');
+    submitVar('V_FP_INT', '');
+    submitVar('V_SW_INT', '');
+    submitVar('V_BP_INT', '');
+    return;
+}
+
+
 function CVT_R(R) { // Variable R is an integer representing the reduced blanking revision to use, version 1 or version 2.
     var H = Global_InputVars['HRES']; // Horizontal active pixels
     var V = Global_InputVars['VRES']; // Vertical active pixels
@@ -618,6 +888,7 @@ function CVT_R(R) { // Variable R is an integer representing the reduced blankin
 
         var G = 8; // Cell granularity constant defined by CVT standard
         var H_RND = Math.floor(H / G) * G; // Round down horizontal resolution to be a multiple 8
+        if (H_RND <= 0) { return false; }
         var V_MARGIN = Math.floor(M / 100) * V_LINES; // If margins percent (M) is 0, this result is 0
         var H_MARGIN = Math.floor(H_RND * M / 100 / G) * G; // If margins percent (M) is 0, this result is 0
 
@@ -750,6 +1021,7 @@ function CVT() {
 
     var G = 8; // Cell Granularity constant
     var H_RND = Math.floor(H / G) * G;
+    if (H_RND <= 0) { return false; }
     var V_MARGIN = Math.floor(M / 100 * V_LINES); // If margins percent (M) is 0, this result is 0
     var H_MARGIN = Math.floor(H_RND * M / 100 / G) * G; // If margins percent (M) is 0, this result is 0
     var H_SYNC_TARGET_WIDTH = 0.08 // Nominal horizontal sync pulse duration (percent of horizontal draw period)
@@ -1070,6 +1342,81 @@ function DMT() {
 
 
 function updateDisplay() {
+    var cells;
+    var id;
+
+    id_list = ['data_rate', '8b10b', '16b18b', 'pixel_rate', 'pixel_rate_active'];
+    for (var x = 0; x < id_list.length; x++) {
+        id = id_list[x];
+        cells = $('#results_' + id).children();
+        DEBUG('Detailed Results:', Detailed_Results[id]);
+        DEBUG('Cells:', cells)
+        cells[1].innerHTML = Detailed_Results[id]['val'];
+        cells[2].innerHTML = Detailed_Results[id]['unit'];
+    }
+
+    id_list = ['active_px', 'blank_px', 'total_px'];
+    for (var x = 0; x < id_list.length; x++) {
+        id = id_list[x];
+        cells = $('#results_' + id).children();
+        DEBUG('Detailed Results:', Detailed_Results[id]);
+        DEBUG('Cells:', cells)
+        cells[1].innerHTML = Detailed_Results[id]['h'];
+        cells[2].innerHTML = Detailed_Results[id]['v'];
+        cells[3].innerHTML = Detailed_Results[id]['t']['val'];
+        cells[4].innerHTML = Detailed_Results[id]['t']['unit'];
+    }
+    id = 'overhead_px';
+    cells = $('#results_' + id).children();
+    DEBUG('Detailed Results:', Detailed_Results[id]);
+    DEBUG('Cells:', cells)
+    cells[1].innerHTML = Detailed_Results[id]['h']['val'];
+    cells[2].innerHTML = Detailed_Results[id]['v']['val'];
+    cells[3].innerHTML = Detailed_Results[id]['t']['val'];
+    cells[4].innerHTML = Detailed_Results[id]['t']['unit'];
+
+    id_list = ['bpc', 'bpp', 'palette'];
+    for (var x = 0; x < id_list.length; x++) {
+        id = id_list[x];
+        cells = $('#results_' + id).children();
+        DEBUG('Detailed Results:', Detailed_Results[id]);
+        DEBUG('Cells:', cells)
+        cells[1].innerHTML = Detailed_Results[id]['val'];
+        cells[2].innerHTML = Detailed_Results[id]['unit'];
+    }
+
+    id = 'px_format';
+    cells = $('#results_' + id).children();
+    DEBUG('Detailed Results:', Detailed_Results[id]);
+    DEBUG('Cells:', cells)
+    cells[1].innerHTML = Detailed_Results[id]
+
+    id = 'scan';
+    cells = $('#results_' + id).children();
+    DEBUG('Detailed Results:', Detailed_Results[id]);
+    DEBUG('Cells:', cells)
+    cells[1].innerHTML = Detailed_Results[id]
+
+    id_list = ['v_freq', 'v_freq_actual', 'v_freq_dev', 'v_freq_dev_perc', 'v_per', 'v_per_actual', 'v_per_dev', 'v_per_dev_perc'];
+    for (var x = 0; x < id_list.length; x++) {
+        id = id_list[x];
+        cells = $('#results_' + id).children();
+        DEBUG('Detailed Results:', Detailed_Results[id]);
+        DEBUG('Cells:', cells)
+        cells[1].innerHTML = Detailed_Results[id]['val'];
+        cells[2].innerHTML = Detailed_Results[id]['unit'];
+    }
+
+    id_list = ['h_freq', 'h_per'];
+    for (var x = 0; x < id_list.length; x++) {
+        id = id_list[x];
+        cells = $('#results_' + id).children();
+        DEBUG('Detailed Results:', Detailed_Results[id]);
+        DEBUG('Cells:', cells)
+        cells[1].innerHTML = Detailed_Results[id]['val'];
+        cells[2].innerHTML = Detailed_Results[id]['unit'];
+    }
+
     return;
 }
 
@@ -1087,6 +1434,9 @@ function timingUIChange() {
         $('#H_FP'),
         $('#H_BP'),
         $('#H_SW'),
+        $('#V_FP_INT'),
+        $('#V_BP_INT'),
+        $('#V_SW_INT'),
     ];
     value = $('#TIMING_DROP').val();
     if (value == 'Custom') {
@@ -1163,299 +1513,6 @@ function marginsUIChange() {
 }
 
 
-function SI(value, unit, options_input) {
-    DEBUG('Input:', value, unit, options_input);
-    if (isNaN(parseInt(value))) { return value; }
-    if (typeof(options_input) == 'number' || typeof(options_input) == 'string') { options_input = {p: options_input.toString()}; }
-
-    /* Valid options:
-    SI_options = {
-        p:     2            Specifies default precision (number of decimal places). Use '-1' or 'a' or 'adaptive' for adaptive mode (autodetect decimal places)
-                            Also accepts individual decimal place settings for each prefix, in array format; for example:
-                                {p: [1, G2, M0]} sets a default of 1 for all prefixes, then specifies 2 decimal places for Giga and 0 for Mega.
-        p_max: 4            Maximum number of decimal places (for adaptive precision mode)
-        p_min: 2            Minimum number of decimal places (for adaptive precision mode)
-
-        separator: ','      Character to use as thousands separator (default comma)
-        decimal: '.'        Character to use as decimal point (default period)
-        unit_sep: '&nbsp;'  Character to place between the value and unit symbol (default non-breaking space)
-        cap_kilo: 'true'    Use capital K for kilo instead of small k. (default false)
-        no_mu: 'true'       Use "u" instead of "µ" on output, if necessary for compatibility reasons (default false)
-
-        exclude: ['c', 'd'] SI prefixes to exclude, for situational use (i.e. for displaying time, one may not wish for "centiseconds").
-                            Symbols can also be used as shortcuts, as in the following examples:
-                                '>=G' excludes Giga and larger
-                                '>G' excludes larger than Giga, but not Giga itself
-                                '<G' and "<=G" same as above, but for prefixes smaller than Giga
-                                '*' excludes all prefixes (unless protected)
-                                '!G' protects a prefix from '*', i.e. {exclude: ['*', '!k', '!M']} excludes all prefixes except Kilo and Mega)
-                            Multiple arguments accepted in array format
-                            "u" is accepted as an argument for excluding "µ", and "0" is accepted for excluding the prefixless base unit
-                            By default, the following are excluded already, and must be un-excluded (using !c, !d, etc.) to be used:
-                                'c' (centi, 10^-2)
-                                'd' (deci, 10^-1)
-                                'D' (deca, 10^1)
-                                'H' (hecto, 10^2)
-    }
-    */
-
-
-    //console.log(SI_options['precision']);
-
-    var out_value;
-    var out_prefix;
-    var precision;
-
-    var prefixDef = {
-        '-24': {sym:'y', name:'yocto', p: 0, excl: false},
-        '-21': {sym:'z', name:'zepto', p: 0, excl: false},
-        '-18': {sym:'a', name:'atto',  p: 0, excl: false},
-        '-15': {sym:'f', name:'femto', p: 0, excl: false},
-        '-12': {sym:'p', name:'pico',  p: 0, excl: false},
-        '-9':  {sym:'n', name:'nano',  p: 0, excl: false},
-        '-6':  {sym:'µ', name:'micro', p: 0, excl: false},
-        '-3':  {sym:'m', name:'milli', p: 0, excl: false},
-        '-2':  {sym:'c', name:'centi', p: 0, excl: false},
-        '-1':  {sym:'d', name:'deci',  p: 0, excl: false},
-        '0':   {sym:'',  name:'',      p: 0, excl: false},
-        '1':   {sym:'D', name:'deca',  p: 0, excl: false},
-        '2':   {sym:'H', name:'hecto', p: 0, excl: false},
-        '3':   {sym:'k', name:'kilo',  p: 0, excl: false},
-        '6':   {sym:'M', name:'mega',  p: 0, excl: false},
-        '9':   {sym:'G', name:'giga',  p: 0, excl: false},
-        '12':  {sym:'T', name:'tera',  p: 0, excl: false},
-        '15':  {sym:'P', name:'peta',  p: 0, excl: false},
-        '18':  {sym:'E', name:'exa',   p: 0, excl: false},
-        '21':  {sym:'Z', name:'zetta', p: 0, excl: false},
-        '24':  {sym:'Y', name:'yotta', p: 0, excl: false},
-    };
-
-    var pre2num = {
-        'y': -24,
-        'z': -21,
-        'a': -18,
-        'f': -15,
-        'p': -12,
-        'n': -9,
-        'µ': -6,
-        'u': -6,
-        'm': -3,
-        'c': -2,
-        'd': -1,
-        '0': 0,
-        'D': 1,
-        'H': 2,
-        'k': 3,
-        'K': 3,
-        'M': 6,
-        'G': 9,
-        'T': 12,
-        'P': 15,
-        'E': 18,
-        'Z': 21,
-        'Y': 24,
-    }
-
-    SI_defaults = {
-        p:          2,
-        p_max:      8,
-        p_min:      0,
-        separator:  ',',
-        decimal:    '.',
-        unit_sep:   '&nbsp;',
-        cap_kilo:   false,
-        no_mu:      false,
-        exclude:    ['c', 'd', 'D', 'H'],
-    }
-    // Apply the default precision setting above
-    for (var i = -24; i <= 24; i++) {
-        if (i.toString() in prefixDef) {
-            prefixDef[i.toString()]['p'] = SI_defaults['p'];
-        }
-    }
-    //SI_options = Unpack_SI_options(SI_options, options_input);
-    var SI_options = SI_set_options(SI_defaults, options_input, prefixDef, pre2num);
-    //console.log(SI_options);
-    //console.log(options_input);
-    SI_options['p'] = options_input['p'];
-
-    //console.log('SI_options: ', SI_options);
-
-    prefixDef = SI_set_precision(SI_options, prefixDef, pre2num);
-
-    var magnitude = Math.floor(Math.log(value)/Math.log(10));
-
-    if (magnitude >= -24 && magnitude <= 24) {
-        // Change any inbetween magnitudes to one that has a prefix assigned to it
-        /*
-        if (!(magnitude in prefixDef)) {
-            magnitude = 3 * Math.floor(magnitude / 3);   
-        }*/
-        while (!(magnitude in prefixDef)) {
-            magnitude--;
-        }
-        // Get the precision specified for that magnitude
-        precision = prefixDef[magnitude]['p'];
-
-        // Divide the number by the appropriate power of 10, and return the new number and associated SI prefix
-        out_value = Commas(Number(value / Math.pow(10, magnitude)).toFixed(precision));
-        out_prefix = prefixDef[magnitude]['sym'];
-    }
-    else {
-        out_value = Commas(value);
-        out_prefix = '';
-    }
-
-    return (out_value + '&nbsp;' + out_prefix + unit);
-}
-
-
-function SI_set_options(SI_options, options_input, prefixDef, pre2num) {
-    var opt = ['p', 'p_max', 'p_min', 'separator', 'decimal', 'unit_sep', 'cap_k', 'no_mu'];
-    // Loop through all options, if specified by options_input, replace the default
-    for (var i = 0; i < opt.length; i++) {
-        if (opt[i] in options_input) {
-            SI_options[opt[i]] = options_input[opt[i]];
-        }
-    }
-    var explicit_incl = [];
-    var arg;
-    var offset;
-
-    if (!('exclude' in options_input)) {
-        DEBUG('options_input contained no exclusions');
-    }
-    if (typeof(options_input['exclude']) == 'string') {
-        DEBUG('(SI_options == string) returns true');
-    }
-
-    else if (typeof(options_input['exclude']) == 'object') {
-        DEBUG('(SI_options == object) returns true');
-
-        // First pass, loops through [exclude] list provided in the input options, to check for any prefixes declared as Explicitly Included, with '!'
-        for (var i = 0; i < options_input['exclude'].length; i++) {
-            arg = options_input['exclude'][i];
-            if (isNaN(parseInt(arg[0]))) {
-                // If arg[0] is !, add arg[1] to the list of explicitly included prefixes
-                if (arg[0] == '!' && pre2num[arg[1]] in prefixDef) {
-                    explicit_incl.push(arg[1]);
-                }
-            }
-        }
-        DEBUG('Explicit inclusions:', explicit_incl);
-        // Second pass, loops through [exclude] list to look for '*', which excludes all prefixes except the ones on the explicit_incl list.
-        for (var i = 0; i < options_input['exclude'].length; i++) {
-            arg = options_input['exclude'][i];
-            if (isNaN(parseInt(arg[0]))) {
-                if (arg[0] == '*') {
-                    // If arg[0] is *, then exclude all prefixes except those explicitly included
-                    for (var j = -24; j <= 24; j++ ) {
-                        if (j in prefixDef) {
-                            if (explicit_incl.indexOf(prefixDef[j]['sym']) == -1 && !(prefixDef[j]['sym'] in SI_options['exclude'])) {
-                                SI_options['exclude'].push(prefixDef[j]['sym']);
-                                DEBUG('Prefix "' + prefixDef[j]['sym'] + '" excluded');
-                                DEBUG(prefixDef[j]['sym'] + ' not in explicit_incl: ' + !(prefixDef[j]['sym'] in explicit_incl));
-                            }
-                        }
-                    }
-                    break;
-                }
-            }
-        }
-        // Third pass, loops through [exclude] list again, to expand all shortcuts like ">=G" into "[G, T, P, E ... ]"
-        for (var i = 0; i < options_input['exclude'].length; i++) {
-            arg = options_input['exclude'][i];
-            if (isNaN(parseInt(arg[0]))) {
-                if (arg[0] == '>') { 
-                    if (arg[1] == '=') { offset = 0; DEBUG('Offset set to 0') } // If command is ">=", offset 0 to include starting position.
-                    else               { offset = 1; } // Otherwise, command is ">", offset 1 to not include the specified prefix
-                    for (var j = pre2num[arg[1 + (1-offset)]] + offset; j <= 24; j++) {
-                        DEBUG('J:', j);
-                        if (j in prefixDef) {
-                            // Check to make sure it hasn't been explicitly included (present in explicit_incl list) or duplicate (present in SI[exclude])
-                            if (explicit_incl.indexOf(prefixDef[j]['sym']) == -1 && !(prefixDef[j]['sym'] in SI_options['exclude'])) {
-                                // Exclude prefixes at/above the prefix specified by arg[1]
-                                SI_options['exclude'].push(prefixDef[j]['sym']);
-                            }
-                        }
-                    }
-                }
-                else if (arg[0] == '<') {
-                    if (arg[1] == '=') { offset = 0; } // If command is "<=", offset 0
-                    else               { offset = 1; } // Otherwise, command is "<", offset 1 to include the specified prefix
-                    for (var j = pre2num[arg[1 + (1-offset)]] - offset; j >= -24; j--) {
-                        if (j in prefixDef) {
-                            // Check to make sure it hasn't been explicitly included (present in explicit_incl list) or duplicate (present in SI[exclude])
-                            if (explicit_incl.indexOf(prefixDef[j]['sym']) == -1 && !(prefixDef[j]['sym'] in SI_options['exclude'])) {
-                                // Exclude prefixes at/below the prefix specified by arg[1]
-                                SI_options['exclude'].push(prefixDef[j]['sym']);
-                            }
-                        }
-                    }
-                }
-                else {
-                    j = pre2num[arg[0]];
-                    if (j in prefixDef) {
-                        if (explicit_incl.indexOf(prefixDef[j]['sym']) == -1 && !(prefixDef[j]['sym'] in SI_options['exclude'])) {
-                            SI_options['exclude'].push(prefixDef[j]['sym']);
-                        }
-                    }
-                }
-            }
-        }
-
-    }
-    return SI_options;
-}
-
-
-function SI_set_precision(SI_options, prefixDef, pre2num) {
-    for (var i = 0; i < SI_options['exclude'].length; i++) {
-        //prefixDef[pre2num[SI_options['exclude'][i]]]['excl'] = true;
-        // Delete prefixes that have been excluded
-        delete prefixDef[pre2num[SI_options['exclude'][i]]];
-    }
-    var precision = SI_options['p'];
-
-    // If the precision argument is a string, then there is only 1 precision specified
-    if (typeof(precision) == 'string') {
-
-        // If it's a 1-character string, then it's a pure number, which means it is set as the default for all prefixes
-        if (precision.length == 1) {
-            for (var i = -24; i <= 24; i++) {
-                if (i.toString() in prefixDef) {
-                    prefixDef[i.toString()]['p'] = precision;
-                }
-            }
-        }
-        // If it's a 2-character string, it could be a 2 digit number or a prefix-specific code
-        else if (precision.length == 2) {
-            if (isNaN(parseInt(precision[0]))) {
-                prefixDef[pre2num[precision[0]]]['p'] = parseInt(precision[1]);
-            }
-        }
-    }
-    else if (typeof(precision) == 'object') {
-        for (var j = 0; j < precision.length; j++) {
-            if (precision[j].length == 1) {
-                for (var i = -24; i <= 24; i++) {
-                    if (i.toString() in prefixDef) {
-                        prefixDef[i.toString()]['p'] = parseInt(precision[j]);
-                    }
-                }
-            }
-                // If it's a 2-character string, it could be a 2 digit number or a prefix-specific code
-            else if (precision[j].length == 2) {
-                if (isNaN(parseInt(precision[j][0])) && (pre2num[precision[j][0]] in prefixDef)) {
-                    prefixDef[pre2num[precision[j][0]]]['p'] = parseInt(precision[j][1]);
-                }
-            }
-        }
-    }
-    return prefixDef
-}
-
-
 function LoadCTA861(){
     // Loads the timing definitions for the CTA-861 standard from a txt file
     //DEBUG('CTA Test 11');
@@ -1466,7 +1523,7 @@ function LoadCTA861(){
         DEBUG('request.status:', request.status)
         if (request.readyState === 4 && (request.status === 200 || request.status === 0)) {
             CTA861 = $.csv.toObjects(request.responseText);
-            DEBUG(CTA861);
+            //DEBUG(CTA861);
         }
     }
     DEBUG('Finished');
@@ -1595,6 +1652,9 @@ function parseNum(val) {
     }
 
     else if (typeof val === 'string') {
+        // Empty string is interpreted as 0
+        if (val == '') { return 0; }
+
         // First, remove all non-numeric characters on the outsides of the string
         for (var i = 0; i < val.length; i++) {
             if (!(i < val.length)) { break; }
@@ -1603,13 +1663,13 @@ function parseNum(val) {
             if ((/[^0-9.-]/g).test(val[i]) == true) {
                 // If character is not a number, period, or minus sign, remove it
                 if (i == 0 && val.length > 1) { val = val.slice(1); }
-                else if (i == val.length - 1) { return NaN; } // If this is the last character in the string
+                else if (i == val.length - 1) { return NaN; } // If this is the last character in the string, then there are no digits in the string; return NaN
                 else if (i > 0) { val = (val.slice(0, i)) + (val.slice(i+1));}
                 i = i - 1; // Since a character has been removed, the next character is now at the same index
                 continue;
             }
             else if ((/[-]/g).test(val[i]) == true) {
-                // If character is a negative sign, ignore it. This is because there may still be non-number characters between the negative sign and the first digit, such as "-$1.00". The negative sign should stay but the dollar needs to be removed.
+                // If character is a negative sign, continue searching without deleting it. This is because there may still be non-number characters between the negative sign and the first digit, such as "-$1.00". The negative sign should stay but the dollar needs to be removed.
                 continue;
             }
             else if ((/[.]/g).test(val[i]) == true) {
@@ -1635,7 +1695,7 @@ function parseNum(val) {
             }
         }
 
-        // Now do a similar starting from the backside, to strip any trailing characters (such as units of measurement)
+        // Now do a similar procedure starting from the backside, to strip any trailing characters (such as units of measurement)
         for (var i = (val.length - 1); i >= 0; i--) {
             if ((/[^0-9]/g).test(val[i]) == true) {
                 // No need to modify iterator for this direction
@@ -1857,17 +1917,41 @@ function isFloat(num) {
 
 
 window.onpageshow = function() {
+    DEBUG('On Page Show function executing...')
     generate_table('Interface Support', -1);
     LoadCTA861();
     LoadDMT();
+    
+    DEBUG('Initializing HRES')
     $('#INPUT_HRES')[0].onchange();
+    DEBUG('Initializing VRES')
     $('#INPUT_VRES')[0].onchange();
+    DEBUG('Initializing FREQ')
     $('#INPUT_F')[0].onchange();
+    DEBUG('Initializing COLOR DEPTH')
     $('#COLOR_DEPTH_FORM')[0].onchange();
+    DEBUG('Initializing PIXEL FORMAT')
     $('#PIXEL_FORMAT_FORM')[0].onchange();
+    DEBUG('Initializing COMPRESSION')
     $('#COMPRESSION_FORM')[0].onchange();
+    DEBUG('Initializing SCAN')
     $('#SCAN_FORM')[0].onchange();
+    DEBUG('Initializing MARGINS')
     $('#MARGINS_FORM')[0].onchange();
+    DEBUG('Initializing TIMING STANDARD')
     $('#TIMING_DROP')[0].onchange();
-    calcMain();
+    
+    $('#V_FP')[0].onchange();
+    $('#V_BP')[0].onchange();
+    $('#V_SW')[0].onchange();
+    $('#H_FP')[0].onchange();
+    $('#H_BP')[0].onchange();
+    $('#H_SW')[0].onchange();
+    $('#V_FP_INT')[0].onchange();
+    $('#V_BP_INT')[0].onchange();
+    $('#V_SW_INT')[0].onchange();
+
+    //calcMain();
 }
+
+//window.onload = window.onpageshow;

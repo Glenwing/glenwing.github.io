@@ -7,16 +7,17 @@ function DEBUG(text) {
     if ('all' in DebugSettings) {
         if (!DebugSettings['all']) {
             return;
-        } // if All == false, always skip
+        }
         else if (DebugSettings['all']) {
-            //printDebug(Fn, arguments);
             proceed_with_msg = true;
         }
     }
     else if (Fn in DebugSettings) {
         if (DebugSettings[Fn] == false) {
-            //printDebug(Fn, arguments)
             proceed_with_msg = false;
+        }
+        else {
+            proceed_with_msg = true;
         }
     }
     else {

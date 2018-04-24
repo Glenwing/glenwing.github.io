@@ -23,6 +23,7 @@
 <head>
     <meta charset="utf-8" />
     <title>Bandwidth Calculator</title>
+    <!--<link rel="stylesheet" href="https://ssl.gstatic.com/docs/script/css/add-ons1.css">-->
     <link rel="stylesheet" type="text/css" href="./style.css" />
     <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons" />
 </head>
@@ -31,7 +32,7 @@
     <div class="wrapper">
         <div class="main">
             <div class="header">
-                <a href="https://glenwing.github.io"><i class="material-icons back_arrow">subdirectory_arrow_left</i>&nbsp;Video Bandwidth Calculator (CTA Test 11)</a>
+                <a href="https://glenwing.github.io"><i class="material-icons back_arrow">subdirectory_arrow_left</i>&nbsp;Video Bandwidth Calculator (Work In Progress)</a>
                 <hr />
             </div>
 
@@ -50,14 +51,14 @@
                                 <tr>
                                     <td>
                                         <div align="center">
-                                            <input id="INPUT_HRES" class="res_input number" style="text-align:right;" type="text" onchange="submitVar(this.id, this.value); calcMain();" oninput="this.onchange()" onfocus="this.select();" autofocus />
+                                            <input id="INPUT_HRES" class="res_input number" style="text-align:right;" type="text" onchange="submitVar(this.id, this.value); calcMain();" oninput="this.onchange();" onfocus="this.select();" autofocus />
                                             <span class="res_x">&#10005;</span>
-                                            <input id="INPUT_VRES" class="res_input number" style="text-align:left;" type="text" onchange="submitVar(this.id, this.value); calcMain();" oninput="this.onchange()" onfocus="this.select();" />
+                                            <input id="INPUT_VRES" class="res_input number" style="text-align:left;" type="text" onchange="submitVar(this.id, this.value); calcMain();" oninput="this.onchange();" onfocus="this.select();" />
                                             <span>@</span>
-                                            <input id="INPUT_F" class="freq_input number" type="text" onchange="submitVar(this.id, this.value), calcMain();" oninput="this.onchange()" onfocus="this.select();" />
+                                            <input id="INPUT_F" class="freq_input number" type="text" onchange="submitVar(this.id, this.value), calcMain();" oninput="this.onchange();" onfocus="this.select();" />
                                             <span>Hz</span>
                                         </div>
-                                        <div id="warning_box" style="text-align:left; width:400px; margin-top:32px; border:1px solid black; padding:16px;">
+                                        <div id="warning_box" style="text-align:left; width:400px; margin-top:32px; border:1px solid black; padding:16px;" hidden>
                                             <b>Warning: Non-Standard Refresh Rate</b><br />
                                             <div style="padding:8px;">
                                                 The CTA-861 standard only defines timing parameters for this resolution at the following refresh rates:<br />
@@ -189,7 +190,7 @@
                                                     <input id="H_BP" class="timing_param" oldvalue="" onchange="submitVar(this.id, this.value); calcMain();" oninput="this.onchange();" onfocus="this.select();" disabled />&nbsp;px
                                                 </td>
                                                 <td style="text-align:right; min-width:60px;">
-                                                    <span id="H_BLANK">1234</span>&nbsp;px
+                                                    <span id="H_BLANK"></span>&nbsp;px
                                                 </td>
                                             </tr>
                                             <tr style="height:30px;">
@@ -206,7 +207,7 @@
                                                     <input id="V_BP" class="timing_param" oldvalue="" onchange="submitVar(this.id, this.value); calcMain();"  oninput="this.onchange();" onfocus="this.select();" disabled />&nbsp;px
                                                 </td>
                                                 <td style="text-align:right; width:100px;">
-                                                    <span id="V_BLANK">0</span>&nbsp;px
+                                                    <span id="V_BLANK"></span>&nbsp;px
                                                 </td>
                                             </tr>
                                             <tr id="Interlaced_Timing_Row" style="height:30px;">
@@ -223,7 +224,7 @@
                                                     <input id="V_BP_INT" class="timing_param" oldvalue="" onchange="submitVar(this.id, this.value); calcMain();" oninput="this.onchange();" onfocus="this.select();" disabled />&nbsp;px
                                                 </td>
                                                 <td id="V_BLANK_INT_CONTAINER" style="text-align:right; width:100px;">
-                                                    <span id="V_BLANK_INT">0</span>&nbsp;px
+                                                    <span id="V_BLANK_INT"></span>&nbsp;px
                                                 </td>
                                             </tr>
                                         </table>
@@ -248,6 +249,7 @@
                     <tr id="results_body" style="display:table-row;">
                         <td colspan="3" class="body">
                             <table style="border-collapse:collapse; border:0px solid transparent; padding:0px;">
+                                <!----<tr>
                                 <tr>
                                     <td style="overflow-x:auto; white-space:nowrap; vertical-align:top; width:300px; padding:12px; background-color:#E0E0E0;">
                                         <b>Video Format:</b><br />
@@ -260,96 +262,132 @@
                                             CTA-861 timing (VIC: 63)<br />
                                         </div>
                                     </td>
-                                </tr>
-                            </table>
-                            <br />
-                            <table class="results">
+                                </tr>-->
                                 <tr>
-                                    <td class="label">
-                                        Data Rate:
+                                    <td id="results_container" class="results_container">
+                                        <table style='width:100%;' onclick='deselectRow();'><tr>
+                                            <td><div>Results</div></td>
+                                            <td style='text-align:right;'><label for='moar_decimals' style='font-size:80%;'>Moar Decimal Places<input type='checkbox' id='moar_decimals' class='moar_decimals' /></label></td>
+                                        </tr></table>
+                                        <table class="results">
+                                        <!--<table class="results" style="border-top-width: 0px;">-->
+                                            <tr id='results_data_transmission'>
+                                                <th class="label">Data Transmission</th><th class="val">Value</th><th class="unit">Unit</th></tr>
+                                            <tr id='results_data_rate'>
+                                                <td class="label">Data Rate</td><td class="val">8.00</td><td class="unit">Gbit/s</td></tr>
+                                            <tr id='results_bit_rate'>
+                                                <td class="label">Bandwidth:</td><td></td><td></td></tr>
+                                                <tr id='results_8b10b'>
+                                                    <td class="label depth2">8b/10b Encoding</td><td class="val">10.00</td><td class="unit">Gbit/s</td></tr>
+                                                <tr id='results_16b18b'>
+                                                    <td class="label depth2">16b/18b Encoding</td><td class="val">9.00</td><td class="unit">Gbit/s</td></tr>
+                                            <!----<tr id='results_char_rate'>
+                                                <td class="label">TMDS Character Rate ("Pixel Clock")</td><td class="val">346</td><td class="unit">MHz</td></tr>-->
+                                            <tr id='results_pixel_rate'>
+                                                <td class="label">Pixel Rate (Effective)</td><td class="val">346</td><td class="unit">Mpx/s</td></tr>
+                                            <tr id='results_pixel_rate_active'>
+                                                <td class="label">Pixel Rate (Active Pixels Only)</td><td class="val">346</td><td class="unit">Mpx/s</td></tr>
+                                        </table>
+                                        <table class="results">
+                                            <tr class="triple" id='results_resolution'>
+                                                <th class="label">Resolution</th><th class="val">Hor.</th><th class="val">Ver.</th><th class="val">Total</th><th class="unit">Unit</th></tr>
+                                            <tr class="triple" id='results_active_px'>
+                                                <td class="label">Active</td><td class="val half">1920</td><td class="val half">1080</td><td class="val">2,073,600</td><td class="unit">px</td></tr>
+                                            <tr class="triple" id='results_blank_px'>
+                                                <td class="label">Blank</td><td class="val half">80</td><td class="val half">77</td><td class="val">240,400</td><td class="unit">px</td></tr>
+                                            <tr class="triple" id='results_total_px'>
+                                                <td class="label">Effective Total</td><td class="val half">2000</td><td class="val half">1157</td><td class="val">2,314,000</td><td class="unit">px</td></tr>
+                                            <tr class="triple" id='results_overhead_px'>
+                                                <td class="label">Overhead</td><td class="val half">4.17</td><td class="val half">7.13</td><td class="val">11.59</td><td class="unit">%</td></tr>
+                                        </table>
+                                        <table class="results">
+                                            <tr id='results_format'>
+                                                <th class="label">Format</th><th class="val">Value</th><th class="unit">Unit</th></tr>
+                                            <tr id='results_bpc'>
+                                                <td class="label">Color Depth (Per Channel)</td><td class="val">8</td><td class="unit">bpc</td></tr>
+                                            <tr id='results_bpp'>
+                                                <td class="label">Color Depth (Per Pixel)</td><td class="val">24</td><td class="unit">bit/px</td></tr>
+                                            <tr id='results_palette'>
+                                                <td class="label">Palette Size</td><td class="val">16,777,216</td><td class="unit">colors</td></tr>
+                                            <tr id='results_px_format'>
+                                                <td class="label">Pixel Format</td><td class="val">RGB</td><td class="unit"></td></tr>
+                                            <tr id='results_scan'>
+                                                <td class="label">Scan Type</td><td class="val">Progressive</td><td class="unit"></td></tr>
+                                        </table>
+                                        <table class="results">
+                                            <tr id='results_v_refresh'>
+                                                <th class="label">Vertical Refresh</th><th class="val">Value</th><th class="unit">Unit</th></tr>
+                                            <tr id='results_v_freq'>
+                                                <td class="label">Frequency (Target)</td><td class="val">144.000</td><td class="unit">Hz</td></tr>
+                                            <tr id='results_v_freq_actual'>
+                                                <td class="label">Frequency (Actual)</td><td class="val">143.993</td><td class="unit">Hz</td></tr>
+                                                <tr id='results_v_freq_dev'>
+                                                    <td class="label depth2">Deviation</td><td class="val">0.007</td><td class="unit">Hz</td></tr>
+                                                <tr id='results_v_freq_dev_perc'>
+                                                    <td class="label depth2"></td><td class="val">0.00486</td><td class="unit">%</td></tr>
+                                            <tr id='results_v_per'>
+                                                <td class="label">Period (Target)</td><td class="val">6.944</td><td class="unit">ms</td></tr>
+                                            <tr id='results_v_per_actual'>
+                                                <td class="label">Period (Actual)</td><td class="val">6.945</td><td class="unit">ms</td></tr>
+                                                <tr id='results_v_per_dev'>
+                                                    <td class="label depth2">Deviation</td><td class="val">0.338</td><td class="unit">µs</td></tr>
+                                                <tr id='results_v_per_dev_perc'>
+                                                    <td class="label depth2"></td><td class="val">0.00486</td><td class="unit">%</td></tr>
+                                        </table>
+                                        <table class="results" hidden>
+                                            <tr id='results_v_refresh_int'>
+                                                <th class="label">Vertical Refresh</th><th class="val">Value</th><th class="unit">Unit</th></tr>
+                                            <tr id='results_v_field'>
+                                                <td class="label">Frequency / Field Rate (Target)</td><td class="val">144.000</td><td class="unit">Hz</td></tr>
+                                            <tr id='results_v_field_actual'>
+                                                <td class="label">Frequency / Field Rate (Actual)</td><td class="val">143.993</td><td class="unit">Hz</td></tr>
+                                                <tr id='results_v_field_dev'>
+                                                    <td class="label depth2">Deviation</td><td class="val">0.007</td><td class="unit">Hz</td></tr>
+                                                <tr id='results_v_field_dev_perc'>
+                                                    <td class="label depth2"></td><td class="val">0.00486</td><td class="unit">%</td></tr>
+                                            <tr id='results_v_framerate'>
+                                                <td class="label">Frame Rate (Target)</td><td class="val">72.000</td><td class="unit">Hz</td></tr>
+                                            <tr id='results_v_framerate_actual'>
+                                                <td class="label">Frame Rate (Actual)</td><td class="val">71.997</td><td class="unit">Hz</td></tr>
+                                                <tr id='results_v_framerate_dev'>
+                                                    <td class="label depth2">Deviation</td><td class="val">0.003</td><td class="unit">Hz</td></tr>
+                                                <tr id='results_v_framerate_dev_perc'>
+                                                    <td class="label depth2"></td><td class="val">0.00486</td><td class="unit">%</td></tr>
+                                            <tr id='results_v_field_per'>
+                                                <td class="label">Field Period (Target)</td><td class="val">6.944</td><td class="unit">ms</td></tr>
+                                            <tr id='results_v_field_per_actual'>
+                                                <td class="label">Field Period (Actual)</td><td class="val">6.945</td><td class="unit">ms</td></tr>
+                                                <tr id='results_v_field_per_dev'>
+                                                    <td class="label depth2">Deviation</td><td class="val">0.338</td><td class="unit">µs</td></tr>
+                                                <tr id='results_v_field_per_dev_perc'>
+                                                    <td class="label depth2"></td><td class="val">0.00486</td><td class="unit">%</td></tr>
+                                        </table>
+                                        <table class="results">
+                                            <tr id='results_h_refresh'>
+                                                <th class="label">Horizontal Refresh</th><th class="val">Value</th><th class="unit">Unit</th></tr>
+                                            <tr id='results_h_freq'>
+                                                <td class="label">Frequency</td><td class="val">167.757</td><td class="unit">kHz</td></tr>
+                                            <tr id='results_h_per'>
+                                                <td class="label">Period</td><td class="val">5.961</td><td class="unit">µs</td></tr>
+                                        </table>
+                                        <script>
+                                            var tables = document.getElementById('results_container').children;
+                                            for (var i = 0; i < tables.length; i++) {
+                                                if (tables[i].className != 'results') { continue; }
+                                                else {
+                                                    var rows = tables[i].children[0].children;
+                                                    for (var j = 0; j < rows.length; j++) {
+                                                        rows[j].setAttribute('onclick', 'selectRow(this)');
+                                                        rows[j].setAttribute('onmouseover', 'if(results_selectedRow == "") { $("#results_explanation").html(Detailed_Explanation[this.id]); }');
+                                                        rows[j].setAttribute('onmouseout',  'if(results_selectedRow == "") { $("#results_explanation").html("Click specifications for details"); }');
+                                                    }
+                                                }
+                                            }
+                                        </script>
                                     </td>
-                                    <td class="value"><b>37.75</b></td>
-                                    <td class="unit"><b>Gbit/s</b></td>
-                                </tr>
-                                <tr class="addon">
-                                    <td>
-                                        Blanking Overhead:
+                                    <td class="results_explanation" id="results_explanation">
+                                        Click specifications for details
                                     </td>
-                                    <td class="value">10.3</td>
-                                    <td class="unit">%</td>
-                                </tr>
-                                <tr>
-                                    <td class="label" colspan="3">
-                                        Bandwidth:
-                                    </td>
-                                </tr>
-                                <tr class="addon">
-                                    <td>
-                                        8b/10b Encoding:
-                                    </td>
-                                    <td class="value">45.30</td>
-                                    <td class="unit">Gbit/s</td>
-                                </tr>
-                                <tr class="addon">
-                                    <td>
-                                        16b/18b Encoding:
-                                    </td>
-                                    <td class="value">51.20</td>
-                                    <td class="unit">Gbit/s</td>
-                                </tr>
-                                <tr>
-                                    <td class="label">
-                                        Character Rate ("Pixel Clock"):
-                                    </td>
-                                    <td class="value">1.26</td>
-                                    <td class="unit">GHz</td>
-                                </tr>
-                                <tr>
-                                    <td class="label">
-                                        Pixel Rate (Actual):
-                                    </td>
-                                    <td class="value">1.26</td>
-                                    <td class="unit">Gpx/s</td>
-                                </tr>
-                                <tr>
-                                    <td class="label">
-                                        Pixel Rate (Incl. Blank):
-                                    </td>
-                                    <td class="value">1.58</td>
-                                    <td class="unit">Gpx/s</td>
-                                </tr>
-                                <tr>
-                                    <td class="label">
-                                        Vertical Refresh Frequency (Actual):
-                                    </td>
-                                    <td class="value">120.001</td>
-                                    <td class="unit">Hz</td>
-                                </tr>
-                                <tr class="addon">
-                                    <td>
-                                        Deviation:
-                                    </td>
-                                    <td class="value">0.001</td>
-                                    <td class="unit">%</td>
-                                </tr>
-                                <tr class="addon">
-                                    <td>
-                                        Period:
-                                    </td>
-                                    <td class="value">8.333</td>
-                                    <td class="unit">ms</td>
-                                </tr>
-                                <tr>
-                                    <td class="label">
-                                        Horizontal Refresh Frequency:
-                                    </td>
-                                    <td class="value">161.25</td>
-                                    <td class="unit">kHz</td>
-                                </tr>
-                                <tr class="addon">
-                                    <td>Period:</td>
-                                    <td class="value">15.2</td>
-                                    <td class="unit">µs</td>
                                 </tr>
                             </table>
                         </td>
@@ -425,6 +463,8 @@
 
 <script src="DebugControl.js"></script>
 <script src="jquery.csv.js"></script>
+<script src="SI.js"></script>
+<script src="bandwidth-spec-details.js"></script>
 <script src="bandwidth.js"></script>
 
 <!----
