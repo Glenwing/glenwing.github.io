@@ -1410,6 +1410,10 @@ function DMT() {
                 Timing = CVT_R(2);
                 Timing['ID'] = DMT_List[i]['ID'];
             }
+            else if (DMT_List[i]['STD'] == 'CTA') {
+                Timing = CTA();
+                Timing['ID'] = DMT_List[i]['ID'];
+            }
             else {
                 Timing = {
                     'V_FP': parseFloat(DMT_List[i]['V_FP']),
