@@ -441,7 +441,7 @@ function calcMain() {
     if(Global_InputVars['V_SW_INT'] == '')      { submitVar('V_SW_INT') }
     */
 
-    if (!input_ok()) { clearResults(); return; }
+    if (!input_ok()) { clearResults(); $('#TIMING_FORMAT_NAME').html(''); return; }
 
     var hres = Global_InputVars['HRES'];
     var vres = Global_InputVars['VRES'];
@@ -462,178 +462,257 @@ function calcMain() {
     var v_eff = Timing['V_EFF'] * scan
     var freq_act = Timing['F_ACTUAL'];
 
-    /*
-    var results = {
-        hres:       hres,
-        vres:       vres,
-        freq:       freq,
-        px_bits:    color_depth,
-        px_format:  px_format,
-        comp:       comp,
-        scan:       scan,
+    // DATA TRANSMISSION
 
-        Timing:     Timing,
+    {
+        Detailed_Results['data_rate'] = SI(
+            (h_eff * v_eff * freq_act * color_depth / px_format / scan / comp),
+            'bit/s',
+            {'p':2, 'output':'split'},
+        );
 
-        // Calculate results
-        // Resolution with blanking intervals
-        h_eff: Timing['H_EFF'],
-        v_eff: Timing['V_EFF'],
+        Detailed_Results['8b10b'] = SI(
+            (h_eff * v_eff * freq_act * color_depth / px_format / scan / comp) * (1.25),
+            'bit/s',
+            {'p':2, 'output':'split'},
+        );
 
-        // Aspect ratio
-        ratio_num: hres / vres,
-        ratio_str: (hres / GCD(hres, vres)) + ':' + (vres / GCD(hres, vres)),
+        Detailed_Results['16b18b'] = SI(
+            (h_eff * v_eff * freq_act * color_depth / px_format / scan / comp) * (1.125),
+            'bit/s',
+            {'p':2, 'output':'split'},
+        );
 
-        // Total pixel count of image
-        px_per_frame: hres * vres,
-        px_per_frame_eff: (Timing['H_EFF']) * (Timing['V_EFF']),
+        Detailed_Results['pixel_rate'] = SI(
+            (h_eff * v_eff * freq_act / scan),
+            'px/s',
+            {'p':[3, 'b1', 'k1', 'M1'], 'output':'split'},
+        );
 
-        // Size (bits) of one frame
-        bits_per_frame: hres * vres * color_depth,
-        bits_per_frame_eff: (Timing['H_EFF']) * (Timing['V_EFF']) * color_depth,
-
-        // Pixel clock
-        px_per_sec: hres * vres * Timing['F_ACTUAL'],
-        px_per_sec_eff: (Timing['H_EFF']) * (Timing['V_EFF']) * Timing['F_ACTUAL'],
-
-        // Raw bit rate
-        bits_per_sec_eff: (Timing['H_EFF']) * (Timing['V_EFF']) * color_depth * Timing['F_ACTUAL'],
-    };*/
-
-    Detailed_Results['data_rate'] = SI(
-        (h_eff * v_eff * freq_act * color_depth / px_format / scan / comp),
-        'bit/s',
-        {'p':2, 'output':'split'},
-    );
-
-    Detailed_Results['8b10b'] = SI(
-        (h_eff * v_eff * freq_act * color_depth / px_format / scan / comp) * (1.25),
-        'bit/s',
-        {'p':2, 'output':'split'},
-    );
-
-    Detailed_Results['16b18b'] = SI(
-        (h_eff * v_eff * freq_act * color_depth / px_format / scan / comp) * (1.125),
-        'bit/s',
-        {'p':2, 'output':'split'},
-    );
-
-    Detailed_Results['pixel_rate'] = SI(
-        (h_eff * v_eff * freq_act / scan),
-        'px/s',
-        {'p':[3, 'b1', 'k1', 'M1'], 'output':'split'},
-    );
-
-    Detailed_Results['pixel_rate_active'] = SI(
-        (hres * vres * freq_act / scan),
-        'px/s',
-        {'p':[3, 'b1', 'k1', 'M1'], 'output':'split'},
-    );
-
-    Detailed_Results['active_px'] = {
-        'h':    hres,
-        'v':    vres,
-        't':    SI(hres * vres, 'px', {'p':0, 'output':'split', 'include': ['b']}),
+        Detailed_Results['pixel_rate_active'] = SI(
+            (hres * vres * freq_act / scan),
+            'px/s',
+            {'p':[3, 'b1', 'k1', 'M1'], 'output':'split'},
+        );
     }
 
-    Detailed_Results['blank_px'] = {
-        'h':    h_eff - hres,
-        'v':    v_eff - vres,
-        't':    SI((h_eff * v_eff) - (hres * vres), 'px', {'p':0, 'output':'split', 'include': ['b']}),
+    // RESOLUTION
+
+    {
+        Detailed_Results['active_px'] = {
+            'h':    { 'val': hres },
+            'v':    { 'val': vres },
+            't':    SI(hres * vres, 'px', {'p':0, 'output':'split', 'include': ['b']}),
+        };
+
+        Detailed_Results['blank_px'] = {
+            'h':    { 'val': h_eff - hres },
+            'v':    { 'val': v_eff - vres },
+            't':    SI((h_eff * v_eff) - (hres * vres), 'px', {'p':0, 'output':'split', 'include': ['b']}),
+        };
+
+        Detailed_Results['total_px'] = {
+            'h':    { 'val': h_eff },
+            'v':    { 'val': v_eff },
+            't':    SI(h_eff * v_eff, 'px', {'p':0, 'output':'split', 'exclude': ['<B', '>B']}),
+        };
+
+        Detailed_Results['overhead_px'] = {
+            'h':    SI(100 * ((h_eff / hres) - 1), '%', {'p':2, 'output':'split',  'exclude': ['<B', '>B']}),
+            'v':    SI(100 * ((v_eff / vres) - 1), '%', {'p':2, 'output':'split',  'exclude': ['<B', '>B']}),
+            't':    SI(100 * (((h_eff * v_eff) / (hres * vres)) - 1), '%', {'p':2, 'output':'split', 'exclude': ['<B', '>B']}),
+        };
     }
 
-    Detailed_Results['total_px'] = {
-        'h':    h_eff,
-        'v':    v_eff,
-        't':    SI(h_eff * v_eff, 'px', {'p':0, 'output':'split', 'exclude': ['<B', '>B']}),
+    // FORMAT
+
+    {
+        if ($('input[name=COLOR_DEPTH_SLCT]:checked').val() == 'Custom') {
+            if (color_depth % 3 == 0) { Detailed_Results['bpc'] = { 'val': color_depth / 3, 'unit':'bpc' }; }
+            else { Detailed_Results['bpc'] = { 'val': '-', 'unit': '' }; }
+        }
+        else {
+            Detailed_Results['bpc'] = { 'val': color_depth / 3, 'unit':'bpc' };
+        }
+        Detailed_Results['bpp'] = { 'val': color_depth, 'unit': 'bit/px' };
+
+        Detailed_Results['palette'] = SI(Math.pow(2, color_depth), 'colors', {'p':0, 'output':'split', 'include':['b']});
+
+        if ($('input[name=PX_FORMAT_SLCT]:checked').val() == 'RGB') { Detailed_Results['px_format'] = 'RGB'; }
+        else if ($('input[name=PX_FORMAT_SLCT]:checked').val() == 'YCBCR 4:4:4') { Detailed_Results['px_format'] = 'YC<sub>B</sub>C<sub>R</sub> 4:4:4'; }
+        else if ($('input[name=PX_FORMAT_SLCT]:checked').val() == 'YCBCR 4:2:2') { Detailed_Results['px_format'] = 'YC<sub>B</sub>C<sub>R</sub> 4:2:2'; }
+        else if ($('input[name=PX_FORMAT_SLCT]:checked').val() == 'YCBCR 4:2:0') { Detailed_Results['px_format'] = 'YC<sub>B</sub>C<sub>R</sub> 4:2:0'; }
+
+        if (scan == 1) { Detailed_Results['scan'] = 'Progressive'; }
+        if (scan == 2) { Detailed_Results['scan'] = 'Interlaced'; }
     }
 
-    Detailed_Results['overhead_px'] = {
-        'h':    SI(100 * ((h_eff / hres) - 1), '%', {'p':2, 'output':'split',  'exclude': ['<B', '>B']}),
-        'v':    SI(100 * ((v_eff / vres) - 1), '%', {'p':2, 'output':'split',  'exclude': ['<B', '>B']}),
-        't':    SI(100 * (((h_eff * v_eff) / (hres * vres)) - 1), '%', {'p':2, 'output':'split', 'exclude': ['<B', '>B']}),
+    // VERTICAL REFRESH FOR PROGRESSIVE SCAN
+
+    {
+        Detailed_Results['v_freq'] = SI(
+            freq,
+            'Hz',
+            {'p':3, 'output':'split', 'include':['>=b']},
+        );
+
+        Detailed_Results['v_freq_actual'] = SI(
+            freq_act,
+            'Hz',
+            {'p':3, 'output':'split', 'include':['>=b']},
+        );
+
+        Detailed_Results['v_freq_dev'] = SI(
+            Math.abs(freq - freq_act),
+            'Hz',
+            {'p':6, 'output':'split', 'include':['>=b']},
+        );
+
+        Detailed_Results['v_freq_dev_perc'] = SI(
+            Math.abs(100 * ((freq - freq_act) / freq)),
+            '%',
+            {'p':6, 'output':'split', 'include':['b']},
+        );
+
+        Detailed_Results['v_per'] = SI(
+            1 / freq,
+            's',
+            {'p':3, 'output':'split', 'include':['<=b']},
+        );
+
+        Detailed_Results['v_per_actual'] = SI(
+            1 / freq_act,
+            's',
+            {'p':3, 'output':'split', 'include':['<=b']},
+        );
+
+        Detailed_Results['v_per_dev'] = SI(
+            Math.abs((1 / freq) - (1 / freq_act)),
+            's',
+            {'p':3, 'output':'split', 'include':['<=b']},
+        );
+
+        Detailed_Results['v_per_dev_perc'] = SI(
+            Math.abs(100 * ((1 / freq) - (1 / freq_act)) / (1 / freq)),
+            '%',
+            {'p':6, 'output':'split', 'include':['b']},
+        );
     }
 
-    if ($('input[name=COLOR_DEPTH_SLCT]:checked').val() == 'Custom') {
-        if (color_depth % 3 == 0) { Detailed_Results['bpc'] = { 'val': color_depth / 3, 'unit':'bpc' }; }
-        else { Detailed_Results['bpc'] = { 'val': '-', 'unit': '' }; }
+    // VERTICAL REFRESH FOR INTERLACED SCAN
+
+    {
+        Detailed_Results['v_field'] = SI(
+            freq,
+            'Hz',
+            {'p':3, 'output':'split', 'include':['>=b']},
+        );
+
+        Detailed_Results['v_field_actual'] = SI(
+            Timing['F_ACTUAL'],
+            'Hz',
+            {'p':3, 'output':'split', 'include':['>=b']},
+        );
+
+        Detailed_Results['v_field_dev'] = SI(
+            Math.abs(freq - freq_act),
+            'Hz',
+            {'p':6, 'output':'split', 'include':['>=b']},
+        );
+
+        Detailed_Results['v_field_dev_perc'] = SI(
+            Math.abs(100 * ((freq - freq_act) / freq)),
+            '%',
+            {'p':6, 'output':'split', 'include':['b']},
+        );
+
+        Detailed_Results['v_field_per'] = SI(
+            1 / freq,
+            's',
+            {'p':3, 'output':'split', 'include':['<=b']},
+        );
+
+        Detailed_Results['v_field_per_actual'] = SI(
+            1 / freq_act,
+            's',
+            {'p':3, 'output':'split', 'include':['<=b']},
+        );
+
+        Detailed_Results['v_field_per_dev'] = SI(
+            Math.abs((1 / freq) - (1 / freq_act)),
+            's',
+            {'p':3, 'output':'split', 'include':['<=b']},
+        );
+
+        Detailed_Results['v_field_per_dev_perc'] = SI(
+            Math.abs(100 * ((1 / freq) - (1 / freq_act)) / (1 / freq)),
+            '%',
+            {'p':6, 'output':'split', 'include':['b']},
+        );
+
+        Detailed_Results['v_frame'] = SI(
+            freq / 2,
+            'FPS',
+            {'p':3, 'output':'split', 'include':['b']},
+        );
+
+        Detailed_Results['v_frame_actual'] = SI(
+            freq_act / 2,
+            'FPS',
+            {'p':3, 'output':'split', 'include':['b']},
+        );
+
+        Detailed_Results['v_frame_dev'] = SI(
+            Math.abs((freq / 2) - (freq_act / 2)),
+            'FPS',
+            {'p':6, 'output':'split', 'include':['b']},
+        );
+
+        Detailed_Results['v_frame_dev_perc'] = SI(
+            Math.abs(100 * ((freq - freq_act) / freq)),
+            '%',
+            {'p':6, 'output':'split', 'include':['b']},
+        );
+
+        Detailed_Results['v_frame_per'] = SI(
+            (1 / (freq / 2)),
+            's',
+            {'p':3, 'output':'split', 'include':['<=b']},
+        );
+
+        Detailed_Results['v_frame_per_actual'] = SI(
+            1 / (freq_act / 2),
+            's',
+            {'p':3, 'output':'split', 'include':['<=b']},
+        );
+
+        Detailed_Results['v_frame_per_dev'] = SI(
+            Math.abs((2 / freq) - (2 / freq_act)),
+            's',
+            {'p':3, 'output':'split', 'include':['<=b']},
+        );
+
+        Detailed_Results['v_frame_per_dev_perc'] = SI(
+            Math.abs(100 * ((2 / freq) - (2 / freq_act)) / (2 / freq)),
+            '%',
+            {'p':6, 'output':'split', 'include':['b']},
+        );
     }
-    else {
-        Detailed_Results['bpc'] = { 'val': color_depth / 3, 'unit':'bpc' }
+
+    // HORIZONTAL REFRESH
+    {
+        Detailed_Results['h_freq'] = SI(
+            (v_eff * freq_act) / scan,
+            'Hz',
+            {'p':3, 'output':'split', 'include':['>=b']},
+        );
+
+        Detailed_Results['h_per'] = SI(
+            scan / (v_eff * freq_act),
+            's',
+            {'p':3, 'output':'split', 'include':['<=b']},
+        );
     }
-    Detailed_Results['bpp'] = { 'val': color_depth, 'unit': 'bit/px' };
-
-    Detailed_Results['palette'] = SI(Math.pow(2, color_depth), 'colors', {'p':0, 'output':'split', 'include':['b']});
-
-    if ($('input[name=PX_FORMAT_SLCT]:checked').val() == 'RGB') { Detailed_Results['px_format'] = 'RGB'; }
-    else if ($('input[name=PX_FORMAT_SLCT]:checked').val() == 'YCBCR 4:4:4') { Detailed_Results['px_format'] = 'YC<sub>B</sub>C<sub>R</sub> 4:4:4'; }
-    else if ($('input[name=PX_FORMAT_SLCT]:checked').val() == 'YCBCR 4:2:2') { Detailed_Results['px_format'] = 'YC<sub>B</sub>C<sub>R</sub> 4:2:2'; }
-    else if ($('input[name=PX_FORMAT_SLCT]:checked').val() == 'YCBCR 4:2:0') { Detailed_Results['px_format'] = 'YC<sub>B</sub>C<sub>R</sub> 4:2:0'; }
-
-    if (scan == 1) { Detailed_Results['scan'] = 'Progressive'; }
-    if (scan == 2) { Detailed_Results['scan'] = 'Interlaced'; }
-
-    Detailed_Results['v_freq'] = SI(
-        freq,
-        'Hz',
-        {'p':3, 'output':'split', 'include':['>=b']},
-    );
-
-    Detailed_Results['v_freq_actual'] = SI(
-        Timing['F_ACTUAL'],
-        'Hz',
-        {'p':3, 'output':'split', 'include':['>=b']},
-    );
-
-    DEBUG('freq:', typeof(freq), freq)
-    DEBUG('f_actual', typeof(Timing['F_ACTUAL']), Timing['F_ACTUAL'])
-    DEBUG('f - fa', freq - Timing['F_ACTUAL'])
-    Detailed_Results['v_freq_dev'] = SI(
-        Math.abs(freq - Timing['F_ACTUAL']),
-        'Hz',
-        {'p':6, 'output':'split', 'include':['>=b']},
-    );
-
-    Detailed_Results['v_freq_dev_perc'] = SI(
-        Math.abs(100 * ((freq - Timing['F_ACTUAL']) / freq)),
-        '%',
-        {'p':6, 'output':'split', 'include':['b']},
-    );
-
-    Detailed_Results['v_per'] = SI(
-        1 / freq,
-        's',
-        {'p':3, 'output':'split', 'include':['<=b']},
-    );
-
-    Detailed_Results['v_per_actual'] = SI(
-        1 / Timing['F_ACTUAL'],
-        's',
-        {'p':3, 'output':'split', 'include':['<=b']},
-    );
-
-    Detailed_Results['v_per_dev'] = SI(
-        Math.abs((1 / freq) - (1 / Timing['F_ACTUAL'])),
-        's',
-        {'p':3, 'output':'split', 'include':['<=b']},
-    );
-
-    Detailed_Results['v_per_dev_perc'] = SI(
-        Math.abs(100 * ((1 / freq) - (1 / Timing['F_ACTUAL'])) / (1 / freq)),
-        '%',
-        {'p':6, 'output':'split', 'include':['b']},
-    );
-
-    Detailed_Results['h_freq'] = SI(
-        (v_eff * Timing['F_ACTUAL']) / scan,
-        'Hz',
-        {'p':3, 'output':'split', 'include':['>=b']},
-    );
-    
-    Detailed_Results['h_per'] = SI(
-        scan / (v_eff * Timing['F_ACTUAL']),
-        's',
-        {'p':3, 'output':'split', 'include':['<=b']},
-    );
 
     //DEBUG('Results:', SI(results['bits_per_sec_eff'], 'bit/s', 2), results);
     updateDisplay();
@@ -661,6 +740,9 @@ function getTiming(timing_standard) {
             'V_BL': '',
             'H_BL': '',
 
+            'V_EFF': '',
+            'H_EFF': '',
+
             'F_ACTUAL': Global_InputVars['FREQ'],
         };
     }
@@ -669,16 +751,26 @@ function getTiming(timing_standard) {
     if (timing_standard != 'Custom') {
         if (timing_standard == 'CVT-R2') {
             DEBUG('Fetching CVT-R2 Timing...')
+            if (Global_InputVars['FREQ'] >= (1 / 0.00046)) {
+                $('#TIMING_FORMAT_NAME').html('&ge;&nbsp;2173.9&nbsp;Hz not allowed');
+                return false;
+            }
             Timing = CVT_R(2);
             if (!Timing) {
                 DEBUG ('CVT-R2 calculation error.');
                 clearTiming();
-                return false; }
+                return false;
+            }
             else {
                 $('#TIMING_FORMAT_NAME').html('<b>VESA Name:</b> ' + (Global_InputVars['HRES'] * Global_InputVars['VRES'] / 1000000).toFixed(2) + 'M' + Timing['VESA_AR'] + '-R');
             }
         }
         else if (timing_standard == 'CVT-RB') {
+            DEBUG('Fetching CVT-R2 Timing...')
+            if (Global_InputVars['FREQ'] >= (1 / 0.00046)) {
+                $('#TIMING_FORMAT_NAME').html('&ge;&nbsp;2173.9&nbsp;Hz not allowed');
+                return false;
+            }
             Timing = CVT_R(1);
             if (!Timing) {
                 DEBUG ('CVT-RB calculation error.');
@@ -690,6 +782,10 @@ function getTiming(timing_standard) {
             }
         }
         else if (timing_standard == 'CVT') {
+            if (Global_InputVars['FREQ'] >= (1 / 0.00055)) {
+                $('#TIMING_FORMAT_NAME').html('&ge;&nbsp;1818.<span style="text-decoration: overline">18</span>&nbsp;Hz not allowed');
+                return false;
+            }
             Timing = CVT();
             if (!Timing) {
                 DEBUG ('CVT calculation error.');
@@ -701,6 +797,10 @@ function getTiming(timing_standard) {
             }
         }
         else if (timing_standard == 'GTF') {
+            if (Global_InputVars['FREQ'] >= (1 / 0.00055)) {
+                $('#TIMING_FORMAT_NAME').html('&ge;&nbsp;1818.<span style="text-decoration: overline">18</span>&nbsp;Hz not allowed');
+                return false;
+            }
             Timing = GTF();
             $('#TIMING_FORMAT_NAME').html('');
             if (!Timing) {
@@ -747,7 +847,7 @@ function getTiming(timing_standard) {
                 'V_BL': 0,
                 'H_BL': 0,
 
-                'V_EFF': Global_InputVars['VRES'],
+                'V_EFF': Global_InputVars['VRES'] / Global_InputVars['SCAN'],
                 'H_EFF': Global_InputVars['HRES'],
 
                 'F_ACTUAL': Global_InputVars['FREQ'],
@@ -776,9 +876,9 @@ function getTiming(timing_standard) {
         submitVar('H_FP', $('#H_FP').val());
         submitVar('H_BP', $('#H_BP').val());
         submitVar('H_SW', $('#H_SW').val());
-        submitVar('V_FP_INT', Global_InputVars['V_FP'] + 0.5);
-        submitVar('V_SW_INT', Global_InputVars['V_SW']);
-        submitVar('V_BP_INT', Global_InputVars['V_BP'] + 0.5);
+        if (isNum(Global_InputVars['V_FP'])) { submitVar('V_FP_INT', Global_InputVars['V_FP'] + 0.5); }
+        if (isNum(Global_InputVars['V_SW'])) { submitVar('V_SW_INT', Global_InputVars['V_SW']); }
+        if (isNum(Global_InputVars['V_BP'])) { submitVar('V_BP_INT', Global_InputVars['V_BP'] + 0.5); }
 
         Timing = {
             'V_FP': Global_InputVars['V_FP'],
@@ -1341,80 +1441,71 @@ function DMT() {
 }
 
 
-function updateDisplay() {
+function updateDisplay(mode) {
+    var clear = 'clear'
     var cells;
     var id;
 
-    id_list = ['data_rate', '8b10b', '16b18b', 'pixel_rate', 'pixel_rate_active'];
+    id_list = [
+        'data_rate', '8b10b', '16b18b', 'pixel_rate', 'pixel_rate_active',
+        'bpc', 'bpp', 'palette',
+
+        'v_freq', 'v_freq_actual', 'v_freq_dev', 'v_freq_dev_perc',
+        'v_per', 'v_per_actual', 'v_per_dev', 'v_per_dev_perc',
+
+        'h_freq', 'h_per',
+
+        'v_field', 'v_field_actual', 'v_field_dev', 'v_field_dev_perc',
+        'v_field_per', 'v_field_per_actual', 'v_field_per_dev', 'v_field_per_dev_perc',
+        'v_frame', 'v_frame_actual', 'v_frame_dev', 'v_frame_dev_perc',
+        'v_frame_per', 'v_frame_per_actual', 'v_frame_per_dev', 'v_frame_per_dev_perc',
+    ];
     for (var x = 0; x < id_list.length; x++) {
         id = id_list[x];
         cells = $('#results_' + id).children();
-        DEBUG('Detailed Results:', Detailed_Results[id]);
-        DEBUG('Cells:', cells)
-        cells[1].innerHTML = Detailed_Results[id]['val'];
-        cells[2].innerHTML = Detailed_Results[id]['unit'];
+        if (mode != clear) {
+            DEBUG('Detailed Results:', Detailed_Results[id]);
+            DEBUG('Cells:', cells)
+            cells[1].innerHTML = Detailed_Results[id]['val'];
+            cells[2].innerHTML = Detailed_Results[id]['unit'];
+        } else {
+            cells[1].innerHTML = '';
+            cells[2].innerHTML = '';
+
+        }
     }
 
-    id_list = ['active_px', 'blank_px', 'total_px'];
+    id_list = ['active_px', 'blank_px', 'total_px', 'overhead_px'];
     for (var x = 0; x < id_list.length; x++) {
         id = id_list[x];
         cells = $('#results_' + id).children();
-        DEBUG('Detailed Results:', Detailed_Results[id]);
-        DEBUG('Cells:', cells)
-        cells[1].innerHTML = Detailed_Results[id]['h'];
-        cells[2].innerHTML = Detailed_Results[id]['v'];
-        cells[3].innerHTML = Detailed_Results[id]['t']['val'];
-        cells[4].innerHTML = Detailed_Results[id]['t']['unit'];
-    }
-    id = 'overhead_px';
-    cells = $('#results_' + id).children();
-    DEBUG('Detailed Results:', Detailed_Results[id]);
-    DEBUG('Cells:', cells)
-    cells[1].innerHTML = Detailed_Results[id]['h']['val'];
-    cells[2].innerHTML = Detailed_Results[id]['v']['val'];
-    cells[3].innerHTML = Detailed_Results[id]['t']['val'];
-    cells[4].innerHTML = Detailed_Results[id]['t']['unit'];
-
-    id_list = ['bpc', 'bpp', 'palette'];
-    for (var x = 0; x < id_list.length; x++) {
-        id = id_list[x];
-        cells = $('#results_' + id).children();
-        DEBUG('Detailed Results:', Detailed_Results[id]);
-        DEBUG('Cells:', cells)
-        cells[1].innerHTML = Detailed_Results[id]['val'];
-        cells[2].innerHTML = Detailed_Results[id]['unit'];
+        if (mode != clear) {
+            DEBUG('Detailed Results:', Detailed_Results[id]);
+            DEBUG('Cells:', cells)
+            cells[1].innerHTML = Detailed_Results[id]['h']['val'];
+            cells[2].innerHTML = Detailed_Results[id]['v']['val'];
+            cells[3].innerHTML = Detailed_Results[id]['t']['val'];
+            cells[4].innerHTML = Detailed_Results[id]['t']['unit'];
+        } else {
+            cells[1].innerHTML = '';
+            cells[2].innerHTML = '';
+            cells[3].innerHTML = '';
+            cells[4].innerHTML = '';
+        }
+    
     }
 
-    id = 'px_format';
-    cells = $('#results_' + id).children();
-    DEBUG('Detailed Results:', Detailed_Results[id]);
-    DEBUG('Cells:', cells)
-    cells[1].innerHTML = Detailed_Results[id]
-
-    id = 'scan';
-    cells = $('#results_' + id).children();
-    DEBUG('Detailed Results:', Detailed_Results[id]);
-    DEBUG('Cells:', cells)
-    cells[1].innerHTML = Detailed_Results[id]
-
-    id_list = ['v_freq', 'v_freq_actual', 'v_freq_dev', 'v_freq_dev_perc', 'v_per', 'v_per_actual', 'v_per_dev', 'v_per_dev_perc'];
+    id_list = ['px_format', 'scan'];
     for (var x = 0; x < id_list.length; x++) {
         id = id_list[x];
         cells = $('#results_' + id).children();
-        DEBUG('Detailed Results:', Detailed_Results[id]);
-        DEBUG('Cells:', cells)
-        cells[1].innerHTML = Detailed_Results[id]['val'];
-        cells[2].innerHTML = Detailed_Results[id]['unit'];
-    }
-
-    id_list = ['h_freq', 'h_per'];
-    for (var x = 0; x < id_list.length; x++) {
-        id = id_list[x];
-        cells = $('#results_' + id).children();
-        DEBUG('Detailed Results:', Detailed_Results[id]);
-        DEBUG('Cells:', cells)
-        cells[1].innerHTML = Detailed_Results[id]['val'];
-        cells[2].innerHTML = Detailed_Results[id]['unit'];
+        if (mode != clear) {
+            DEBUG('Detailed Results:', Detailed_Results[id]);
+            DEBUG('Cells:', cells)
+            cells[1].innerHTML = Detailed_Results[id]
+        } else {
+            cells[1].innerHTML = '';
+        }
     }
 
     return;
@@ -1422,8 +1513,13 @@ function updateDisplay() {
 
 
 function clearResults() {
+    updateDisplay('clear');
+    if ($('#TIMING_DROP').val() != 'Custom') {
+        clearTiming();
+    }
     return;
 }
+
 
 function timingUIChange() {
     // Controls the enabled/disabled state of the custom timing format input fields
@@ -1465,6 +1561,8 @@ function timingUIChange() {
         $('#V_SW_INT_CONTAINER').css('display', 'table-cell');
         $('#V_BLANK_INT_CONTAINER').css('display', 'table-cell');
         $('#V_BLANK_EVEN_LABEL').html('(Even)&nbsp;V<sub>blank</sub>');
+        $('#results_v_progressive').css('display', 'none');
+        $('#results_v_interlaced').css('display', 'table');
     }
     else if (value == 'p') {
         $('#V_BLANK_INT_LABEL').css('display', 'none');
@@ -1473,6 +1571,8 @@ function timingUIChange() {
         $('#V_SW_INT_CONTAINER').css('display', 'none');
         $('#V_BLANK_INT_CONTAINER').css('display', 'none');
         $('#V_BLANK_EVEN_LABEL').html('V<sub>blank</sub>');
+        $('#results_v_progressive').css('display', 'table');
+        $('#results_v_interlaced').css('display', 'none');
     }
     else {
         DEBUG('Something somewhere has gone terribly wrong. Attemped to grab SCAN_SLCT value, and it was neither "p" nor "i"!');

@@ -6,6 +6,7 @@ function SI(value, unit, options_input) {
         ['mode',       'f'],
         ['p',          '2'],
         //['exclude',    ['c', 'd', 'D', 'H']],
+        ['round',      'n'],
         ['exclude',    []],
         ['include',    []],
 
@@ -31,28 +32,45 @@ function SI(value, unit, options_input) {
         mode: 'f'           Precision mode (default Fixed mode). Options are:
                                 'fixed' or 'f'      Uses a fixed number of decimal places, specified by precision field
                                 'sig' or 's'        Targets a fixed number of significant figures.
-                                'adaptive' or 'a'   Uses up to a certain number of decimal points, but leaves no trailing zeroes when not needed.
+                                'adaptive' or 'a'   Uses up to the specified number of decimal points, but leaves no trailing zeroes when not needed.
         p: 2                Specifies default precision (number of decimal places).
                             For adaptive mode, it may be specified in the format "[2, 5]" to indicate minimum and maximum precision. A single number will be interpreted as a maximum.
                             Also accepts individual decimal place settings for each prefix, in array format; for example:
                                 {p: [1, G2, M0]} sets a default of 1 for all prefixes, then specifies 2 decimal places for Giga and 0 for Mega.
-                            That can alternatively be written as powers:
+                            That can alternatively be written using powers instead of prefix symbols:
                                 {p: [1, [9, 2], [6, 0]]}
+        round:              Options:
+                                n       Rounds to nearest (default)
+                                +       Rounds toward positive infinity (ceil)      (1.9 -> 2;  -1.9 ->  1)
+                                -       Rounds toward negative infinity (floor)     (1.9 -> 1;  -1.9 -> -2)
+                                0       Rounds toward zero (truncate)               (1.9 -> 1;  -1.9 ->  1)
+                                !0      Rounds away from zero                       (1.9 -> 2;  -1.9 -> -2)
+                            Also accepted:
+                                up      Same as +
+                                ceil    Same as +
+                                +inf    Same as +
 
-        separator: ','      Character to use as thousands separator (default comma)
-        decimal: '.'        Character to use as decimal point (default period)
-        unit_sep: '&nbsp;'  Character to place between the value and unit symbol (default non-breaking space)
-        big_kilo: 'true'    Use capital K for kilo instead of small k. (default false)
-        no_mu: 'true'       Use "u" instead of "µ" on output, if necessary for compatibility reasons (default false)
-        threshold: 1000     Point at which to use the next
+                                down    Same as -
+                                floor   Same as -
+                                -inf    Same as -
+
+                                zero    Same as 0
+                                !zero   Same as !0
+
+
+        grouper: ','        Character to use for digit grouping (default comma); space is interpreted as Non-Breaking Thin Space (U+2009)
+        radix: '.'          Character to use as decimal point (default period); error if same as grouper
+        unit_sep: '&nbsp;'  Character to place between the value and unit symbol (default Non-Breaking Space (U+00A0))
+        big_kilo: 'false'   Use capital K for kilo instead of small k. (default false)
+        no_mu: 'false'      Use "u" instead of "µ" on output, if necessary for compatibility reasons (default false)
+        threshold: 0        Point at which to use the next prefix (represeted by power). For example, if Threshold is set to 2, then
+                             number must be at 100,000,000 to use the Mega prefix (>= 10^2 times the prefix value). 0 for normal behavior.
 
         exclude: ['c', 'd'] SI prefixes to exclude, for situational use (i.e. for displaying time, one may not wish for "centiseconds").
                             Symbols can also be used as shortcuts, as in the following examples:
                                 '>=G' excludes Giga and larger
                                 '>G' excludes larger than Giga, but not Giga itself
                                 '<G' and "<=G" same as above, but for prefixes smaller than Giga
-                                '*' excludes all prefixes (unless protected)
-                                '!G' protects a prefix from '*', i.e. {exclude: ['*', '!k', '!M']} excludes all prefixes except Kilo and Mega)
                             Multiple arguments accepted in array format
                             "u" is accepted as an argument for excluding "µ", and "0" is accepted for excluding the prefixless base unit
                             By default, the following are excluded already, and must be un-excluded (using !c, !d, etc.) to be used:

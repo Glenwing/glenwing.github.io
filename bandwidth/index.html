@@ -108,8 +108,8 @@
                                                 </div>
                                                 <div class="tcell" style="padding-left:4px; vertical-align:middle; line-height:125%; width:100%;">
                                                     <form id="CD_UNIT_FORM" style="line-height:100%;" onchange="document.getElementById('CUSTOM_COLOR_DEPTH').focus(); submitVar('COLOR_DEPTH_FORM', $('input[name=COLOR_DEPTH_SLCT]:checked').val()); calcMain();" disabled>
-                                                        <label><input type="radio" name="CD_UNIT_SLCT" value="bpc" checked />&nbsp;bpc</label><br />
-                                                        <label><input type="radio" name="CD_UNIT_SLCT" value="bpp" />&nbsp;bit/px</label>
+                                                        <label><input type="radio" name="CD_UNIT_SLCT" value="bpc" checked disabled />&nbsp;bpc</label><br />
+                                                        <label><input type="radio" name="CD_UNIT_SLCT" value="bpp" disabled />&nbsp;bit/px</label>
                                                     </form>
                                                 </div>
                                             </div>    
@@ -274,101 +274,109 @@
                                             <tr id='results_data_transmission'>
                                                 <th class="label">Data Transmission</th><th class="val">Value</th><th class="unit">Unit</th></tr>
                                             <tr id='results_data_rate'>
-                                                <td class="label">Data Rate</td><td class="val">8.00</td><td class="unit">Gbit/s</td></tr>
+                                                <td class="label">Data Rate</td><td class="val"></td><td class="unit"></td></tr>
                                             <tr id='results_bit_rate'>
                                                 <td class="label">Bandwidth:</td><td></td><td></td></tr>
                                                 <tr id='results_8b10b'>
-                                                    <td class="label depth2">8b/10b Encoding</td><td class="val">10.00</td><td class="unit">Gbit/s</td></tr>
+                                                    <td class="label depth2">8b/10b Encoding</td><td class="val"></td><td class="unit"></td></tr>
                                                 <tr id='results_16b18b'>
-                                                    <td class="label depth2">16b/18b Encoding</td><td class="val">9.00</td><td class="unit">Gbit/s</td></tr>
+                                                    <td class="label depth2">16b/18b Encoding</td><td class="val"></td><td class="unit"></td></tr>
                                             <!----<tr id='results_char_rate'>
                                                 <td class="label">TMDS Character Rate ("Pixel Clock")</td><td class="val">346</td><td class="unit">MHz</td></tr>-->
                                             <tr id='results_pixel_rate'>
-                                                <td class="label">Pixel Rate (Effective)</td><td class="val">346</td><td class="unit">Mpx/s</td></tr>
+                                                <td class="label">Pixel Rate (Effective)</td><td class="val"></td><td class="unit"></td></tr>
                                             <tr id='results_pixel_rate_active'>
-                                                <td class="label">Pixel Rate (Active Pixels Only)</td><td class="val">346</td><td class="unit">Mpx/s</td></tr>
+                                                <td class="label">Pixel Rate (Active Pixels Only)</td><td class="val"></td><td class="unit"></td></tr>
                                         </table>
                                         <table class="results">
                                             <tr class="triple" id='results_resolution'>
                                                 <th class="label">Resolution</th><th class="val">Hor.</th><th class="val">Ver.</th><th class="val">Total</th><th class="unit">Unit</th></tr>
                                             <tr class="triple" id='results_active_px'>
-                                                <td class="label">Active</td><td class="val half">1920</td><td class="val half">1080</td><td class="val">2,073,600</td><td class="unit">px</td></tr>
+                                                <td class="label">Active</td><td class="val half"></td><td class="val half"></td><td class="val"></td><td class="unit"></td></tr>
                                             <tr class="triple" id='results_blank_px'>
-                                                <td class="label">Blank</td><td class="val half">80</td><td class="val half">77</td><td class="val">240,400</td><td class="unit">px</td></tr>
+                                                <td class="label">Blank</td><td class="val half"></td><td class="val half"></td><td class="val"></td><td class="unit"></td></tr>
                                             <tr class="triple" id='results_total_px'>
-                                                <td class="label">Effective Total</td><td class="val half">2000</td><td class="val half">1157</td><td class="val">2,314,000</td><td class="unit">px</td></tr>
+                                                <td class="label">Effective Total</td><td class="val half"></td><td class="val half"></td><td class="val"></td><td class="unit"></td></tr>
                                             <tr class="triple" id='results_overhead_px'>
-                                                <td class="label">Overhead</td><td class="val half">4.17</td><td class="val half">7.13</td><td class="val">11.59</td><td class="unit">%</td></tr>
+                                                <td class="label">Overhead</td><td class="val half"></td><td class="val half"></td><td class="val"></td><td class="unit"></td></tr>
                                         </table>
                                         <table class="results">
                                             <tr id='results_format'>
                                                 <th class="label">Format</th><th class="val">Value</th><th class="unit">Unit</th></tr>
                                             <tr id='results_bpc'>
-                                                <td class="label">Color Depth (Per Channel)</td><td class="val">8</td><td class="unit">bpc</td></tr>
+                                                <td class="label">Color Depth (Per Channel)</td><td class="val"></td><td class="unit"></td></tr>
                                             <tr id='results_bpp'>
-                                                <td class="label">Color Depth (Per Pixel)</td><td class="val">24</td><td class="unit">bit/px</td></tr>
+                                                <td class="label">Color Depth (Per Pixel)</td><td class="val"></td><td class="unit"></td></tr>
                                             <tr id='results_palette'>
-                                                <td class="label">Palette Size</td><td class="val">16,777,216</td><td class="unit">colors</td></tr>
+                                                <td class="label">Palette Size</td><td class="val"></td><td class="unit"></td></tr>
                                             <tr id='results_px_format'>
-                                                <td class="label">Pixel Format</td><td class="val">RGB</td><td class="unit"></td></tr>
+                                                <td class="label">Pixel Format</td><td class="val"></td><td class="unit"></td></tr>
                                             <tr id='results_scan'>
-                                                <td class="label">Scan Type</td><td class="val">Progressive</td><td class="unit"></td></tr>
+                                                <td class="label">Scan Type</td><td class="val"></td><td class="unit"></td></tr>
                                         </table>
-                                        <table class="results">
+                                        <table class="results" id='results_v_progressive'>
                                             <tr id='results_v_refresh'>
                                                 <th class="label">Vertical Refresh</th><th class="val">Value</th><th class="unit">Unit</th></tr>
                                             <tr id='results_v_freq'>
-                                                <td class="label">Frequency (Target)</td><td class="val">144.000</td><td class="unit">Hz</td></tr>
+                                                <td class="label">Frequency (Target)</td><td class="val"></td><td class="unit"></td></tr>
                                             <tr id='results_v_freq_actual'>
-                                                <td class="label">Frequency (Actual)</td><td class="val">143.993</td><td class="unit">Hz</td></tr>
+                                                <td class="label">Frequency (Actual)</td><td class="val"></td><td class="unit"></td></tr>
                                                 <tr id='results_v_freq_dev'>
-                                                    <td class="label depth2">Deviation</td><td class="val">0.007</td><td class="unit">Hz</td></tr>
+                                                    <td class="label depth2">Deviation</td><td class="val"></td><td class="unit"></td></tr>
                                                 <tr id='results_v_freq_dev_perc'>
-                                                    <td class="label depth2"></td><td class="val">0.00486</td><td class="unit">%</td></tr>
+                                                    <td class="label depth2"></td><td class="val"></td><td class="unit"></td></tr>
                                             <tr id='results_v_per'>
-                                                <td class="label">Period (Target)</td><td class="val">6.944</td><td class="unit">ms</td></tr>
+                                                <td class="label">Period (Target)</td><td class="val"></td><td class="unit"></td></tr>
                                             <tr id='results_v_per_actual'>
-                                                <td class="label">Period (Actual)</td><td class="val">6.945</td><td class="unit">ms</td></tr>
+                                                <td class="label">Period (Actual)</td><td class="val"></td><td class="unit"></td></tr>
                                                 <tr id='results_v_per_dev'>
-                                                    <td class="label depth2">Deviation</td><td class="val">0.338</td><td class="unit">µs</td></tr>
+                                                    <td class="label depth2">Deviation</td><td class="val"></td><td class="unit"></td></tr>
                                                 <tr id='results_v_per_dev_perc'>
-                                                    <td class="label depth2"></td><td class="val">0.00486</td><td class="unit">%</td></tr>
+                                                    <td class="label depth2"></td><td class="val"></td><td class="unit"></td></tr>
                                         </table>
-                                        <table class="results" hidden>
+                                        <table class="results" id='results_v_interlaced' style='display:none;'>
                                             <tr id='results_v_refresh_int'>
                                                 <th class="label">Vertical Refresh</th><th class="val">Value</th><th class="unit">Unit</th></tr>
                                             <tr id='results_v_field'>
-                                                <td class="label">Frequency / Field Rate (Target)</td><td class="val">144.000</td><td class="unit">Hz</td></tr>
+                                                <td class="label">Field Rate (Target)</td><td class="val"></td><td class="unit"></td></tr>
                                             <tr id='results_v_field_actual'>
-                                                <td class="label">Frequency / Field Rate (Actual)</td><td class="val">143.993</td><td class="unit">Hz</td></tr>
+                                                <td class="label">Field Rate (Actual)</td><td class="val"></td><td class="unit"></td></tr>
                                                 <tr id='results_v_field_dev'>
-                                                    <td class="label depth2">Deviation</td><td class="val">0.007</td><td class="unit">Hz</td></tr>
+                                                    <td class="label depth2">Deviation</td><td class="val"></td><td class="unit"></td></tr>
                                                 <tr id='results_v_field_dev_perc'>
-                                                    <td class="label depth2"></td><td class="val">0.00486</td><td class="unit">%</td></tr>
-                                            <tr id='results_v_framerate'>
-                                                <td class="label">Frame Rate (Target)</td><td class="val">72.000</td><td class="unit">Hz</td></tr>
-                                            <tr id='results_v_framerate_actual'>
-                                                <td class="label">Frame Rate (Actual)</td><td class="val">71.997</td><td class="unit">Hz</td></tr>
-                                                <tr id='results_v_framerate_dev'>
-                                                    <td class="label depth2">Deviation</td><td class="val">0.003</td><td class="unit">Hz</td></tr>
-                                                <tr id='results_v_framerate_dev_perc'>
-                                                    <td class="label depth2"></td><td class="val">0.00486</td><td class="unit">%</td></tr>
+                                                    <td class="label depth2"></td><td class="val"></td><td class="unit"></td></tr>
                                             <tr id='results_v_field_per'>
-                                                <td class="label">Field Period (Target)</td><td class="val">6.944</td><td class="unit">ms</td></tr>
+                                                <td class="label">Field Period (Target)</td><td class="val"></td><td class="unit"></td></tr>
                                             <tr id='results_v_field_per_actual'>
-                                                <td class="label">Field Period (Actual)</td><td class="val">6.945</td><td class="unit">ms</td></tr>
+                                                <td class="label">Field Period (Actual)</td><td class="val"></td><td class="unit"></td></tr>
                                                 <tr id='results_v_field_per_dev'>
-                                                    <td class="label depth2">Deviation</td><td class="val">0.338</td><td class="unit">µs</td></tr>
+                                                    <td class="label depth2">Deviation</td><td class="val"></td><td class="unit"></td></tr>
                                                 <tr id='results_v_field_per_dev_perc'>
-                                                    <td class="label depth2"></td><td class="val">0.00486</td><td class="unit">%</td></tr>
+                                                    <td class="label depth2"></td><td class="val"></td><td class="unit"></td></tr>
+                                            <tr id='results_v_frame'>
+                                                <td class="label">Frame Rate (Target)</td><td class="val"></td><td class="unit"></td></tr>
+                                            <tr id='results_v_frame_actual'>
+                                                <td class="label">Frame Rate (Actual)</td><td class="val"></td><td class="unit"></td></tr>
+                                                <tr id='results_v_frame_dev'>
+                                                    <td class="label depth2">Deviation</td><td class="val"></td><td class="unit"></td></tr>
+                                                <tr id='results_v_frame_dev_perc'>
+                                                    <td class="label depth2"></td><td class="val"></td><td class="unit"></td></tr>
+                                            <tr id='results_v_frame_per'>
+                                                <td class="label">Frame Period (Target)</td><td class="val"></td><td class="unit"></td></tr>
+                                            <tr id='results_v_frame_per_actual'>
+                                                <td class="label">Frame Period (Actual)</td><td class="val"></td><td class="unit"></td></tr>
+                                                <tr id='results_v_frame_per_dev'>
+                                                    <td class="label depth2">Deviation</td><td class="val"></td><td class="unit"></td></tr>
+                                                <tr id='results_v_frame_per_dev_perc'>
+                                                    <td class="label depth2"></td><td class="val"></td><td class="unit"></td></tr>
                                         </table>
                                         <table class="results">
                                             <tr id='results_h_refresh'>
                                                 <th class="label">Horizontal Refresh</th><th class="val">Value</th><th class="unit">Unit</th></tr>
                                             <tr id='results_h_freq'>
-                                                <td class="label">Frequency</td><td class="val">167.757</td><td class="unit">kHz</td></tr>
+                                                <td class="label">Frequency</td><td class="val"></td><td class="unit"></td></tr>
                                             <tr id='results_h_per'>
-                                                <td class="label">Period</td><td class="val">5.961</td><td class="unit">µs</td></tr>
+                                                <td class="label">Period</td><td class="val"></td><td class="unit"></td></tr>
                                         </table>
                                         <script>
                                             var tables = document.getElementById('results_container').children;

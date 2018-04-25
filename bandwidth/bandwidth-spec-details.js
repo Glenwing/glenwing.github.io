@@ -44,7 +44,7 @@ var Detailed_Explanation = {
         '<li><b>Pixels per frame</b> is the effective number of total pixels (horizontal resolution times vertical resolution), including both active and blank pixels</li>' +
         '<li><b>Frames per second</b> is the vertical refresh frequency (for progressive scan) or half the vertical field rate (for interlaced scan)</li></ul>' +
         'The data rate for YC<sub>B</sub>C<sub>R</sub> 4:4:4 video is the same as RGB. ' +
-        'For YC<sub>B</sub>C<sub>R</sub> 4:2:2 video, the data rate is divided by 1.5. For YC<sub>B</sub>C<sub>R</sub> 4:2:0 the data rate is divided by 2.<br><br>' +
+        'For YC<sub>B</sub>C<sub>R</sub> 4:2:2 video, the data rate is divided by 1.5. For YC<sub>B</sub>C<sub>R</sub> 4:2:0, the data rate is divided by 2.<br><br>' +
         'The total <b>bandwidth</b> required for video transmission is larger than the data rate, due to additional overhead involved with transmission.',
 
     'results_bit_rate':
@@ -151,22 +151,13 @@ var Detailed_Explanation = {
     'results_v_field':
         '',
 
+    'results_v_field_actual':
+        '',
+
     'results_v_field_dev':
         '',
 
     'results_v_field_dev_perc':
-        '',
-
-    'results_v_framerate':
-        '',
-
-    'results_v_framerate_actual':
-        '',
-
-    'results_v_framerate_dev':
-        '',
-
-    'results_v_framerate_dev_perc':
         '',
 
     'results_v_field_per':
@@ -179,6 +170,30 @@ var Detailed_Explanation = {
         '',
 
     'results_v_field_per_dev_perc':
+        '',
+
+    'results_v_frame':
+        '',
+
+    'results_v_frame_actual':
+        '',
+
+    'results_v_frame_dev':
+        '',
+
+    'results_v_frame_dev_perc':
+        '',
+    
+    'results_v_frame_per':
+        '',
+
+    'results_v_frame_per_actual':
+        '',
+
+    'results_v_frame_per_dev':
+        '',
+
+    'results_v_frame_per_dev_perc':
         '',
 
     'results_h_refresh':
