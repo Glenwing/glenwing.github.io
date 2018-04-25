@@ -1,10 +1,10 @@
 DebugConfig({
     //all:                true,
-    calcMain:           0,
+    calcMain:           1,
     submitVar:          0,
     input_ok:           0,
     updateDisplay:      0,
-    getTiming:          0,
+    getTiming:          1,
 
     marginsUIChange:    0,
     timingUIChange:     0,
@@ -16,7 +16,7 @@ DebugConfig({
     SI_set_precision:   0,
     
     CTA:                0,
-    DMT:                0,
+    DMT:                1,
     CVT:                0,
     CVT_R:              0,
     GTF:                0,
