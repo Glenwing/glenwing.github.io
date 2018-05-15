@@ -2026,6 +2026,7 @@ window.onpageshow = function() {
     LoadCTA861();
     LoadDMT();
     
+    /*
     DEBUG('Initializing HRES')
     $('#INPUT_HRES')[0].onchange();
     DEBUG('Initializing VRES')
@@ -2054,8 +2055,40 @@ window.onpageshow = function() {
     $('#V_FP_INT')[0].onchange();
     $('#V_BP_INT')[0].onchange();
     $('#V_SW_INT')[0].onchange();
-
-    //calcMain();
+*/
+    calcMain();
 }
 
-//window.onload = window.onpageshow;
+window.onload = function() {
+    
+    DEBUG('Initializing HRES')
+    $('#INPUT_HRES')[0].onchange();
+    DEBUG('Initializing VRES')
+    $('#INPUT_VRES')[0].onchange();
+    DEBUG('Initializing FREQ')
+    $('#INPUT_F')[0].onchange();
+    DEBUG('Initializing COLOR DEPTH')
+    $('#COLOR_DEPTH_FORM')[0].onchange();
+    DEBUG('Initializing PIXEL FORMAT')
+    $('#PIXEL_FORMAT_FORM')[0].onchange();
+    DEBUG('Initializing COMPRESSION')
+    $('#COMPRESSION_FORM')[0].onchange();
+    DEBUG('Initializing SCAN')
+    $('#SCAN_FORM')[0].onchange();
+    DEBUG('Initializing MARGINS')
+    $('#MARGINS_FORM')[0].onchange();
+    DEBUG('Initializing TIMING STANDARD')
+    $('#TIMING_DROP')[0].onchange();
+    
+    $('#V_FP')[0].onchange();
+    $('#V_BP')[0].onchange();
+    $('#V_SW')[0].onchange();
+    $('#H_FP')[0].onchange();
+    $('#H_BP')[0].onchange();
+    $('#H_SW')[0].onchange();
+    $('#V_FP_INT')[0].onchange();
+    $('#V_BP_INT')[0].onchange();
+    $('#V_SW_INT')[0].onchange();
+    
+    calcMain();
+}
