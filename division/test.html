@@ -55,9 +55,12 @@
     <tr><td><input type="button" value="43 ÷ 18" style="background-color:#555555; color:#EEEEEE; font-size:16px;" onclick="divide(43, 18);" /> (1 non-repeating + 1-digit repeating pattern)</td></tr>
     <tr><td><input type="button" value="256 ÷ 135" style="background-color:#555555; color:#EEEEEE; font-size:16px;" onclick="divide(256, 135);" /> (1 non-repeating + 3-digit repeating pattern)</td></tr>
     <tr><td>&nbsp;</td></tr>
+    <tr><td><input type="button" value="8 ÷ 4" style="background-color:#555555; color:#EEEEEE; font-size:16px;" onclick="divide(8, 4);" /> (integer result)</td></tr>
     <tr><td><input type="button" value="8 ÷ 5" style="background-color:#555555; color:#EEEEEE; font-size:16px;" onclick="divide(8, 5);" /> (1-decimal evenly-divisible result)</td></tr>
     <tr><td><input type="button" value="1 ÷ 64" style="background-color:#555555; color:#EEEEEE; font-size:16px;" onclick="divide(1, 64);" /> (6-decimal evenly-divisible result)</td></tr>
-    <tr><td><input type="button" value="-256 ÷ 135" style="background-color:#555555; color:#EEEEEE; font-size:16px;" onclick="divide(-256, 135);" /> (negative result)</td></tr>
+    <tr><td><input type="button" value="&minus;256 ÷ 135" style="background-color:#555555; color:#EEEEEE; font-size:16px;" onclick="divide(-256, 135);" /> (negative A)</td></tr>
+    <tr><td><input type="button" value="256 ÷ &minus;135" style="background-color:#555555; color:#EEEEEE; font-size:16px;" onclick="divide(256, -135);" /> (negative B)</td></tr>
+    <tr><td><input type="button" value="&minus;256 ÷ &minus;135" style="background-color:#555555; color:#EEEEEE; font-size:16px;" onclick="divide(-256, -135);" /> (negative A and B)</td></tr>
 </table>
 </body>
 
@@ -181,7 +184,7 @@
         var Sign = Plus_Sign;
 
         // Determine if answer will be negative, then use the absolute value of inputs for the rest of the calculations.
-        if ((A / B) < 0) { Sign = Minus_Sign; }
+        if ((A < 0) ? !(B < 0) : (B < 0)) { Sign = Minus_Sign; } // If (A is negative) XOR (B is negative) then final result will be negative.
         var Dividend = Math.abs(parseFloat(A));
         var Divisor = Math.abs(parseFloat(B));
 
