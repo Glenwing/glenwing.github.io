@@ -3,6 +3,7 @@
 <meta name="viewport" content="width=device-width">
 
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+<script src="../DebugControl.js"></script>
 <script src="diuJS.js"></script>
 
 <html lang="en" xmlns="http://www.w3.org/1999/xhtml">
@@ -85,17 +86,17 @@
                         <td class="label">Secondary Display<br />Aspect Ratio:</td>
                         <td>
                             <input class="res_input" id="INPUT_HRES2" style="width:32px; text-align:right;" type="text" onchange="update();" oninput="this.onchange()" onfocus="this.select();" />
-                            <span>:</span>
+                            <span>&#x2236;</span>
                             <input class="res_input" id="INPUT_VRES2" style="width:32px; text-align:left;" type="text" onchange="update();" oninput="this.onchange()" onfocus="this.select();" />
                         </td>
                     </tr>
                     <tr id="21_9_warning" style="display:none;">
                         <td class="label">&nbsp;</td>
                         <td class="result" style="color:#DD1111;">
-                            <b>Warning: Formats commonly known as "21:9" are not an exact 21:9 ratio</b><br />
-                            &nbsp;&nbsp;2560 <span class="res_x">&#10005;</span> 1080 is a 64:27 ratio<br />
-                            &nbsp;&nbsp;3440 <span class="res_x">&#10005;</span> 1440 is a 43:18 ratio<br />
-                            &nbsp;&nbsp;3840 <span class="res_x">&#10005;</span> 1600 is a 12:5 ratio<br />
+                            <b>Warning: Formats commonly known as "21&#x2236;9" are not an exact 21&#x2236;9 ratio</b><br />
+                            &nbsp;&nbsp;2560 <span class="res_x">&#10005;</span> 1080 is a 64&#x2236;27 ratio<br />
+                            &nbsp;&nbsp;3440 <span class="res_x">&#10005;</span> 1440 is a 43&#x2236;18 ratio<br />
+                            &nbsp;&nbsp;3840 <span class="res_x">&#10005;</span> 1600 is a 12&#x2236;5 ratio<br />
                         </td>
                     </tr>
                     <tr>
