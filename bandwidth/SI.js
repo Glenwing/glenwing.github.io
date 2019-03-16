@@ -1,7 +1,9 @@
 function SI(value, unit, options_input) {
     DEBUG('Input:', value, unit, options_input);
     if (isNaN(parseInt(value))) { return value; }
-    if (typeof(options_input) === 'number' || typeof(options_input) === 'string') { options_input = {p: options_input.toString()}; }
+    if (typeof(options_input) === 'number' || typeof(options_input) === 'string') {
+        options_input = {p: options_input.toString()};
+    }
     Default_Options = [
         ['mode',       'f'],
         ['p',          '2'],
@@ -20,6 +22,9 @@ function SI(value, unit, options_input) {
         ['big_kilo',   false],
         ['no_mu',      false],
     ]
+    if (typeof(options_input) === 'undefined') {
+        options_input = Default_Options;
+    }
     for (var i = 0; i < Default_Options.length; i++) {
         if (!(Default_Options[i][0] in options_input)) {
             //DEBUG('SI option "' + Default_Options[i][0] + '" defaulted to:',  Default_Options[i][1])
@@ -246,14 +251,14 @@ function SI(value, unit, options_input) {
         }
     }
     if (SI_options['output'] == 'single') {
-        var final_output = (out_value + '&nbsp;' + out_prefix + unit);
+        var final_output = (out_value + options_input['separator'] + out_prefix + unit);
         DEBUG('Single Output');
         return final_output
     }
     else if (SI_options['output'] == 'split') {
         var final_output = {
-            'full':         out_value + '&nbsp;' + out_prefix + unit,
-            'f':            out_value + '&nbsp;' + out_prefix + unit,
+            'full':         out_value + options_input['separator'] + out_prefix + unit,
+            'f':            out_value + options_input['separator'] + out_prefix + unit,
             'value':        out_value,
             'val':          out_value,
             'v':            out_value,

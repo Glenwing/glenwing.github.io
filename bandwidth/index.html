@@ -9,7 +9,12 @@
 <script>
     MathJax.Hub.Config({
         jax: ["input/TeX", "output/HTML-CSS"],
-        displayAlign: "left"
+        displayAlign: "left",
+        TeX: {
+            Macros: {
+                box: ['\\boxed{\\vphantom{^0_0}\\hphantom{\\,} #1 \\hphantom{\\,}}', 1],
+            },
+        },
     });
     WebFont.load({
         google: { families: ['Inconsolata'] }
@@ -416,22 +421,32 @@
                     <tr id="calculations_body" style="display:table-row;">
                         <td colspan="3" class="body" style="vertical-align:top;">
                             <div style="overflow-x:auto; white-space:nowrap;">
-                                $$\texttt{Pixels per frame:}$$
-                                <div style="padding-left:20px;">$$\texttt{4,096} \times \texttt{2,560 lines} = \texttt{10,485,760 px (10.5 Mpx)}$$</div>
-                                $$\texttt{Pixels per second:}$$
-                                <div style="padding-left:20px;">$$10\,485\,760\;\mathtt{px/frame} \times 120\;\mathtt{frame/s} = 1\,258\,291\,200\;\mathtt{px/s}\;(1.26\;\mathtt{Gpx/s})$$</div>
-                                $$\texttt{Bits per second:}$$
-                                <div style="padding-left:20px;">$$1\,258\,291\,200\;\mathtt{px/s} \times 30\;\mathtt{bit/px} = 37\,748\,736\,000\;\mathtt{bit/s}\;(37.7\;\mathtt{Gbit/s})$$</div>
+                                $$\textrm{Active pixels per frame:}$$
+                                <div class='equation' id='Math_TotalPixels'>
+                                    $$\mathtt{4\:096 \times 2\:560~pixels = 10\:485\:760~px \ (10.5~Mpx)}$$
+                                </div>
+                                $$\textrm{Effective pixels per frame:}$$
+                                <div class='equation' id='Math_EffectiveTotalPixels'>
+                                    $$\mathtt{4\:096 \times 2\:560~pixels = 10\:485\:760~px \ (10.5~Mpx)}$$
+                                </div>
+                                $$\textrm{Pixels per second:}$$
+                                <div class='equation' id='Math_PixelRate'>
+                                    $$10\,485\,760\;\mathtt{px/frame} \times 120\;\mathtt{frame/s} = 1\,258\,291\,200\;\mathtt{px/s}\;(1.26\;\mathtt{Gpx/s})$$
+                                </div>
+                                $$\textrm{Bits per second:}$$
+                                <div class='equation' id='Math_BitRate'>
+                                    $$1\,258\,291\,200\;\mathtt{px/s} \times 30\;\mathtt{bit/px} = 37\,748\,736\,000\;\mathtt{bit/s}\;(37.7\;\mathtt{Gbit/s})$$
+                                </div>
                                 <br /><hr /><br />
-                                $$\texttt{Timing Formula:}$$
-                                <div style="padding-left:20px;">
+                                $$\textrm{Timing Formula:}$$
+                                <div class='equation'>
                                     $$\texttt{Constants:}$$
                                     $$\texttt{H = 4,096 px}$$
                                     $$\texttt{V = 2,560 px}$$
                                     $$\texttt{F = 120 Hz}$$
                                 </div>
                                 $$\texttt{Formula:}$$
-                                <div style="padding-left:20px;">$$\texttt{V}_{\texttt{blank}} \texttt{ = } {{\texttt{V × V}_{\texttt{min}}} \over {{\texttt{1} \over \texttt{F}} - \texttt{V}_{\texttt{min}}}}$$</div>
+                                <div class='equation'>$$\texttt{V}_{\texttt{blank}} \texttt{ = } {{\texttt{V × V}_{\texttt{min}}} \over {{\texttt{1} \over \texttt{F}} - \texttt{V}_{\texttt{min}}}}$$</div>
                             </div>
                             <div style="padding-left:20px; max-width:100%;">The timing parameters used for these calculations are defined by the <a>CTA-861</a> standard. The definitions for this format are listed under Video Identification Code (VIC) #98, first defined in <a style="white-space:nowrap;">CTA-861-F</a> (formerly CEA-861-F).</div>
                         </td>

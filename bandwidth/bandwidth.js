@@ -29,24 +29,24 @@ DMT_List = {};
 
 // The intepreted current state of all input fields is stored here
 Global_InputVars = {
-    'HRES': '', // Int
-    'VRES': '', // Int
-    'FREQ': '', // Float
-    'COLOR_DEPTH': '',
-    'PIXEL_FORMAT': '',
-    'COMP': '',
-    'SCAN': '',
-    'MARGINS': '',
-    'TIMING_STD': '',
-    'V_FP': '',
-    'V_BP': '',
-    'V_SW': '',
-    'H_FP': '',
-    'H_BP': '',
-    'H_SW': '',
-    'V_FP_INT': '',
-    'V_BP_INT': '',
-    'V_SW_INT': '',
+    'HRES': '', // int
+    'VRES': '', // int
+    'FREQ': '', // float
+    'COLOR_DEPTH': '', // int, in bits per pixel
+    'PIXEL_FORMAT': '', // float: 1.0 for RGB/YCbCr 4:4;4, 1.5 for YCbCr 4:2:2, 2.0 for YCbCr 2.0
+    'COMP': '', // float (compression ratio)
+    'SCAN': '', // int; 1 for progressive, 2 for interlaced
+    'MARGINS': '', // float; margin %
+    'TIMING_STD': '', // string
+    'V_FP': '', // int
+    'V_BP': '', // int
+    'V_SW': '', // int
+    'H_FP': '', // int
+    'H_BP': '', // int
+    'H_SW': '', // int
+    'V_FP_INT': '', // int
+    'V_BP_INT': '', // int
+    'V_SW_INT': '', // int
 }
 
 Detailed_Results = {
@@ -715,7 +715,10 @@ function calcMain() {
     }
 
     //DEBUG('Results:', SI(results['bits_per_sec_eff'], 'bit/s', 2), results);
+    generateLaTeX();
     updateDisplay();
+
+    return;
 }
 
 
@@ -823,7 +826,7 @@ function getTiming(timing_standard) {
         else if (timing_standard == 'CTA-861') {
             Timing = CTA();
             if (!Timing) {
-                DEBUG ('Not a CTA Format. CTA Function returned false.');
+                DEBUG ('Not a CTA Format. CTA Function returned false. Vars:', Global_InputVars);
                 $('#TIMING_FORMAT_NAME').html('Not a CTA format');
                 clearTiming();
                 return false; }
@@ -942,8 +945,8 @@ function CVT_R(R) { // Variable R is an integer representing the reduced blankin
     var H_SW; // Horizontal sync width
     var H_BP; // Horizontal back porch
 
-    var V_BLANK; // Total vertical blanking (V_FP + V_SW + V_BP)
-    var H_BLANK; // Total horizontal blanking (H_FP + H_SW + H_BP)
+    var V_BLANK; // Total vertical blanking inteval size, in pixels (V_FP + V_SW + V_BP)
+    var H_BLANK; // Total horizontal blanking interval size, in pixels (H_FP + H_SW + H_BP)
     var V_EFF;   // V + V_Blank + V_Margins
     var H_EFF;   // H + H_Blank + H_Margins
 
@@ -951,7 +954,7 @@ function CVT_R(R) { // Variable R is an integer representing the reduced blankin
     var F_HOR; // Horizontal refresh frequency
 
     // Common constants
-    var V_PER_MIN = 0.00046; /* Minimum vertical blanking period for reduced blank timing (in seconds), defined by VESA CVT 1.2 standard */
+    var V_PER_MIN = 0.00046; // Minimum vertical blanking period for reduced blank timing (in seconds), defined by VESA CVT 1.2 standard
     var V_LINES = Math.floor(V / S) // If progressive scan, S = 1 and V_LINES = V. If interlaced, V_LINES = floor(V / 2).
 
     if (R == 1) {
@@ -963,7 +966,7 @@ function CVT_R(R) { // Variable R is an integer representing the reduced blankin
         V_FP = 3;
         var V_BP_MIN = 6;
 
-        // All H timings are defined, as well as V_FP. Only V_SW and V_BP remain (and V_BLANK, the sum of all 3 V parameters)
+        // All H timings are pre-defined by the standard, as well as V_FP. Only V_SW and V_BP remain (and V_BLANK, the sum of all 3 V parameters)
 
         // Determine vertical sync width (V_SW) from table of magic numbers defined in VESA CVT standard
         var V_SYNC_TABLE = [
@@ -992,7 +995,7 @@ function CVT_R(R) { // Variable R is an integer representing the reduced blankin
         var V_MARGIN = Math.floor(M / 100) * V_LINES; // If margins percent (M) is 0, this result is 0
         var H_MARGIN = Math.floor(H_RND * M / 100 / G) * G; // If margins percent (M) is 0, this result is 0
 
-        var H_PER_EST = ((1 / F) - V_PER_MIN) / (V_LINES + (2 * V_MARGIN)); // Horizontal blanking period estimate
+        var H_PER_EST = ((1 / F) - V_PER_MIN) / (V_LINES + (2 * V_MARGIN)); // Horizontal refresh period estimate
         V_BLANK = Math.floor((V_PER_MIN / H_PER_EST) + 1);
 
         var V_BLANK_MIN = V_FP + V_SW + V_BP_MIN;
@@ -1217,10 +1220,20 @@ function CTA() {
     
     DEBUG('Input:', H, V, F, S);
 
+    if ((   H == 720 && V == 480 && F <= 60 && S == 'i')
+        || (H == 720 && V == 576 && F <= 50 && S == 'i')
+        || (H == 720 && (V == 240 || V == 288)  && F <= 60)
+        ) {
+        Global_InputVars['HRES'] = 2 * H;
+        H = 2 * H;
+        DEBUG('Horizontal width H changed to', H);
+    }
+
     var CTA_H;
     var CTA_V;
     var CTA_F;
     var CTA_S;
+
 
     for (var i = 0; i < CTA861.length; i++) {
         CTA_H = parseFloat(CTA861[i]['H']);
@@ -1231,7 +1244,7 @@ function CTA() {
         DEBUG('Parsing: VIC', CTA861[i]['VIC'], '|', CTA_H, (H == CTA_H), '|', CTA_V, (V == CTA_V), '|' , (CTA_F).toFixed(3), (Math.abs(F - CTA_F) < 0.01), '|', CTA_S, (S == CTA_S));
         
         //DEBUG( (V == CTA_V), (Math.abs(F - CTA_F) < 0.01), (S == CTA_S))
-        if ((H == CTA_H) && (V == CTA_V) && (Math.abs(F - CTA_F) < 0.01) && (S == CTA_S)) {
+        if ((H == CTA_H) && (V == CTA_V) && (Math.abs(F - CTA_F) < (0.001 * F)) && (S == CTA_S)) {
             DEBUG('Match Found');
 
             // Special modifications to values based on whether interlacing is selected or not
@@ -1265,6 +1278,8 @@ function CTA() {
     }
 
     // Not found in CTA list
+    
+
     return false;
 }
 
@@ -1651,11 +1666,65 @@ function LoadDMT(){
 }
 
 
-//Small functions
-{
-function Commas(num) {
+// LaTeX
+
+function MathCommas(num) {
     var parts = num.toString().split(".");
-    parts[0] = parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+    parts[0] = parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, "\\:");
+    return parts.join(".");
+}
+
+function generateLaTeX() {
+    DEBUG('Generating LaTeX...');
+    var result;
+    var H = Global_InputVars['HRES'];
+    var H_FP = Global_InputVars['H_FP'];
+    var H_SW = Global_InputVars['H_SW'];
+    var H_BP = Global_InputVars['H_BP'];
+
+    var V = Global_InputVars['VRES'];
+    var V_FP = Global_InputVars['V_FP'];
+    var V_SW = Global_InputVars['V_SW'];
+    var V_BP = Global_InputVars['V_BP'];
+
+    var F = Global_InputVars['FREQ'];
+    var F_ACTUAL = Global_InputVars['F_ACTUAL'];
+    
+    var CD = Global_InputVars['COLOR DEPTH'];
+
+    // Total Pixels
+
+    result = SI(H * V, 'px', {'output': 'split'});
+    DEBUG('Total pixels SI result:', result);
+    $('#Math_TotalPixels').html(
+        '$$' + MathCommas(H) + '\\times' + MathCommas(V) + '= \\boxed{\\vphantom{^0_0}\\,' + MathCommas(H * V) + '~\\mathrm{px}\\ (' + result['v'] + '~\\mathrm{' + result['u'] + '}' + ')\\,}' + '$$'
+    );
+
+    // Total Pixels with Blanking
+    result = SI((H + H_FP + H_SW + H_BP) * (V + V_FP + V_SW + V_BP), 'px', {'output':'split'});
+    DEBUG('Pixels with blanking SI result:', result);
+    $('#Math_EffectiveTotalPixels').html(
+        '$$' + 'H_{\\rm blank} = H_{\\rm front~porch} + H_{\\rm sync~width} + H_{\\rm back~porch} = {\\rm' +
+        MathCommas(H_FP) + '~px +' + MathCommas(H_SW) + '~px +' + MathCommas(H_BP) + '~px} = \\box{\\rm' + MathCommas(H_FP + H_SW + H_BP) + '~px } \\\\' +
+        'V_{\\rm blank} = V_{\\rm front~porch} + V_{\\rm sync~width} + V_{\\rm back~porch} = {\\rm' + 
+        MathCommas(V_FP) + '~px +' + MathCommas(V_SW) + '~px +' + MathCommas(V_BP) + '~px} = \\box{\\rm' + MathCommas(V_FP + V_SW + V_BP) + '~px } \\\\' + '$$'
+        
+        + '$$' + '(H + H_{\\rm blank}) \\times (V + V_{\\rm blank}) = \\rm (' + MathCommas(H) + '+' + MathCommas(H_FP + H_SW + H_BP) + ') \\times (' + MathCommas(V) + '+' + MathCommas(V_FP + V_SW + V_BP) + ')' +
+        '= \\boxed{\\vphantom{^0_0}\\,' + MathCommas(result['o']) + '~\\mathrm{' + result['b'] + '}\\ (' + result['v'] + '~\\mathrm{' + result['u'] + '}) \\,}' + '$$'
+    );
+    
+
+    MathJax.Hub.Typeset();
+}
+
+// Small functions
+{
+function Commas(num, commaChar) {
+    if (commaChar === undefined) {
+        commaChar = ',';
+    }
+    var parts = num.toString().split(".");
+    parts[0] = parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, commaChar);
     return parts.join(".");
 }
 
@@ -1904,13 +1973,13 @@ function parseNum(val) {
 
 
 function parseNum(val) {
-    // This function is designed to interpret strings with formatted numbers (which may contain currencies, digit grouping commas, units, etc.)
+    // This function is designed to interpret strings with formatted numbers (which may contain currency symbols, digit grouping commas, units of measurement, etc.)
     // It will return NaN if it cannot be interpreted as a valid number (i.e. no numeric characters, multiple periods or minus signs, etc.)
 
     if (typeof(val) === 'number') {
         // If the input argument is already a number, then nothing needs to be done, simply return the input value
         if (Number.isNaN(val) == true) {
-            // However, we do need to check that it isn't NaN, because that is identified as a number.
+            // However, we do need to check that it isn't NaN, because NaN is identified as a 'number' type.
             return NaN;
         }
         else {
@@ -1919,10 +1988,12 @@ function parseNum(val) {
     }
 
     else if (typeof val === 'string') {
+        // If the input argument is a string, then the parsing process begins
+
         // Empty string is interpreted as 0
         if (val == '') { return 0; }
 
-        // First, remove all non-numeric characters on the outsides of the string
+        // First, remove all non-numeric characters on the outsides of the string (with exceptions for minus signs or other numerically-meaningful characters)
         for (var i = 0; i < val.length; i++) {
             // Loop through each character starting from the front
             if (!(i < val.length)) { break; }
@@ -1935,7 +2006,7 @@ function parseNum(val) {
                 continue;
             }
             else if ((/[-]/g).test(val[i]) == true) {
-                // If character is a negative sign, continue searching without deleting it. This is because there may still be non-number characters between the negative sign and the first digit, such as "-$1.00". The negative sign should stay but the dollar needs to be removed.
+                // If character is a minus sign, continue searching without deleting it. The search continues because there may still be non-number characters between the negative sign and the first digit, such as "-$1.00". The negative sign should stay but the dollar needs to be removed.
                 continue;
             }
             else if ((/[.]/g).test(val[i]) == true) {

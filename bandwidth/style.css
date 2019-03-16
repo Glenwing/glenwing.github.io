@@ -462,3 +462,9 @@ div.trow {
 div.tcell {
     display:table-cell;
 }
+
+/* LaTeX */
+
+div.equation {
+    padding-left: 32px;
+}
