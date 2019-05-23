@@ -69,11 +69,11 @@
 <script>
 
     function divide(A, B) {
-        if(A) { document.getElementById('num1').value = A; }
-        if(B) { document.getElementById('num2').value = B; }
+        if(A) { document.getElementById('num1').value = A.toString(); }
+        if(B) { document.getElementById('num2').value = B.toString(); }
         console.log('A:', A, 'B:', B);
-        A = A || parseFloat(document.getElementById('num1').value);
-        B = B || parseFloat(document.getElementById('num2').value);
+        A = A || document.getElementById('num1').value.toString();
+        B = B || document.getElementById('num2').value.toString();
 
         var p_max = document.getElementById('p_max').value;
         var p_min = document.getElementById('p_min').value;
@@ -89,9 +89,9 @@
             //'OL_close': '}}',
         }
         //var result = long_division_core(A, B);
-        var result = long_division(A, B, options);
+        var result = long_division(A.toString(), B.toString(), options);
         document.getElementById('long_div_result').innerHTML = result;
-        document.getElementById('standard_result').innerHTML = (A / B);
+        document.getElementById('standard_result').innerHTML = (parseFloat(A) / parseFloat(B));
     }
 
     /*
@@ -132,7 +132,7 @@
 
     function long_division(A, B, options) {
         console.log('BEGIN:', A, '÷', B)
-        if (isNaN(A / B) || !isFinite(A / B)) { console.log('Answer is NaN or Infinity. Function aborted.'); return ''; }
+        if (isNaN(parseFloat(A) / parseFloat(B) || !isFinite(parseFloat(A) / parseFloat(B)))) { console.log('One or both inputs is NaN or Infinity. Function aborted.'); return ''; }
 
         var OL_open = '<span style="text-decoration:overline;">'; // Overline markup opening tag
         var OL_close = '</span>'; // Overline markup closing tag. Used in conjunction with OL_open to surround the repeating numbers. May be set to control markup, separate it with parentheses, or simply left blank, etc.
@@ -161,9 +161,9 @@
             if ('repeat_singles' in options) { RepeatSinglesFlag = options['repeat_singles']; }
         }
 
-        p_max = parseInt(p_max);
-        p_min = parseInt(p_min);
-        Base = parseInt(Base);
+        p_max = Math.round(p_max);
+        p_min = Math.round(p_min);
+        Base = Math.round(Base);
         if (p_max < 0 || p_min < 0 || p_max < p_min || isNaN(p_max) || isNaN(p_min) || !isFinite(p_max) || !isFinite(p_min)) {
             console.log('Invalid p_max and p_min values. Both values must be non-negative numbers, and p_min cannot be greater than p_max. p_max:', p_max, 'p_min', p_min)
             return '';
@@ -173,12 +173,14 @@
             return '';
         }
         if (p_max == 0) {
-            var Result = Math.round(A / B).toFixed(0);
-            if (Result != (A / B)) { Result = '≈'.concat(Result); }
+            var Result = Math.round(parseFloat(A) / parseFloat(B)).toFixed(0);
+            if (Result < 0) { Result = Minus_Sign.concat(Result * -1); }
+            else { Result = Plus_Sign.concat(Result); }
+            if (Result != (A / B)) { Result = Approx.concat(Result); }
             return Result;
         }
         
-        var Max_Depth = 32; // Depth of internal calculations, regardless of p_max or p_min settings
+        //var Max_Depth = 64; // Depth of internal calculations, regardless of p_max or p_min settings (number of decimal digits)
         var Decimal_Digits = '';
         var Previous_Dividends = {};
         var Prefix = '';
@@ -186,6 +188,22 @@
         var RepeatFlag = false;
         var ApproxFlag = true;
         var Sign = Plus_Sign;
+
+        //watchdog = 0;
+        //while ((A != Math.round(A, 0) || B != Math.round(B, 0)) && (watchdog < 32)) { A *= 10; B *= 10; watchdog++; console.log('Floating points detected; A and B multiplied by 10; A =', A, 'B =', B); }
+        if (A.indexOf('.') != -1 || B.indexOf('.') != -1) {
+            if (A.indexOf('.') == -1) { A = A + '.'; }
+            if (B.indexOf('.') == -1) { B = B + '.'; }
+            Multiplier = Math.max(A.length - A.indexOf('.') - 1, B.length - B.indexOf('.') - 1); // Find the power of 10 to multiply by to ensure both numbers are ints
+            if (Multiplier - (A.length - A.indexOf('.') - 1) > 0) A = A + '0'.repeat(Multiplier - (A.length - A.indexOf('.') - 1)); // Pad the necessary number of zeros onto the number with fewer decimal places
+            if (Multiplier - (B.length - B.indexOf('.') - 1) > 0) B = B + '0'.repeat(Multiplier - (B.length - B.indexOf('.') - 1));
+            A = A.slice(0, A.indexOf('.')) + A.slice(A.indexOf('.') + 1, A.length); // Remove the decimal point from each number
+            B = B.slice(0, B.indexOf('.')) + B.slice(B.indexOf('.') + 1, B.length);
+            console.log('Float inputs detected. Results multiplied by 10^' + Multiplier + '.', 'A =', A, 'B =', B);
+        }
+
+        A = parseInt(A);
+        B = parseInt(B);
 
         // Determine if answer will be negative, then use the absolute value of inputs for the rest of the calculations.
         if ((A < 0) ? !(B < 0) : (B < 0)) { Sign = Minus_Sign; } // If (A is negative) XOR (B is negative) then final result will be negative.
