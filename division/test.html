@@ -40,7 +40,7 @@
         <td style="text-align:center;"><input id="singles" type="checkbox" onchange="divide();" checked /></td>
     </tr>
     <tr>
-        <td>Use ≈ symbol for non-exact output:</td>
+        <td>Use &approx; symbol for non-exact output:</td>
         <td style="text-align:center;"><input id="approx" type="checkbox" onchange="divide();" checked /></td>
     </tr>
 </table>
@@ -52,8 +52,10 @@
     <tr><td><input type="button" value="16 ÷ 9" style="background-color:#555555; color:#EEEEEE; font-size:16px;" onclick="divide(16, 9);" /> (1-digit repeating pattern)</td></tr>
     <tr><td><input type="button" value="64 ÷ 27" style="background-color:#555555; color:#EEEEEE; font-size:16px;" onclick="divide(64, 27);" /> (3-digit repeating pattern)</td></tr>
     <tr><td><input type="button" value="30 ÷ 13" style="background-color:#555555; color:#EEEEEE; font-size:16px;" onclick="divide(30, 13);" /> (6-digit repeating pattern)</td></tr>
+    <tr><td><input type="button" value="60000 ÷ 1001" style="background-color:#555555; color:#EEEEEE; font-size:16px;" onclick="divide(60000, 1001);" /> (6-digit repeating pattern)</td></tr>
     <tr><td><input type="button" value="43 ÷ 18" style="background-color:#555555; color:#EEEEEE; font-size:16px;" onclick="divide(43, 18);" /> (1 non-repeating + 1-digit repeating pattern)</td></tr>
     <tr><td><input type="button" value="256 ÷ 135" style="background-color:#555555; color:#EEEEEE; font-size:16px;" onclick="divide(256, 135);" /> (1 non-repeating + 3-digit repeating pattern)</td></tr>
+    <tr><td><input type="button" value="60 ÷ 1.001" style="background-color:#555555; color:#EEEEEE; font-size:16px;" onclick="divide(60, 1.001);" /> (6-digit repeating pattern with float input)</td></tr>
     <tr><td>&nbsp;</td></tr>
     <tr><td><input type="button" value="8 ÷ 4" style="background-color:#555555; color:#EEEEEE; font-size:16px;" onclick="divide(8, 4);" /> (integer result)</td></tr>
     <tr><td><input type="button" value="8 ÷ 5" style="background-color:#555555; color:#EEEEEE; font-size:16px;" onclick="divide(8, 5);" /> (1-decimal evenly-divisible result)</td></tr>
@@ -92,9 +94,10 @@
         document.getElementById('standard_result').innerHTML = (A / B);
     }
 
+    /*
     function long_division_core(A, B) {
         if (isNaN(A / B)) { return NaN; }
-        var Max_Depth = 32; // maximum number of decimal places
+        var Max_Depth = 64; // maximum number of decimal places
         var Radix_Point = '.';
         var Base = 10;
         
@@ -123,6 +126,7 @@
 
         return Sign.concat(Result);
     }
+    */
 
 
 
@@ -134,7 +138,7 @@
         var OL_close = '</span>'; // Overline markup closing tag. Used in conjunction with OL_open to surround the repeating numbers. May be set to control markup, separate it with parentheses, or simply left blank, etc.
         var p_max = 8; // Maximum number of decimal places
         var p_min = 3; // Minimum number of decimal places
-        var Approx = '≈'; // Symbol to be used for "approximately equal to". Can be set to '~' or blank if desired, etc.
+        var Approx = '&approx;'; // Symbol to be used for "approximately equal to". Can be set to '~' or blank if desired, etc.
         var Radix_Point = '.';  // Character to use for the radix point ("decimal point")
         var Base = 10; // Number base system to use
         var Minus_Sign = '&minus;'; // Character to preceed negative numbers
@@ -215,13 +219,18 @@
                 console.log('Repetition Detected');
                 Prefix = Decimal_Digits.substring(0, Previous_Dividends[Dividend]);
                 Repetend = Decimal_Digits.substring(Previous_Dividends[Dividend], Decimal_Digits.length);
-                console.log('Prefix:', Prefix, 'Repetend:', Repetend);
+                console.log('Prefix:', Prefix, '; Repetend:', Repetend);
 
                 if (Repetend == '0') {  // A "repeating" dividend of 0 signals a non-repeating result
                     console.log('Removing Repetend of 0...');
                     Repetend = '';
                     RepeatFlag = false;
                     Decimal_Digits = Prefix;
+                }
+                if (Repetend.length > p_max) {
+                    console.log('Repetend is longer than p_max; reverting to standard rounded result.');
+                    Repetend = '';
+                    RepeatFlag = false;
                 }
 
                 //Decimal_Digits = Prefix + Repetend;
@@ -232,23 +241,29 @@
 
         if (RepeatFlag == false) {
             if (Decimal_Digits.length > p_max) {
-                console.log('Truncating decimals.');
+                console.log('Rounding decimals.');
                 //Decimal_Digits = Decimal_Digits.substr(0, p_max);
-                Decimal_Digits = Math.round(parseFloat(Decimal_Digits.substr(0, p_max) + '.' + Decimal_Digits.substr(p_max))).toString();
-                if (p_max - Decimal_Digits.length >= 0) {
+                //Decimal_Digits = Math.round(parseFloat(Decimal_Digits.substr(0, p_max) + '.' + Decimal_Digits.substr(p_max))).toString();
+                console.log('Digits', parseInt(Decimal_Digits), 'rounded to p_max of', p_max, '->', parseInt(Math.round(Number.parseInt(Decimal_Digits) / (10 ** (Decimal_Digits.length - p_max)) )));
+                //Decimal_Digits = Math.round(parseFloat(Decimal_Digits.substr(0, p_max) + '.' + (Number.parseInt(Decimal_Digits).toPrecision(p_max))).toString();
+                Decimal_Digits = parseInt(Math.round(Number.parseInt(Decimal_Digits) / (10 ** (Decimal_Digits.length - p_max)) )).toString();
+                if (p_max - Decimal_Digits.length > 0) {
+                    console.log('Decimal_Digits.length: ' + Decimal_Digits.length + '; p_min: ' + p_max);
+                    console.log('Padding front with zeroes. Decimal Digits:', Decimal_Digits.length, 'p_min:', p_max);
                     Decimal_Digits = '0'.repeat(p_max - Decimal_Digits.length) + Decimal_Digits;
                 }
                 ApproxFlag = true;
             }
             if (Decimal_Digits.length < p_min) {
-                console.log('Padding end with zeroes. Decimal Digits:', Decimal_Digits.length, 'p_min:', p_min);
-                if (p_min - Decimal_Digits.length >= 0) {
+                console.log('Decimal_Digits.length: ' + Decimal_Digits.length + '; p_min: ' + p_min);
+                if (p_min - Decimal_Digits.length > 0) {
+                    console.log('Padding end with zeroes. Decimal Digits:', Decimal_Digits.length, 'p_min:', p_min);
                     Decimal_Digits += '0'.repeat(p_min - Decimal_Digits.length);
                 }
             }
         }
-
-        console.log('Prefix:', Prefix, 'Repetend:', Repetend);
+        
+        if (RepeatFlag == true) console.log('Prefix:', Prefix, '; Repetend:', Repetend);
 
         if (RepeatFlag == true) {
             if (Prefix.length + Repetend.length > p_max) {
@@ -279,7 +294,7 @@
             }
         }
 
-        console.log('Prefix:', Prefix, 'Repetend:', Repetend);
+        if (RepeatFlag == true) console.log('Prefix:', Prefix, '; Repetend:', Repetend);
 
         if (RepeatFlag == true) {
             if (Repetend.length == 1 && (Prefix.length + Repetend.length < p_max) && RepeatSinglesFlag == true) { Repetend = Repetend.repeat(2); } // Single-digit repetitions will be displayed twice, i.e. 4/3 will result in 1.(33) rather than 1.(3)
