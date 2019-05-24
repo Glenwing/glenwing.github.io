@@ -132,7 +132,7 @@
 
     function long_division(A, B, options) {
         console.log('BEGIN:', A, '÷', B)
-        if (isNaN(parseFloat(A) / parseFloat(B) || !isFinite(parseFloat(A) / parseFloat(B)))) { console.log('One or both inputs is NaN or Infinity. Function aborted.'); return ''; }
+        if ( isNaN(parseFloat(A)) || isNaN(parseFloat(B)) || !isFinite(parseFloat(A)) || !isFinite(parseFloat(B)) ) { console.log('One or both inputs is NaN or Infinity. Function aborted.'); return ''; }
 
         var OL_open = '<span style="text-decoration:overline;">'; // Overline markup opening tag
         var OL_close = '</span>'; // Overline markup closing tag. Used in conjunction with OL_open to surround the repeating numbers. May be set to control markup, separate it with parentheses, or simply left blank, etc.
