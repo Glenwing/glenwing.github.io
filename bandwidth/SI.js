@@ -37,7 +37,7 @@ function SI(value, unit, options_input) {
         mode: 'f'           Precision mode (default Fixed mode). Options are:
                                 'fixed' or 'f'      Uses a fixed number of decimal places, specified by precision field
                                 'sig' or 's'        Targets a fixed number of significant figures.
-                                'adaptive' or 'a'   Uses up to the specified number of decimal points, but leaves no trailing zeroes when not needed.
+                                'adaptive' or 'a'   Uses up to the specified number of decimal points, but leaves no trailing zeros when not needed.
         p: 2                Specifies default precision (number of decimal places).
                             For adaptive mode, it may be specified in the format "[2, 5]" to indicate minimum and maximum precision. A single number will be interpreted as a maximum.
                             Also accepts individual decimal place settings for each prefix, in array format; for example:
@@ -75,7 +75,7 @@ function SI(value, unit, options_input) {
                             Symbols can also be used as shortcuts, as in the following examples:
                                 '>=G' excludes Giga and larger
                                 '>G' excludes larger than Giga, but not Giga itself
-                                '<G' and "<=G" same as above, but for prefixes smaller than Giga
+                                '<G' and '<=G' same as above, but for prefixes smaller than Giga
                             Multiple arguments accepted in array format
                             "u" is accepted as an argument for excluding "µ", and "0" is accepted for excluding the prefixless base unit
                             By default, the following are excluded already, and must be un-excluded (using !c, !d, etc.) to be used:
@@ -192,7 +192,7 @@ function SI(value, unit, options_input) {
         out_prefix = '';
     }
     else {
-        var magnitude = Math.floor(Math.log(Math.abs(value))/Math.log(10));
+        var magnitude = Math.floor(Math.log10(Math.abs(value)));
         var initial_magnitude = magnitude;
         DEBUG('Initial Magnitude:', initial_magnitude);
         while (magnitude >= prefixDef['_min'] && magnitude <= prefixDef['_max']) {
@@ -246,7 +246,7 @@ function SI(value, unit, options_input) {
         if (magnitude > prefixDef['_max']) {
             DEBUG('Reached upper boundary; returning in base units');
             precision = prefixDef[0]['p'];
-            out_value = Commas(value.toFixed(precision));
+            out_value = Commas(parseFloat(value).toFixed(precision));
             out_prefix = '';
         }
     }
@@ -463,7 +463,7 @@ function SI_include_exclude(SI_options, prefixDef, pre2num) {
                     prefixDef[P]['incl'] = !EX['state'];
                 }
                     else if (EX['blanket']) {
-                    // If the Exclusion rule is established by a blanket statement, but the Inclusion rule is stated explicityly, the Inclusion rule takes precedence
+                    // If the Exclusion rule is established by a blanket statement, but the Inclusion rule is stated explicitly, the Inclusion rule takes precedence
                     // This implicitly means both are set to true, because blanket statements can only set things true
                     prefixDef[P]['incl'] = IN['state'];
                 }
@@ -482,7 +482,7 @@ function SI_include_exclude(SI_options, prefixDef, pre2num) {
             // These powers (centi, deci, deca, and hecto) are excluded automatically
             prefixDef[P]['incl'] = false;
             if (P in ex_in_table[1]) {
-                // Include them if and only if the user makes an explicity Inclusion rule for them
+                // Include them if and only if the user makes an explicit Inclusion rule for them
                 if (ex_in_table[1][P]['state'] == true && ex_in_table[1][P]['blanket'] == false) {
                     prefixDef[P]['incl'] = true;
                 }

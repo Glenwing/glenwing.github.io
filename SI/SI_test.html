@@ -1,0 +1,106 @@
+<script src="../DebugControl.js"></script>
+<script src="../bandwidth/SI.js"></script>
+
+<body style="background-color:#333333; color:#EEEEEE; font-family:arial, inconsolata, monospace, sans-serif; font-size:24px;">
+<div>
+    SI prefix generator test<br><br>
+Number: <input id="num" type="text" onchange="SI_test();" oninput='this.onchange()' onfocus='this.select();' style="width:100px; background-color:#555555; color:#EEEEEE; font-size:20px; text-align:center;"  />&nbsp;Base Unit:&nbsp;
+<input id="unit" type="text" onchange="SI_test();" oninput='this.onchange()' onfocus='this.select();' style="width:100px; background-color:#555555; color:#EEEEEE; font-size:20px; text-align:center;" />
+</div><br>
+<table style="font-size:20px;">
+    <tr>
+        <td>Output:</td>
+        <td id='result'></td>
+    </tr>
+</table>
+<br>
+options = { (These don't do anything right now)
+<table>
+    <tr>
+        <td>p:</td>
+        <td>
+            <!--<input type="button" value="&minus;" onclick="document.getElementById('p_max').value = parseInt(document.getElementById('p_max').value) - 1; divide();" > -->
+            [ <input id="p" value="2" type="text" onchange="SI_test();" oninput="this.onchange();" onfocus="this.select();" style="width:120px; background-color:#555555; color:#EEEEEE; font-size:16px; text-align:center;" /> ]
+            <!--<input type="button" value="&plus;" onclick="document.getElementById('p_max').value = parseInt(document.getElementById('p_max').value) + 1; divide();" > -->
+        </td>
+        <td>(Precision argument)</td>
+    </tr>
+    <tr>
+        <td>exclude:</td>
+        <td>
+            [ <input id="exclude" value="'c', 'd', 'D', 'H'" type="text" onchange="SI_test();" oninput="this.onchange();" onfocus="this.select();" style="width:120px; background-color:#555555; color:#EEEEEE; font-size:16px; text-align:center;" /> ]
+        </td>
+        <td>(these prefixes should not be used)</td>
+    </tr>
+    <tr>
+        <td>include:</td>
+        <td>
+            [ <input id="include" value="" type="text" onchange="SI_test();" oninput="this.onchange();" onfocus="this.select();" style="width:120px; background-color:#555555; color:#EEEEEE; font-size:16px; text-align:center;" /> ]
+        </td>
+        <td>(can be used to override blanket exclusions)</td>
+    </tr>
+</table>
+}
+<br>
+<table style="display:none;">
+    <tr><td>Quick Tests:</td></tr>
+    <tr><td></td></tr>
+    <tr><td><input type="button" value="4 ÷ 3" style="background-color:#555555; color:#EEEEEE; font-size:16px;" onclick="divide(4, 3);" /> (1-digit repeating pattern)</td></tr>
+    <tr><td><input type="button" value="16 ÷ 9" style="background-color:#555555; color:#EEEEEE; font-size:16px;" onclick="divide(16, 9);" /> (1-digit repeating pattern)</td></tr>
+    <tr><td><input type="button" value="64 ÷ 27" style="background-color:#555555; color:#EEEEEE; font-size:16px;" onclick="divide(64, 27);" /> (3-digit repeating pattern)</td></tr>
+    <tr><td><input type="button" value="30 ÷ 13" style="background-color:#555555; color:#EEEEEE; font-size:16px;" onclick="divide(30, 13);" /> (6-digit repeating pattern)</td></tr>
+    <tr><td><input type="button" value="60000 ÷ 1001" style="background-color:#555555; color:#EEEEEE; font-size:16px;" onclick="divide(60000, 1001);" /> (6-digit repeating pattern)</td></tr>
+    <tr><td><input type="button" value="43 ÷ 18" style="background-color:#555555; color:#EEEEEE; font-size:16px;" onclick="divide(43, 18);" /> (1 non-repeating + 1-digit repeating pattern)</td></tr>
+    <tr><td><input type="button" value="256 ÷ 135" style="background-color:#555555; color:#EEEEEE; font-size:16px;" onclick="divide(256, 135);" /> (1 non-repeating + 3-digit repeating pattern)</td></tr>
+    <tr><td><input type="button" value="60 ÷ 1.001" style="background-color:#555555; color:#EEEEEE; font-size:16px;" onclick="divide(60, 1.001);" /> (6-digit repeating pattern with float input)</td></tr>
+    <tr><td>&nbsp;</td></tr>
+    <tr><td><input type="button" value="8 ÷ 4" style="background-color:#555555; color:#EEEEEE; font-size:16px;" onclick="divide(8, 4);" /> (integer result)</td></tr>
+    <tr><td><input type="button" value="8 ÷ 5" style="background-color:#555555; color:#EEEEEE; font-size:16px;" onclick="divide(8, 5);" /> (1-decimal evenly-divisible result)</td></tr>
+    <tr><td><input type="button" value="1 ÷ 64" style="background-color:#555555; color:#EEEEEE; font-size:16px;" onclick="divide(1, 64);" /> (6-decimal evenly-divisible result)</td></tr>
+    <tr><td><input type="button" value="&minus;256 ÷ 135" style="background-color:#555555; color:#EEEEEE; font-size:16px;" onclick="divide(-256, 135);" /> (negative A)</td></tr>
+    <tr><td><input type="button" value="256 ÷ &minus;135" style="background-color:#555555; color:#EEEEEE; font-size:16px;" onclick="divide(256, -135);" /> (negative B)</td></tr>
+    <tr><td><input type="button" value="&minus;256 ÷ &minus;135" style="background-color:#555555; color:#EEEEEE; font-size:16px;" onclick="divide(-256, -135);" /> (negative A and B)</td></tr>
+</table>
+</body>
+
+<script>
+
+    function SI_test(num, unit) {
+        if(num) { document.getElementById('num').value = num.toString(); }
+        if(unit) { document.getElementById('unit').value = unit.toString(); }
+        console.log('A:', num, 'B:', unit);
+        num = num || document.getElementById('num').value.toString();
+        unit = unit || document.getElementById('unit').value.toString();
+
+        //var p_max = document.getElementById('p_max').value;
+        //var p_min = document.getElementById('p_min').value;
+        //var singles = document.getElementById('singles').checked;
+        /*
+        if (document.getElementById('approx').checked) { var approx = '≈'; } else { var approx = ''; }
+        var options = {
+            'p_max': p_max,
+            'p_min': p_min,
+            'repeat_singles': singles,
+            'approx': approx,
+
+            //'OL_open': '{{overline|',
+            //'OL_close': '}}',
+        }
+        */
+        //var result = long_division_core(A, B);
+        var result = SI(num, unit);
+        document.getElementById('result').innerHTML = result;
+        //document.getElementById('standard_result').innerHTML = (parseFloat(A) / parseFloat(B));
+    }
+
+    function Commas(num, commaChar) {
+        if (commaChar === undefined) {
+            commaChar = ',';
+        }
+        var parts = num.toString().split(".");
+        parts[0] = parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, commaChar);
+        return parts.join(".");
+    }
+
+    
+</script>
