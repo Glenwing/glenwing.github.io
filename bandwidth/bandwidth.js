@@ -483,6 +483,12 @@ function calcMain() {
             {'p':2, 'output':'split'},
         );
 
+        Detailed_Results['128b132b'] = SI(
+            (h_eff * v_eff * freq_act * color_depth / px_format / scan / comp) * (1.03125),
+            'bit/s',
+            {'p':2, 'output':'split'},
+        );
+
         Detailed_Results['pixel_rate'] = SI(
             (h_eff * v_eff * freq_act / scan),
             'px/s',
@@ -1466,7 +1472,7 @@ function updateDisplay(mode) {
     var id;
 
     id_list = [
-        'data_rate', '8b10b', '16b18b', 'pixel_rate', 'pixel_rate_active',
+        'data_rate', '8b10b', '16b18b', '128b132b', 'pixel_rate', 'pixel_rate_active',
         'bpc', 'bpp', 'palette',
 
         'v_freq', 'v_freq_actual', 'v_freq_dev', 'v_freq_dev_perc',

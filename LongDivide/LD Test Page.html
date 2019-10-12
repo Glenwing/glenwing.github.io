@@ -1,0 +1,214 @@
+
+<body style="background-color:#333333; color:#EEEEEE; font-family:arial, inconsolata, monospace, sans-serif; font-size:24px;">
+<div>
+    Test page for long division algorithm with repeating decimal detection<br><br>
+LongDivide(&nbsp;<input id="num1" placeholder="A" type="text" onchange="divide();" oninput='this.onchange()' onfocus='this.select();' style="width:100px; background-color:#555555; color:#EEEEEE; font-size:20px; text-align:center;"  />&nbsp;,&nbsp;
+<input id="num2" placeholder="B" type="text" onchange="divide();" oninput='this.onchange()' onfocus='this.select();' style="width:100px; background-color:#555555; color:#EEEEEE; font-size:20px; text-align:center;" />&nbsp;,&nbsp;{ 'format': '
+<input id="format" placeholder="0.00[00]" type="text" onchange="divide();" oninput='this.onchange()' onfocus='this.select();' style="width:100px; background-color:#555555; color:#EEEEEE; font-size:20px; text-align:center;" />&nbsp;' });
+</div><br>
+<table style="font-size:20px;">
+    <tr>
+        <td>LongDivide Output:</td>
+        <td id='long_div_result'></td>
+    </tr>
+    <tr>
+        <td>Built-in (A/B) Output:</td>
+        <td id='standard_result'></td>
+    </tr>
+</table>
+<br>
+options = {
+<table style="padding-left:20px;">
+    <tr>
+        <td>'p':</td>
+        <td>
+            <input type="button" value="&minus;" onclick="if (document.getElementById('P').value != '') { document.getElementById('P').value = parseInt(document.getElementById('P').value) - 1; divide(); }" >
+            <input id="P" value="" placeholder="' '" type="text" onchange="divide();" oninput="this.onchange();" onfocus="this.select();" style="width:40px; background-color:#555555; color:#EEEEEE; font-size:16px; text-align:center;" />
+            <input type="button" value="&plus;" onclick="if (document.getElementById('P').value != '') { document.getElementById('P').value = parseInt(document.getElementById('P').value) + 1; divide(); }" >
+        </td>
+    </tr>
+    <tr>
+        <td>'p_max':</td>
+        <td>
+            <input type="button" value="&minus;" onclick="if (document.getElementById('P_Max').value != '') { document.getElementById('P_Max').value = parseInt(document.getElementById('P_Max').value) - 1; divide(); }" >
+            <input id="P_Max" value="8" placeholder="' '" type="text" onchange="divide();" oninput="this.onchange();" onfocus="this.select();" style="width:40px; background-color:#555555; color:#EEEEEE; font-size:16px; text-align:center;" />
+            <input type="button" value="&plus;" onclick="if (document.getElementById('P_Max').value != '') { document.getElementById('P_Max').value = parseInt(document.getElementById('P_Max').value) + 1; divide(); }" >
+        </td>
+    </tr>
+    <tr>
+        <td>'p_min':</td>
+        <td>
+            <input type="button" value="&minus;" onclick="if (document.getElementById('P_Min').value != '') { document.getElementById('P_Min').value = parseInt(document.getElementById('P_Min').value) - 1; divide(); }" >
+            <input id="P_Min" value="0" placeholder="' '" type="text" onchange="divide();" oninput="this.onchange();" onfocus="this.select();" style="width:40px; background-color:#555555; color:#EEEEEE; font-size:16px; text-align:center;" />
+            <input type="button" value="&plus;" onclick="if (document.getElementById('P_Min').value != '') { document.getElementById('P_Min').value = parseInt(document.getElementById('P_Min').value) + 1; divide(); }" >
+        </td>
+    </tr>
+    <tr>
+        <td>'leading':</td>
+        <td>
+            <input type="button" value="&minus;" onclick="if (document.getElementById('leading_box').value != '') { document.getElementById('leading_box').value = parseInt(document.getElementById('leading_box').value) - 1; divide(); }" >
+            <input id="leading_box" value="1" placeholder="' '" type="text" onchange="divide();" oninput="this.onchange();" onfocus="this.select();" style="width:40px; background-color:#555555; color:#EEEEEE; font-size:16px; text-align:center;" />
+            <input type="button" value="&plus;" onclick="if (document.getElementById('leading_box').value != '') { document.getElementById('leading_box').value = parseInt(document.getElementById('leading_box').value) + 1; divide(); }" >
+        </td>
+    </tr>
+    <tr>
+        <td>'thousands':</td>
+        <td>
+            <input id="thousands_box" value="" placeholder="' '" type="text" onchange="divide();" oninput="this.onchange();" onfocus="this.select();" style="width:40px; background-color:#555555; color:#EEEEEE; font-size:16px; text-align:center;" />
+            <input type="button" value="Clear" onclick="document.getElementById('thousands_box').value = ''; divide();" >
+            <input type="button" value="Comma" onclick="document.getElementById('thousands_box').value = ','; divide();" >
+            <input type="button" value="Period" onclick="document.getElementById('thousands_box').value = '.'; divide();" >
+        </td>
+    </tr>
+    <tr>
+        <td>'thousandths':</td>
+        <td>
+            <input id="thousandths_box" value="" placeholder="' '" type="text" onchange="divide();" oninput="this.onchange();" onfocus="this.select();" style="width:40px; background-color:#555555; color:#EEEEEE; font-size:16px; text-align:center;" />
+            <input type="button" value="Clear" onclick="document.getElementById('thousandths_box').value = ''; divide();" >
+            <input type="button" value="Thin Space (U+202F)" onclick="document.getElementById('thousandths_box').value = '\u202F'; divide();" >
+        </td>
+    </tr>
+    <tr>
+        <td>'decimal':</td>
+        <td>
+            <input id="decimal_box" value="." placeholder="' '" type="text" onchange="divide();" oninput="this.onchange();" onfocus="this.select();" style="width:40px; background-color:#555555; color:#EEEEEE; font-size:16px; text-align:center;" />
+            <input type="button" value="Clear" onclick="document.getElementById('decimal_box').value = ''; divide();" >
+            <input type="button" value="Period" onclick="document.getElementById('decimal_box').value = '.'; divide();" >
+            <input type="button" value="Comma" onclick="document.getElementById('decimal_box').value = '.'; divide();" >
+        </td>
+    </tr>
+    <tr>
+        <td>'minus':</td>
+        <td>
+            <input id="minus_box" value="&minus;" placeholder="' '" type="text" onchange="divide();" oninput="this.onchange();" onfocus="this.select();" style="width:40px; background-color:#555555; color:#EEEEEE; font-size:16px; text-align:center;" />
+            <input type="button" value="Clear" onclick="document.getElementById('minus_box').value = ''; divide();" >
+            <input type="button" value="Minus Sign (U+2212)" onclick="document.getElementById('minus_box').value = '\u2212'; divide();" >
+        </td>
+    </tr>
+    <tr>
+        <td>'plus':</td>
+        <td>
+            <input id="plus_box" value="" placeholder="' '" type="text" onchange="divide();" oninput="this.onchange();" onfocus="this.select();" style="width:40px; background-color:#555555; color:#EEEEEE; font-size:16px; text-align:center;" />
+            <input type="button" value="Clear" onclick="document.getElementById('plus_box').value = ''; divide();" >
+        </td>
+    </tr>
+    <tr>
+        <td>'approx':</td>
+        <td>
+            <input id="approx_box" value="&#x2248;" placeholder="' '" type="text" onchange="divide();" oninput="this.onchange();" onfocus="this.select();" style="width:40px; background-color:#555555; color:#EEEEEE; font-size:16px; text-align:center;" />
+            <input type="button" value="Clear" onclick="document.getElementById('approx_box').value = ''; divide();" >
+        </td>
+    </tr>
+    <tr>
+        <td>'currency':</td>
+        <td>
+            <input id="currency_box" value="" placeholder="' '" type="text" onchange="divide();" oninput="this.onchange();" onfocus="this.select();" style="width:40px; background-color:#555555; color:#EEEEEE; font-size:16px; text-align:center;" />
+            <input type="button" value="Clear" onclick="document.getElementById('currency_box').value = ''; divide();" >
+        </td>
+    </tr>
+    <tr>
+        <td>'OL_open':</td>
+        <td><input id="ol_open_box" value="&lt;span style='text-decoration:overline;'&gt;" placeholder="' '" type="text" onchange="divide();" oninput="this.onchange();" onfocus="this.select();" style="width:200px; background-color:#555555; color:#EEEEEE; font-size:16px;" /></td>
+    </tr>
+    <tr>
+        <td>'OL_close':</td>
+        <td><input id="ol_close_box" value="&lt;/span&gt;" placeholder="' '" type="text" onchange="divide();" oninput="this.onchange();" onfocus="this.select();" style="width:200px; background-color:#555555; color:#EEEEEE; font-size:16px;" /></td>
+    </tr>
+    <tr>
+        <td>'si':</td>
+        <td><span id="si_text">false</span>&nbsp;<input id="si" type="checkbox" onchange="this.checked ? document.getElementById('si_text').innerHTML = true : document.getElementById('si_text').innerHTML = false; divide();" /></td>
+    </tr>
+    <tr>
+        <td>'2_singles':</td>
+        <td><span id="singles_text">true</span>&nbsp;<input id="singles" type="checkbox" onchange="this.checked ? document.getElementById('singles_text').innerHTML = true : document.getElementById('singles_text').innerHTML = false; divide();" checked /></td>
+    </tr>
+    <tr>
+        <td>'repeat':</td>
+        <td><span id="repeat_text">true</span>&nbsp;<input id="repeat" type="checkbox" onchange="this.checked ? document.getElementById('repeat_text').innerHTML = true : document.getElementById('repeat_text').innerHTML = false; divide();" checked /></td>
+    </tr>
+</table>
+};
+
+<br><br>
+<table>
+    <tr><td>Quick Tests:</td></tr>
+    <tr><td></td></tr>
+    <tr><td><input type="button" value="4 ÷ 3" style="background-color:#555555; color:#EEEEEE; font-size:16px;" onclick="divide(4, 3);" /> (1-digit repeating pattern)</td></tr>
+    <tr><td><input type="button" value="16 ÷ 9" style="background-color:#555555; color:#EEEEEE; font-size:16px;" onclick="divide(16, 9);" /> (1-digit repeating pattern)</td></tr>
+    <tr><td><input type="button" value="64 ÷ 27" style="background-color:#555555; color:#EEEEEE; font-size:16px;" onclick="divide(64, 27);" /> (3-digit repeating pattern)</td></tr>
+    <tr><td><input type="button" value="30 ÷ 13" style="background-color:#555555; color:#EEEEEE; font-size:16px;" onclick="divide(30, 13);" /> (6-digit repeating pattern)</td></tr>
+    <tr><td><input type="button" value="60000 ÷ 1001" style="background-color:#555555; color:#EEEEEE; font-size:16px;" onclick="divide(60000, 1001);" /> (6-digit repeating pattern)</td></tr>
+    <tr><td><input type="button" value="43 ÷ 18" style="background-color:#555555; color:#EEEEEE; font-size:16px;" onclick="divide(43, 18);" /> (1 non-repeating + 1-digit repeating pattern)</td></tr>
+    <tr><td><input type="button" value="256 ÷ 135" style="background-color:#555555; color:#EEEEEE; font-size:16px;" onclick="divide(256, 135);" /> (1 non-repeating + 3-digit repeating pattern)</td></tr>
+    <tr><td><input type="button" value="29 ÷ 70" style="background-color:#555555; color:#EEEEEE; font-size:16px;" onclick="divide(29, 70);" /> (1 non-repeating + 6-digit repeating pattern with up-rounding final digits in pattern)</td></tr>
+    <tr><td><input type="button" value="60 ÷ 1.001" style="background-color:#555555; color:#EEEEEE; font-size:16px;" onclick="divide(60, 1.001);" /> (6-digit repeating pattern with float input)</td></tr>
+    <tr><td>&nbsp;</td></tr>
+    <tr><td><input type="button" value="8 ÷ 4" style="background-color:#555555; color:#EEEEEE; font-size:16px;" onclick="divide(8, 4);" /> (integer result)</td></tr>
+    <tr><td><input type="button" value="8 ÷ 5" style="background-color:#555555; color:#EEEEEE; font-size:16px;" onclick="divide(8, 5);" /> (1-decimal evenly-divisible result)</td></tr>
+    <tr><td><input type="button" value="1 ÷ 64" style="background-color:#555555; color:#EEEEEE; font-size:16px;" onclick="divide(1, 64);" /> (6-decimal evenly-divisible result)</td></tr>
+    <tr><td><input type="button" value="&minus;256 ÷ 135" style="background-color:#555555; color:#EEEEEE; font-size:16px;" onclick="divide(-256, 135);" /> (negative A)</td></tr>
+    <tr><td><input type="button" value="256 ÷ &minus;135" style="background-color:#555555; color:#EEEEEE; font-size:16px;" onclick="divide(256, -135);" /> (negative B)</td></tr>
+    <tr><td><input type="button" value="&minus;256 ÷ &minus;135" style="background-color:#555555; color:#EEEEEE; font-size:16px;" onclick="divide(-256, -135);" /> (negative A and B)</td></tr>
+</table>
+</body>
+
+<script src="decimal.min.js"></script>
+<script src="LongDivide.js"></script>
+
+<script>
+
+    function divide(A, B) {
+        if(A) { document.getElementById('num1').value = A.toString(); }
+        if(B) { document.getElementById('num2').value = B.toString(); }
+        //console.log('A:', A, 'B:', B);
+        A = A || document.getElementById('num1').value.toString();
+        B = B || document.getElementById('num2').value.toString();
+
+        var format = '';
+        if (document.getElementById('format').value.toString() != '') { format = document.getElementById('format').value.toString(); }
+
+        var options = {};
+
+        if (format != '') { options['format'] = format; }
+        var P = document.getElementById('P').value;
+        if (P != '') { options['p'] = P; }
+        var P_Max = document.getElementById('P_Max').value;
+        if (P_Max != '') { options['p_max'] = P_Max; }
+        var P_Min = document.getElementById('P_Min').value;
+        if (P_Min != '') { options['p_min'] = P_Min; }
+        var Leading = document.getElementById('leading_box').value;
+        if (Leading != '') { options['leading'] = Leading; }
+        var Thousands = document.getElementById('thousands_box').value;
+        if (Thousands != '') { options['thousands'] = Thousands; }
+        var Thousandths = document.getElementById('thousandths_box').value;
+        if (Thousandths != '') { options['thousandths'] = Thousandths; }
+        var Decimal = document.getElementById('decimal_box').value;
+        if (Decimal != '') { options['decimal'] = Decimal; }
+        var Minus = document.getElementById('minus_box').value;
+        if (Minus != '') { options['minus'] = Minus; }
+        var Plus = document.getElementById('plus_box').value;
+        if (Plus != '') { options['plus'] = Plus; }
+        var Approx = document.getElementById('approx_box').value;
+        if (Approx != '') { options['approx'] = Approx; }
+        var Currency = document.getElementById('currency_box').value;
+        if (Currency != '') { options['currency'] = Currency; }
+        var OL_open = document.getElementById('ol_open_box').value;
+        if (OL_open != '') { options['OL_open'] = OL_open; }
+        var OL_close = document.getElementById('ol_close_box').value;
+        if (OL_close != '') { options['OL_close'] = OL_close; }
+
+        options['singles'] = document.getElementById('singles').checked;
+        options['repeat'] = document.getElementById('repeat').checked;
+        options['si'] = document.getElementById('si').checked;
+        /*
+        if (format != '') {
+            var result = LongDivide(A.toString(), B.toString(), format);
+        }*/
+        var result = LongDivide(A.toString(), B.toString(), options);
+        document.getElementById('long_div_result').innerHTML = result;
+        document.getElementById('standard_result').innerHTML = (parseFloat(A) / parseFloat(B));
+    }
+
+    window.onload = function() { divide(); }
+
+</script>

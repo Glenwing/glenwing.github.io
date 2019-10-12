@@ -7,7 +7,7 @@ body {
     -moz-osx-font-smoothing: grayscale;
 }
 body {
-    font-family:        "Arial", "Consolas", "Inconsolata", "Lucida Console", Monospace;
+    font-family:        "Arial", "Segoe UI", "Consolas", "Inconsolata", "Lucida Console", Monospace;
     font-size:          16px;
     line-height:        120%;
     min-height:         100%;

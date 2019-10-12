@@ -45,20 +45,24 @@ var Detailed_Explanation = {
         '<li><b>Frames per second</b> is the vertical refresh frequency (for progressive scan) or half the vertical field rate (for interlaced scan)</li></ul>' +
         'The data rate for YC<sub>B</sub>C<sub>R</sub> 4:4:4 video is the same as RGB. ' +
         'For YC<sub>B</sub>C<sub>R</sub> 4:2:2 video, the data rate is divided by 1.5. For YC<sub>B</sub>C<sub>R</sub> 4:2:0, the data rate is divided by 2.<br><br>' +
-        'The total <b>bandwidth</b> required for video transmission is larger than the data rate, due to additional overhead involved with transmission.',
+        'The total <b>bit rate</b> required for video transmission is larger than the data rate, due to additional overhead involved with transmission.',
 
     'results_bit_rate':
-        'The <b>bandwidth</b> is the number of physical bits per second transmitted across the video interface, generally represented in bits per second.<br><br>' +
-        'The bandwidth required for video transmission is larger than the data rate. In addition to the bits required to represent the data payload, there is also additional overhead (extra bits beyond just the raw data ' +
+        'The <b>bit rate</b> is the number of physical bits per second transmitted across the video interface, generally represented in bits per second.<br><br>' +
+        'The bit rate required for video transmission is larger than the data rate. In addition to the bits required to represent the data payload, there is also additional overhead (extra bits beyond just the raw data ' +
         'which must be signaled across the interface.',
 
     'results_8b10b':
-        'The 8b/10b encoding scheme requires 10 bits of bandwidth to represent 8 bits of data. Therefore, the bandwidth required to send data ' +
+        'The 8b/10b encoding scheme and the TMDS encoding scheme require 10 bits in the transmission to represent 8 bits of data. Therefore, the bit rate required to send data ' +
         'at a certain rate is 125% of the desired data rate.',
 
     'results_16b18b':
-        'The 16b/18b encoding scheme requires 18 bits of bandwidth to represent 16 bits of data. Therefore, the bandwidth required to send data ' +
+        'The 16b/18b encoding scheme requires 18 bits in the transmission to represent 16 bits of data. Therefore, the bit rate required to send data ' +
         'at a certain rate is 112.5% of the desired data rate.',
+        
+    'results_16b18b':
+        'The 128b/132b encoding scheme requires 132 bits in the transmission to represent 128 bits of data, and the 64b/66b encoding scheme requires 66 bits to represent 64 bits of data. Therefore, the bit rate required to send data ' +
+        'at a certain rate is 103.125% of the desired data rate.',
 
     'results_char_rate':
         'The <b>character rate</b> is a value associated with HDMI and DVI. It is the number of TMDS characters transmitted across the interface per channel per second.<br><br>' +

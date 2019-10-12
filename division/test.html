@@ -43,6 +43,10 @@
         <td>Use &approx; symbol for non-exact output:</td>
         <td style="text-align:center;"><input id="approx" type="checkbox" onchange="divide();" checked /></td>
     </tr>
+    <tr>
+        <td>Use SI prefixes:</td>
+        <td style="text-align:center;"><input id="si" type="checkbox" onchange="divide();" /></td>
+    </tr>
 </table>
 <br>
 <table>
@@ -71,7 +75,7 @@
     function divide(A, B) {
         if(A) { document.getElementById('num1').value = A.toString(); }
         if(B) { document.getElementById('num2').value = B.toString(); }
-        console.log('A:', A, 'B:', B);
+        //console.log('A:', A, 'B:', B);
         A = A || document.getElementById('num1').value.toString();
         B = B || document.getElementById('num2').value.toString();
 
@@ -79,108 +83,133 @@
         var p_min = document.getElementById('p_min').value;
         var singles = document.getElementById('singles').checked;
         if (document.getElementById('approx').checked) { var approx = '≈'; } else { var approx = ''; }
+        if (document.getElementById('si').checked) { var si = true; } else { var si = false; }
         var options = {
             'p_max': p_max,
             'p_min': p_min,
             'repeat_singles': singles,
             'approx': approx,
+            'si': si,
 
             //'OL_open': '{{overline|',
             //'OL_close': '}}',
         }
-        //var result = long_division_core(A, B);
         var result = long_division(A.toString(), B.toString(), options);
         document.getElementById('long_div_result').innerHTML = result;
         document.getElementById('standard_result').innerHTML = (parseFloat(A) / parseFloat(B));
     }
 
-    /*
-    function long_division_core(A, B) {
-        if (isNaN(A / B)) { return NaN; }
-        var Max_Depth = 64; // maximum number of decimal places
-        var Radix_Point = '.';
-        var Base = 10;
-        
-        var Sign = '';
-        if ((A / B) < 0) { Sign = '-'; }
-
-        var Dividend = Math.abs(parseFloat(A));
-        var Divisor = Math.abs(parseFloat(B));
-
-        var Quotient = Dividend / Divisor;
-        var Remainder = Dividend % Divisor;
-        var Result = Math.floor(Quotient).toString() + Radix_Point; // Use floor division to determine the front part of the number immediately
-        Dividend = Remainder * Base;
-
-        var i = 0;
-        while (i < Max_Depth) {
-
-            Quotient = Dividend / Divisor;
-            Remainder = Dividend % Divisor;
-            Dividend = Remainder * 10;
-
-            Result += Math.floor(Quotient).toString();
-
-            i += 1;
-        }
-
-        return Sign.concat(Result);
-    }
-    */
-
 
 
     function long_division(A, B, options) {
         console.log('BEGIN:', A, '÷', B)
-        if ( isNaN(parseFloat(A)) || isNaN(parseFloat(B)) || !isFinite(parseFloat(A)) || !isFinite(parseFloat(B)) ) { console.log('One or both inputs is NaN or Infinity. Function aborted.'); return ''; }
+        if ( isNaN(parseFloat(A)) || isNaN(parseFloat(B)) || !isFinite(parseFloat(A)) || !isFinite(parseFloat(B)) ) { console.log('Error in function long_division(): One or both inputs is NaN or Infinity. Function aborted.'); return ''; }
 
         var OL_open = '<span style="text-decoration:overline;">'; // Overline markup opening tag
         var OL_close = '</span>'; // Overline markup closing tag. Used in conjunction with OL_open to surround the repeating numbers. May be set to control markup, separate it with parentheses, or simply left blank, etc.
-        var p_max = 8; // Maximum number of decimal places
-        var p_min = 3; // Minimum number of decimal places
+        var p_max = 6; // Maximum number of decimal places
+        var p_min = 0; // Minimum number of decimal places
         var Approx = '&approx;'; // Symbol to be used for "approximately equal to". Can be set to '~' or blank if desired, etc.
         var Radix_Point = '.';  // Character to use for the radix point ("decimal point")
+        var Thousands = ',';
+        var Thousandths = '';
         var Base = 10; // Number base system to use
         var Minus_Sign = '&minus;'; // Character to preceed negative numbers
-        var Plus_Sign = ''; // Character to preceed positive numbers
+        var Plus_Sign = ''; // Character to preceed positive numbers; blank string by default
+        var SI = false;
+        var SI_Prefix = '';
         var RepeatSinglesFlag = true; // Display single-digit repeating patterns as 1.(33) instead of 1.(3)
 
         if (typeof(options) === 'number') { // If 3rd argument is a number rather than a dictionary, use it as the p_max value
             p_max = options;
         }
+
         else if(options) {
-            if ('OL_open' in options) { OL_open = options['OL_open']; }
-            if ('OL_close' in options) { OL_close = options['OL_close']; }
-            if ('p_max' in options) { p_max = options['p_max']; }
-            if ('p_min' in options) { p_min = options['p_min']; }
-            if ('radix' in options) { Radix_Point = options['radix']; }
-            if ('approx' in options) { Approx = options['approx']; }
-            if ('minus' in options) { Minus_Sign = options['minus']; }
-            if ('plus' in options) { Plus_Sign = options['plus']; }
-            if ('base' in options) { Base = options['base']; }
+            if (typeof(options) === 'string') { options = parseFormatString(options); }
+            else if ('format' in options) { options = parseFormatString(options['format']); }
+
+            if ('OL_open' in options) { OL_open = options['OL_open']; } // string
+            if ('OL_close' in options) { OL_close = options['OL_close']; } // string
+            if ('p_max' in options) { p_max = options['p_max']; } // integer
+            if ('p_min' in options) { p_min = options['p_min']; } // integer
+            if ('thousands' in options) { thousands = options['thousands']; } // string
+            if ('thousandths' in options) { thousandths = options['thousandths']; } // string
+            if ('decimal' in options) { Radix_Point = options['decimal']; } // string
+            if ('approx' in options) { Approx = options['approx']; } // string
+            if ('minus' in options) { Minus_Sign = options['minus']; } // string
+            if ('plus' in options) { Plus_Sign = options['plus']; } // string
+            if ('base' in options) { Base = options['base']; } // integer
+            if ('si' in options) { SI = options['si']; } // boolean
             if ('repeat_singles' in options) { RepeatSinglesFlag = options['repeat_singles']; }
         }
 
         p_max = Math.round(p_max);
         p_min = Math.round(p_min);
         Base = Math.round(Base);
+        // Validity checks for precision and base
         if (p_max < 0 || p_min < 0 || p_max < p_min || isNaN(p_max) || isNaN(p_min) || !isFinite(p_max) || !isFinite(p_min)) {
-            console.log('Invalid p_max and p_min values. Both values must be non-negative numbers, and p_min cannot be greater than p_max. p_max:', p_max, 'p_min', p_min)
+            console.log('Error in function long_division(): Invalid p_max and p_min values. Both values must be non-negative numbers, and p_min cannot be greater than p_max. p_max:', p_max, 'p_min', p_min)
             return '';
         }
         if (isNaN(Base)) {
-            console.log('Invalid Base value. Must be an integer number. Base:', Base);
+            console.log('Error in function long_division(): Invalid Base value. Must be an integer number. Base:', Base);
             return '';
         }
+
+        // Adjust numerator for metric prefixes
+        if (SI == true) {
+            var Power = 0;
+            var watchdog = 0;
+            while (Power < 24 && Power > -24 && watchdog < 10) {
+                console.log('A/B: ' + A/B + '\nPower: ' + Power);
+                if (Math.abs(A/B) >= 1000) {
+                    A = A / 1000; Power += 3;
+                }
+                else if (Math.abs(A/B) < 1) {
+                    A = A * 1000; Power -= 3;
+                }
+                else {
+                    break;
+                }
+                watchdog += 1;
+                if (watchdog == 10) {
+                    console.log('Warning in function long_division(): Runaway loop has hit watchdog threshold and was aborted in SI prefix algorithm. Check your code!');
+                }
+            }
+            var SI_Prefix_Table = {
+                '24':  'Y',
+                '21':  'Z',
+                '18':  'E',
+                '15':  'P',
+                '12':  'T',
+                '9':   'G',
+                '6':   'M',
+                '3':   'k',
+                '0':   '',
+                '-3':  'm',
+                '-6':  '&mu;',
+                '-9':  'n',
+                '-12': 'p',
+                '-15': 'f',
+                '-18': 'a',
+                '-21': 'z',
+                '-24': 'y',
+            }
+            SI_Prefix = '&nbsp;' + SI_Prefix_Table[Power];
+            A = A.toString();
+            B = B.toString();
+            console.log('Prefix: ' + SI_Prefix_Table[Power] + ', ' + SI_Prefix);
+        }
+
         if (p_max == 0) {
+            // If precision is set to 0, then the standard division operator can be used to obtain the result.
             var Result = Math.round(parseFloat(A) / parseFloat(B)).toFixed(0);
-            if (Result < 0) { Result = Minus_Sign.concat(Result * -1); }
-            else { Result = Plus_Sign.concat(Result); }
-            if (Result != (A / B)) { Result = Approx.concat(Result); }
-            return Result;
+            if (Result < 0) { Result = Minus_Sign.concat(Math.abs(Result)); } // If the number is negative, attach the Minus sign character set in options
+            else { Result = Plus_Sign.concat(Result); } // Otherwise, attach the Plus sign character set in options (blank string by default)
+            if (Result != (A / B)) { Result = Approx.concat(Result); } // If input numbers are not evenly divisible, attach the approximation sign set in options
+            return Result.concat(SI_Prefix);
         }
         
-        //var Max_Depth = 64; // Depth of internal calculations, regardless of p_max or p_min settings (number of decimal digits)
         var Decimal_Digits = '';
         var Previous_Dividends = {};
         var Prefix = '';
@@ -189,8 +218,6 @@
         var ApproxFlag = true;
         var Sign = Plus_Sign;
 
-        //watchdog = 0;
-        //while ((A != Math.round(A, 0) || B != Math.round(B, 0)) && (watchdog < 32)) { A *= 10; B *= 10; watchdog++; console.log('Floating points detected; A and B multiplied by 10; A =', A, 'B =', B); }
         if (A.indexOf('.') != -1 || B.indexOf('.') != -1) {
             if (A.indexOf('.') == -1) { A = A + '.'; }
             if (B.indexOf('.') == -1) { B = B + '.'; }
@@ -199,7 +226,7 @@
             if (Multiplier - (B.length - B.indexOf('.') - 1) > 0) B = B + '0'.repeat(Multiplier - (B.length - B.indexOf('.') - 1));
             A = A.slice(0, A.indexOf('.')) + A.slice(A.indexOf('.') + 1, A.length); // Remove the decimal point from each number
             B = B.slice(0, B.indexOf('.')) + B.slice(B.indexOf('.') + 1, B.length);
-            console.log('Float inputs detected. Results multiplied by 10^' + Multiplier + '.', 'A =', A, 'B =', B);
+            console.log('Warning in function long_division(): Float inputs detected. Results multiplied by 10^' + Multiplier + '.', 'A =', A, 'B =', B);
         }
 
         A = parseInt(A);
@@ -207,27 +234,28 @@
 
         // Determine if answer will be negative, then use the absolute value of inputs for the rest of the calculations.
         if ((A < 0) ? !(B < 0) : (B < 0)) { Sign = Minus_Sign; } // If (A is negative) XOR (B is negative) then final result will be negative.
+        else { Sign = Plus_Sign; } // Plus_Sign is a blank string by default, but can be set to '+' to force sign for positive numbers
         var Dividend = Math.abs(parseFloat(A));
-        var Divisor = Math.abs(parseFloat(B));
+        var Divisor  = Math.abs(parseFloat(B));
 
-        var Quotient = Dividend / Divisor;
-        var Remainder = Dividend % Divisor;
-        var Result = Math.floor(Quotient).toString() + Radix_Point; // Use floor division to determine the front part of the number immediately
+        var Quotient  = Math.floor(Dividend / Divisor);
+        var Remainder =            Dividend % Divisor;
+
+        // Use floor division to determine the front part of the number immediately
+        var Result = exponential_toFixed(Quotient.toString()) + Radix_Point;
         Dividend = Remainder * Base;
 
         // Use long division for the decimal places, so that repeating decimals can be detected
         var i = 0;
-        while (i < p_max + 2) {
+        while (i < p_max + 1) {
             if (!(Dividend in Previous_Dividends)) {
                 Previous_Dividends[Dividend] = i;
 
-                Quotient = Dividend / Divisor;
-                Remainder = Dividend % Divisor;
+                Quotient  = Math.floor(Dividend / Divisor);
+                Remainder =            Dividend % Divisor;
                 Dividend = Remainder * Base;
 
-                //if (i < p_max) {
-                    Decimal_Digits += Math.floor(Quotient).toString();
-                //}
+                Decimal_Digits += Quotient.toString();
 
                 console.log('i:', i, 'Quotient:', Quotient, 'Remainder:', Remainder, 'Dividend:', Dividend, 'Result:', Result, 'Decimal_Digits:', Decimal_Digits);
             }
@@ -245,13 +273,12 @@
                     RepeatFlag = false;
                     Decimal_Digits = Prefix;
                 }
-                if (Repetend.length > p_max) {
-                    console.log('Repetend is longer than p_max; reverting to standard rounded result.');
+                if (Decimal_Digits.length > p_max) {
+                    console.log('Decimal_Digits is longer than p_max; reverting to standard rounded result.');
                     Repetend = '';
                     RepeatFlag = false;
                 }
 
-                //Decimal_Digits = Prefix + Repetend;
                 break;
             }
             i += 1;
@@ -260,10 +287,7 @@
         if (RepeatFlag == false) {
             if (Decimal_Digits.length > p_max) {
                 console.log('Rounding decimals.');
-                //Decimal_Digits = Decimal_Digits.substr(0, p_max);
-                //Decimal_Digits = Math.round(parseFloat(Decimal_Digits.substr(0, p_max) + '.' + Decimal_Digits.substr(p_max))).toString();
                 console.log('Digits', parseInt(Decimal_Digits), 'rounded to p_max of', p_max, '->', parseInt(Math.round(Number.parseInt(Decimal_Digits) / (10 ** (Decimal_Digits.length - p_max)) )));
-                //Decimal_Digits = Math.round(parseFloat(Decimal_Digits.substr(0, p_max) + '.' + (Number.parseInt(Decimal_Digits).toPrecision(p_max))).toString();
                 Decimal_Digits = parseInt(Math.round(Number.parseInt(Decimal_Digits) / (10 ** (Decimal_Digits.length - p_max)) )).toString();
                 if (p_max - Decimal_Digits.length > 0) {
                     console.log('Decimal_Digits.length: ' + Decimal_Digits.length + '; p_min: ' + p_max);
@@ -281,7 +305,7 @@
             }
         }
         
-        if (RepeatFlag == true) console.log('Prefix:', Prefix, '; Repetend:', Repetend);
+        // if (RepeatFlag == true) console.log('Prefix:', Prefix, '; Repetend:', Repetend);
 
         if (RepeatFlag == true) {
             if (Prefix.length + Repetend.length > p_max) {
@@ -292,18 +316,20 @@
                     }
                 }
                 else {
+                    console.log('Appending repetend substring to prefix: Prefix: ' + Prefix + '; Repetend: ' + Repetend);
                     Prefix = Prefix + Repetend.substr(0, p_max - Prefix.length);
+                    console.log(Prefix);
                 }
                 Decimal_Digits = Prefix;
                 RepeatFlag = false;
                 ApproxFlag = true;
             }
             if (Prefix.length + Repetend.length < p_min) {
-                console.log('Decimal Count is lower than p_min. Prefix length:', Prefix.length, 'Repetend length:', Repetend.length);
+                //console.log('Decimal Count is lower than p_min. Prefix length:', Prefix.length, 'Repetend length:', Repetend.length);
                 if ((p_min - (Prefix.length + Repetend.length)) >= Repetend.length) {
-                    console.log('Multiplying repetend. Remaining space:', p_min - (Prefix.length + Repetend.length), 'Repetend length:', Repetend.length, 'Multiply by:', Math.floor((p_min - (Prefix.length + Repetend.length)) / Repetend.length));
+                    //console.log('Multiplying repetend. Remaining space:', p_min - (Prefix.length + Repetend.length), 'Repetend length:', Repetend.length, 'Multiply by:', Math.floor((p_min - (Prefix.length + Repetend.length)) / Repetend.length));
                     Repetend += Repetend.repeat(Math.floor((p_min - (Prefix.length + Repetend.length)) / Repetend.length));
-                    console.log('New Repetend:', Repetend);
+                    //console.log('New Repetend:', Repetend);
                 }
                 while (Prefix.length + Repetend.length < p_min) {
                     Prefix = Prefix.concat(Repetend[0]);
@@ -312,7 +338,7 @@
             }
         }
 
-        if (RepeatFlag == true) console.log('Prefix:', Prefix, '; Repetend:', Repetend);
+        // if (RepeatFlag == true) console.log('Prefix:', Prefix, '; Repetend:', Repetend);
 
         if (RepeatFlag == true) {
             if (Repetend.length == 1 && (Prefix.length + Repetend.length < p_max) && RepeatSinglesFlag == true) { Repetend = Repetend.repeat(2); } // Single-digit repetitions will be displayed twice, i.e. 4/3 will result in 1.(33) rather than 1.(3)
@@ -322,15 +348,147 @@
             Result += Decimal_Digits;
         }
 
+        Result = GroupDigits(Result, Thousands, Thousandths, Radix_Point);
+
         Result = Sign.concat(Result);
 
         if (ApproxFlag == true) {
             Result = Approx.concat(Result);
         }
 
-        if (Result[Result.length - 1] == Radix_Point) { Result = Result.replace(Radix_Point, ''); }
+        if (Result[Result.length - 1] == Radix_Point) { Result = Result.replace(Radix_Point, ''); } // Remove decimal point if there are no digits after it
+
+        Result = Result.concat(SI_Prefix); // Attach SI prefix (it's a blank string if N/A)
+
         return Result;
 
-        //return Result * Sign;
     }
+
+
+    function parseFormatString(string) {
+        string = string.toLowerCase();
+
+        var options = {
+            'leading_digits': 1,
+            'p_max': 4,
+            'p_min': 0,
+            'thousands': ',',
+            'approx': '&approx;',
+            'minus': '-',
+            'plus': '',
+            'si': false
+        }
+
+        // Check for invalid characters
+        check = string.match(/[^-+!0.,si\[\] ]/g) || [];
+        if (check.length > 1) {
+            console.log('Error in parseFormatString(): Input contains invalid character(s): ' + check);
+            return options;
+        }
+
+        var integer_minimum_digits = 1; // Minimum number of digits for integer portion of number (pad with leading zeros if result has fewer)
+        var decimal_minimum_digits = 0;
+        var decimal_maximum_digits = 3;
+        var thousands_separator = '' // Character to use for separating thousands
+        var approx_symbol = '&approx;';
+        var Msign = '-'; // Hyphen-minus character by default
+        var Psign = ''; // Blank string by default; will be set to '+' to force sign on positive numbers
+
+        if (string.indexOf('.' == -1)) {
+        // If string does not have a decimal point, add one at the end
+            string = string.concat('.');
+        }
+
+        // Determine the minimum number of integer digits from the number of zeros in front of the decimal point
+        options['leading_digits'] = (string.slice(0, string.indexOf('.')).match(/0/g) || []).length;
+
+        if (string.indexOf(',') != -1) { options['thousands'] = ','; }
+        if (string.indexOf('!') != -1) { options['approx'] = ''; }
+        if (string.indexOf('-') != -1) { options['minus'] = '&minus;'; }
+        if (string.indexOf('+') != -1) { options['plus'] = '+'; }
+        if (string.indexOf('si') != -1) { options['si'] = true; }
+
+        options['p_max'] = (string.slice(string.indexOf('.')).match(/0/g) || []).length;
+        otpions['p_min'] = options['p_max'];
+
+        if (string.indexOf('[') != -1 || string.indexOf(']') != -1) {
+            if (string.indexOf('[') == -1) { console.log('Error in parseFormatString(): Invalid syntax: Closing bracket used without an open bracket'); return options; }
+            if (string.indexOf(']') == -1) { console.log('Error in parseFormatString(): Invalid syntax: Open bracket used without a closing bracket'); return options; }
+            if (string.indexOf('[') < string.indexOf('.')) { console.log('Error in parseFormatString(): Invalid syntax: Bracket appears in front of decimal point.'); return options; }
+            if (string.indexOf('[') > string.indexOf(']')) { console.log('Error in parseFormatString(): Invalid syntax: Open bracket (\'[\') appears after closing bracket (\']\')'); return options; }
+            if ((string.match(/\[/g) || []).length > 1) { console.log('Error in parseFormatString(): Invalid syntax: Multiple open brackets detected'); return options; }
+            if ((string.match(/\]/g) || []).length > 1) { console.log('Error in parseFormatString(): Invalid syntax: Multiple closing brackets detected'); return options; }
+            if (string.lastIndexOf('0') > string.indexOf(']')) { console.log('Error in parseFormatString(): Invalid syntax: Zeros detected after closing bracket'); return options; }
+
+            options['p_min'] = options['p_max'] - (string.slice(string.indexOf('[') + 1, string.indexOf(']')).match(/0/g) || []).length;
+        }
+
+        return options;
+    }
+
+
+    function exponential_toFixed(num) {
+        var str = num.toString().toLowerCase();
+        if (str.indexOf('e') == -1) { return num; } // Number is not in exponential form; return input as-is
+        console.log('Exponential: ' + str);
+
+        var parts = str.split('e');
+        var base = parts[0];
+        var power = parts[1];
+
+        var integer;
+        var decimal;
+
+        if (base.indexOf('.') == -1) {
+            integer = base;
+            decimal = '';
+        }
+        else {
+            parts = base.split('.');
+            integer = parts[0];
+            decimal = parts[1];
+        }
+
+        if (integer[0] == '-') {
+            sign = '-'; // Record that the number is negative.
+            integer = integer.slice(1, integer.length); // Remove the minus sign from the front of the working number
+        }
+        else { sign = '+'; }
+
+        power_sign = power[0];
+        power = parseInt(power.slice(1, power.length));
+
+        var newbase;
+        var result;
+
+        console.log('Power: ', power);
+        console.log('Integer.length: ', integer.length);
+        console.log('Decimal.length: ', decimal.length);
+
+        if (power_sign == '+') {
+            if (decimal.length <= power) {
+                result = ( integer + decimal + ('0'.repeat(power - decimal.length)) );
+            }
+            else if (decimal.length > power) {
+                result = ( integer + decimal.slice(0, power) + '.' + decimal.slice(power, decimal.length) );
+            }
+        }
+
+        else if (power_sign == '-') {
+            result = ( '0.' + ('0'.repeat(power - 1)) + integer + decimal );
+        }
+
+        console.log('Fixed: ', result);
+        return result;
+    }
+
+    function GroupDigits(number, thousands, thousandths, decimal) {
+        // Modified from https://stackoverflow.com/a/2901298
+        var parts = number.toString().split('.');
+        parts[0] = parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, thousands);
+        parts[1] = parts[1].split('').reverse().join('').replace(/\B(?=(\d{3})+(?!\d))/g, thousandths).split('').reverse().join('');
+        return parts.join(decimal);
+    }
+
+ 
 </script>
