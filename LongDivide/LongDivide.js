@@ -1,10 +1,24 @@
+/*
+
+LongDivide.js
+Created by Glenwing (https://github.com/Glenwing)
+
+Version: 1.0.1
+October 12, 2019
+
+*/
+
 function LongDivide(A, B, options) {
-    //console.log('BEGIN:', A, '÷', B)
+    Decimal.set( {'precision': 1000 } )
+    console.log('BEGIN:', A, '÷', B)
     if (A == '' || B == '') { return ''; }
-    if ( Number.isNaN(parseFloat(A)) || Number.isNaN(parseFloat(B)) || !Number.isFinite(parseFloat(A)) || !Number.isFinite(parseFloat(B)) || !Number.isFinite(parseFloat(A)/parseFloat(B)) || Number.isNaN(parseFloat(A)/parseFloat(B)) ) { console.log('Error in function LongDivide(): One or both inputs is NaN or Infinity. Function aborted.'); return 'Error'; }
+    if ( Number.isNaN(parseFloat(A)) || Number.isNaN(parseFloat(B)) || !Number.isFinite(parseFloat(A)) || !Number.isFinite(parseFloat(B)) || !Number.isFinite(parseFloat(A)/parseFloat(B)) || Number.isNaN(parseFloat(A)/parseFloat(B)) ) { console.log('Error in function LongDivide(): One or both inputs is NaN or Infinity, or there is a division by zero. Function aborted.'); return 'Error'; }
 
     A = new Decimal(A);
     B = new Decimal(B);
+
+    //console.log('Decimals:\nA:', A.toFixed(A.dp()).toString(), '(' + A.toFixed(A.dp()).toString().length + ')', '\nB', B.toFixed(B.dp()).toString(), '(' + B.toFixed(B.dp()).toString().length + ')');
+    //console.log('Decimal Places:\nA:', A.dp(), '\nB:', B.dp());
 
     if (typeof(options) === 'number') { // If 3rd argument is a number rather than a dictionary, use it as the P_Max value
         var P_Max = options;
@@ -159,15 +173,16 @@ function LongDivide(A, B, options) {
         if (A.div(B).round().isZero()) { Sign = ''; }
         if (A.div(B).round().isNegative()) { Sign = Minus_Char; } // If the number is negative, attach the Minus sign character set in options
         else { Sign = Plus_Char; } // Otherwise, attach the Plus sign character set in options (blank string by default)
-        var Result = Sign.concat(A.div(B).round().abs().toString());
+        var Result = A.div(B).round().abs();
+        Result = Sign.concat(Result.toFixed(Result.dp())); // toFixed avoids exponential notation when Result is converted to a string in the next line
         // Result is now a string
         if (!(A.div(B).equals(A.div(B).round()))) { Result = Approx_Char.concat(Result); } // If input numbers are not evenly divisible, attach the approximation sign set in options
         return Result.concat(SI_Prefix);
     }
 
     // Handle floating point numbers by multiplying them by 10 until they are integers        
-    A = A.toString();
-    B = B.toString();
+    A = A.toFixed(A.dp());
+    B = B.toFixed(B.dp());
     if (A.indexOf('.') != -1 || B.indexOf('.') != -1) {
         if (A.indexOf('.') == -1) { A = A + '.'; }
         if (B.indexOf('.') == -1) { B = B + '.'; }
@@ -183,8 +198,11 @@ function LongDivide(A, B, options) {
     A = new Decimal(A);
     B = new Decimal(B);
 
+    console.log('Decimal 2:\nA:', A.toFixed(A.dp()), '\nB:', B.toFixed(B.dp()));
+
     // Determine if answer will be negative, set Sign to the appropriate sign, then take the absolute value for the rest of the calculations.
-    if ((A.lessThan(0)) ? !(B.lessThan(0)) : (B.lessThan(0))) { Sign = Minus_Char; } // If (A is negative) XOR (B is negative) then final result will be negative.
+    if (A.div(B).isZero()) { Sign = ''; }
+    else if (A.isNegative() ? !(B.isNegative()) : B.isNegative()) { Sign = Minus_Char; } // If (A is negative) XOR (B is negative) then final result will be negative.
     else { Sign = Plus_Char; } // Plus_Char is a blank string by default, but can be set to '+' to force sign for positive numbers
     A = A.abs();
     B = B.abs();
@@ -206,12 +224,13 @@ function LongDivide(A, B, options) {
     var RepeatFlag = false;
     var ApproxFlag = true;
 
-    Quotient  = Dividend.dividedBy(Divisor).floor();
+    Quotient  = Dividend.dividedBy(Divisor).floor(); console.log('Quotient DP:', Quotient.dp(), '\nQuotient String:', Quotient.toFixed(0));
     Remainder = Dividend.modulo(Divisor);
     Dividend = Remainder.times(Base);
 
     // The initial Quotient floor division above determines the front part of the number immediately
-    Integer = Quotient.toString();
+    Integer = Quotient.toFixed(Quotient.dp());
+    console.log('Integer:', Integer)
 
     //console.log('Quotient:', Quotient.toNumber(), 'Remainder:', Remainder.toNumber(), 'Dividend:', Dividend.toNumber(), 'Decimal_Digits:', Decimal_Digits, 'Previous Dividends:', Previous_Dividends);
 
@@ -229,7 +248,7 @@ function LongDivide(A, B, options) {
             Remainder = Dividend.modulo(Divisor);
             Dividend  = Remainder.times(Base);
 
-            Decimal_Digits += Quotient.toString();
+            Decimal_Digits += Quotient.toFixed(Quotient.dp());
 
             //console.log('i:', i, 'Quotient:', Quotient.toNumber(), 'Remainder:', Remainder.toNumber(), 'Dividend:', Dividend.toNumber(), 'Result:', Result, 'Decimal_Digits:', Decimal_Digits);
         }
@@ -272,7 +291,8 @@ function LongDivide(A, B, options) {
         // Rounds result when Decimal_Digits is longer than P_Max (to obey the maximum precision specified in the options)
         if (Decimal_Digits.length > P_Max) { //console.log('Rounding decimals.'); //console.log('Decimal_Digits:', Decimal_Digits.toNumber(), 'Decimal_Digits.toString().length:', Decimal_Digits.toString().length);
             Decimal_Digits = Decimal_Digits.slice(0, P_Max).concat('.').concat(Decimal_Digits.slice(P_Max)); // console.log('Decimal_Digits 1:', Decimal_Digits); // console.log('Decimal_Digits.slice(0, Decimal_Digits.indexOf(\'.\')):', Decimal_Digits.slice(0, Decimal_Digits.indexOf('.')));
-            Decimal_Digits = '0'.repeat(P_Max - parseFloat(Decimal_Digits).toFixed(0).toString().length).concat((new Decimal(Decimal_Digits)).round().toFixed(0).toString())
+            //Decimal_Digits = '0'.repeat(P_Max - parseFloat(Decimal_Digits).toFixed(0).toString().length).concat((new Decimal(Decimal_Digits)).round().toFixed(0).toString())
+            Decimal_Digits = '0'.repeat(P_Max - (new Decimal(Decimal_Digits)).floor().toFixed(0).length).concat((new Decimal(Decimal_Digits)).round().toFixed(0))
             // An approximation sign is added when the result is rounded, to indicate a non-exact result
             Approx = Approx_Char;
         }
@@ -290,7 +310,7 @@ function LongDivide(A, B, options) {
         if (Prefix.length + Repetend.length > P_Max) {
             if (Prefix.length > P_Max) {
                 Prefix = new Decimal(Prefix.substr(0, P_Max) + '.' + Prefix.substr(P_Max));
-                Prefix = Prefix.round().toString();
+                Prefix = Prefix.round().toFixed(0);
                 if (P_Max - Prefix.length >= 0) {
                     // Leading zeros in the prefix are lost in string<->number conversions above. This adds them back in.
                     Prefix = '0'.repeat(P_Max - Prefix.length).concat(Prefix);
@@ -414,10 +434,10 @@ LongDivide.parseFormatString = function(options) {
 
 LongDivide.GroupDigits = function(number, thousands, thousandths, decimal) {
     // Modified from https://stackoverflow.com/a/2901298
-    console.log('GroupDigits():\nnumber:', number, '\nthousands:', thousands, '\nthousandths', thousandths, '\ndecimal', decimal);
+    //console.log('GroupDigits():\nnumber:', number, '\nthousands:', thousands, '\nthousandths', thousandths, '\ndecimal', decimal);
     var parts = number.toString().split('.');
     parts[0] = parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, thousands);
     parts[1] = parts[1].split('').reverse().join('').replace(/\B(?=(\d{3})+(?!\d))/g, thousandths.split('').reverse().join('')).split('').reverse().join('');
-    console.log('LongDivide.GroupDigits(): ' + parts.join(decimal));
+    //console.log('LongDivide.GroupDigits(): ' + parts.join(decimal));
     return parts.join(decimal);
 }
