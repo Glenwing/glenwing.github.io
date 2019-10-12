@@ -10,7 +10,7 @@ October 12, 2019
 
 function LongDivide(A, B, options) {
     Decimal.set( {'precision': 1000 } )
-    console.log('BEGIN:', A, '÷', B)
+    //console.log('BEGIN:', A, '÷', B)
     if (A == '' || B == '') { return ''; }
     if ( Number.isNaN(parseFloat(A)) || Number.isNaN(parseFloat(B)) || !Number.isFinite(parseFloat(A)) || !Number.isFinite(parseFloat(B)) || !Number.isFinite(parseFloat(A)/parseFloat(B)) || Number.isNaN(parseFloat(A)/parseFloat(B)) ) { console.log('Error in function LongDivide(): One or both inputs is NaN or Infinity, or there is a division by zero. Function aborted.'); return 'Error'; }
 
@@ -191,7 +191,7 @@ function LongDivide(A, B, options) {
         if (Multiplier - (B.length - B.indexOf('.') - 1) > 0) B = B + '0'.repeat(Multiplier - (B.length - B.indexOf('.') - 1));
         A = A.slice(0, A.indexOf('.')) + A.slice(A.indexOf('.') + 1, A.length); // Remove the decimal point from each number
         B = B.slice(0, B.indexOf('.')) + B.slice(B.indexOf('.') + 1, B.length);
-        console.log('Warning in function LongDivide(): Float inputs detected. Results multiplied by 10^' + Multiplier + '.', 'A =', A, 'B =', B);
+        //console.log('Warning in function LongDivide(): Float inputs detected. Inputs multiplied by 10^' + Multiplier + ' to eliminate floats.', '\nA:', A, '\nB:', B);
     }
     // End floating point section
 
@@ -230,7 +230,7 @@ function LongDivide(A, B, options) {
 
     // The initial Quotient floor division above determines the front part of the number immediately
     Integer = Quotient.toFixed(Quotient.dp());
-    console.log('Integer:', Integer)
+    //console.log('Integer:', Integer)
 
     //console.log('Quotient:', Quotient.toNumber(), 'Remainder:', Remainder.toNumber(), 'Dividend:', Dividend.toNumber(), 'Decimal_Digits:', Decimal_Digits, 'Previous Dividends:', Previous_Dividends);
 
