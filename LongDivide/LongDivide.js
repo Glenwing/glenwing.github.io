@@ -198,8 +198,6 @@ function LongDivide(A, B, options) {
     A = new Decimal(A);
     B = new Decimal(B);
 
-    console.log('Decimal 2:\nA:', A.toFixed(A.dp()), '\nB:', B.toFixed(B.dp()));
-
     // Determine if answer will be negative, set Sign to the appropriate sign, then take the absolute value for the rest of the calculations.
     if (A.div(B).isZero()) { Sign = ''; }
     else if (A.isNegative() ? !(B.isNegative()) : B.isNegative()) { Sign = Minus_Char; } // If (A is negative) XOR (B is negative) then final result will be negative.
@@ -224,7 +222,7 @@ function LongDivide(A, B, options) {
     var RepeatFlag = false;
     var ApproxFlag = true;
 
-    Quotient  = Dividend.dividedBy(Divisor).floor(); console.log('Quotient DP:', Quotient.dp(), '\nQuotient String:', Quotient.toFixed(0));
+    Quotient  = Dividend.dividedBy(Divisor).floor();
     Remainder = Dividend.modulo(Divisor);
     Dividend = Remainder.times(Base);
 

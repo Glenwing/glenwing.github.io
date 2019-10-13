@@ -205,7 +205,7 @@ options = {
             var result = LongDivide(A.toString(), B.toString(), format);
         }*/
         var result = LongDivide(A.toString(), B.toString(), options);
-        document.getElementById('long_div_result').innerHTML = result;
+        document.getElementById('long_div_result').innerHTML = result + (result == 'Error' ? ' (check console)' : '');
         document.getElementById('standard_result').innerHTML = (parseFloat(A) / parseFloat(B));
     }
 
