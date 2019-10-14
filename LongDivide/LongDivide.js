@@ -3,7 +3,7 @@
 LongDivide.js
 Created by Glenwing (https://github.com/Glenwing)
 
-Version: 1.0.1
+Version: 1.0.2
 October 12, 2019
 
 */
@@ -58,6 +58,10 @@ function LongDivide(A, B, options) {
         // Character used for grouping thousandths (i.e. 1.0000000001 -> 1.000 000 000 1)
         var Thousandths_Char =   options['thousandths'] !== undefined ? options['thousandths'] :
             '';
+
+        // Flag to allow an "orphan" digit after a thousandths separator if there is only 1 digit left (if false, thousandth grouping will prefer a group of 4 digits at the end rather than an orphan digit)
+        var Orphans =            options['orphan'] !== undefined ? options['orphan'] : options['orphans'] !== undefined ? options['orphans'] :
+            false;
 
         // Number base system to use
         var Base =               options['base'] !== undefined ? options['base'] :
@@ -346,7 +350,7 @@ function LongDivide(A, B, options) {
         if (Repetend.length == 1 && (Prefix.length + Repetend.length < P_Max) && RepeatSinglesFlag == true) { Repetend = Repetend.repeat(2); }
 
         // Construct final number (for repeating results) and add digit grouping
-        Result = LongDivide.GroupDigits(Result.concat(Prefix).concat(Repetend), Thousands_Char, Thousandths_Char, Decimal_Point_Char);
+        Result = LongDivide.GroupDigits(Result.concat(Prefix).concat(Repetend), Thousands_Char, Thousandths_Char, Decimal_Point_Char, Orphans);
 
         // Adds overline tags; Some fancy footwork is needed here to skip over the thousandths separators
         Result = Result.slice(0, Result.indexOf(Decimal_Point_Char) + 1 + Prefix.length + (Thousandths_Char.length * Math.floor(Prefix.length / 3))) + OL_open + Result.slice(Result.indexOf(Decimal_Point_Char) + 1 + Prefix.length + (Thousandths_Char.length * Math.floor(Prefix.length / 3))) + OL_close;
@@ -354,7 +358,7 @@ function LongDivide(A, B, options) {
     }
     else {
         // Construct final number (for non-repeating results) and add digit grouping
-        Result = LongDivide.GroupDigits(Result + Decimal_Digits, Thousands_Char, Thousandths_Char, Decimal_Point_Char);
+        Result = LongDivide.GroupDigits(Result + Decimal_Digits, Thousands_Char, Thousandths_Char, Decimal_Point_Char, Orphans);
     }
 
     // Remove decimal point if there are no digits after it
@@ -430,12 +434,18 @@ LongDivide.parseFormatString = function(options) {
 }
 
 
-LongDivide.GroupDigits = function(number, thousands, thousandths, decimal) {
+LongDivide.GroupDigits = function(number, thousands, thousandths, decimal, orphans) {
     // Modified from https://stackoverflow.com/a/2901298
     //console.log('GroupDigits():\nnumber:', number, '\nthousands:', thousands, '\nthousandths', thousandths, '\ndecimal', decimal);
     var parts = number.toString().split('.');
     parts[0] = parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, thousands);
     parts[1] = parts[1].split('').reverse().join('').replace(/\B(?=(\d{3})+(?!\d))/g, thousandths.split('').reverse().join('')).split('').reverse().join('');
     //console.log('LongDivide.GroupDigits(): ' + parts.join(decimal));
+    // Remove the last thousandths separator if there is an orphan digit and orphans have been disallowed in options
+    if (parts[1] != '' && thousandths != '') {
+        if (number.split('.')[1].length % 3 == 1 && parts[1].indexOf(thousandths) != -1 && orphans == false) {
+            parts[1] = parts[1].slice(0, parts[1].lastIndexOf(thousandths)).concat(parts[1].slice(parts[1].lastIndexOf(thousandths) + thousandths.length));
+        }
+    }
     return parts.join(decimal);
 }
