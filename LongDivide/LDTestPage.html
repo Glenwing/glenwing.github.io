@@ -1,4 +1,4 @@
-
+<title>LongDivide.js Test Page</title>
 <body style="background-color:#333333; color:#EEEEEE; font-family:arial, inconsolata, monospace, sans-serif; font-size:24px;">
 <div>
     Test page for long division algorithm with repeating decimal detection<br><br>
@@ -205,24 +205,15 @@ options = {
         if (P_Min != '') { options['p_min'] = P_Min; }
         var Leading = document.getElementById('leading_box').value;
         if (Leading != '') { options['leading'] = Leading; }
-        var Thousands = document.getElementById('thousands_box').value;
-        if (Thousands != '') { options['thousands'] = Thousands; }
-        var Thousandths = document.getElementById('thousandths_box').value;
-        if (Thousandths != '') { options['thousandths'] = Thousandths; }
-        var Decimal = document.getElementById('decimal_box').value;
-        if (Decimal != '') { options['decimal'] = Decimal; }
-        var Minus = document.getElementById('minus_box').value;
-        if (Minus != '') { options['minus'] = Minus; }
-        var Plus = document.getElementById('plus_box').value;
-        if (Plus != '') { options['plus'] = Plus; }
-        var Approx = document.getElementById('approx_box').value;
-        if (Approx != '') { options['approx'] = Approx; }
-        var Currency = document.getElementById('currency_box').value;
-        if (Currency != '') { options['currency'] = Currency; }
-        var OL_open = document.getElementById('ol_open_box').value;
-        if (OL_open != '') { options['OL_open'] = OL_open; }
-        var OL_close = document.getElementById('ol_close_box').value;
-        if (OL_close != '') { options['OL_close'] = OL_close; }
+        options['thousands'] =   document.getElementById('thousands_box').value;
+        options['thousandths'] = document.getElementById('thousandths_box').value;
+        options['decimal'] =     document.getElementById('decimal_box').value;
+        options['minus'] =       document.getElementById('minus_box').value;
+        options['plus'] =        document.getElementById('plus_box').value;
+        options['approx'] =      document.getElementById('approx_box').value;
+        options['currency'] =    document.getElementById('currency_box').value;
+        options['OL_open'] = document.getElementById('ol_open_box').value;
+        options['OL_close'] = document.getElementById('ol_close_box').value;
 
         options['2_singles'] = document.getElementById('singles').checked;
         options['repeat'] = document.getElementById('repeat').checked;
