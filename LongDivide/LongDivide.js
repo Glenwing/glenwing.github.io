@@ -3,14 +3,14 @@
 LongDivide.js
 Created by Glenwing (https://github.com/Glenwing)
 
-Version: 1.0.2
-October 12, 2019
+Version: 1.1.0
+October 14, 2019
 
 */
 
 function LongDivide(A, B, options) {
-    Decimal.set( {'precision': 1000 } )
     //console.log('BEGIN:', A, '÷', B)
+    try { Decimal.set({'precision': 1000 }) } catch (ReferenceError) { console.log('Error in function LongDivide(): Decimal.js library not detected. LongDivide.js requires Decimal.js in order to operate. (https://github.com/MikeMcl/decimal.js)'); return 'Error'; }
     if (A == '' || B == '') { return ''; }
     if ( Number.isNaN(parseFloat(A)) || Number.isNaN(parseFloat(B)) || !Number.isFinite(parseFloat(A)) || !Number.isFinite(parseFloat(B)) || !Number.isFinite(parseFloat(A)/parseFloat(B)) || Number.isNaN(parseFloat(A)/parseFloat(B)) ) { console.log('Error in function LongDivide(): One or both inputs is NaN or Infinity, or there is a division by zero. Function aborted.'); return 'Error'; }
 
@@ -20,8 +20,9 @@ function LongDivide(A, B, options) {
     //console.log('Decimals:\nA:', A.toFixed(A.dp()).toString(), '(' + A.toFixed(A.dp()).toString().length + ')', '\nB', B.toFixed(B.dp()).toString(), '(' + B.toFixed(B.dp()).toString().length + ')');
     //console.log('Decimal Places:\nA:', A.dp(), '\nB:', B.dp());
 
-    if (typeof(options) === 'number') { // If 3rd argument is a number rather than a dictionary, use it as the P_Max value
+    if (typeof(options) === 'number') { // If 3rd argument is a number rather than a dictionary, use it as the P_Max and P_Min value
         var P_Max = options;
+        var P_Min = options;
     }
     else {
         if (typeof(options) === 'string') { options = LongDivide.parseFormatString(options); }
