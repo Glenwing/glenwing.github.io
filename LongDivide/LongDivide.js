@@ -3,7 +3,7 @@
 LongDivide.js
 Created by Glenwing (https://github.com/Glenwing)
 
-Version: 1.2.0
+Version: 1.2.1
 October 16, 2019
 
 */
@@ -22,105 +22,102 @@ function LongDivide(A, B, options) {
     //console.log('Decimals:\nA:', A.toFixed(A.dp()).toString(), '(' + A.toFixed(A.dp()).toString().length + ')', '\nB', B.toFixed(B.dp()).toString(), '(' + B.toFixed(B.dp()).toString().length + ')');
     //console.log('Decimal Places:\nA:', A.dp(), '\nB:', B.dp());
 
-    if (typeof(options) === 'number') { // If 3rd argument is a number rather than a dictionary, use it as the P_Max and P_Min value
-        var P_Max = options;
-        var P_Min = options;
-    }
-    else {
-        if (typeof(options) === 'string') { options = LongDivide.parseFormatString(options); }
-        else if ('format' in options) { options = LongDivide.parseFormatString(options); }
+    if (typeof(options) === 'number') { options = {'p': options} } // If 3rd argument is a number rather than a dictionary, use it as the P_Max and P_Min value
+    else if (typeof(options) === 'string') { options = LongDivide.parseFormatString(options); } // If 3rd argument is a string, send it through the format string parser
+    else if ('format' in options) { options = LongDivide.parseFormatString(options); } // If 3rd argument is a dictionary that contains a 'format' entry, send it through the format string parser
 
-        // Overline markup opening tag
-        var OL_open =            options['OL_open'] !== undefined ? options['OL_open'] :
-            '<span style="text-decoration:overline;">'; // Default value
+    // Set variables according to entries specified in options dictionary
 
-        // Overline markup closing tag. Used in conjunction with OL_open to surround the repeating numbers. May be set to control markup, separate it with parentheses, or simply left blank, etc.
-        var OL_close =           options['OL_close'] !== undefined ? options['OL_close'] :
-            '</span>';
-        
-        // Maximum number of decimal places; option 'p' (for setting both min and max precision together) takes priority if set
-        var P_Max =              options['p'] !== undefined ? options['p'] : options['p_max'] !== undefined ? options['p_max'] : options['pmax'] !== undefined ? options['pmax'] :
-            8;
+    // Overline markup opening tag
+    var OL_open =            options['OL_open'] !== undefined ? options['OL_open'] :
+        '<span style="text-decoration:overline;">'; // Default value
 
-        // Minimum number of decimal places; option 'p' (for setting both min and max precision together) takes priority if set
-        var P_Min =              options['p'] !== undefined ? options['p'] : options['p_min'] !== undefined ? options['p_min'] : options['pmin'] !== undefined ? options['pmin'] :
-            0;
+    // Overline markup closing tag. Used in conjunction with OL_open to surround the repeating numbers. May be set to control markup, separate it with parentheses, or simply left blank, etc.
+    var OL_close =           options['OL_close'] !== undefined ? options['OL_close'] :
+        '</span>';
+    
+    // Maximum number of decimal places; option 'p' (for setting both min and max precision together) takes priority if set
+    var P_Max =              options['p'] !== undefined ? options['p'] : options['p_max'] !== undefined ? options['p_max'] : options['pmax'] !== undefined ? options['pmax'] :
+        8;
 
-        // Minimum number of digits in the integer part of the number. Leading zeros are added if necessary.
-        var Leading_Digits =     options['leading'] !== undefined ? options['leading'] :
-            1;
+    // Minimum number of decimal places; option 'p' (for setting both min and max precision together) takes priority if set
+    var P_Min =              options['p'] !== undefined ? options['p'] : options['p_min'] !== undefined ? options['p_min'] : options['pmin'] !== undefined ? options['pmin'] :
+        0;
 
-        // Character to use for the radix point (decimal point)
-        var Decimal_Point_Char = options['decimal'] !== undefined ? options['decimal'] :
-            '.';
+    // Minimum number of digits in the integer part of the number. Leading zeros are added if necessary.
+    var Leading_Digits =     options['leading'] !== undefined ? options['leading'] :
+        1;
 
-        // Characters used for grouping thousands (i.e. 10000 -> 10,000)
-        var Thousands_Char =     options['thousands'] !== undefined ? options['thousands'] :
-            '';
+    // Character to use for the radix point (decimal point)
+    var Decimal_Point_Char = options['decimal'] !== undefined ? options['decimal'] :
+        '.';
 
-        // Character used for grouping thousandths (i.e. 1.0000000001 -> 1.000 000 000 1)
-        var Thousandths_Char =   options['thousandths'] !== undefined ? options['thousandths'] :
-            '';
+    // Characters used for grouping thousands (i.e. 10000 -> 10,000)
+    var Thousands_Char =     options['thousands'] !== undefined ? options['thousands'] :
+        '';
 
-        // Flag to allow an "orphan" digit after a thousandths separator if there is only 1 digit left (if false, thousandth grouping will prefer a group of 4 digits at the end rather than an orphan digit)
-        var Orphans =            options['orphan'] !== undefined ? options['orphan'] : options['orphans'] !== undefined ? options['orphans'] :
-            false;
+    // Character used for grouping thousandths (i.e. 1.0000000001 -> 1.000 000 000 1)
+    var Thousandths_Char =   options['thousandths'] !== undefined ? options['thousandths'] :
+        '';
 
-        // Number base system to use
-        var Base =               options['base'] !== undefined ? options['base'] :
-            10;
+    // Flag to allow an "orphan" digit after a thousandths separator if there is only 1 digit left (if false, thousandth grouping will prefer a group of 4 digits at the end rather than an orphan digit)
+    var Orphans =            options['orphan'] !== undefined ? options['orphan'] : options['orphans'] !== undefined ? options['orphans'] :
+        false;
 
-        // Character to preceed negative numbers
-        var Minus_Char =         options['minus'] !== undefined ? options['minus'] :
-            '\u2212';
+    // Number base system to use
+    var Base =               options['base'] !== undefined ? options['base'] :
+        10;
 
-        // Character to preceed positive numbers; blank string by default
-        var Plus_Char =          options['plus'] !== undefined ? options['plus'] :
-            '';
+    // Character to preceed negative numbers
+    var Minus_Char =         options['minus'] !== undefined ? options['minus'] :
+        '\u2212';
 
-        // Symbol to be used for "approximately equal to". Can be set to '~' or blank if desired, etc.
-        var Approx_Char =        options['approx'] !== undefined ? options['approx'] : options['~'] !== undefined ? options['~'] :
-            '\u2248';
+    // Character to preceed positive numbers; blank string by default
+    var Plus_Char =          options['plus'] !== undefined ? options['plus'] :
+        '';
 
-        // Currency symbol to be inserted between the sign and number. Leave blank to have no currency.
-        var Currency_Char =      options['currency'] !== undefined ? options['currency'] :
-            '';
+    // Symbol to be used for "approximately equal to". Can be set to '~' or blank if desired, etc.
+    var Approx_Char =        options['approx'] !== undefined ? options['approx'] : options['~'] !== undefined ? options['~'] :
+        '\u2248';
 
-        // Flag indicating whether SI prefixes are desired or not
-        var SI =                 options['si'] !== undefined ? options['si'] : options['SI'] !== undefined ? options['SI'] :
-            false;
+    // Currency symbol to be inserted between the sign and number. Leave blank to have no currency.
+    var Currency_Char =      options['currency'] !== undefined ? options['currency'] :
+        '';
 
-        // Flag indicating whether single-digit repeating patterns should be doubled; i.e. display as 1.(33) instead of 1.(3)
-        var RepeatSinglesFlag =  options['2_singles'] !== undefined ? options['2_singles'] :
-            true;
+    // Flag indicating whether SI prefixes are desired or not
+    var SI =                 options['si'] !== undefined ? options['si'] : options['SI'] !== undefined ? options['SI'] :
+        false;
 
-        // Flag indicating whether repeating decimal detection should be enabled or not
-        var RepeatEnableFlag =   options['repeat'] !== undefined ? options['repeat'] :
-            true;
+    // Flag indicating whether single-digit repeating patterns should be doubled; i.e. display as 1.(33) instead of 1.(3)
+    var RepeatSinglesFlag =  options['2_singles'] !== undefined ? options['2_singles'] :
+        true;
 
-        // Exponential notation specifier; 'e', 'ex', 'ed', or 'custom'
-        var Exponential =        options['exp'] !== undefined ? options['exp'] : options['e'] !== undefined ? options['e'] :
-            '';
+    // Flag indicating whether repeating decimal detection should be enabled or not
+    var RepeatEnableFlag =   options['repeat'] !== undefined ? options['repeat'] :
+        true;
 
-        // String to be placed before the exponential power and sign; only valid when options['exp'] is set to 'custom'
-        var Exp_open =           options['exp_open'] !== undefined ? options['exp_open'] :
-            'e';
+    // Exponential notation specifier; 'e', 'ex', 'ed', or 'custom'
+    var Exponential =        options['exp'] !== undefined ? options['exp'] : options['e'] !== undefined ? options['e'] :
+        '';
 
-        // String to be placed after the exponential power; only valid when options['exp'] is set to 'custom'
-        var Exp_close =          options['exp_close'] !== undefined ? options['exp_close'] :
-            '';
+    // String to be placed before the exponential power and sign; only valid when options['exp'] is set to 'custom'
+    var Exp_open =           options['exp_open'] !== undefined ? options['exp_open'] :
+        'e';
 
-        // String to be placed before negative exponential powers; only valid when options['exp'] is set to 'custom'
-        var Exp_minus =           options['exp_minus'] !== undefined ? options['exp_minus'] :
-            Minus_Char;
+    // String to be placed after the exponential power; only valid when options['exp'] is set to 'custom'
+    var Exp_close =          options['exp_close'] !== undefined ? options['exp_close'] :
+        '';
 
-        // String to be placed before non-negative exponential powers; only valid when options['exp'] is set to 'custom'
-        var Exp_plus =            options['exp_plus'] !== undefined ? options['exp_plus'] :
-            Plus_Char;
+    // String to be placed before negative exponential powers; only valid when options['exp'] is set to 'custom'
+    var Exp_minus =           options['exp_minus'] !== undefined ? options['exp_minus'] :
+        Minus_Char;
 
-        // If OL open and closing tags are blanked, assume the user means to disable repeating decimal detection
-        if (OL_open == '' && OL_close == '') { RepeatEnableFlag = false; options['repeat'] = false; }
-    }
+    // String to be placed before non-negative exponential powers; only valid when options['exp'] is set to 'custom'
+    var Exp_plus =            options['exp_plus'] !== undefined ? options['exp_plus'] :
+        Plus_Char;
+
+    // If OL open and closing tags are blanked, assume the user means to disable repeating decimal detection
+    if (OL_open == '' && OL_close == '') { RepeatEnableFlag = false; options['repeat'] = false; }
 
     if (Decimal_Point_Char === Thousands_Char) { console.log('Error in function LongDivide(): Decimal point character and thousands grouping character cannot be the same.\ndecimal_point_char:' + Decimal_Point_Char + '\nthousands_char:' + Thousands_Char); return 'Error'; }
     if (Decimal_Point_Char === Thousandths_Char) { console.log('Error in function LongDivide(): Decimal point character and thousandths grouping character cannot be the same.\ndecimal_point_char:' + Decimal_Point_Char + '\nthousandths_char:' + Thousandths_Char); return 'Error'; }
