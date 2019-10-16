@@ -17,6 +17,8 @@ function LongDivide(A, B, options) {
     A = new Decimal(A);
     B = new Decimal(B);
 
+    if (typeof(options) === 'undefined') { options = {}; }
+
     //console.log('Decimals:\nA:', A.toFixed(A.dp()).toString(), '(' + A.toFixed(A.dp()).toString().length + ')', '\nB', B.toFixed(B.dp()).toString(), '(' + B.toFixed(B.dp()).toString().length + ')');
     //console.log('Decimal Places:\nA:', A.dp(), '\nB:', B.dp());
 
@@ -96,6 +98,26 @@ function LongDivide(A, B, options) {
         var RepeatEnableFlag =   options['repeat'] !== undefined ? options['repeat'] :
             true;
 
+        // Exponential notation specifier; 'e', 'ex', 'ed', or 'custom'
+        var Exponential =        options['exp'] !== undefined ? options['exp'] : options['e'] !== undefined ? options['e'] :
+            '';
+
+        // String to be placed before the exponential power and sign; only valid when options['exp'] is set to 'custom'
+        var Exp_open =           options['exp_open'] !== undefined ? options['exp_open'] :
+            'e';
+
+        // String to be placed after the exponential power; only valid when options['exp'] is set to 'custom'
+        var Exp_close =          options['exp_close'] !== undefined ? options['exp_close'] :
+            '';
+
+        // String to be placed before negative exponential powers; only valid when options['exp'] is set to 'custom'
+        var Exp_minus =           options['exp_minus'] !== undefined ? options['exp_minus'] :
+            Minus_Char;
+
+        // String to be placed before non-negative exponential powers; only valid when options['exp'] is set to 'custom'
+        var Exp_plus =            options['exp_plus'] !== undefined ? options['exp_plus'] :
+            Plus_Char;
+
         // If OL open and closing tags are blanked, assume the user means to disable repeating decimal detection
         if (OL_open == '' && OL_close == '') { RepeatEnableFlag = false; options['repeat'] = false; }
     }
@@ -110,12 +132,20 @@ function LongDivide(A, B, options) {
     if (Approx_Char.match(/[0-9]/g)) { console.log('Error in function LongDivide(): Approximation sign character cannot be a number.\nApprox_Char:', Approx_Char); return 'Error'; }
     if (Currency_Char.match(/[0-9]/g)) { console.log('Error in function LongDivide(): Currency symbol cannot be a number.\nCurrency_Char:', Currency_Char); return 'Error'; }
 
+    // Determine whether exponential notation is enabled (it's a somewhat convoluted check, so putting it on a single variable is useful)
+    var Exp_flag = false;
+    if (Exponential === true) { Exponential = 'e'; } // If Exponential is given as a boolean, interpret it as request for standard 'e'-style exponential form
+    else if (typeof(Exponential) === 'string') {
+        Exponential = Exponential.toLowerCase();
+        if (Exponential == 'e' || Exponential == 'ex' || Exponential == 'ed' || Exponential == 'custom') { Exp_flag = true; }
+    }
+
     //console.log('options:', options);
 
-    // Variables containing characters to be added when the final result is constructed
+    // Additional variables containing characters to be added when the final result is constructed
+    var Sign = Plus_Char; // Will be set to either Minus_Char or Plus_Char later depending on the inputs
+    var Approx = ''; // Will be set to Approx_Char later if the division algorithm detects a non-exact result; otherwise left as a blank string
     var SI_Prefix = '';
-    var Sign = Plus_Char;
-    var Approx = '';
 
     // Integerize variables for safety
     P_Max = Math.round(P_Max);
@@ -174,9 +204,9 @@ function LongDivide(A, B, options) {
     }
 
     // If precision is set to 0, then the standard division operator can be used to obtain the result.
-    if (P_Max == 0) { //console.log('P_Max is zero. Performing standard division operation. Preliminary Result:\n' + Result.toString() + '\n' + typeof(Result));
-        if (A.div(B).round().isZero()) { Sign = ''; }
-        if (A.div(B).round().isNegative()) { Sign = Minus_Char; } // If the number is negative, attach the Minus sign character set in options
+    if (P_Max == 0 && Exp_flag == false) { //console.log('P_Max is zero. Performing standard division operation. Preliminary Result:\n' + Result.toString() + '\n' + typeof(Result));
+        if      (A.div(B).round().isZero()) { Sign = ''; }
+        else if (A.div(B).round().isNegative()) { Sign = Minus_Char; } // If the number is negative, attach the Minus sign character set in options
         else { Sign = Plus_Char; } // Otherwise, attach the Plus sign character set in options (blank string by default)
         var Result = A.div(B).round().abs();
         Result = Sign.concat(Result.toFixed(Result.dp())); // toFixed avoids exponential notation when Result is converted to a string in the next line
@@ -185,23 +215,72 @@ function LongDivide(A, B, options) {
         return Result.concat(SI_Prefix);
     }
 
-    // Handle floating point numbers by multiplying them by 10 until they are integers        
-    A = A.toFixed(A.dp());
-    B = B.toFixed(B.dp());
-    if (A.indexOf('.') != -1 || B.indexOf('.') != -1) {
-        if (A.indexOf('.') == -1) { A = A + '.'; }
-        if (B.indexOf('.') == -1) { B = B + '.'; }
-        Multiplier = Math.max(A.length - A.indexOf('.') - 1, B.length - B.indexOf('.') - 1); // Find the power of 10 to multiply by to ensure both numbers are ints
-        if (Multiplier - (A.length - A.indexOf('.') - 1) > 0) A = A + '0'.repeat(Multiplier - (A.length - A.indexOf('.') - 1)); // Pad the necessary number of zeros onto the number with fewer decimal places
-        if (Multiplier - (B.length - B.indexOf('.') - 1) > 0) B = B + '0'.repeat(Multiplier - (B.length - B.indexOf('.') - 1));
-        A = A.slice(0, A.indexOf('.')) + A.slice(A.indexOf('.') + 1, A.length); // Remove the decimal point from each number
-        B = B.slice(0, B.indexOf('.')) + B.slice(B.indexOf('.') + 1, B.length);
+    // Handle floating point numbers by multiplying them by 10 until they are integers
+    if (A.dp() != 0 || B.dp() != 0) {
+        var Multiplier = Decimal.max(A.dp(), B.dp());
+        A = A.times(Multiplier);
+        B = B.times(Multiplier);
+    }
+    /*
+    A_str = A.toFixed(A.dp());
+    B_str = B.toFixed(B.dp());
+    if (A_str.indexOf('.') != -1 || B_str.indexOf('.') != -1) {
+        if (A_str.indexOf('.') == -1) { A_str = A_str + '.'; }
+        if (B_str.indexOf('.') == -1) { B_str = B_str + '.'; }
+        Multiplier = Math.max(A_str.length - A_str.indexOf('.') - 1, B_str.length - B_str.indexOf('.') - 1); // Find the power of 10 to multiply by to ensure both numbers are ints
+        if (Multiplier - (A_str.length - A_str.indexOf('.') - 1) > 0) A_str = A_str + '0'.repeat(Multiplier - (A_str.length - A_str.indexOf('.') - 1)); // Pad the necessary number of zeros onto the number with fewer decimal places
+        if (Multiplier - (B_str.length - B_str.indexOf('.') - 1) > 0) B_str = B_str + '0'.repeat(Multiplier - (B_str.length - B_str.indexOf('.') - 1));
+        A_str = A_str.slice(0, A_str.indexOf('.')) + A_str.slice(A_str.indexOf('.') + 1, A_str.length); // Remove the decimal point from each number
+        B_str = B_str.slice(0, B_str.indexOf('.')) + B_str.slice(B_str.indexOf('.') + 1, B_str.length);
         //console.log('Warning in function LongDivide(): Float inputs detected. Inputs multiplied by 10^' + Multiplier + ' to eliminate floats.', '\nA:', A, '\nB:', B);
     }
+    A = new Decimal(A_str);
+    B = new Decimal(B_str);
+    */
     // End floating point section
 
-    A = new Decimal(A);
-    B = new Decimal(B);
+    var Exp_power = new Decimal(0);
+    var Exp_sign = '';
+    if (Exp_flag == true) {
+        if (Exponential === 'e') {
+            Exp_open = 'e';
+            Exp_close = '';
+            Exp_plus = '+';
+            Exp_minus = Minus_Char;
+        }
+        else if (Exponential === 'ex') {
+            Exp_open = '\u00A0\u00D7\u00A010<sup>';
+            Exp_close = '</sup>';
+            Exp_plus = Plus_Char;
+            Exp_minus = Minus_Char;
+        }
+        else if (Exponential === 'ed') {
+            Exp_open = '\u00A0\u2219\u00A010<sup>';
+            Exp_close = '</sup>';
+            Exp_plus = Plus_Char;
+            Exp_minus = Minus_Char;
+        }
+        // if Exponential == 'custom', then Exp vars have already been set to the strings specified in options
+
+        if (A.div(B).abs() > 0 && (A.div(B).abs() < 1 || A.div(B).abs() >= 10)) { // Check if numbers need to be multiplied for exponential notation
+            Exp_power = A.div(B).abs().log(10).floor();
+        }
+        if (Exp_power.isNegative()) {
+            A = A.times(Decimal.pow(10, Exp_power.abs())); Exp_power = Exp_power.abs();
+            Exp_sign = Exp_minus;
+        }
+        else if (Exp_power.isPositive() || Exp_power.isZero()) { // If exponent is positive or zero
+            B = B.times(Decimal.pow(10, Exp_power));
+            Exp_sign = Exp_plus;
+        }
+        Exp_power = Exp_power.toFixed(0); // Converts Exp_power to a string
+    }
+    else { // If Exp_flag is false, turn exponential notation off by setting all exp parameters to blank strings
+        Exp_power = '';
+        Exp_open = '';
+        Exp_close = '';
+        Exp_sign = '';
+    }
 
     // Determine if answer will be negative, set Sign to the appropriate sign, then take the absolute value for the rest of the calculations.
     if (A.div(B).isZero()) { Sign = ''; }
@@ -225,7 +304,6 @@ function LongDivide(A, B, options) {
     var Prefix = '';
     var Repetend = '';
     var RepeatFlag = false;
-    var ApproxFlag = true;
 
     Quotient  = Dividend.dividedBy(Divisor).floor();
     Remainder = Dividend.modulo(Divisor);
@@ -273,7 +351,7 @@ function LongDivide(A, B, options) {
                 Repetend = '';
                 RepeatFlag = false;
             }
-            if (RepeatFlag == true && RepeatEnableFlag == false) {
+            if (RepeatFlag == true && RepeatEnableFlag == false) { // Handle the case that repeating decimals have been disabled in the options; convert to standard rounded result by adding repetends until P_Max is exceeded.
                 var watchdog = 0;
                 while (Decimal_Digits.length <= P_Max) {
                     Decimal_Digits = Decimal_Digits.concat(Repetend);
@@ -289,47 +367,30 @@ function LongDivide(A, B, options) {
         i += 1;
     }
 
-    // Handles rounding and padding (P_Max and P_Min options) for standard non-repeating results
-    if (RepeatFlag == false) {
-        // Rounds result when Decimal_Digits is longer than P_Max (to obey the maximum precision specified in the options)
-        if (Decimal_Digits.length > P_Max) { //console.log('Rounding decimals.'); //console.log('Decimal_Digits:', Decimal_Digits.toNumber(), 'Decimal_Digits.toString().length:', Decimal_Digits.toString().length);
-            Decimal_Digits = Decimal_Digits.slice(0, P_Max).concat('.').concat(Decimal_Digits.slice(P_Max)); // console.log('Decimal_Digits 1:', Decimal_Digits); // console.log('Decimal_Digits.slice(0, Decimal_Digits.indexOf(\'.\')):', Decimal_Digits.slice(0, Decimal_Digits.indexOf('.')));
-            //Decimal_Digits = '0'.repeat(P_Max - parseFloat(Decimal_Digits).toFixed(0).toString().length).concat((new Decimal(Decimal_Digits)).round().toFixed(0).toString())
-            Decimal_Digits = '0'.repeat(P_Max - (new Decimal(Decimal_Digits)).floor().toFixed(0).length).concat((new Decimal(Decimal_Digits)).round().toFixed(0))
-            // An approximation sign is added when the result is rounded, to indicate a non-exact result
-            Approx = Approx_Char;
+    // Handle rounding and padding (P_Max and P_Min options)
+    // Rounds result when Decimal_Digits is longer than P_Max (to obey the maximum precision specified in the options)
+    if (Decimal_Digits.length > P_Max) { //console.log('Rounding decimals.'); //console.log('Decimal_Digits:', Decimal_Digits.toNumber(), 'Decimal_Digits.toString().length:', Decimal_Digits.toString().length);
+        Decimal_Digits = (new Decimal('0.'.concat(Decimal_Digits))).toDecimalPlaces(P_Max);
+        // If rounding overflows to the integer section (i.e. 0.999 with P_Max of 2 becomes 1.00), increment the integer result by 1
+        if (Decimal_Digits.gte(1)) {
+            Decimal_Digits = Decimal_Digits.minus(1);
+            Integer = (new Decimal(Integer)).plus(1).toFixed(0);
         }
-        // Adds trailing zeros if Decimal_Digits is shorter than P_Min (to obey the minimum precision specified in the options)
-        if (Decimal_Digits.length < P_Min) { //console.log('Decimal_Digits.length: ' + Decimal_Digits.length + '; P_Min: ' + P_Min);
-            if (P_Min - Decimal_Digits.length > 0) { //console.log('Padding end with zeroes. Decimal Digits:', Decimal_Digits.length, 'P_Min:', P_Min);
-                // Adds trailing zeros if Decimal_Digits is shorter than P_Min (to obey the minimum precision specified in the options)
-                Decimal_Digits += '0'.repeat(P_Min - Decimal_Digits.length);
-            }
-        }
+        // Converts Decimal_Digits to string, then removes the '0.' at the beginning to get just the decimal digits
+        Decimal_Digits = Decimal_Digits.toFixed(P_Max).slice(2);
+        // An approximation sign is added when the result is rounded, to indicate a non-exact result
+        Approx = Approx_Char;
     }
-
-    // Handles rounding and padding (P_Max and P_Min options) for results with repeating decimals
-    if (RepeatFlag == true) {
-        if (Prefix.length + Repetend.length > P_Max) {
-            if (Prefix.length > P_Max) {
-                Prefix = new Decimal(Prefix.substr(0, P_Max) + '.' + Prefix.substr(P_Max));
-                Prefix = Prefix.round().toFixed(0);
-                if (P_Max - Prefix.length >= 0) {
-                    // Leading zeros in the prefix are lost in string<->number conversions above. This adds them back in.
-                    Prefix = '0'.repeat(P_Max - Prefix.length).concat(Prefix);
-                }
-            }
-            else {
-                Prefix = Prefix.concat(Repetend.substr(0, P_Max - Prefix.length));
-            }
-            Decimal_Digits = Prefix;
-            RepeatFlag = false;
-            Approx = Approx_Char;
-        }
-        if (Prefix.length + Repetend.length < P_Min) { //console.log('Decimal Count is lower than P_Min. Prefix length:', Prefix.length, 'Repetend length:', Repetend.length);
+    if (Decimal_Digits.length < P_Min) { //console.log('Decimal_Digits.length: ' + Decimal_Digits.length + '; P_Min: ' + P_Min);
+        // For non-repeating results, adds trailing zeros if Decimal_Digits is shorter than P_Min (to obey the minimum precision specified in the options)
+        if (RepeatFlag == false) { Decimal_Digits = (new Decimal('0.'.concat(Decimal_Digits))).toFixed(P_Min).slice(2); }
+        // For repeating results, multiplies the repeating pattern to get as close to P_Min as possible, then cycles the pattern to match P_Min if necessary
+        else if (RepeatFlag == true) {
+            // Multiply the repetend to get as close to P_Min as possible (can only get within a multiple of Repetend.length)
             if ((P_Min - (Prefix.length + Repetend.length)) >= Repetend.length) { //console.log('Multiplying repetend. Remaining space:', P_Min - (Prefix.length + Repetend.length), 'Repetend length:', Repetend.length, 'Multiply by:', Math.floor((P_Min - (Prefix.length + Repetend.length)) / Repetend.length));
                 Repetend += Repetend.repeat(Math.floor((P_Min - (Prefix.length + Repetend.length)) / Repetend.length)); //console.log('New Repetend:', Repetend);
             }
+            // Cycle the repetend (perform a left-rotate on the repetend digits, and also add the previous most-significant-digit of the repetend to the prefix)
             while (Prefix.length + Repetend.length < P_Min) {
                 Prefix = Prefix.concat(Repetend[0]);
                 Repetend = Repetend.slice(1).concat(Repetend[0]);
@@ -368,6 +429,9 @@ function LongDivide(A, B, options) {
     // Add currency symbol (will be a blank string if no currency symbol was set in the options)
     Result = Currency_Char.concat(Result);
 
+    // Add exponential notation
+    Result = Result.concat(Exp_open).concat(Exp_sign).concat(Exp_power).concat(Exp_close);
+
     // Attach SI prefix (it's a blank string if N/A)
     Result = Result.concat(SI_Prefix);
     
@@ -386,13 +450,13 @@ function LongDivide(A, B, options) {
 
 
 LongDivide.parseFormatString = function(options) {
-    if (typeof(options) === string) { var string = options; options = {}; }
+    if (typeof(options) === 'string') { var string = options; options = {}; }
     else { var string = options['format']; }
 
     string = string.toLowerCase();
 
     // Check for invalid characters
-    check = string.match(/[^-+!0.,si\[\]\(\) ]/g) || [];
+    check = string.match(/[^-+!0.,siexd\[\]\(\) ]/g) || [];
     if (check.length > 1) {
         console.log('Error in LongDivide.parseFormatString(): Input contains invalid character(s): ', check);
         return options;
@@ -411,6 +475,9 @@ LongDivide.parseFormatString = function(options) {
     if (string.indexOf('-') != -1) { options['minus'] = '\u2212'; }
     if (string.indexOf('+') != -1) { options['plus'] = '+'; }
     if (string.indexOf('si') != -1) { options['si'] = true; }
+    if (string.indexOf('ex') != -1) { options['exp'] = 'ex'; }
+    else if (string.indexOf('ed') != -1) { options['exp'] = 'ed'; }
+    else if (string.indexOf('e') != -1) { options['exp'] =  'e'; }
 
     options['p_max'] = (string.slice(string.indexOf('.')).match(/0/g) || []).length;
     options['p_min'] = options['p_max'];

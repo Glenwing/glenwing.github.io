@@ -131,12 +131,59 @@ options = {
     <tr>
         <td>'OL_open':</td>
         <td><input id="ol_open_box" value="&lt;span style='text-decoration:overline;'&gt;" placeholder="' '" type="text" onchange="divide();" oninput="this.onchange();" onfocus="this.select();" style="width:200px; background-color:#555555; color:#EEEEEE; font-size:16px;" />
+        <input type="button" value="Default" onclick="document.getElementById('ol_open_box').value = '<span style=\'text-decoration:overline;\'>'; divide();" >
         &nbsp;&nbsp;// string placed inside number, in front of the repeating pattern (if applicable)</td>
     </tr>
     <tr>
         <td>'OL_close':</td>
         <td><input id="ol_close_box" value="&lt;/span&gt;" placeholder="' '" type="text" onchange="divide();" oninput="this.onchange();" onfocus="this.select();" style="width:200px; background-color:#555555; color:#EEEEEE; font-size:16px;" />
+        <input type="button" value="Default" onclick="document.getElementById('ol_close_box').value = '</span>'; divide();" >
         &nbsp;&nbsp;// string placed inside number, behind the repeating pattern (if applicable)</td>
+    </tr>
+    <tr>
+        <td>'exp':</td>
+        <td><input id="exp_box" value="" placeholder="' '" type="text" onchange="divide();" oninput="this.onchange();" onfocus="this.select();" style="width:80px; background-color:#555555; color:#EEEEEE; font-size:16px; text-align:center;" />
+        <input type="button" value="Clear" onclick="document.getElementById('exp_box').value = ''; divide();" >
+        <input type="button" value="e" onclick="document.getElementById('exp_box').value = 'e'; divide();" >
+        <input type="button" value="ex" onclick="document.getElementById('exp_box').value = 'ex'; divide();" >
+        <input type="button" value="ed" onclick="document.getElementById('exp_box').value = 'ed'; divide();" >
+        <input type="button" value="custom" onclick="document.getElementById('exp_box').value = 'custom'; divide();" >
+        &nbsp;&nbsp;// exponential notation style ('e', 'ex', or 'ed')</td>
+    </tr>
+    <tr>
+        <td>'exp_open':</td>
+        <td><input id="exp_open_box" value="&nbsp;&times;&nbsp;10&lt;sup&gt;" placeholder="' '" type="text" onchange="divide();" oninput="this.onchange();" onfocus="this.select();" style="width:80px; background-color:#555555; color:#EEEEEE; font-size:16px;" />
+        <input type="button" value="Clear" onclick="document.getElementById('exp_open_box').value = ''; divide();" >
+        <input type="button" value="e" onclick="document.getElementById('exp_open_box').value = 'e'; divide();" >
+        <input type="button" value="times (&times;)" onclick="document.getElementById('exp_open_box').value = '\u00A0\u00D7\u00A010<sup>'; divide();" >
+        <input type="button" value="dot (&#x2219;)" onclick="document.getElementById('exp_open_box').value = '\u00A0\u2219\u00A010<sup>'; divide();" >
+        &nbsp;&nbsp;// exponential opening string (only valid when exp is set to custom)</td>
+    </tr>
+    <tr>
+        <td>'exp_close':</td>
+        <td><input id="exp_close_box" value="&lt;/sup&gt;" placeholder="' '" type="text" onchange="divide();" oninput="this.onchange();" onfocus="this.select();" style="width:80px; background-color:#555555; color:#EEEEEE; font-size:16px;" />
+        <input type="button" value="Clear" onclick="document.getElementById('exp_close_box').value = ''; divide();" >
+        <input type="button" value="&lt;/sup&gt;" onclick="document.getElementById('exp_close_box').value = '</sup>'; divide();" >
+        &nbsp;&nbsp;// exponential closing string (only valid when exp is set to custom)</td>
+    </tr>
+    <tr>
+        <td>'exp_minus':</td>
+        <td>
+            <input id="exp_minus_box" value="&minus;" placeholder="' '" type="text" onchange="divide();" oninput="this.onchange();" onfocus="this.select();" style="width:40px; background-color:#555555; color:#EEEEEE; font-size:16px; text-align:center;" />
+            <input type="button" value="Clear" onclick="document.getElementById('exp_minus_box').value = ''; divide();" >
+            <input type="button" value="Minus Sign (U+2212)" onclick="document.getElementById('exp_minus_box').value = '\u2212'; divide();" >
+            <input type="button" value="Hyphen-Minus" onclick="document.getElementById('exp_minus_box').value = '-'; divide();" >
+            &nbsp;&nbsp;// character to use in front of negative exponents (only valid when exp is set to custom)
+        </td>
+    </tr>
+    <tr>
+        <td>'exp_plus':</td>
+        <td>
+            <input id="exp_plus_box" value="+" placeholder="' '" type="text" onchange="divide();" oninput="this.onchange();" onfocus="this.select();" style="width:40px; background-color:#555555; color:#EEEEEE; font-size:16px; text-align:center;" />
+            <input type="button" value="Clear" onclick="document.getElementById('exp_plus_box').value = ''; divide();" >
+            <input type="button" value="+" onclick="document.getElementById('exp_plus_box').value = '+'; divide();" >
+            &nbsp;&nbsp;// character to use in front of zero or positive exponents (only valid when exp is set to custom)
+        </td>
     </tr>
     <tr>
         <td>'si':</td>
@@ -212,6 +259,11 @@ options = {
         options['plus'] =        document.getElementById('plus_box').value;
         options['approx'] =      document.getElementById('approx_box').value;
         options['currency'] =    document.getElementById('currency_box').value;
+        options['exp'] =         document.getElementById('exp_box').value;
+        options['exp_open'] =    document.getElementById('exp_open_box').value;
+        options['exp_close'] =    document.getElementById('exp_close_box').value;
+        options['exp_minus'] =    document.getElementById('exp_minus_box').value;
+        options['exp_plus'] =    document.getElementById('exp_plus_box').value;
         options['OL_open'] = document.getElementById('ol_open_box').value;
         options['OL_close'] = document.getElementById('ol_close_box').value;
 
