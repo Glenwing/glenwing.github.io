@@ -3,8 +3,8 @@
 LongDivide.js
 Created by Glenwing (https://github.com/Glenwing)
 
-Version: 1.1.0
-October 14, 2019
+Version: 1.2.0
+October 16, 2019
 
 */
 
@@ -221,22 +221,6 @@ function LongDivide(A, B, options) {
         A = A.times(Multiplier);
         B = B.times(Multiplier);
     }
-    /*
-    A_str = A.toFixed(A.dp());
-    B_str = B.toFixed(B.dp());
-    if (A_str.indexOf('.') != -1 || B_str.indexOf('.') != -1) {
-        if (A_str.indexOf('.') == -1) { A_str = A_str + '.'; }
-        if (B_str.indexOf('.') == -1) { B_str = B_str + '.'; }
-        Multiplier = Math.max(A_str.length - A_str.indexOf('.') - 1, B_str.length - B_str.indexOf('.') - 1); // Find the power of 10 to multiply by to ensure both numbers are ints
-        if (Multiplier - (A_str.length - A_str.indexOf('.') - 1) > 0) A_str = A_str + '0'.repeat(Multiplier - (A_str.length - A_str.indexOf('.') - 1)); // Pad the necessary number of zeros onto the number with fewer decimal places
-        if (Multiplier - (B_str.length - B_str.indexOf('.') - 1) > 0) B_str = B_str + '0'.repeat(Multiplier - (B_str.length - B_str.indexOf('.') - 1));
-        A_str = A_str.slice(0, A_str.indexOf('.')) + A_str.slice(A_str.indexOf('.') + 1, A_str.length); // Remove the decimal point from each number
-        B_str = B_str.slice(0, B_str.indexOf('.')) + B_str.slice(B_str.indexOf('.') + 1, B_str.length);
-        //console.log('Warning in function LongDivide(): Float inputs detected. Inputs multiplied by 10^' + Multiplier + ' to eliminate floats.', '\nA:', A, '\nB:', B);
-    }
-    A = new Decimal(A_str);
-    B = new Decimal(B_str);
-    */
     // End floating point section
 
     var Exp_power = new Decimal(0);
