@@ -3,7 +3,7 @@
 LongDivide.js
 Created by Glenwing (https://github.com/Glenwing)
 
-Version: 1.2.1
+Version: 1.2.2
 October 16, 2019
 
 */
@@ -143,6 +143,7 @@ function LongDivide(A, B, options) {
     var Sign = Plus_Char; // Will be set to either Minus_Char or Plus_Char later depending on the inputs
     var Approx = ''; // Will be set to Approx_Char later if the division algorithm detects a non-exact result; otherwise left as a blank string
     var SI_Prefix = '';
+    var temp;
 
     // Integerize variables for safety
     P_Max = Math.round(P_Max);
@@ -202,13 +203,14 @@ function LongDivide(A, B, options) {
 
     // If precision is set to 0, then the standard division operator can be used to obtain the result.
     if (P_Max == 0 && Exp_flag == false) { //console.log('P_Max is zero. Performing standard division operation. Preliminary Result:\n' + Result.toString() + '\n' + typeof(Result));
-        if      (A.div(B).round().isZero()) { Sign = ''; }
-        else if (A.div(B).round().isNegative()) { Sign = Minus_Char; } // If the number is negative, attach the Minus sign character set in options
+        temp = A.div(B).round();
+        if      (temp.isZero()) { Sign = ''; }
+        else if (temp.isNegative()) { Sign = Minus_Char; } // If the number is negative, attach the Minus sign character set in options
         else { Sign = Plus_Char; } // Otherwise, attach the Plus sign character set in options (blank string by default)
-        var Result = A.div(B).round().abs();
+        var Result = temp.abs();
         Result = Sign.concat(Result.toFixed(Result.dp())); // toFixed avoids exponential notation when Result is converted to a string in the next line
         // Result is now a string
-        if (!(A.div(B).equals(A.div(B).round()))) { Result = Approx_Char.concat(Result); } // If input numbers are not evenly divisible, attach the approximation sign set in options
+        if (!(A.div(B).equals(temp))) { Result = Approx_Char.concat(Result); } // If input numbers are not evenly divisible, attach the approximation sign set in options
         return Result.concat(SI_Prefix);
     }
 
@@ -243,15 +245,25 @@ function LongDivide(A, B, options) {
         }
         // if Exponential == 'custom', then Exp vars have already been set to the strings specified in options
 
-        if (A.div(B).abs() > 0 && (A.div(B).abs() < 1 || A.div(B).abs() >= 10)) { // Check if numbers need to be multiplied for exponential notation
-            Exp_power = A.div(B).abs().log(10).floor();
+        temp = A.div(B).abs();
+        if (temp > 0 && (temp < 1 || temp >= 10)) { // Check if numbers need to be multiplied for exponential notation
+            //Exp_power = A.div(B).abs().log(10).floor();
+            Exp_power = new Decimal(temp.precision() - temp.decimalPlaces() - 1);
         }
         if (Exp_power.isNegative()) {
             A = A.times(Decimal.pow(10, Exp_power.abs())); Exp_power = Exp_power.abs();
+            if (A.div(B).abs().toFixed(P_Max).slice(0, 2) == '10') { // Checks if rounding to P_Max will bump up to the next power
+                B = B.times(10);
+                Exp_power = Exp_power.minus(1);
+            }
             Exp_sign = Exp_minus;
         }
         else if (Exp_power.isPositive() || Exp_power.isZero()) { // If exponent is positive or zero
             B = B.times(Decimal.pow(10, Exp_power));
+            if (A.div(B).abs().toFixed(P_Max).slice(0, 2) == '10') { // Checks if rounding to P_Max will bump up to the next power
+                B = B.times(10);
+                Exp_power = Exp_power.plus(1);
+            }
             Exp_sign = Exp_plus;
         }
         Exp_power = Exp_power.toFixed(0); // Converts Exp_power to a string
