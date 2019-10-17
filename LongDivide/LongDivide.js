@@ -3,8 +3,8 @@
 LongDivide.js
 Created by Glenwing (https://github.com/Glenwing)
 
-Version: 1.2.2
-October 16, 2019
+Version: 1.2.3
+October 17, 2019
 
 */
 
