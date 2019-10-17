@@ -247,8 +247,7 @@ function LongDivide(A, B, options) {
 
         temp = A.div(B).abs();
         if (temp > 0 && (temp < 1 || temp >= 10)) { // Check if numbers need to be multiplied for exponential notation
-            //Exp_power = A.div(B).abs().log(10).floor();
-            Exp_power = new Decimal(temp.precision() - temp.decimalPlaces() - 1);
+            Exp_power = new Decimal(temp.precision(true) - temp.decimalPlaces() - 1);
         }
         if (Exp_power.isNegative()) {
             A = A.times(Decimal.pow(10, Exp_power.abs())); Exp_power = Exp_power.abs();
