@@ -3,19 +3,66 @@
 LongDivide.js
 Created by Glenwing (https://github.com/Glenwing)
 
-Version: 1.2.3
+Version: 1.3.0
 October 17, 2019
 
 */
 
-function LongDivide(A, B, options) {
+// Default options
+LongDivide.p_max = 8;
+LongDivide.p_min = 0;
+LongDivide.leading = 1;
+LongDivide.decimal = '.';
+LongDivide.thousands = '';
+LongDivide.thousandths = '';
+LongDivide.orphans = false;
+LongDivide.minus = '\u2212';
+LongDivide.plus = '';
+LongDivide.approx = '\u2248';
+LongDivide.currency = '';
+LongDivide.exp = '';
+LongDivide.exp_open = 'e';
+LongDivide.exp_close = '';
+LongDivide.exp_minus = LongDivide.minus;
+LongDivide.exp_plus = LongDivide.plus;
+LongDivide.OL_open = '<span style="text-decoration:overline;">';
+LongDivide.OL_close = '</span>';
+LongDivide.si = false;
+LongDivide.twosingles = true;
+LongDivide.repeat = true;
+
+function LongDivide (A, B, options) {
     //console.log('BEGIN:', A, '÷', B)
     try { Decimal.set({'precision': 1000 }) } catch (ReferenceError) { console.log('Error in function LongDivide(): Decimal.js library not detected. LongDivide.js requires Decimal.js in order to operate. (https://github.com/MikeMcl/decimal.js)'); return 'Error'; }
     if (A == '' || B == '') { return ''; }
-    if ( Number.isNaN(parseFloat(A)) || Number.isNaN(parseFloat(B)) || !Number.isFinite(parseFloat(A)) || !Number.isFinite(parseFloat(B)) || !Number.isFinite(parseFloat(A)/parseFloat(B)) || Number.isNaN(parseFloat(A)/parseFloat(B)) ) { console.log('Error in function LongDivide(): One or both inputs is NaN or Infinity, or there is a division by zero. Function aborted.'); return 'Error'; }
 
-    A = new Decimal(A);
-    B = new Decimal(B);
+    if (typeof(A) === 'string' || typeof(A) === 'number') {
+        try {
+            A = new Decimal(A);
+            if (A.isNaN() || !A.isFinite()) { console.log('Error in function LongDivide(): First argument is NaN or Infinity.\nArgument:', A); return 'Error'; }
+        }
+        catch (DecimalError) { console.log('Error in function LongDivide(): First argument could not be interpreted as a number.\nArgument:', A); return 'Error'; }
+    }
+    else if (typeof(A) === 'object') { if (A.constructor !== Decimal) { console.log('Error in function LongDivide(): First argument is an unrecognized object. Argument must be a string, number, or Decimal object.\nArgument:', A) } }
+    else { console.log('Error in function LongDivide(): First argument is of an unrecognized type.\ntypeof(A):', typeof(A)); }
+
+    if (typeof(B) === 'string' || typeof(B) === 'number') {
+        try {
+            B = new Decimal(B);
+            if (B.isNaN() || !B.isFinite()) { console.log('Error in function LongDivide(): Second argument is NaN or Infinity.\nArgument:', B); }
+        }
+        catch (DecimalError) { console.log('Error in function LongDivide(): Second argument could not be interpreted as a number.\nArgument:', B); return 'Error'; }
+    }
+    else if (typeof(B) === 'object') { if (B.constructor !== Decimal) { console.log('Error in function LongDivide(): Second argument is an unrecognized object. Argument must be a string, number, or Decimal object.\nArgument:', B) } }
+    else { console.log('Error in function LongDivide(): Second argument is of an unrecognized type.\ntypeof(B):', typeof(B)); }
+
+    if (B.isZero()) { console.log('Error in function LongDivide(): Division by zero'); return 'Error'; }
+    if (!A.div(B).isFinite()) { console.log('Error in function LongDivide(): Division result is Infinity,\nA:', A.toFixed(A.dp()), '\nB:', B.toFixed(B.dp())); return 'Error'; }
+
+    //if ( Number.isNaN(parseFloat(A)) || Number.isNaN(parseFloat(B)) || !Number.isFinite(parseFloat(A)) || !Number.isFinite(parseFloat(B)) || !Number.isFinite(parseFloat(A)/parseFloat(B)) || Number.isNaN(parseFloat(A)/parseFloat(B)) ) { console.log('Error in function LongDivide(): One or both inputs is NaN or Infinity, or there is a division by zero. Function aborted.'); return 'Error'; }
+
+    //A = new Decimal(A);
+    //B = new Decimal(B);
 
     if (typeof(options) === 'undefined') { options = {}; }
 
@@ -30,39 +77,39 @@ function LongDivide(A, B, options) {
 
     // Overline markup opening tag
     var OL_open =            options['OL_open'] !== undefined ? options['OL_open'] :
-        '<span style="text-decoration:overline;">'; // Default value
+        LongDivide.OL_open; // Default value
 
     // Overline markup closing tag. Used in conjunction with OL_open to surround the repeating numbers. May be set to control markup, separate it with parentheses, or simply left blank, etc.
     var OL_close =           options['OL_close'] !== undefined ? options['OL_close'] :
-        '</span>';
+        LongDivide.OL_close;
     
     // Maximum number of decimal places; option 'p' (for setting both min and max precision together) takes priority if set
     var P_Max =              options['p'] !== undefined ? options['p'] : options['p_max'] !== undefined ? options['p_max'] : options['pmax'] !== undefined ? options['pmax'] :
-        8;
+        LongDivide.p_max;
 
     // Minimum number of decimal places; option 'p' (for setting both min and max precision together) takes priority if set
     var P_Min =              options['p'] !== undefined ? options['p'] : options['p_min'] !== undefined ? options['p_min'] : options['pmin'] !== undefined ? options['pmin'] :
-        0;
+        LongDivide.p_min;
 
     // Minimum number of digits in the integer part of the number. Leading zeros are added if necessary.
     var Leading_Digits =     options['leading'] !== undefined ? options['leading'] :
-        1;
+        LongDivide.leading;
 
     // Character to use for the radix point (decimal point)
     var Decimal_Point_Char = options['decimal'] !== undefined ? options['decimal'] :
-        '.';
+        LongDivide.decimal;
 
     // Characters used for grouping thousands (i.e. 10000 -> 10,000)
     var Thousands_Char =     options['thousands'] !== undefined ? options['thousands'] :
-        '';
+        LongDivide.thousands;
 
     // Character used for grouping thousandths (i.e. 1.0000000001 -> 1.000 000 000 1)
     var Thousandths_Char =   options['thousandths'] !== undefined ? options['thousandths'] :
-        '';
+        LongDivide.thousandths;
 
     // Flag to allow an "orphan" digit after a thousandths separator if there is only 1 digit left (if false, thousandth grouping will prefer a group of 4 digits at the end rather than an orphan digit)
     var Orphans =            options['orphan'] !== undefined ? options['orphan'] : options['orphans'] !== undefined ? options['orphans'] :
-        false;
+        LongDivide.orphans;
 
     // Number base system to use
     var Base =               options['base'] !== undefined ? options['base'] :
@@ -70,56 +117,63 @@ function LongDivide(A, B, options) {
 
     // Character to preceed negative numbers
     var Minus_Char =         options['minus'] !== undefined ? options['minus'] :
-        '\u2212';
+        LongDivide.minus;
 
     // Character to preceed positive numbers; blank string by default
     var Plus_Char =          options['plus'] !== undefined ? options['plus'] :
-        '';
+        LongDivide.plus;
 
     // Symbol to be used for "approximately equal to". Can be set to '~' or blank if desired, etc.
     var Approx_Char =        options['approx'] !== undefined ? options['approx'] : options['~'] !== undefined ? options['~'] :
-        '\u2248';
+        LongDivide.approx;
 
     // Currency symbol to be inserted between the sign and number. Leave blank to have no currency.
     var Currency_Char =      options['currency'] !== undefined ? options['currency'] :
-        '';
+        LongDivide.currency;
 
     // Flag indicating whether SI prefixes are desired or not
     var SI =                 options['si'] !== undefined ? options['si'] : options['SI'] !== undefined ? options['SI'] :
-        false;
+        LongDivide.si;
 
     // Flag indicating whether single-digit repeating patterns should be doubled; i.e. display as 1.(33) instead of 1.(3)
     var RepeatSinglesFlag =  options['2_singles'] !== undefined ? options['2_singles'] :
-        true;
+        LongDivide.twosingles;
 
     // Flag indicating whether repeating decimal detection should be enabled or not
     var RepeatEnableFlag =   options['repeat'] !== undefined ? options['repeat'] :
-        true;
+        LongDivide.repeat;
 
     // Exponential notation specifier; 'e', 'ex', 'ed', or 'custom'
     var Exponential =        options['exp'] !== undefined ? options['exp'] : options['e'] !== undefined ? options['e'] :
-        '';
+        LongDivide.exp;
 
     // String to be placed before the exponential power and sign; only valid when options['exp'] is set to 'custom'
     var Exp_open =           options['exp_open'] !== undefined ? options['exp_open'] :
-        'e';
+        LongDivide.exp_open;
 
     // String to be placed after the exponential power; only valid when options['exp'] is set to 'custom'
     var Exp_close =          options['exp_close'] !== undefined ? options['exp_close'] :
-        '';
+        LongDivide.exp_close;
 
     // String to be placed before negative exponential powers; only valid when options['exp'] is set to 'custom'
     var Exp_minus =           options['exp_minus'] !== undefined ? options['exp_minus'] :
-        Minus_Char;
+        LongDivide.exp_minus;
 
     // String to be placed before non-negative exponential powers; only valid when options['exp'] is set to 'custom'
     var Exp_plus =            options['exp_plus'] !== undefined ? options['exp_plus'] :
-        Plus_Char;
+        LongDivide.exp_plus;
 
     // If OL open and closing tags are blanked, assume the user means to disable repeating decimal detection
     if (OL_open == '' && OL_close == '') { RepeatEnableFlag = false; options['repeat'] = false; }
 
-    if (Decimal_Point_Char === Thousands_Char) { console.log('Error in function LongDivide(): Decimal point character and thousands grouping character cannot be the same.\ndecimal_point_char:' + Decimal_Point_Char + '\nthousands_char:' + Thousands_Char); return 'Error'; }
+    if (options['thousands'] !== undefined) { if (options['thousands'] === '.' && options['decimal'] === undefined) { Decimal_Point_Char = ','; } }
+    if (Decimal_Point_Char === Thousands_Char) {
+        if (options['decimal'] === undefined) {
+            if      (Decimal_Point_Char === '.') { Decimal_Point_Char = ','; }
+            else if (Decimal_Point_Char === ',') { Decimal_Point_Char = '.'; }
+        }
+        else { console.log('Error in function LongDivide(): Decimal point character and thousands grouping character cannot be the same.\ndecimal_point_char:' + Decimal_Point_Char + '\nthousands_char:' + Thousands_Char); return 'Error'; }
+    }
     if (Decimal_Point_Char === Thousandths_Char) { console.log('Error in function LongDivide(): Decimal point character and thousandths grouping character cannot be the same.\ndecimal_point_char:' + Decimal_Point_Char + '\nthousandths_char:' + Thousandths_Char); return 'Error'; }
     if (Decimal_Point_Char.match(/[0-9]/g)) { console.log('Error in function LongDivide(): Decimal point character cannot be a number.\nDecimal_Point_Char:', Decimal_Point_Char); return 'Error'; }
     if (Thousands_Char.match(/[0-9]/g)) { console.log('Error in function LongDivide(): Thousands grouping character cannot be a number.\nThousands_Char:', Thousands_Char); return 'Error'; }
@@ -150,7 +204,7 @@ function LongDivide(A, B, options) {
     P_Min = Math.round(P_Min);
     Base = Math.round(Base);
     // Validity checks for precision and base
-    if (P_Max < 0 || P_Min < 0 || P_Max < P_Min || isNaN(P_Max) || isNaN(P_Min) || !isFinite(P_Max) || !isFinite(P_Min)) {
+    if (P_Max < 0 || P_Min < 0 || P_Max < P_Min || Number.isNaN(P_Max) || Number.isNaN(P_Min) || !Number.isFinite(P_Max) || !Number.isFinite(P_Min)) {
         console.log('Error in function LongDivide(): Invalid P_Max and P_Min values. Both values must be non-negative numbers, and P_Min cannot be greater than P_Max.\nP_Max:', P_Max, 'P_Min', P_Min)
         return 'Error';
     }
@@ -208,10 +262,15 @@ function LongDivide(A, B, options) {
         else if (temp.isNegative()) { Sign = Minus_Char; } // If the number is negative, attach the Minus sign character set in options
         else { Sign = Plus_Char; } // Otherwise, attach the Plus sign character set in options (blank string by default)
         var Result = temp.abs();
-        Result = Sign.concat(Result.toFixed(Result.dp())); // toFixed avoids exponential notation when Result is converted to a string in the next line
+        Result = Result.toFixed(Result.dp()); // toFixed avoids exponential notation
         // Result is now a string
+        Result = LongDivide.GroupDigits(Result, Thousands_Char, Thousandths_Char, Decimal_Point_Char, Orphans);
+        Result = Currency_Char.concat(Result);
+        //Result = Sign.concat(Result);
+        Result = Result.concat(SI_Prefix);
+        if (Sign !== '()') { Result = Sign.concat(Result); } else { Result = '('.concat(Result).concat(')'); }
         if (!(A.div(B).equals(temp))) { Result = Approx_Char.concat(Result); } // If input numbers are not evenly divisible, attach the approximation sign set in options
-        return Result.concat(SI_Prefix);
+        return Result
     }
 
     // Handle floating point numbers by multiplying them by 10 until they are integers
@@ -490,6 +549,7 @@ LongDivide.parseFormatString = function(options) {
         options['minus'] = '()';
     }
 
+    //console.log(options);
     return options;
 }
 
@@ -499,10 +559,12 @@ LongDivide.GroupDigits = function(number, thousands, thousandths, decimal, orpha
     //console.log('GroupDigits():\nnumber:', number, '\nthousands:', thousands, '\nthousandths', thousandths, '\ndecimal', decimal);
     var parts = number.toString().split('.');
     parts[0] = parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, thousands);
-    parts[1] = parts[1].split('').reverse().join('').replace(/\B(?=(\d{3})+(?!\d))/g, thousandths.split('').reverse().join('')).split('').reverse().join('');
+    if (parts.length > 1) {
+        parts[1] = parts[1].split('').reverse().join('').replace(/\B(?=(\d{3})+(?!\d))/g, thousandths.split('').reverse().join('')).split('').reverse().join('');
+    }
     //console.log('LongDivide.GroupDigits(): ' + parts.join(decimal));
     // Remove the last thousandths separator if there is an orphan digit and orphans have been disallowed in options
-    if (parts[1] != '' && thousandths != '') {
+    if (parts[1] != '' && parts[1] !== undefined && thousandths != '') {
         if (number.split('.')[1].length % 3 == 1 && parts[1].indexOf(thousandths) != -1 && orphans == false) {
             parts[1] = parts[1].slice(0, parts[1].lastIndexOf(thousandths)).concat(parts[1].slice(parts[1].lastIndexOf(thousandths) + thousandths.length));
         }
