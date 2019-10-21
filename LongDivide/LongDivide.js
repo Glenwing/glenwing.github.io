@@ -9,6 +9,8 @@ October 17, 2019
 */
 
 // Default options
+LongDivide.version = '1.3.0';
+
 LongDivide.p_max = 8;
 LongDivide.p_min = 0;
 LongDivide.leading = 1;
@@ -31,36 +33,42 @@ LongDivide.si = false;
 LongDivide.twosingles = true;
 LongDivide.repeat = true;
 
+LongDivide.errors = true;
+LongDivide.warnings = true;
+LongDivide.erroroutput = 'Error';
+
 function LongDivide (A, B, options) {
     //console.log('BEGIN:', A, '÷', B)
-    try { Decimal.set({'precision': 1000 }) } catch (ReferenceError) { console.log('Error in function LongDivide(): Decimal.js library not detected. LongDivide.js requires Decimal.js in order to operate. (https://github.com/MikeMcl/decimal.js)'); return 'Error'; }
-    if (A == '' || B == '') { return ''; }
+    try { Decimal.set({'precision': 1000 }) } catch (ReferenceError) { LongDivide.PrintError('Decimal.js library not detected. LongDivide.js requires Decimal.js in order to operate. (https://github.com/MikeMcl/decimal.js)'); return LongDivide.erroroutput; }
+    if (A === '' || B === '') { return ''; }
 
     if (typeof(A) === 'string' || typeof(A) === 'number') {
         try {
             A = new Decimal(A);
-            if (A.isNaN() || !A.isFinite()) { console.log('Error in function LongDivide(): First argument is NaN or Infinity.\nArgument:', A); return 'Error'; }
+            if (A.isNaN() || !A.isFinite()) { LongDivide.PrintError('First argument is NaN or Infinity.\nArgument:', A); return LongDivide.erroroutput; }
         }
-        catch (DecimalError) { console.log('Error in function LongDivide(): First argument could not be interpreted as a number.\nArgument:', A); return 'Error'; }
+        catch (DecimalError) { LongDivide.PrintError('First argument could not be interpreted as a number.\nArgument:', A); return LongDivide.erroroutput; }
     }
-    else if (typeof(A) === 'object') { if (A.constructor !== Decimal) { console.log('Error in function LongDivide(): First argument is an unrecognized object. Argument must be a string, number, or Decimal object.\nArgument:', A) } }
-    else { console.log('Error in function LongDivide(): First argument is of an unrecognized type.\ntypeof(A):', typeof(A)); }
+    else if (typeof(A) === 'object') { if (A.constructor !== Decimal) { LongDivide.PrintError('First argument is an unrecognized object. Argument must be a string, number, or Decimal object.\nArgument:', A) } }
+    else { LongDivide.PrintError('First argument is of an unrecognized type.\ntypeof(A):', typeof(A)); }
 
     if (typeof(B) === 'string' || typeof(B) === 'number') {
         try {
             B = new Decimal(B);
-            if (B.isNaN() || !B.isFinite()) { console.log('Error in function LongDivide(): Second argument is NaN or Infinity.\nArgument:', B); }
+            if (B.isNaN() || !B.isFinite()) { LongDivide.PrintError('Second argument is NaN or Infinity.\nArgument:', B); }
         }
-        catch (DecimalError) { console.log('Error in function LongDivide(): Second argument could not be interpreted as a number.\nArgument:', B); return 'Error'; }
+        catch (DecimalError) { LongDivide.PrintError('Second argument could not be interpreted as a number.\nArgument:', B); return LongDivide.erroroutput; }
     }
-    else if (typeof(B) === 'object') { if (B.constructor !== Decimal) { console.log('Error in function LongDivide(): Second argument is an unrecognized object. Argument must be a string, number, or Decimal object.\nArgument:', B) } }
-    else { console.log('Error in function LongDivide(): Second argument is of an unrecognized type.\ntypeof(B):', typeof(B)); }
+    else if (typeof(B) === 'object') { if (B.constructor !== Decimal) { LongDivide.PrintError('Second argument is an unrecognized object. Argument must be a string, number, or Decimal object.\nArgument:', B) } }
+    else { LongDivide.PrintError('Second argument is of an unrecognized type.\ntypeof(B):', typeof(B)); }
 
-    if (B.isZero()) { console.log('Error in function LongDivide(): Division by zero'); return 'Error'; }
-    if (!A.div(B).isFinite()) { console.log('Error in function LongDivide(): Division result is Infinity,\nA:', A.toFixed(A.dp()), '\nB:', B.toFixed(B.dp())); return 'Error'; }
+    if (B.isZero()) { LongDivide.PrintError('Division by zero'); return LongDivide.erroroutput; }
+    if (!A.div(B).isFinite()) { LongDivide.PrintError('Division result is Infinity,\nA:', A.toFixed(A.dp()), '\nB:', B.toFixed(B.dp())); return LongDivide.erroroutput; }
 
-    //if ( Number.isNaN(parseFloat(A)) || Number.isNaN(parseFloat(B)) || !Number.isFinite(parseFloat(A)) || !Number.isFinite(parseFloat(B)) || !Number.isFinite(parseFloat(A)/parseFloat(B)) || Number.isNaN(parseFloat(A)/parseFloat(B)) ) { console.log('Error in function LongDivide(): One or both inputs is NaN or Infinity, or there is a division by zero. Function aborted.'); return 'Error'; }
+    //if ( Number.isNaN(parseFloat(A)) || Number.isNaN(parseFloat(B)) || !Number.isFinite(parseFloat(A)) || !Number.isFinite(parseFloat(B)) || !Number.isFinite(parseFloat(A)/parseFloat(B)) || Number.isNaN(parseFloat(A)/parseFloat(B)) ) { LongDivide.PrintError('One or both inputs is NaN or Infinity, or there is a division by zero. Function aborted.'); return LongDivide.erroroutput; }
 
+    console.log('A', A);
+    console.log('B', B);
     //A = new Decimal(A);
     //B = new Decimal(B);
 
@@ -172,16 +180,16 @@ function LongDivide (A, B, options) {
             if      (Decimal_Point_Char === '.') { Decimal_Point_Char = ','; }
             else if (Decimal_Point_Char === ',') { Decimal_Point_Char = '.'; }
         }
-        else { console.log('Error in function LongDivide(): Decimal point character and thousands grouping character cannot be the same.\ndecimal_point_char:' + Decimal_Point_Char + '\nthousands_char:' + Thousands_Char); return 'Error'; }
+        else { LongDivide.PrintError('Decimal point character and thousands grouping character cannot be the same.\ndecimal_point_char:' + Decimal_Point_Char + '\nthousands_char:' + Thousands_Char); return LongDivide.erroroutput; }
     }
-    if (Decimal_Point_Char === Thousandths_Char) { console.log('Error in function LongDivide(): Decimal point character and thousandths grouping character cannot be the same.\ndecimal_point_char:' + Decimal_Point_Char + '\nthousandths_char:' + Thousandths_Char); return 'Error'; }
-    if (Decimal_Point_Char.match(/[0-9]/g)) { console.log('Error in function LongDivide(): Decimal point character cannot be a number.\nDecimal_Point_Char:', Decimal_Point_Char); return 'Error'; }
-    if (Thousands_Char.match(/[0-9]/g)) { console.log('Error in function LongDivide(): Thousands grouping character cannot be a number.\nThousands_Char:', Thousands_Char); return 'Error'; }
-    if (Thousandths_Char.match(/[0-9]/g)) { console.log('Error in function LongDivide(): Thousandths grouping character cannot be a number.\nThousandths_Char:', Thousandths_Char); return 'Error'; }
-    if (Minus_Char.match(/[0-9]/g)) { console.log('Error in function LongDivide(): Minus sign character cannot be a number.\nMinus_Char:', Minus_Char); return 'Error'; }
-    if (Plus_Char.match(/[0-9]/g)) { console.log('Error in function LongDivide(): Plus sign character cannot be a number.\nPlus_Char:', Plus_Char); return 'Error'; }
-    if (Approx_Char.match(/[0-9]/g)) { console.log('Error in function LongDivide(): Approximation sign character cannot be a number.\nApprox_Char:', Approx_Char); return 'Error'; }
-    if (Currency_Char.match(/[0-9]/g)) { console.log('Error in function LongDivide(): Currency symbol cannot be a number.\nCurrency_Char:', Currency_Char); return 'Error'; }
+    if (Decimal_Point_Char === Thousandths_Char) { LongDivide.PrintError('Decimal point character and thousandths grouping character cannot be the same.\ndecimal_point_char:' + Decimal_Point_Char + '\nthousandths_char:' + Thousandths_Char); return LongDivide.erroroutput; }
+    if (Decimal_Point_Char.match(/[0-9]/g)) { LongDivide.PrintError('Decimal point character cannot be a number.\nDecimal_Point_Char:', Decimal_Point_Char); return LongDivide.erroroutput; }
+    if (Thousands_Char.match(/[0-9]/g)) { LongDivide.PrintError('Thousands grouping character cannot be a number.\nThousands_Char:', Thousands_Char); return LongDivide.erroroutput; }
+    if (Thousandths_Char.match(/[0-9]/g)) { LongDivide.PrintError('Thousandths grouping character cannot be a number.\nThousandths_Char:', Thousandths_Char); return LongDivide.erroroutput; }
+    if (Minus_Char.match(/[0-9]/g)) { LongDivide.PrintError('Minus sign character cannot be a number.\nMinus_Char:', Minus_Char); return LongDivide.erroroutput; }
+    if (Plus_Char.match(/[0-9]/g)) { LongDivide.PrintError('Plus sign character cannot be a number.\nPlus_Char:', Plus_Char); return LongDivide.erroroutput; }
+    if (Approx_Char.match(/[0-9]/g)) { LongDivide.PrintError('Approximation sign character cannot be a number.\nApprox_Char:', Approx_Char); return LongDivide.erroroutput; }
+    if (Currency_Char.match(/[0-9]/g)) { LongDivide.PrintError('Currency symbol cannot be a number.\nCurrency_Char:', Currency_Char); return LongDivide.erroroutput; }
 
     // Determine whether exponential notation is enabled (it's a somewhat convoluted check, so putting it on a single variable is useful)
     var Exp_flag = false;
@@ -205,12 +213,12 @@ function LongDivide (A, B, options) {
     Base = Math.round(Base);
     // Validity checks for precision and base
     if (P_Max < 0 || P_Min < 0 || P_Max < P_Min || Number.isNaN(P_Max) || Number.isNaN(P_Min) || !Number.isFinite(P_Max) || !Number.isFinite(P_Min)) {
-        console.log('Error in function LongDivide(): Invalid P_Max and P_Min values. Both values must be non-negative numbers, and P_Min cannot be greater than P_Max.\nP_Max:', P_Max, 'P_Min', P_Min)
-        return 'Error';
+        LongDivide.PrintError('Invalid P_Max and P_Min values. Both values must be non-negative numbers, and P_Min cannot be greater than P_Max.\nP_Max:', P_Max, 'P_Min', P_Min)
+        return LongDivide.erroroutput;
     }
     if (isNaN(Base)) {
-        console.log('Error in function LongDivide(): Invalid Base value. Must be an integer number.\nBase:', Base);
-        return 'Error';
+        LongDivide.PrintError('Invalid Base value. Must be an integer number.\nBase:', Base);
+        return LongDivide.erroroutput;
     }
 
     // Adjust numerator for metric prefixes
@@ -230,7 +238,7 @@ function LongDivide (A, B, options) {
             }
             watchdog += 1;
             if (watchdog == 10) {
-                console.log('Warning in function LongDivide(): Runaway loop in the SI prefix section has hit the watchdog threshold (10 loop cycles) and was aborted. Check your code!\n', 'A:', A, 'B:', B, 'Power:', Power);
+                LongDivide.PrintWarning('Runaway loop in the SI prefix section has hit the watchdog threshold (10 loop cycles) and was aborted. Check your code!\n', 'A:', A, 'B:', B, 'Power:', Power);
             }
         }
         var SI_Prefix_Table = {
@@ -407,7 +415,7 @@ function LongDivide (A, B, options) {
                 while (Decimal_Digits.length <= P_Max) {
                     Decimal_Digits = Decimal_Digits.concat(Repetend);
                     watchdog += 1;
-                    if (watchdog > 1000) { console.log('Warning in function LongDivide(): Runaway loop has hit the watchdog threshold in the RepeatEnableFlag section (1 thousand loop cycles) and was aborted. Check your code!\nDecimal_Digits.length:', Decimal_Digits.length, 'Repetend:', Repetend, 'P_Max:', P_Max); break; }
+                    if (watchdog > 1000) { LongDivide.PrintWarning('Runaway loop has hit the watchdog threshold in the RepeatEnableFlag section (1 thousand loop cycles) and was aborted. Check your code!\nDecimal_Digits.length:', Decimal_Digits.length, 'Repetend:', Repetend, 'P_Max:', P_Max); break; }
                 }
                 Repetend = '';
                 RepeatFlag = false;
@@ -570,4 +578,55 @@ LongDivide.GroupDigits = function(number, thousands, thousandths, decimal, orpha
         }
     }
     return parts.join(decimal);
+}
+
+
+LongDivide.PrintError = function(text) {
+    //console.log('Printing Error')
+    if (LongDivide.errors === true) {
+        var str = 'console.log("Error in function LongDivide():"'
+        for (var i = 0; i < arguments.length; i++) {
+            str += ', arguments[' + i + ']';
+        }
+        str += ');';
+        eval(str);
+        // This eval is performed on a string which can only possibly be a console statement of the form "console.log(argument[0], argument[1], ... , argument[i]);"
+        // The actual arguments are not processed by eval, it only converts the literal text "argument[0]" into javascript, which is then executed by the console.log statement
+        // Hence, there should be no vulnerability beyond what is possible with console.log.
+
+        // In addition, the arguments themselves are only predefined strings elsewhere in the code anyway.
+        // In no way is this eval statement ever exposed to user input.
+
+        // Even if this LongDivide.PrintError function is called directly with arbitrary arguments given,
+        // the arguments to the function will be evaluated exactly as if the user called "console.log" with the same arguments.
+        // If a string of attempted malicious code is passed to PrintError, the contents of the string will just be printed to the console.
+        // If a function or object is passed to PrintError, the definition of the function/object will simply be printed to the console.
+        // Etc.
+        // This eval statement does not evaluate the contents of arbitrary strings.
+    }
+    return;
+}
+
+LongDivide.PrintWarning = function(text) {
+    if (LongDivide.warnings === true) {
+        var str = 'console.log("Warning in function LongDivide():"'
+        for (var i = 0; i < arguments.length; i++) {
+            str += ', arguments[' + i + ']';
+        }
+        str += ');';
+        eval(str);
+        // This eval is performed on a string which can only possibly be a console statement of the form "console.log(argument[0], argument[1], ... , argument[i]);"
+        // The actual arguments are not processed by eval, it only converts the literal text "argument[0]" into javascript, which is then executed by the console.log statement
+        // Hence, there should be no vulnerability beyond what is possible with console.log.
+
+        // In addition, the arguments themselves are only predefined strings elsewhere in the code anyway.
+        // In no way is this eval statement ever exposed to user input.
+
+        // Even if this LongDivide.PrintError function is called directly, the arguments to the function will be evaluated exactly as if the user called "console.log" with the same arguments.
+        // If a string of attempted malicious code is passed to PrintError, the contents of the string will just be printed to the console.
+        // If a function or object is passed to PrintError, the definition of the function/object will simply be printed to the console.
+        // Etc.
+        // This eval statement does not evaluate the contents of arbitrary strings.
+    }
+    return;
 }
