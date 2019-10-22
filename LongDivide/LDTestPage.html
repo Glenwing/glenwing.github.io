@@ -254,23 +254,24 @@ options = {
         if (Leading != '') { options['leading'] = Leading; }
         options['thousands'] =   document.getElementById('thousands_box').value;
         options['thousandths'] = document.getElementById('thousandths_box').value;
-        options['decimal'] =     document.getElementById('decimal_box').value;
+        var Decimal = document.getElementById('decimal_box').value;
+        if (Decimal != '') { options['decimal'] = Decimal; }
         options['minus'] =       document.getElementById('minus_box').value;
         options['plus'] =        document.getElementById('plus_box').value;
         options['approx'] =      document.getElementById('approx_box').value;
         options['currency'] =    document.getElementById('currency_box').value;
         options['exp'] =         document.getElementById('exp_box').value;
         options['exp_open'] =    document.getElementById('exp_open_box').value;
-        options['exp_close'] =    document.getElementById('exp_close_box').value;
-        options['exp_minus'] =    document.getElementById('exp_minus_box').value;
+        options['exp_close'] =   document.getElementById('exp_close_box').value;
+        options['exp_minus'] =   document.getElementById('exp_minus_box').value;
         options['exp_plus'] =    document.getElementById('exp_plus_box').value;
-        options['OL_open'] = document.getElementById('ol_open_box').value;
-        options['OL_close'] = document.getElementById('ol_close_box').value;
+        options['OL_open'] =     document.getElementById('ol_open_box').value;
+        options['OL_close'] =    document.getElementById('ol_close_box').value;
 
-        options['2_singles'] = document.getElementById('singles').checked;
-        options['repeat'] = document.getElementById('repeat').checked;
-        options['si'] = document.getElementById('si').checked;
-        options['orphan'] = document.getElementById('orphan').checked;
+        options['2_singles'] =   document.getElementById('singles').checked;
+        options['repeat'] =      document.getElementById('repeat').checked;
+        options['si'] =          document.getElementById('si').checked;
+        options['orphan'] =      document.getElementById('orphan').checked;
         /*
         if (format != '') {
             var result = LongDivide(A.toString(), B.toString(), format);

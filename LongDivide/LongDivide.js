@@ -67,10 +67,8 @@ function LongDivide (A, B, options) {
 
     //if ( Number.isNaN(parseFloat(A)) || Number.isNaN(parseFloat(B)) || !Number.isFinite(parseFloat(A)) || !Number.isFinite(parseFloat(B)) || !Number.isFinite(parseFloat(A)/parseFloat(B)) || Number.isNaN(parseFloat(A)/parseFloat(B)) ) { LongDivide.PrintError('One or both inputs is NaN or Infinity, or there is a division by zero. Function aborted.'); return LongDivide.erroroutput; }
 
-    console.log('A', A);
-    console.log('B', B);
-    //A = new Decimal(A);
-    //B = new Decimal(B);
+    //console.log('A', A);
+    //console.log('B', B);
 
     if (typeof(options) === 'undefined') { options = {}; }
 
