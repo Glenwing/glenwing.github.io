@@ -3,13 +3,13 @@
 LongDivide.js
 Created by Glenwing (https://github.com/Glenwing)
 
-Version: 1.3.0
-October 21, 2019
+Version: 1.3.1
+May the 4th, 2020
 
 */
 
 // Default options
-LongDivide.version = '1.3.0';
+LongDivide.version = '1.3.1';
 
 LongDivide.p_max = 8;
 LongDivide.p_min = 0;
@@ -22,6 +22,7 @@ LongDivide.minus = '\u2212';
 LongDivide.plus = '';
 LongDivide.approx = '\u2248';
 LongDivide.currency = '';
+LongDivide.micro = '\u00B5';
 LongDivide.exp = '';
 LongDivide.exp_open = 'e';
 LongDivide.exp_close = '';
@@ -137,6 +138,10 @@ function LongDivide (A, B, options) {
     var Currency_Char =      options['currency'] !== undefined ? options['currency'] :
         LongDivide.currency;
 
+    // Symbol to be used for the Micro prefix (10^-6) when SI prefixes are enabled. Default is Greek letter mu (U+00B5).
+    var Micro_Char =         options['micro'] !== undefined ? options['micro'] :
+        LongDivide.micro;
+
     // Flag indicating whether SI prefixes are desired or not
     var SI =                 options['si'] !== undefined ? options['si'] : options['SI'] !== undefined ? options['SI'] :
         LongDivide.si;
@@ -250,7 +255,7 @@ function LongDivide (A, B, options) {
             '3':   'k',
             '0':   '',
             '-3':  'm',
-            '-6':  '&mu;',
+            '-6':  Micro_Char,
             '-9':  'n',
             '-12': 'p',
             '-15': 'f',
@@ -507,6 +512,8 @@ function LongDivide (A, B, options) {
 
 
 LongDivide.parseFormatString = function(options) {
+    // If options are entered to LongDivide via a format string, this function parses that string to determine the individual options that the string indicates.
+
     if (typeof(options) === 'string') { var string = options; options = {}; }
     else { var string = options['format']; }
 
@@ -583,53 +590,26 @@ LongDivide.GroupDigits = function(number, thousands, thousandths, decimal, orpha
     return parts.join(decimal);
 }
 
-
 LongDivide.PrintError = function(text) {
     //console.log('Printing Error')
     if (LongDivide.errors === true) {
-        var str = 'console.log("Error in function LongDivide():"'
+        var args = ["Error in function LongDivide():"];
         for (var i = 0; i < arguments.length; i++) {
-            str += ', arguments[' + i + ']';
+            args.push(arguments[i]);
         }
-        str += ');';
-        eval(str);
-        // This eval is performed on a string which can only possibly be a console statement of the form "console.log(argument[0], argument[1], ... , argument[i]);"
-        // The actual arguments are not processed by eval, it only converts the literal text "argument[0]" into javascript, which is then executed by the console.log statement
-        // Hence, there should be no capabilities exposed beyond what is possible with console.log.
-
-        // In addition, the arguments themselves are only predefined strings elsewhere in the code anyway.
-        // In no way is this eval statement ever exposed to user input.
-
-        // Even if this LongDivide.PrintError function is called directly with arbitrary arguments given,
-        // the arguments to the function will be evaluated exactly as if the user called "console.log" with the same arguments.
-        // If a string of attempted malicious code is passed to PrintError, the contents of the string will just be printed to the console.
-        // If a function or object is passed to PrintError, the definition of the function/object will simply be printed to the console.
-        // Etc.
-        // This eval statement does not evaluate the contents of the function arguments, or any other arbitrary strings.
+        console.log.apply(this, args);
     }
     return;
 }
 
 LongDivide.PrintWarning = function(text) {
+    //console.log('Printing Warning')
     if (LongDivide.warnings === true) {
-        var str = 'console.log("Warning in function LongDivide():"'
+        var args = ["Warning in function LongDivide():"];
         for (var i = 0; i < arguments.length; i++) {
-            str += ', arguments[' + i + ']';
+            args.push(arguments[i]);
         }
-        str += ');';
-        eval(str);
-        // This eval is performed on a string which can only possibly be a console statement of the form "console.log(argument[0], argument[1], ... , argument[i]);"
-        // The actual arguments are not processed by eval, it only converts the literal text "argument[0]" into javascript, which is then executed by the console.log statement
-        // Hence, there should be no capabilities exposed beyond what is possible with console.log.
-
-        // In addition, the arguments themselves are only predefined strings elsewhere in the code anyway.
-        // In no way is this eval statement ever exposed to user input.
-
-        // Even if this LongDivide.PrintError function is called directly, the arguments to the function will be evaluated exactly as if the user called "console.log" with the same arguments.
-        // If a string of attempted malicious code is passed to PrintError, the contents of the string will just be printed to the console.
-        // If a function or object is passed to PrintError, the definition of the function/object will simply be printed to the console.
-        // Etc.
-        // This eval statement does not evaluate the contents of the function arguments, or any other arbitrary strings.
+        console.log.apply(this, args);
     }
     return;
 }

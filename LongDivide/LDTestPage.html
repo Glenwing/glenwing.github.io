@@ -129,6 +129,15 @@ options = {
         </td>
     </tr>
     <tr>
+        <td>'micro':</td>
+        <td>
+            <input id="micro_box" value="&mu;" placeholder="' '" type="text" onchange="divide();" oninput="this.onchange();" onfocus="this.select();" style="width:40px; background-color:#555555; color:#EEEEEE; font-size:16px; text-align:center;" />
+            <input type="button" value="&mu;" onclick="document.getElementById('micro_box').value = '&mu;'; divide();" >
+            <input type="button" value="u" onclick="document.getElementById('micro_box').value = 'u'; divide();" >
+            &nbsp;&nbsp;// Character used for "micro" (10<sup>&minus;6</sup>) prefix when SI prefixes are enabled
+        </td>
+    </tr>
+    <tr>
         <td>'OL_open':</td>
         <td><input id="ol_open_box" value="&lt;span style='text-decoration:overline;'&gt;" placeholder="' '" type="text" onchange="divide();" oninput="this.onchange();" onfocus="this.select();" style="width:200px; background-color:#555555; color:#EEEEEE; font-size:16px;" />
         <input type="button" value="Default" onclick="document.getElementById('ol_open_box').value = '<span style=\'text-decoration:overline;\'>'; divide();" >
@@ -260,6 +269,7 @@ options = {
         options['plus'] =        document.getElementById('plus_box').value;
         options['approx'] =      document.getElementById('approx_box').value;
         options['currency'] =    document.getElementById('currency_box').value;
+        options['micro'] =       document.getElementById('micro_box').value;
         options['exp'] =         document.getElementById('exp_box').value;
         options['exp_open'] =    document.getElementById('exp_open_box').value;
         options['exp_close'] =   document.getElementById('exp_close_box').value;
@@ -281,6 +291,6 @@ options = {
         document.getElementById('standard_result').innerHTML = (parseFloat(A) / parseFloat(B));
     }
 
-    window.onload = function() { divide(); }
+    window.onload = function() { console.log("LongDivide Version", LongDivide.version); divide(); }
 
 </script>
