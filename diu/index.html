@@ -24,10 +24,10 @@
             </div>
             <div style="width:512px; margin-left:auto; margin-right:auto;">
                 <!-- FIRST SEGMENT -->
-                <div class="title">DISPLAY INFO UTILITY</div>
+                <div class="title">Display Info Utility</div>
                 <table>
                     <tr>
-                        <td class="label"><b>Size:</b></td>
+                        <td class="label">Size</td>
                         <td>
                             <input id="INPUT_SIZE" style="width:50px;" type="text" onchange="update();" oninput="this.onchange();" onfocus="this.select();" tabindex="3" autofocus />
                         </td>
@@ -39,7 +39,7 @@
                         </td>
                     </tr>
                     <tr>
-                        <td class="label"><b>Resolution:</b></td>
+                        <td class="label">Resolution</td>
                         <td colspan="2" style="width:100%">
                             <input id="INPUT_HRES" class="res_input" style="text-align:right;" type="text" onchange="update();" oninput="this.onchange()" onfocus="this.select();" tabindex="4" />
                             <span class="res_x">&#10005;</span>
@@ -48,45 +48,45 @@
                     </tr>
                 </table>
                 <!-- SECOND SEGMENT -->
-                <div class="title">GENERAL INFO</div>
+                <div class="title">General Info</div>
                 <table style="min-width:160px;">
                     <tr>
-                        <td class="label">Ratio:</td>
+                        <td class="label">Ratio</td>
                         <td id="RESULT_RATIO" class="result"></td>
                     </tr>
                     <tr>
-                        <td class="label">Total Pixels:</td>
+                        <td class="label">Total Pixels</td>
                         <td id="RESULT_TOTAL_PX" class="result"></td>
                     </tr>
                     <tr>
-                        <td class="label">Pixel Density:</td>
+                        <td class="label">Pixel Density</td>
                         <td id="RESULT_PX_DENSITY" class="result"></td>
                     </tr>
                     <tr>
-                        <td class="label">Diagonal Size:</td>
+                        <td class="label">Diagonal Size</td>
                         <td id="RESULT_DIAG" class="result"></td>
                     </tr>
                     <tr>
-                        <td class="label">Width:</td>
+                        <td class="label">Width</td>
                         <td id="RESULT_WIDTH" class="result"></td>
                     </tr>
                     <tr>
-                        <td class="label">Height:</td>
+                        <td class="label">Height</td>
                         <td id="RESULT_HEIGHT" class="result"></td>
                     </tr>
                     <tr>
-                        <td class="label">Area:</td>
+                        <td class="label">Area</td>
                         <td id="RESULT_AREA" class="result"></td>
                     </tr>
                 </table>
                 <!-- THIRD SEGMENT -->
-                <div class="title">SECONDARY DISPLAY WITH MATCHING HEIGHT</div>
+                <div class="title">Secondary Display with Matching Height</div>
                 <table>
                     <tr>
-                        <td class="label">Secondary Display<br />Aspect Ratio:</td>
+                        <td class="label">Secondary Display<br />Aspect Ratio</td>
                         <td>
                             <input class="res_input" id="INPUT_HRES2" style="width:32px; text-align:right;" type="text" onchange="update();" oninput="this.onchange()" onfocus="this.select();" />
-                            <span>&#x2236;</span>
+                            <span class="ratio">&#x2236;</span>
                             <input class="res_input" id="INPUT_VRES2" style="width:32px; text-align:left;" type="text" onchange="update();" oninput="this.onchange()" onfocus="this.select();" />
                         </td>
                     </tr>
@@ -100,11 +100,11 @@
                         </td>
                     </tr>
                     <tr>
-                        <td class="label">Diagonal Size:</td>
+                        <td class="label">Diagonal Size</td>
                         <td id="RESULT_D_MATCH" class="result"></td>
                     </tr>
                     <tr>
-                        <td class="label">Optimum Resolution:<br />(to also match density)</td>
+                        <td class="label">Optimum Resolution<br />(to also match density)</td>
                         <td id="RESULT_OPT_RES" class="result"></td>
                     </tr>
                     <!----<tr>
@@ -113,10 +113,10 @@
                     </tr>-->
                 </table>
                 <!-- FOURTH SEGMENT -->
-                <div class="title">SECONDARY DISPLAY WITH MATCHING PIXEL DENSITY</div>
+                <div class="title">Secondary Display with Matching Pixel Density</div>
                 <table>
                     <tr>
-                        <td class="label">Secondary Display<br />Resolution:</td>
+                        <td class="label">Secondary Display<br />Resolution</td>
                         <td>
                             <input class="res_input" id="INPUT_HRES_DENSITY" style="text-align:right;" type="text" onchange="update();" oninput="this.onchange()" onfocus="this.select();" />
                             <span class="res_x">&#10005;</span>
@@ -124,11 +124,11 @@
                         </td>
                     </tr>
                     <tr>
-                        <td class="label">Diagonal Size:</td>
+                        <td class="label">Diagonal Size</td>
                         <td id="RESULT_DENSITY_SIZE" class="result"></td>
                     </tr>
                     <tr>
-                        <td class="label">Ratio:</td>
+                        <td class="label">Ratio</td>
                         <td id="RESULT_DENSITY_RATIO" class="result"></td>
                     </tr>
                 </table>

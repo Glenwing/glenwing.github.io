@@ -1,21 +1,131 @@
-﻿html,
-body {
+﻿@font-face {
+    font-family: Inconsolata;
+    src: url("../fonts/Inconsolata-Regular.ttf") format('truetype');
+    font-weight: normal;
+}
+@font-face {
+    font-family: Inconsolata;
+    src: url("../fonts/Inconsolata-Bold.ttf") format('truetype');
+    font-weight: bold;
+}
+
+@font-face {
+    font-family: IBM Plex Sans;
+    src: url("../fonts/IBMPlexSans-Thin.ttf") format('truetype');
+    font-weight: 100;
+    font-style:  normal;
+}
+
+@font-face {
+    font-family: IBM Plex Sans;
+    src: url("../fonts/IBMPlexSans-ThinItalic.ttf") format('truetype');
+    font-weight: 100;
+    font-style:  italic;
+}
+
+@font-face {
+    font-family: IBM Plex Sans;
+    src: url("../fonts/IBMPlexSans-ExtraLight.ttf") format('truetype');
+    font-weight: 200;
+    font-style:  normal;
+}
+
+@font-face {
+    font-family: IBM Plex Sans;
+    src: url("../fonts/IBMPlexSans-ExtraLightItalic.ttf") format('truetype');
+    font-weight: 200;
+    font-style:  italic;
+}
+
+@font-face {
+    font-family: IBM Plex Sans;
+    src: url("../fonts/IBMPlexSans-Light.ttf") format('truetype');
+    font-weight: 300;
+    font-style:  normal;
+}
+
+@font-face {
+    font-family: IBM Plex Sans;
+    src: url("../fonts/IBMPlexSans-LightItalic.ttf") format('truetype');
+    font-weight: 300;
+    font-style:  italic;
+}
+
+@font-face {
+    font-family: IBM Plex Sans;
+    src: url("../fonts/IBMPlexSans-Regular.ttf") format('truetype');
+    font-weight: 400;
+    font-style:  normal;
+}
+
+@font-face {
+    font-family: IBM Plex Sans;
+    src: url("../fonts/IBMPlexSans-RegularItalic.ttf") format('truetype');
+    font-weight: 400;
+    font-style:  italic;
+}
+
+@font-face {
+    font-family: IBM Plex Sans;
+    src: url("../fonts/IBMPlexSans-Medium.ttf") format('truetype');
+    font-weight: 500;
+    font-style:  normal;
+}
+
+@font-face {
+    font-family: IBM Plex Sans;
+    src: url("../fonts/IBMPlexSans-MediumItalic.ttf") format('truetype');
+    font-weight: 500;
+    font-style:  italic;
+}
+
+@font-face {
+    font-family: IBM Plex Sans;
+    src: url("../fonts/IBMPlexSans-SemiBold.ttf") format('truetype');
+    font-weight: 600;
+    font-style:  normal;
+}
+
+@font-face {
+    font-family: IBM Plex Sans;
+    src: url("../fonts/IBMPlexSans-SemiBoldItalic.ttf") format('truetype');
+    font-weight: 600;
+    font-style:  italic;
+}
+
+@font-face {
+    font-family: IBM Plex Sans;
+    src: url("../fonts/IBMPlexSans-Bold.ttf") format('truetype');
+    font-weight: 700;
+    font-style:  normal;
+}
+
+@font-face {
+    font-family: IBM Plex Sans;
+    src: url("../fonts/IBMPlexSans-BoldItalic.ttf") format('truetype');
+    font-weight: 700;
+    font-style:  italic;
+}
+
+html, body {
     margin:             0;
     height:             100%;
     padding:            0;
+    background-color:   #1E1E1E;
+    color:              #FFFFFF;
 }
 
 body {
-    font-family:        "Consolas", "Inconsolata", "Lucida Console", Monospace;
-    font-size:          15px;
+    font-family:        "Inconsolata", "Consolas", "Lucida Console", Monospace;
+    font-size:          18px;
     line-height:        120%;
     min-height:         100%;
     overflow-y:         scroll;
 }
 
 .number {
-    font-family:        "Consolas", "Inconsolata", "Lucida Console", Monospace;
-    font-size:          15px;
+    font-family:        "Inconsolata", "Consolas", "Lucida Console", Monospace;
+    font-size:          100%;
 }
 
 div.wrapper {
@@ -25,7 +135,7 @@ div.wrapper {
 
 div.main {
     border:             0px solid transparent;
-    font-size:          15px;
+    font-size:          100%;
     padding-bottom:     48px;
     margin-left:        auto;
     margin-right:       auto;
@@ -37,12 +147,12 @@ div.footer {
     bottom:             0;
     left:               0;
     vertical-align:     middle;
-    background-color:   #DDDDDD;
+    background-color:   #323232;
     cursor:             pointer;
     min-width:          512px;
     padding-top:        10px;
     padding-bottom:     10px;
-    font-family:        "Consolas", "Inconsolata", "Lucida Console", Monospace;
+    font-family:        "Inconsolata", "Consolas", "Lucida Console", Monospace;
     font-size:          15px;
 }
 div.footer a {
@@ -53,7 +163,8 @@ div.footer a {
 }
 
 div.header {
-    font-family:        "Consolas", "Inconsolata", "Lucida Console", Monospace;
+    font-family:        "Inconsolata", "Consolas", "Lucida Console", Monospace;
+    /* font-family:        "IBM Plex Sans"; */
     line-height:        120%;
     font-weight:        bold;
     font-size:          16px;
@@ -66,7 +177,7 @@ div.header {
 div.header a {
     cursor:             pointer;
     text-decoration:    none;
-    color:              #000000;
+    color:              #FFFFFF;
 }
 div.header i.back_arrow {
     transform:rotate(90deg) scale(0.75);
@@ -76,12 +187,14 @@ div.header i.back_arrow {
 }
 
 div.title {
+    font-family:        "IBM Plex Sans", sans-serif;
+    font-weight:        400;
+    font-size:          100%;
     margin-left:        auto;
     margin-right:       auto;
     text-align:         center;
-    font-weight:        bold;
-    background-color:   #DDDDDD;
-    padding:            8px;
+    background-color:   #323232;
+    padding:            12px;
 }
 
 span.title {
@@ -89,13 +202,18 @@ span.title {
 }
 
 input {
+    font-family:        "Inconsolata", "Consolas", "Lucida Console", Monospace;
+    font-weight:        normal;
+    font-size:          85%;
     padding:            4px;
     text-align:         center;
+    height:             25px;
 }
 
 input[type="text"] {
-    border:             1px solid #CCCCCC;
-    background-color:   #F4F4F8;
+    border:             1px solid #323232;
+    background-color:   #272727;
+    color:              #FFFFFF;
 }
 
 input.res_input {
@@ -115,12 +233,17 @@ td {
 }
 
 td.label {
-    font-weight:        bold;
+    font-family:        "IBM Plex Sans", sans-serif;
+    font-weight:        200;
+    line-height:        120%;
+    color:              #BBBBBB;
     min-width:          192px;
     text-align:         right;
 }
 
 td.result {
+    font-weight:        normal;
+    font-size:          85%;
     min-width:          120px;
     width:              100%;
 }
@@ -166,7 +289,16 @@ span.res_x {
     vertical-align:     baseline;
     position:           relative;
     top:                -0.1em;
-    line-height:        0;
+    line-height:        1;
+}
+
+span.ratio {
+    font-family:        'Courier New';
+    font-size:          14px;
+    vertical-align:     baseline;
+    position:           relative;
+    font-weight:        bold;
+    line-height:        1;
 }
 
 hr {
