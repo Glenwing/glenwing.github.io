@@ -1,0 +1,114 @@
+<div>
+    This is the aspect ratio of the display's image&mdash;the ratio of the image's width to its height. This indicates how wide the image is, in proportion to its height. For example, an aspect ratio of 2 means that the image is twice as wide as it is tall.<br><br>
+    
+    This is also commonly written as 2<span class='ratio'>&#x2236;</span>1 (a "two-to-one" ratio, meaning the image is 2 pixels wide for every 1 pixel tall). The "<span class='ratio'>&#x2236;</span>" symbol is used to indicate a ratio in common writing. Mathematically, it is interpreted as a division operator.<br><br>
+    
+    Modern displays have square pixels (the width and height of a pixel are the same), and in that case the aspect ratio of the display is calculated as:
+
+    <div id='eq1' class='katex'>
+        Aspect Ratio (R) = H:V = H/V
+    </div>
+
+    where:
+    <ul>
+        <li><em>H</em> is the horizontal resolution of the display</li>
+        <li><em>V</em> is the vertical resolution of the display</li>
+    </ul>
+</div>
+
+<div id='description_extra1' style='display:none;'>
+    For a <span id='des_fill1'>HRES2</span>&thinsp;&times;&thinsp;<span id='des_fill2'>VRES2</span> display, the aspect ratio is:
+
+    <div id='eq2' class='katex'>
+        R = H:V = H/V = HRES2/VRES2
+    </div>
+</div>
+
+<div>
+    The aspect ratio is also commonly written <em>H<span class='ratio'>&#x2236;</span>V</em> with reduced whole numbers instead of carrying out the division operation. For example, the aspect ratio of the standard HD format 1920&thinsp;&times;&thinsp;1080 is 1.<span style='text-decoration:overline'>77</span>, but is typically written as 16<span class='ratio'>&#x2236;</span>9 rather than 1.<span style='text-decoration:overline'>77</span> or 1.<span style='text-decoration:overline'>77</span><span class='ratio'>&#x2236;</span>1. In general, this form is obtained by:
+
+    <div id='eq3' class='katex'>
+        R = (H/G):(V/G)
+    </div>
+
+    where:
+    <ul>
+        <li><em>G</em> is <span style='font-family:"CMU Serif";'>gcd(<em>H</em>,<em>V</em>)</span>; the <a target='_blank' href='https://en.wikipedia.org/wiki/Greatest_common_divisor'>greatest common divisor</a> of <em>H</em> and <em>V</em></li>
+        <li>Other variables are as defined previously</li>
+    </ul>
+    However, there are exceptions (such as 16<span class='ratio'>&#x2236;</span>10 and 21<span class='ratio'>&#x2236;</span>9) in which the numbers are not reduced all the way by convention.<br><br>
+</div>
+
+<div id='description_extra2' style='display:none;'>
+    For a <span id='des_fill3'>HRES</span>&thinsp;&times;&thinsp;<span id='des_fill4'>VRES</span> display, the aspect ratio in reduced whole number form is:
+
+    <div id='eq4' class='katex'>
+        R = (H/G):(V/G)
+        = (HRES2/G):(VRES2/G)
+    </div>
+</div><br><br><br><br>
+
+
+<script>
+    global_DescriptionFunction = function (specs) {
+        katex.render(
+
+            '\\textrm{Aspect Ratio}~(R\\,) = H \\raisebox{0.1em}{:} V = \\frac{H}{V}',
+    
+            document.getElementById('eq1'), { throwOnError: false, displayMode: true, strict:false }
+        );
+
+        katex.render(
+
+            'R = \\left( \\frac{H}{G} \\right) \\raisebox{0.1em}{:} \\left( \\frac{V}{G} \\right)',
+    
+            document.getElementById('eq3'), { throwOnError: false, displayMode: true, strict:false }
+        );
+
+        if (isNum(specs['ar1'])) {
+            var LD_rep = { overline:['\\overline{', '}'], p:[2,6], sep:['\\,', '\\,', true, false] };
+
+            $('#description_extra1').css('display', 'block');
+            $('#description_extra2').css('display', 'block');
+
+            $('#des_fill1').html(specs['hres2']);
+            $('#des_fill2').html(specs['vres2']);
+            $('#des_fill3').html(specs['hres2']);
+            $('#des_fill4').html(specs['vres2']);
+
+            var AR_LaTeX = LongDivide(specs['hres2'], specs['vres2'], LD_rep)
+            var eq = '';
+            if (AR_LaTeX.indexOf('\u2248') == -1) {
+                eq = '=';
+            }
+
+            katex.render(
+
+                'R = H \\raisebox{0.1em}{:} V = \\frac{H}{V} = \\frac{' + commas3(specs['hres2']) + '~\\rm px}{' + commas3(specs['vres2']) + '~\\rm px}' + eq + ' \\boxed{' + AR_LaTeX + '}',
+        
+                document.getElementById('eq2'), { throwOnError: false, displayMode: true, strict:false }
+            );
+
+            katex.render(
+
+                '\\begin{aligned} R ' +
+                '&= \\left( \\frac{H}{G} \\right) \\raisebox{0.1em}{:} \\left( \\frac{V}{G} \\right)\\\\[4mm]' +
+                '&= \\left( \\frac{' + commas3(specs['hres2']) + '~\\rm px}{' + commas3(GCD(specs['hres2'], specs['vres2'])) + '} \\right) \\raisebox{0.1em}{:} \\left( \\frac{' + commas3(specs['vres2']) + '~\\rm px}{' + commas3(GCD(specs['hres2'], specs['vres2'])) + '} \\right)\\\\[4mm]' +
+                '&= \\boxed{ ' + commas3(specs['hres2'] / GCD(specs['hres2'], specs['vres2'])) + ' \\raisebox{0.1em}{:} ' + commas3(specs['vres2'] / GCD(specs['hres2'], specs['vres2'])) + '} \\end{aligned}',
+        
+                document.getElementById('eq4'), { throwOnError: false, displayMode: true, strict:false }
+            );
+
+
+
+        }
+        else {
+            $('#description_extra1').css('display', 'none');
+            $('#description_extra2').css('display', 'none');
+        }
+
+        return;
+    }
+
+    update();
+</script>

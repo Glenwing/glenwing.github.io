@@ -1,0 +1,63 @@
+<div id='description_extra1' style='display:none;'>
+    This is the diagonal size that a <span id='des_fill1'>HRES2<span class='ratio'>&#x2236;</span>VRES2</span> display needs to have in order to be the same vertical height as a <span id='des_fill2'>DIAG UNIT HRES&thinsp;&times;&thinsp;VRES</span> display.<br><br>
+
+    The size is calculated as:
+
+    <div id='eq1' class='katex'>
+        S<sub>2</sub> = L ÷ cos(tan<sup>-1</sup>(R<sub>2</sub>))
+    </div>
+
+    where:
+    <ul>
+        <li><em>L</em> is the physical height of the displays</li>
+        <li><em>R<sub>2</sub></em> is the aspect ratio of the secondary display (horizontal resolution divided by vertical resolution)</li>
+        <li><em>S<sub>2</sub></em> is the resulting size of the secondary display</li>
+    </ul>
+
+    The <em><span style='font-style:normal'>cos(tan<sup>&minus;1</sup>(</span>R<sub>2</sub><span style='font-style:normal'>))</span></em> gives the ratio between the secondary display's height and diagonal size, <em>L<sub>2</sub>/S<sub>2</sub></em>. Since the height <em>L<sub>2</sub></em> is already known (the same as <em>L<sub>1</sub></em>), the corresponding diagonal size can be found.
+
+
+</div>
+
+
+
+
+
+<script>
+    global_DescriptionFunction = function (specs) {
+
+        if (isNum([ specs['hres'], specs['vres'], specs['diag'], specs['hres2'], specs['vres2'] ])) {
+            var LD_4sf = { sf:4, sep:['\\,', '\\,', true, false], approx:'', repeat:false };
+            var LD_5sf = { sf:5, sep:['\\,', '\\,', true, false], approx:'', repeat:false };
+            var LD_1to3dp = { p:[1,3], sep:['\\,', '\\,', true, false], approx:'', repeat:false };
+            var unit = specs['unit'];
+
+            if (specs['hres2'].toString().length > 3) {
+                $('#des_fill1').html(specs['hres2'] + '&thinsp;&times;&thinsp;' + specs['vres2']);
+            }
+            else {
+                $('#des_fill1').html(specs['hres2'] + "<span class='ratio'>&#x2236;</span>" + specs['vres2']);
+            }
+            $('#des_fill2').html(LongDivide(specs['diag'], 1, LD_1to3dp) + unit.sym()[0] + ' ' + specs['hres'] + '&thinsp;&times;&thinsp;' + specs['vres']);
+
+            $('#description_extra1').css('display', 'block');
+            $('#description_extra2').css('display', 'block');
+
+            katex.render(
+
+                '\\begin{aligned}' +
+                'S_2 = \\frac{L}{\\cos \\left( \\tan^{-1} \\left( R_2 \\right) \\right) }' + 
+                '\\end{aligned}',
+    
+            document.getElementById('eq1'), { throwOnError: false, displayMode: true, strict:false });
+        }
+        else {
+            $('#description_extra1').css('display', 'none');
+            $('#description_extra2').css('display', 'none');
+        }
+
+        return;
+    }
+
+    update();
+</script>

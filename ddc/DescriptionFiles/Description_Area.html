@@ -1,0 +1,64 @@
+<div>
+    This is the surface area of the face of the display panel. Area is calculated as:
+
+    <div id='eq1' class='katex'>
+        Area (A) = W &times; L
+    </div>
+
+    where:
+    <ul>
+        <li><em>W</em> is the physical width of the display panel</li>
+        <li><em>L</em> is the physical height of the display panel</li>
+    </ul>
+</div>
+
+<div id='description_extra1' style='display:none;'>
+    The area of a <span id='des_fill1'>SIZE UNIT_SYM HRES</span>&thinsp;&times;&thinsp;<span id='des_fill2'>VRES</span> display is:
+
+    <div id='eq2' class='katex'>
+        A = WIDTH &times; HEIGHT
+    </div>
+</div>
+
+
+
+
+
+<script>
+    global_DescriptionFunction = function (specs) {
+        katex.render(
+
+            '\\textrm{Area}~(A) = W \\times L',
+    
+            document.getElementById('eq1'), { throwOnError: false }
+        );
+
+        if (isNum([ specs['hres'], specs['vres'], specs['diag'] ])) {
+            var LD_4sf = { sf:4, sep:['\\,', '\\,', true, false], approx:'', repeat:false };
+            var LD_5sf = { sf:5, sep:['\\,', '\\,', true, false], approx:'', repeat:false };
+            var LD_1to3dp = { p:[1,3], sep:['\\,', '\\,', true, false], approx:'', repeat:false };
+            var unit = specs['unit'];
+
+            $('#des_fill1').html(LongDivide(specs['diag'], 1, LD_1to3dp) + unit.sym()[0] + ' ' + specs['hres']);
+            $('#des_fill2').html(specs['vres']);
+
+            $('#description_extra1').css('display', 'block');
+
+            katex.render(
+
+                '\\begin{aligned}' +
+                'A &= \\rm ' + LongDivide(specs['width'], 1, LD_5sf) + '~' + unit.abbr()[0] + ' \\times ' + LongDivide(specs['height'], 1, LD_5sf) + '~' + unit.abbr()[0] +
+                ' \\\\[5mm] &= \\boxed{ \\rm ' + LongDivide(specs['area'], 1, LD_5sf) + '~' + unit.abbr()[0] + '^2}' +
+                '\\end{aligned}',
+    
+            document.getElementById('eq2'), { throwOnError: false, displayMode: true, strict:false });
+        }
+        else {
+            $('#description_extra1').css('display', 'none');
+        }
+
+        return;
+    }
+
+    update();
+</script>

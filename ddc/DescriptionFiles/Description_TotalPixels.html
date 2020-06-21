@@ -1,0 +1,58 @@
+<div>
+    This the is the total number of pixels on the display. Total pixel count is calculated as:
+
+    <div id='eq1' class='katex'>
+        Total Pixels (P) = H &times; V
+    </div>
+
+    where:
+    <ul>
+        <li><em>H</em> is the horizontal resolution of the display</li>
+        <li><em>V</em> is the vertical resolution of the display</li>
+    </ul>
+</div>
+
+<div id='description_extra' style='display:none;'>
+    <div>
+        For a <span id='des_fill1'>HRES</span>&thinsp;&times;&thinsp;<span id='des_fill2'>VRES</span> display, the total pixel count is:
+    </div>
+
+    <div id='eq2' class='katex'>
+        P = HRES &times; VRES
+    </div>
+</div><br><br><br><br>
+
+
+
+
+
+<script>
+    global_DescriptionFunction = function (specs) {
+        katex.render(
+
+            '\\textrm{Total Pixels}~(T) = H \\times V',
+    
+            document.getElementById('eq1'), { throwOnError: false }
+        );
+
+        if (isNum([ specs['hres'], specs['vres'] ])) {
+            $('#des_fill1').html(specs['hres']);
+            $('#des_fill2').html(specs['vres']);
+
+            $('#description_extra').css('display', 'block');
+
+            katex.render(
+
+                '\\begin{aligned}T &= \\rm ' + commas3(specs['hres']) + '~px \\times ' + commas3(specs['vres']) + '~lines\\\\[1mm]' +
+                '&= \\boxed{\\rm ' + commas3(specs['total_px']) + '~px} \\end{aligned}',
+    
+                document.getElementById('eq2'), { throwOnError: false, displayMode: true, strict:false }
+            );
+        }
+        else {
+            $('#description_extra').css('display', 'none');
+        }
+    }
+
+    update();
+</script>

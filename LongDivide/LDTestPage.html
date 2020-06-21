@@ -47,6 +47,15 @@ options = {
         </td>
     </tr>
     <tr>
+        <td>'sf':</td>
+        <td>
+            <input type="button" value="&minus;" onclick="if (document.getElementById('Sig_Figs').value != '') { document.getElementById('Sig_Figs').value = parseInt(document.getElementById('Sig_Figs').value) - 1; divide(); }" >
+            <input id="Sig_Figs" value="0" placeholder="' '" type="text" onchange="divide();" oninput="this.onchange();" onfocus="this.select();" style="width:40px; background-color:#555555; color:#EEEEEE; font-size:16px; text-align:center;" />
+            <input type="button" value="&plus;" onclick="if (document.getElementById('Sig_Figs').value != '') { document.getElementById('Sig_Figs').value = parseInt(document.getElementById('Sig_Figs').value) + 1; divide(); }" >
+            &nbsp;&nbsp;// Minimum precision
+        </td>
+    </tr>
+    <tr>
         <td>'leading':</td>
         <td>
             <input type="button" value="&minus;" onclick="if (document.getElementById('leading_box').value != '') { document.getElementById('leading_box').value = parseInt(document.getElementById('leading_box').value) - 1; divide(); }" >
@@ -234,7 +243,7 @@ options = {
     <tr><td><input type="button" value="&minus;256 ÷ &minus;135" style="background-color:#555555; color:#EEEEEE; font-size:16px;" onclick="divide(-256, -135);" /> (negative A and B)</td></tr>
 </table>
 <br />
-<span style="font-size:8pt;">Version 1.3.1</span>
+<span style="font-size:8pt;">Version 1.4.0</span>
 </body>
 
 <script src="decimal.min.js"></script>
@@ -255,35 +264,44 @@ options = {
         var options = {};
 
         if (format != '') { options['format'] = format; }
+
         var P = document.getElementById('P').value;
         if (P != '') { options['p'] = P; }
+
         var P_Max = document.getElementById('P_Max').value;
         if (P_Max != '') { options['p_max'] = P_Max; }
+        
         var P_Min = document.getElementById('P_Min').value;
         if (P_Min != '') { options['p_min'] = P_Min; }
+
+        options['sf'] =             document.getElementById('Sig_Figs').value
+
         var Leading = document.getElementById('leading_box').value;
         if (Leading != '') { options['leading'] = Leading; }
-        options['thousands'] =   document.getElementById('thousands_box').value;
-        options['thousandths'] = document.getElementById('thousandths_box').value;
-        var Decimal = document.getElementById('decimal_box').value;
-        if (Decimal != '') { options['decimal'] = Decimal; }
-        options['minus'] =       document.getElementById('minus_box').value;
-        options['plus'] =        document.getElementById('plus_box').value;
-        options['approx'] =      document.getElementById('approx_box').value;
-        options['currency'] =    document.getElementById('currency_box').value;
-        options['micro'] =       document.getElementById('micro_box').value;
-        options['exp'] =         document.getElementById('exp_box').value;
-        options['exp_open'] =    document.getElementById('exp_open_box').value;
-        options['exp_close'] =   document.getElementById('exp_close_box').value;
-        options['exp_minus'] =   document.getElementById('exp_minus_box').value;
-        options['exp_plus'] =    document.getElementById('exp_plus_box').value;
-        options['OL_open'] =     document.getElementById('ol_open_box').value;
-        options['OL_close'] =    document.getElementById('ol_close_box').value;
 
-        options['2_singles'] =   document.getElementById('singles').checked;
-        options['repeat'] =      document.getElementById('repeat').checked;
-        options['si'] =          document.getElementById('si').checked;
-        options['orphan'] =      document.getElementById('orphan').checked;
+        options['thousands'] =      document.getElementById('thousands_box').value;
+        options['thousandths'] =    document.getElementById('thousandths_box').value;
+
+        var Decimal =               document.getElementById('decimal_box').value;
+        if (Decimal != '') { options['decimal'] = Decimal; }
+        
+        options['minus'] =          document.getElementById('minus_box').value;
+        options['plus'] =           document.getElementById('plus_box').value;
+        options['approx'] =         document.getElementById('approx_box').value;
+        options['currency'] =       document.getElementById('currency_box').value;
+        options['micro'] =          document.getElementById('micro_box').value;
+        options['exp'] =            document.getElementById('exp_box').value;
+        options['exp_open'] =       document.getElementById('exp_open_box').value;
+        options['exp_close'] =      document.getElementById('exp_close_box').value;
+        options['exp_minus'] =      document.getElementById('exp_minus_box').value;
+        options['exp_plus'] =       document.getElementById('exp_plus_box').value;
+        options['OL_open'] =        document.getElementById('ol_open_box').value;
+        options['OL_close'] =       document.getElementById('ol_close_box').value;
+
+        options['2_singles'] =      document.getElementById('singles').checked;
+        options['repeat'] =         document.getElementById('repeat').checked;
+        options['si'] =             document.getElementById('si').checked;
+        options['orphan'] =         document.getElementById('orphan').checked;
         /*
         if (format != '') {
             var result = LongDivide(A.toString(), B.toString(), format);

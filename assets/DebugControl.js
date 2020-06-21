@@ -25,12 +25,15 @@ function DEBUG(text) {
     }
 
     if (proceed_with_msg == true) {
-        str = 'console.log("[" + Fn + "()] ::"';
+        //str = 'console.log("[" + Fn + "()] ::"';
+        var args = [ Fn + "(): "];
         for (var i = 0; i < arguments.length; i++) {
-            str += ', arguments[' + i + ']';
+            args.push(arguments[i]);
+            //str += ', arguments[' + i + ']';
         }
-        str += ');';
-        eval(str);
+        //str += ');';
+        //eval(str);
+        console.log.apply(this, args);
     }
 
     return;
