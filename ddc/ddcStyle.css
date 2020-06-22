@@ -1,9 +1,12 @@
 ﻿html, body {
     margin:             0;
-    height:             100%;
-    min-height:         100%;
-    max-height:         200vh;
-    max-width:          200vh;
+    position:           absolute;
+    top:                0;
+    left:               0;
+    width:              100vw;
+    height:             100vh;
+    min-height:         100vh;
+    max-height:         100vh;
     padding:            0;
     background-color:   #1E1E1E;
     color:              #FFFFFF;
@@ -22,7 +25,7 @@ div.page {
     flex-flow:          column nowrap;
     
     height:             100%;
-    min-width:          100%;
+    min-width:          100vh;
     margin:             0px;
     padding:            0px;
     border:             0px solid transparent;
