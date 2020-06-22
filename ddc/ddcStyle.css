@@ -464,6 +464,7 @@ button {
     justify-content:    center;
 
     padding:            8px;
+    padding-top:        5px;
     border:             1px solid #646464;
     border-radius:      5px;
     background-color:   #181818;
@@ -612,7 +613,7 @@ table.diu td.label {
     font-size:          1.2rem;
     font-weight:        200;
     line-height:        120%;
-    color:              #BBBBBB;
+    color:              #CCCCCC;
     min-width:          240px;
     text-align:         right;
     border-right:       1px solid #404040;
