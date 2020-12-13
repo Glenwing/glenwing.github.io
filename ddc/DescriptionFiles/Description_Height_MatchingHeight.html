@@ -1,13 +1,5 @@
 <div>
-    Content goes here!
-</div>
-
-<div id='eq1' class='katex'></div>
-
-<div id='description_extra1' style='display:none;'>
-    For a <span id='des_fill1'>SIZE UNIT_SYM HRES</span>&thinsp;&times;&thinsp;<span id='des_fill2'>VRES</span> display,
-
-    <div id='eq2' class='katex'></div>
+    This is the height of the secondary display. It is the same as the height of the primary display.
 </div>
 
 
@@ -15,35 +7,11 @@
 
 
 <script>
+    if (window.location.href.indexOf('DescriptionFiles') != -1) {
+        window.location.replace(window.location.href.substring(0, window.location.href.indexOf('DescriptionFiles')));
+    }
+    
     global_DescriptionFunction = function (specs) {
-        katex.render(
-
-            '\\textrm{An equation goes here!}',
-    
-            document.getElementById('eq1'), { throwOnError: false, displayMode: true, strict:false }
-        );
-
-        if (isNum([ specs['hres'], specs['vres'], specs['diag'] ])) {
-            var unit = specs['unit'];
-            var LD_1to3dp = { p:[1,3], sep:['\\,', '\\,', true, false], approx:'', repeat:false };
-
-            $('#des_fill1').html(LongDivide(specs['diag'], 1, LD_1to3dp) + unit.sym()[0] + ' ' + specs['hres']);
-            $('#des_fill2').html(specs['vres']);
-
-            $('#description_extra1').css('display', 'block');
-
-            katex.render(
-
-                '\\begin{aligned}' +
-                '\\textrm{An equation goes here!}' +
-                '\\end{aligned}',
-    
-            document.getElementById('eq2'), { throwOnError: false, displayMode: true, strict:false });
-        }
-        else {
-            $('#description_extra1').css('display', 'none');
-        }
-
         return;
     }
 

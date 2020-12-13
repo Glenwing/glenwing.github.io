@@ -9,6 +9,10 @@
 
 
 <script>
+    if (window.location.href.indexOf('DescriptionFiles') != -1) {
+        window.location.replace(window.location.href.substring(0, window.location.href.indexOf('DescriptionFiles')));
+    }
+    
     global_DescriptionFunction = function (specs) {
         return;
     }

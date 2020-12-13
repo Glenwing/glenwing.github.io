@@ -2,9 +2,11 @@
     Pixel pitch is the distance at which pixels are spaced on the display. It can also simply be considered the length or height of a pixel (technically, it's the length of a pixel plus the gap between pixels, but the gap is insignificant in comparison). Modern displays have square pixels; the length of the pixels is the same along both dimensions, so the horizontal and vertical pixel pitch are the same.
 </div>
 
-<canvas id='des_canvas1' class='px_pitch_diagram' width='480' height='300'>
+<div style='text-align:center;'>
+    <canvas id='des_canvas1' class='px_pitch_diagram' width='480' height='300'>
 
-</canvas>
+    </canvas>
+</div>
 
 <div>
     Pixel pitch can be calculated as the horizontal or vertical resolution divided by the physical width or height of the display panel:
@@ -59,24 +61,28 @@
 
 
 <script>
+    if (window.location.href.indexOf('DescriptionFiles') != -1) {
+        window.location.replace(window.location.href.substring(0, window.location.href.indexOf('DescriptionFiles')));
+    }
+
     global_DescriptionFunction = function (specs) {
         katex.render(
 
-            '\\textrm{Pixel Pitch}~(P\\,) = \\frac{W}{H} = \\frac{L}{V}',
+            '\\textrm{Pixel Pitch}~(P\\,) = \\frac{\\raisebox{-0.1em}{$W$}}{\\raisebox{-0.1em}{$H$}} = \\frac{\\raisebox{-0.1em}{$L$}}{\\raisebox{-0.1em}{$V$}}',
     
             document.getElementById('eq1'), { throwOnError: false, displayMode: true, strict:false }
         );
 
         katex.render(
 
-            'P = \\frac{1}{D}',
+            'P = \\frac{\\raisebox{-0.1em}{$1$}}{\\raisebox{-0.1em}{$D$}}',
     
             document.getElementById('eq3'), { throwOnError: false, displayMode: true, strict:false }
         );
 
         katex.render(
 
-            'P = \\frac{S}{\\sqrt{H^2 + V^2}}',
+            'P = \\frac{\\raisebox{-0.1em}{$S$}}{\\sqrt{H^2 + V^2}}',
     
             document.getElementById('eq4'), { throwOnError: false, displayMode: true, strict:false }
         );
@@ -113,11 +119,12 @@
             katex.render(
 
                 '\\begin{aligned}' +
-                'P = \\frac{W}{H} = \\rm \\frac{' + LongDivide(specs['width'], 1, LD_4sf) + '~' + unit.abbr()[0] + '}{' + commas3(specs['hres']) + '~px}' +
+                'P = \\frac{\\raisebox{-0.1em}{$W$}}{\\raisebox{-0.1em}{$H$}} = \\rm \\frac{\\raisebox{-0.1em}{' + LongDivide(specs['width'], 1, LD_4sf) + '~' + unit.abbr()[0] + '}}{\\raisebox{-0.1em}{' + commas3(specs['hres']) + '~px}}' +
                 '&= \\rm' + result1 +
                 '\\end{aligned}',
     
-            document.getElementById('eq2'), { throwOnError: false, displayMode: true, strict:false });
+                document.getElementById('eq2'), { throwOnError: false, displayMode: true, strict:false
+            });
 
             
 
@@ -130,7 +137,8 @@
                 ' \\\\[5mm] &= \\rm ' + result1 +
                 '\\end{aligned}',
     
-            document.getElementById('eq5'), { throwOnError: false, displayMode: true, strict:false });
+                document.getElementById('eq5'), { throwOnError: false, displayMode: true, strict:false
+            });
         }
         else {
             $('#description_extra1').css('display', 'none');
@@ -139,18 +147,23 @@
 
         var canvas = document.getElementById('des_canvas1');
         var cx = canvas.getContext('2d');
+        //canvas.width = canvas.width;
         cx.clearRect(0, 0, canvas.width, canvas.height);
         cx.strokeStyle = '#AAAAAA';
         
-        // Axes
+        //Axes
         cx.lineWidth = '2';
+        cx.beginPath();
         cx.moveTo(10,0);
         cx.lineTo(10,240);
         cx.lineTo(480,240);
         cx.stroke();
-
         cx.lineWidth = '1';
 
+        drawPixels(cx, 25, 95, 130, 40, 5, 15, 5, 3);
+        drawPartialPixels(cx, 25, 0, 80, 40, 5, 15, 5, 3, 1);
+
+/*
         var gradR = cx.createLinearGradient(0, 80, 0, 0);
         gradR.addColorStop(0,   '#662222');
         gradR.addColorStop(0.6, '#662222');
@@ -198,7 +211,6 @@
         roundRect(cx, 360, 95, 40, 130, 5, true, true);
         cx.fillStyle = ('#222266');
         roundRect(cx, 405, 95, 40, 130, 5, true, true);
-
         // Top Pixel 1
 
         cx.fillStyle = (gradR);
@@ -225,7 +237,7 @@
         roundRect(cx, 360, 0, 40, 80, 5, true, true);
         cx.fillStyle = (gradB);
         roundRect(cx, 405, 0, 40, 80, 5, true, true);
-
+*/
 
         cx.strokeStyle = '#DDDDDD';
         cx.fillStyle = '#DDDDDD';
@@ -279,8 +291,7 @@
         cx.closePath();
         cx.stroke();
         cx.fill();
-
-
+        /**/
 
         return;
     }

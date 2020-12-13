@@ -25,7 +25,7 @@
 </div>
 
 <div>
-    The aspect ratio is also commonly written <em>H<span class='ratio'>&#x2236;</span>V</em> with reduced whole numbers instead of carrying out the division operation. For example, the aspect ratio of the standard HD format 1920&thinsp;&times;&thinsp;1080 is 1.<span style='text-decoration:overline'>77</span>, but is typically written as 16<span class='ratio'>&#x2236;</span>9 rather than 1.<span style='text-decoration:overline'>77</span> or 1.<span style='text-decoration:overline'>77</span><span class='ratio'>&#x2236;</span>1. In general, this form is obtained by:
+    The aspect ratio is also commonly written <em>H</em><span class='ratio'>&#x2236;</span><em>V</em> with reduced whole numbers instead of carrying out the division operation. For example, the aspect ratio of the standard HD format 1920&thinsp;&times;&thinsp;1080 is 1.<span style='text-decoration:overline'>77</span>, but is typically written as 16<span class='ratio'>&#x2236;</span>9 rather than 1.<span style='text-decoration:overline'>77</span> or 1.<span style='text-decoration:overline'>77</span><span class='ratio'>&#x2236;</span>1. In general, this form is obtained by:
 
     <div id='eq3' class='katex'>
         R = (H/G):(V/G)
@@ -50,6 +50,10 @@
 
 
 <script>
+    if (window.location.href.indexOf('DescriptionFiles') != -1) {
+        window.location.replace(window.location.href.substring(0, window.location.href.indexOf('DescriptionFiles')));
+    }
+    
     global_DescriptionFunction = function (specs) {
         katex.render(
 

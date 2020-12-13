@@ -24,6 +24,10 @@
 
 
 <script>
+    if (window.location.href.indexOf('DescriptionFiles') != -1) {
+        window.location.replace(window.location.href.substring(0, window.location.href.indexOf('DescriptionFiles')));
+    }
+    
     global_DescriptionFunction = function (specs) {
 
         if (isNum([ specs['hres'], specs['vres'], specs['diag'], specs['hres2'], specs['vres2'] ])) {
@@ -41,7 +45,7 @@
             $('#des_fill2').html(LongDivide(specs['diag'], 1, LD_1to3dp) + unit.sym()[0] + ' ' + specs['hres'] + '&thinsp;&times;&thinsp;' + specs['vres']);
 
             $('#description_extra1').css('display', 'block');
-            $('#description_extra2').css('display', 'block');
+            //$('#description_extra2').css('display', 'block');
 
             katex.render(
 
@@ -53,7 +57,7 @@
         }
         else {
             $('#description_extra1').css('display', 'none');
-            $('#description_extra2').css('display', 'none');
+            //$('#description_extra2').css('display', 'none');
         }
 
         return;

@@ -41,7 +41,7 @@
 
     In most discussions about how to calculate these figures, the solutions tend to start with the Pythagorean theorem and solve from there.<sup><a target='_blank' href='https://www.reddit.com/r/askmath/comments/9qt5an/monitor_size/'>[1]</a></sup><sup><a target='_blank' href='https://www.reddit.com/r/thinkpad/comments/ckd8fa/how_to_calculate_screen_dimensions_screen_size/'>[2]</a></sup> That's a valid technique, but it's a lot simpler to approach it from the other direction using trig functions.<br><br>
     
-    Computing <span id='eq5' class='katex'>tan<sup>-1</sup>(H/V)</span> gives the angle between the side of the display and the diagonal. This angle is opposite from the horizontal edge of the display, and adjacent to the vertical edge of the display. Therefore, the sine and cosine of this angle, which tell us the opposite-over-hypotenuse and adjacent-over-hypotenuse ratios respectively, give us <em>W/S</em> and <em>L/S</em>, and simply multiplying those results by S gives us <em>W</em> and <em>L</em>, the width and height of the display. Even if you can't remember which one needs sine and which one is cosine, you can simply compute both and sort it out based on which one is bigger; changing a sine to a cosine is very quick on a calculator (much faster than swapping the horizontal and vertical resolution numbers, which is what you need to do with the Pythagorean solution).<br><br>
+    Computing <span id='eq5' class='katex'>tan<sup>&minus;1</sup>(H/V)</span> gives the angle between the side of the display and the diagonal. This angle is opposite from the horizontal edge of the display, and adjacent to the vertical edge of the display. Therefore, the sine and cosine of this angle, which tell us the opposite-over-hypotenuse and adjacent-over-hypotenuse ratios respectively, give us <em>W/S</em> and <em>L/S</em>, and simply multiplying those results by S gives us <em>W</em> and <em>L</em>, the width and height of the display. Even if you can't remember which one needs sine and which one is cosine, you can simply compute both and sort it out based on which one is bigger; changing a sine to a cosine is very quick on a calculator (much faster than swapping the horizontal and vertical resolution numbers, which is what you need to do with the Pythagorean solution).<br><br>
 
     But if you just can't stand the sight of trig functions, you can use the Pythagorean approach. This form is more complicated and difficult to remember, and slower to enter into a calculator, but it is favored by many people due to the commonplace allergy to trig functions (and mathematics beyond algebra in general).<br><br>
 
@@ -77,12 +77,16 @@
 
 
 <script>
+    if (window.location.href.indexOf('DescriptionFiles') != -1) {
+        window.location.replace(window.location.href.substring(0, window.location.href.indexOf('DescriptionFiles')));
+    }
+    
     global_DescriptionFunction = function (specs) {
         katex.render(
 
             '\\begin{aligned}' +
-            '\\textrm{Width}~(W) &= S \\cdot \\sin \\left( \\tan ^{-1} \\left( \\frac{H}{V} \\right) \\right) \\\\[5mm]' +
-            '\\textrm{Height}~(L) &= S \\cdot \\cos \\left( \\tan ^{-1} \\left( \\frac{H}{V} \\right) \\right)' +
+            '\\textrm{Width}~(W) &= S \\cdot \\sin \\left( \\tan ^{-1} \\left( \\frac{\\raisebox{-0.1em}{$H$}}{\\raisebox{-0.1em}{$V$}} \\right) \\right) \\\\[5mm]' +
+            '\\textrm{Height}~(L) &= S \\cdot \\cos \\left( \\tan ^{-1} \\left( \\frac{\\raisebox{-0.1em}{$H$}}{\\raisebox{-0.1em}{$V$}} \\right) \\right)' +
             '\\end{aligned}',
     
             document.getElementById('eq1'), { throwOnError: false, displayMode: true, strict:false }
@@ -96,7 +100,7 @@
         katex.render(
 
             '\\begin{aligned}' +
-            'L &= \\rm S \\cdot \\cos \\left( \\tan ^{-1} \\left( \\frac{16}{9} \\right) \\right)' +
+            'L &= \\rm S \\cdot \\cos \\left( \\tan ^{-1} \\left( \\frac{\\raisebox{-0.1em}{$16$}}{\\raisebox{-0.1em}{$9$}} \\right) \\right)' +
             ' \\\\[5mm] &= \\rm S \\cdot \\cos \\left( \\tan ^{-1} \\left( 1.\\overline{77} \\right) \\right)' +
             ' \\\\[5mm] &= \\rm S \\cdot 0.490 ' +
             ' \\\\[5mm] &= \\textrm{49.0~\\% of } S' +
@@ -118,13 +122,14 @@
             katex.render(
 
                 '\\begin{aligned}' +
-                'W &= \\rm ' + LongDivide(specs['diag'], 1, LD_1to3dp) + '~' + unit.abbr()[0] + ' \\cdot \\sin \\left( \\tan ^{-1} \\left( \\frac{' + commas3(specs['hres']) + '}{' + commas3(specs['vres']) + '} \\right) \\right)' +
+                'W &= \\rm ' + LongDivide(specs['diag'], 1, LD_1to3dp) + '~' + unit.abbr()[0] + ' \\cdot \\sin \\left( \\tan ^{-1} \\left( \\frac{\\raisebox{-0.1em}{$' + commas3(specs['hres']) + '$}}{\\raisebox{-0.1em}{$' + commas3(specs['vres']) + '$}} \\right) \\right)' +
                 ' = \\boxed{\\rm ' + LongDivide(Decimal(specs['hres'] / specs['vres']).atan().sin().times(specs['diag']), 1, LD_5sf) + '~' + unit.abbr()[0] + '} \\\\[5mm] ' +
-                'L &= \\rm ' + LongDivide(specs['diag'], 1, LD_1to3dp) + '~' + unit.abbr()[0] + ' \\cdot \\cos \\left( \\tan ^{-1} \\left( \\frac{' + commas3(specs['hres']) + '}{' + commas3(specs['vres']) + '} \\right) \\right)' +
+                'L &= \\rm ' + LongDivide(specs['diag'], 1, LD_1to3dp) + '~' + unit.abbr()[0] + ' \\cdot \\cos \\left( \\tan ^{-1} \\left( \\frac{\\raisebox{-0.1em}{$' + commas3(specs['hres']) + '$}}{\\raisebox{-0.1em}{$' + commas3(specs['vres']) + '$}} \\right) \\right)' +
                 ' = \\boxed{\\rm ' + LongDivide(Decimal(specs['hres'] / specs['vres']).atan().cos().times(specs['diag']), 1, LD_5sf) + '~' + unit.abbr()[0] + '}' +
                 '\\end{aligned}',
     
-            document.getElementById('eq2'), { throwOnError: false, displayMode: true, strict:false });
+                document.getElementById('eq2'), { throwOnError: false, displayMode: true, strict:false }
+            );     
 
             katex.render(
 
@@ -135,22 +140,56 @@
             katex.render(
 
                 '\\begin{aligned}' +
-                'S^2 = W^2 + L^2 &= \\left( \\frac{H}{V} \\cdot L \\right)^2 + L^2' +
-                ' \\\\[5mm] S^2 &= \\frac{H^2}{V^2} L^2 + L^2' +
-                ' \\\\[5mm] S^2 &= L^2 \\left( \\frac{H^2}{V^2} + 1 \\right)' +
+                'S^2 &= \\left( L \\cdot \\frac{\\raisebox{-0.1em}{$H$}}{\\raisebox{-0.1em}{$V$}} \\right)^2 + L^2' +
+                ' \\\\[5mm] S^2 &= L^2 \\frac{\\raisebox{-0.1em}{$H^2$}}{\\raisebox{-0.1em}{$V^2$}} + L^2' +
+                ' \\\\[5mm] S^2 &= L^2 \\left( \\frac{\\raisebox{-0.1em}{$H^2$}}{\\raisebox{-0.1em}{$V^2$}} + 1 \\right)' +
                 '\\end{aligned}',
 
                 document.getElementById('eq7'), { throwOnError: false, displayMode: true, strict:false }
             );
             katex.render(
 
-                '\\frac{S^2}{\\dfrac{H^2}{V^2} + 1} = L^2',
+                '\\frac{\\raisebox{-0.1em}{$S^2$}}{\\raisebox{-0.1em}{$\\dfrac{\\raisebox{-0.1em}{$H^2$}}{\\raisebox{-0.1em}{$V^2$}} + 1$}} = L^2',
 
                 document.getElementById('eq8'), { throwOnError: false, displayMode: true, strict:false }
             );
             katex.render(
 
-                'L = \\sqrt{\\frac{S^2}{\\left( \\frac{H}{V} \\right)^2 + 1}} = \\frac{S}{\\sqrt{\\left( \\frac{H}{V} \\right)^2 + 1}}',
+                '\\begin{aligned}' +
+
+                'L &= \\sqrt{' +
+                    '\\frac{' +
+                        '\\raisebox{-0.1em}{$S^2$}' +
+                    '}{' +
+                        '{' +
+                            '\\left(' +
+                                '\\frac{' +
+                                    'H' +
+                                '}{' +
+                                    'V' +
+                                '}' +
+                            '\\right)^2 + 1' +
+                        '}' +
+                    '}' +
+                '} \\\\[5mm]' +
+
+                '&= \\frac{' +
+                    '\\raisebox{-0.1em}{$S$}' +
+                '}{' +
+                    '\\raisebox{-0.1em}{$' +
+                        '\\sqrt{' +
+                            '\\left(' +
+                                '\\frac{' +
+                                    'H' +
+                                '}{' +
+                                    'V' +
+                                '}' +
+                            '\\right)^2 + 1' +
+                        '}' +
+                    '$}' +
+                '}' +
+                
+                '\\end{aligned}',
 
                 document.getElementById('eq9'), { throwOnError: false, displayMode: true, strict:false }
             );

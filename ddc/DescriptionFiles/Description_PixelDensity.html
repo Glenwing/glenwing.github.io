@@ -38,17 +38,21 @@
 
 
 <script>
+    if (window.location.href.indexOf('DescriptionFiles') != -1) {
+        window.location.replace(window.location.href.substring(0, window.location.href.indexOf('DescriptionFiles')));
+    }
+    
     global_DescriptionFunction = function (specs) {
         katex.render(
 
-            '\\textrm{Pixel Density}~(D\\,) = \\frac{H}{W} = \\frac{V}{L}',
+            '\\textrm{Pixel Density}~(D\\,) = \\frac{\\raisebox{-0.1em}{$H$}}{\\raisebox{-0.1em}{$W$}} = \\frac{\\raisebox{-0.1em}{$V$}}{\\raisebox{-0.1em}{$L$}}',
     
             document.getElementById('eq1'), { throwOnError: false, displayMode: true, strict:false }
         );
 
         katex.render(
 
-            'D = \\frac{\\sqrt{H^2 + V^2}}{S}',
+            'D = \\frac{\\raisebox{-0.1em}{$\\sqrt{H^2 + V^2}$}}{\\raisebox{-0.1em}{$S$}}',
     
             document.getElementById('eq2'), { throwOnError: false, displayMode: true, strict:false }
         );

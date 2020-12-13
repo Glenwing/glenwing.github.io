@@ -1,24 +1,42 @@
 <div>
-    Content goes here!
+    This is the height that a secondary display needs to have in order to match the pixel density of a display with the given specifications.
+    <br><br>
+    Since the displays have the same pixel density, the ratio between the heights of the display is the same as the ratio of the vertical resolution.
+    <br><br>
+    In other words, if the secondary display has twice as many pixels vertically, and the pixel density is the same (meaning the pixels are the same size as the first display), then logically it means the second display will have twice the height.
+    <br><br>
+    Mathematically, the height of the second display is:
 </div>
 
-<div id='eq1' class='katex'></div>
+<div id='eq1' class='katex'>
+    H<sub>2</sub> = H<sub>1</sub> &times; (Y<sub>2</sub> / Y<sub>1</sub>)
+</div>
+
+Where:
+<ul>
+    <li><em>L<sub>1</sub></em> is the height of the primary display</li>
+    <li><em>L<sub>2</sub></em> is the height of the secondary display</li>
+    <li><em>V<sub>1</sub></em> is the vertical resolution of the primary display</li>
+    <li><em>V<sub>2</sub></em> is the vertical resolution of the secondary display</li>
+</ul>
 
 <div id='description_extra1' style='display:none;'>
-    For a <span id='des_fill1'>SIZE UNIT_SYM HRES</span>&thinsp;&times;&thinsp;<span id='des_fill2'>VRES</span> display,
-
-    <div id='eq2' class='katex'></div>
+    For a <span id='des_fill1'>SIZE UNIT_SYM HRES</span>&thinsp;&times;&thinsp;<span id='des_fill2'>VRES</span> primary display,
+    the height of the display panel is <span id='des_fill3'></span>. The height of a secondary display with matching pixel density is therefore:
+    <div id='eq2' class='katex'>L<sub>2</sub> = L<sub>1</sub>> &times; (V<sub>2</sub> / V<sub>1</sub>)</div>
 </div>
-
-
 
 
 
 <script>
+    if (window.location.href.indexOf('DescriptionFiles') != -1) {
+        window.location.replace(window.location.href.substring(0, window.location.href.indexOf('DescriptionFiles')));
+    }
+    
     global_DescriptionFunction = function (specs) {
         katex.render(
 
-            '\\textrm{An equation goes here!}',
+            'H_2 = H_1 \\times \\frac{Y_2}{\\raisebox{-0.1em}{$Y_1$}}',
     
             document.getElementById('eq1'), { throwOnError: false, displayMode: true, strict:false }
         );
@@ -29,13 +47,19 @@
 
             $('#des_fill1').html(LongDivide(specs['diag'], 1, LD_1to3dp) + unit.sym()[0] + ' ' + specs['hres']);
             $('#des_fill2').html(specs['vres']);
+            $('#des_fill3').html(LongDivide(specs['height'], 1, LD_1to3dp) + unit.sym()[0]);
 
             $('#description_extra1').css('display', 'block');
 
             katex.render(
 
                 '\\begin{aligned}' +
-                '\\textrm{An equation goes here!}' +
+                'H_2 = \\rm ' + LongDivide(specs['height'], 1, LD_1to3dp) + '~' + unit.abbr()[0] + '\\times \\left ( \\frac{' +
+                commas3(specs['vres2']) +
+                '~px}{\\raisebox{-0.1em}{$' +
+                commas3(specs['vres']) +
+                '$~px}} \\right )' +
+                '=' + LongDivide(specs['height'] * (specs['vres2'] / specs['vres']), 1, LD_1to3dp) + '~' + unit.abbr()[0] +
                 '\\end{aligned}',
     
             document.getElementById('eq2'), { throwOnError: false, displayMode: true, strict:false });
