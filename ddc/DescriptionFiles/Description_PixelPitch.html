@@ -3,9 +3,8 @@
 </div>
 
 <div style='text-align:center;'>
-    <canvas id='des_canvas1' class='px_pitch_diagram' width='480' height='300'>
-
-    </canvas>
+    <canvas id='des_canvas1' class='px_pitch_diagram' width='480' height='300'></canvas>
+    <div id='caption1' class='katex caption'>Figure: An illustration of pixel pitch</div>
 </div>
 
 <div>
@@ -66,6 +65,14 @@
     }
 
     global_DescriptionFunction = function (specs) {
+        
+        katex.render(
+
+            '\\textrm{Figure: An illustration of pixel pitch}',
+    
+            document.getElementById('caption1'), { throwOnError: false, displayMode:false, strict:false }
+        );
+
         katex.render(
 
             '\\textrm{Pixel Pitch}~(P\\,) = \\mfrac{W}{H} = \\mfrac{L}{V}',
@@ -87,7 +94,7 @@
             document.getElementById('eq4'), global_katexOptions
         );
 
-        if (isNum([ specs['hres'], specs['vres'], specs['diag'] ])) {
+        if (isPositive([ specs['hres'], specs['vres'], specs['diag'] ])) {
             var unit = specs['unit'];
             $('#des_fill1').html(LongDivide(specs['diag'], 1, LD_4sf) + unit.sym(0) + ' ' + specs['hres'] + '&#x202f;&times;&#x202f;' + specs['vres']);
             $('#des_fill2').html(LongDivide(specs['width'], 1, LD_4sf) + unit.sym(0));

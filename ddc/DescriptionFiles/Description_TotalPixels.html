@@ -39,7 +39,7 @@
             document.getElementById('eq1'), global_katexOptions
         );
 
-        if (isNum([ specs['hres'], specs['vres'] ])) {
+        if (isPositive([ specs['hres'], specs['vres'] ])) {
             $('#des_fill1').html(specs['hres'] + '&#x202f;&times;&#x202f;' + specs['vres']);
 
             $('#description_extra').css('display', 'block');

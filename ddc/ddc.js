@@ -335,12 +335,11 @@ function changeUnit(buttonElement, force) {
 }
 
 
-// Returns false if input is a non-integer number or NaN
+// Returns true if input is an integer, false if input is a non-integer number or NaN
 function isInt(num) {
     if (Array.isArray(num) == true) {
         for (a = 0; a < num.length; a++) {
             if (Number.isInteger(parseNum(num[a])) == false) {
-                //DEBUG('isInt Array False. a:', a, 'num[a]:', num[a], 'Number.isInteger(num[a]):', Number.isInteger(num[a]));
                 return false;
             }
         }
@@ -350,7 +349,7 @@ function isInt(num) {
         return Number.isInteger(parseNum(num));
 }
 
-
+// Returns true if input is a number with a decimal point in it, false otherwise (integer inputs or NaN)
 function isFloat(num) {
     if (Array.isArray(num) == true) {
         for (a = 0; a < num.length; a++) {
@@ -365,7 +364,7 @@ function isFloat(num) {
 }
 
 
-// Returns false if input is not a positive number (zero, negative number, or NaN)
+// Returns true if input is a number >= 1, false otherwise (numbers between 0 and 1, zero, negative number, or NaN)
 function isGTEOne(num) {
     if (Array.isArray(num) == true) {
         for (a = 0; a < num.length; a++) {
@@ -388,7 +387,7 @@ function isGTEOne(num) {
 }
 
 
-// Returns false if input is not a positive number (zero, negative number, or NaN)
+// Returns true if input is a number > 0, false otherwise (zero, negative number, or NaN)
 function isPositive(num) {
     if (Array.isArray(num) == true) {
         for (a = 0; a < num.length; a++) {
@@ -410,7 +409,7 @@ function isPositive(num) {
     }
 }
 
-
+// Returns true if input is a number >= 0, false otherwise (negative number or NaN)
 function isNonNegative(num) {
     if (Array.isArray(num) == true) {
         for (a = 0; a < num.length; a++) {
@@ -920,14 +919,14 @@ function roundRect(ctx, x, y, width, height, radius, fill, stroke) {
   
   }
 
-  function drawPixels(cx, startX, startY, spxH, spxW, spxGap, pxGap, radius, amount) {
+  function drawPixels(cx, startX, startY, spxH, spxW, spxGap, pxGap, radius, quantity) {
     cx.strokeStyle = 'transparent';
 
     var R = '#662222';
     var G = '#226622';
     var B = '#222266';
 
-    for (var i = 0; i < amount; i++) {
+    for (var i = 0; i < quantity; i++) {
         var offset = i * (3 * spxW + 2 * spxGap + pxGap);
         cx.fillStyle = R;
         roundRect(cx, startX + offset, startY, spxW, spxH, radius, true, true);
@@ -938,7 +937,7 @@ function roundRect(ctx, x, y, width, height, radius, fill, stroke) {
     }
   }
 
-  function drawPartialPixels(cx, startX, startY, spxH, spxW, spxGap, pxGap, radius, amount, cutoff) {
+  function drawPartialPixels(cx, startX, startY, spxH, spxW, spxGap, pxGap, radius, quantity, cutoff) {
     cx.strokeStyle = 'transparent';
     startY = startY + spxH * (1 - cutoff);
 
@@ -957,7 +956,7 @@ function roundRect(ctx, x, y, width, height, radius, fill, stroke) {
     gradB.addColorStop(0.4, '#222266');
     gradB.addColorStop(1, 'transparent');
 
-    for (var i = 0; i < amount; i++) {
+    for (var i = 0; i < quantity; i++) {
         var offset = i * (3 * spxW + 2 * spxGap + pxGap);
         cx.fillStyle = gradR;
         roundRect(cx, startX + offset, startY, spxW, spxH * cutoff, radius, true, true);

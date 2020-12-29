@@ -14,7 +14,6 @@
 
 Where:
 <ul>
-    <li><em>L<sub>2</sub></em> is the height of the secondary display</li>
     <li><em>L<sub>1</sub></em> is the height of the primary display</li>
     <li><em>V<sub>2</sub></em> is the vertical resolution of the secondary display</li>
     <li><em>V<sub>1</sub></em> is the vertical resolution of the primary display</li>
@@ -41,7 +40,7 @@ Where:
             document.getElementById('eq1'), global_katexOptions
         );
 
-        if (isNum([ specs['hres'], specs['vres'], specs['diag'], specs['hres2'], specs['vres2'] ])) {
+        if (isPositive([ specs['hres'], specs['vres'], specs['diag'], specs['hres2'], specs['vres2'] ])) {
             var unit = specs['unit'];
 
             $('#des_fill1').html(LongDivide(specs['diag'], 1, LD_4sf) + unit.sym(0) + ' ' + specs['hres'] + '&#x202f;&times;&#x202f;' + specs['vres']);

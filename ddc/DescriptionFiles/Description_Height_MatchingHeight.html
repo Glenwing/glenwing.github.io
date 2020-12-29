@@ -1,5 +1,11 @@
 <div>
-    This is the height of the secondary display. It is the same as the height of the primary display.
+    This is the height of the secondary display. It is the same as the <a onclick='selectRow(document.getElementById("selectHeight"));'>height</a> of the primary display.
+</div>
+
+<div>
+    <div id='eq1' class='katex'>
+        L<sub>2</sub> = L<sub>1</sub>
+    </div>
 </div>
 
 
@@ -12,6 +18,34 @@
     }
     
     global_DescriptionFunction = function (specs) {
+        katex.render(
+
+            '\\textrm{Secondary Display Height} (L_2) = L_1',
+    
+            document.getElementById('eq1'), global_katexOptions
+        );
+
+        if (isPositive([ specs['hres'], specs['vres'], specs['diag'] ])) {
+            var unit = specs['unit'];
+
+            $('#des_fill1').html(a_or_an(specs['diag']) + ' ' + LongDivide(specs['diag'], 1, LD_4sf) + unit.sym(0) + ' ' + specs['hres'] + '&#x202f;&times;&#x202f;' + specs['vres']);
+
+            $('#description_extra1').css('display', 'block');
+
+            katex.render(
+
+                '\\begin{aligned}' +
+                '\\textrm{Secondary Display Height} (L_2) &= L_1' +
+                '\\\\[5mm] &= \\boxed{\\rm ' + LongDivide(specs['height'], 1, LD_5sf) + '~' + unit.abbr(0) + '}' +
+                '\\end{aligned}',
+    
+                document.getElementById('eq1'), global_katexOptions
+            );
+        }
+        else {
+            $('#description_extra1').css('display', 'none');
+        }
+
         return;
     }
 

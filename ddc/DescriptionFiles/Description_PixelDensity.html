@@ -2,13 +2,15 @@
     The pixel density of a display is the number of pixels per unit length along the edge of the display.
 </div>
 
-<div tooltip="Somewhat disturbingly, this image is approximately to scale if viewed on a typical ≈90&ndash;110&nbsp;px/in monitor" style='text-align:center;'>
-<canvas id='des_canvas1' class='px_density_diagram' width='400' height='130'>
-
-</canvas>
+<!----<div tooltip="Somewhat disturbingly, this image is approximately to scale if viewed on a typical ≈90&ndash;110&nbsp;px/in monitor" style='text-align:center;'><!---->
+<div style='text-align:center;'>    
+    <canvas id='des_canvas1' class='px_density_diagram' width='420' height='120'></canvas>
+    <div id='caption1' class='katex caption'>Figure: An illustration of 3 px/in pixel density</div>
 </div>
+<!----</div><!---->
+
 <div>
-    For example, the above diagram shows a pixel density of approximately 3&nbsp;px/in. Actual displays usually have a pixel density of 90&nbsp;px/in or more. Pixel density in general can be calculated as:
+    For example, the figure above shows a pixel density of approximately 3&nbsp;px/in. Actual displays usually have a pixel density of 90&nbsp;px/in or more. Pixel density is calculated as:
 
     <div id='eq1' class='katex'>
         Pixel Density (D) = H/W = V/L
@@ -43,6 +45,14 @@
     }
     
     global_DescriptionFunction = function (specs) {
+        
+        katex.render(
+
+            '\\textrm{Figure: An illustration of 3~px/in pixel density}',
+    
+            document.getElementById('caption1'), { throwOnError: false, displayMode:false, strict:false }
+        );
+
         katex.render(
 
             //'\\textrm{Pixel Density}~(D\\,) = \\frac{\\raisebox{-0.1em}{$H$}}{\\raisebox{-0.1em}{$W$}} = \\frac{\\raisebox{-0.1em}{$V$}}{\\raisebox{-0.1em}{$L$}}',
@@ -59,7 +69,7 @@
             document.getElementById('eq2'), global_katexOptions
         );
 
-        if (isNum([ specs['hres'], specs['vres'], specs['diag'] ])) {
+        if (isPositive([ specs['hres'], specs['vres'], specs['diag'] ])) {
             var unit = specs['unit'];
 
             $('#des_fill1').html(LongDivide(specs['diag'], 1, LD_4sf) + unit.sym(0) + ' ' + specs['hres'] + '&#x202f;&times;&#x202f;' + specs['vres']);
@@ -111,29 +121,50 @@
         
         // Axes
         cx.lineWidth = '2';
-        cx.moveTo(10,10);
-        cx.lineTo(10,80);
-        cx.lineTo(400,80);
+        cx.moveTo(20,10);
+        cx.lineTo(20,80);
+        cx.lineTo(410,80);
         cx.stroke();
 
-        drawPixels(cx, 15, 43, 31, 9, 2, 6, 3, 10);
-        drawPartialPixels(cx, 15, 6, 31, 9, 2, 6, 3, 10, 0.9);
+        drawPixels(cx, 25, 43, 31, 9, 2, 6, 3, 10);
+        drawPartialPixels(cx, 25, 6, 31, 9, 2, 6, 3, 10, 0.9);
 
         cx.strokeStyle = '#DDDDDD';
         cx.fillStyle = '#DDDDDD';
         cx.lineWidth = '1';
 
         cx.beginPath();
-        cx.moveTo(15, 90);
-        cx.lineTo(15, 100);
-        cx.lineTo(15 + 108, 100);
-        cx.lineTo(15 + 108, 90);
+        cx.moveTo(25, 90);
+        cx.lineTo(25, 100);
+        cx.lineTo(25 + 108, 100);
+        cx.lineTo(25 + 108, 90);
         cx.stroke();
 
         cx.beginPath();
         cx.textAlign = 'center';
         cx.font = '300 16px IBM Plex Sans';
-        cx.fillText('1 inch', 15 + 54, 120);
+        cx.fillText('1 inch', 25 + 54, 120);
+
+        var tempX = 25 + 9 + 2 + (9/2);
+        var tempY = 43 + (31/2);
+        var comX = tempX + 31 + 6 + (31/2);
+        var comY = tempY - 30;
+        cx.moveTo(tempX, tempY);
+        cx.lineTo(comX, comY);
+        cx.stroke();
+        tempX += 37;
+        cx.moveTo(tempX, tempY);
+        cx.lineTo(comX, comY);
+        cx.stroke();
+        tempX += 37;
+        cx.moveTo(tempX, tempY);
+        cx.lineTo(comX, comY);
+        cx.stroke();
+
+        cx.beginPath();
+        cx.textAlign = 'left';
+        cx.font = '300 16px IBM Plex Sans';
+        cx.fillText('3 pixels', comX, comY - 10);
 
     }
 

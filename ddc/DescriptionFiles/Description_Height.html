@@ -106,7 +106,7 @@
             document.getElementById('eq4'), global_katexOptions
         );
 
-        if (isNum([ specs['hres'], specs['vres'], specs['diag'] ])) {
+        if (isPositive([ specs['hres'], specs['vres'], specs['diag'] ])) {
             var unit = specs['unit'];
             $('#des_fill1').html(LongDivide(specs['diag'], 1, LD_4sf) + unit.sym(0) + ' ' + specs['hres'] + '&#x202f;&times;&#x202f;' + specs['vres']);
 

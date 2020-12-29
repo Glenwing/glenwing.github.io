@@ -10,11 +10,21 @@
     where:
 
     <ul>
-        <li><em>L</em> is the physical height of the displays</li>
-        <li><em>R<sub>2</sub></em> is the aspect ratio of the secondary display</li>
+        <li><em>L</em> is the physical <a onclick='selectRow(document.getElementById("selectHeight"));'>height</a> of the displays</li>
+        <li><em>R<sub>2</sub></em> is the aspect ratio of the secondary display (horizontal resolution divided by vertical resolution)</li>
     </ul>
+</div>
 
-    It is often convenient to do calculations using only the diagonal size and resolution of the displays, since these are the most readily available specifications. This can be done by substituting the equations for <a onclick='selectRow(document.getElementById("selectHeight"));'>display height</a> and <a onclick='selectRow(document.getElementById("selectRatio"));'>aspect ratio</a>. This yields the following equation:
+<div id='description_extra1' style='display:none;'>
+        For a <span id='des_fill1'>HRES2<span class='ratio'>&#x2236;</span>VRES2</span> secondary display with the same height as a <span id='des_fill2'>DIAG UNIT HRES&#x202f;&times;&#x202f;VRES</span> primary display, the width of the secondary display is:
+    
+        <div id='eq3' class='katex'>
+            W<sub>2</sub> = L<sub>1</sub> &times; (H<sub>2</sub>/V<sub>2</sub>)
+        </div>
+    </div>
+
+<div>
+    It is often convenient to do calculations using only the diagonal size and resolution of the displays, since these are the most readily available specifications. This can be done by substituting the equations for <a onclick='selectRow(document.getElementById("selectHeight"));'>height</a> and <a onclick='selectRow(document.getElementById("selectRatio"));'>aspect ratio</a>. This yields the following equation:
 
     <div id='eq2' class='katex'>
         W<sub>2</sub> = S<sub>1</sub> &times; cos(tan<sup>-1</sup>(H<sub>1</sub>/V<sub>1</sub>)) &times; (H<sub>2</sub>/V<sub>2</sub>)
@@ -29,10 +39,10 @@
     </ul>
 </div>
 
-<div id='description_extra1' style='display:none;'>
-    For a <span id='des_fill1'>HRES2<span class='ratio'>&#x2236;</span>VRES2</span> secondary display with the same height as a <span id='des_fill2'>DIAG UNIT HRES&#x202f;&times;&#x202f;VRES</span> primary display, the width of the secondary display is:
+<div id='description_extra2' style='display:none;'>
+    For a <span id='des_fill3'>HRES2<span class='ratio'>&#x2236;</span>VRES2</span> secondary display with the same height as a <span id='des_fill4'>DIAG UNIT HRES&#x202f;&times;&#x202f;VRES</span> primary display, the width of the secondary display is:
 
-    <div id='eq3' class='katex'>
+    <div id='eq4' class='katex'>
         W<sub>2</sub> = S<sub>1</sub> &times; cos(tan<sup>-1</sup>(H<sub>1</sub>/V<sub>1</sub>)) &times; (H<sub>2</sub>/V<sub>2</sub>)
     </div>
 </div>
@@ -61,23 +71,50 @@
             document.getElementById('eq2'), global_katexOptions
         );
 
-        if (isNum([ specs['hres'], specs['vres'], specs['diag'], specs['hres2'], specs['vres2'] ])) {
+        if (isPositive([ specs['hres'], specs['vres'], specs['diag'], specs['hres2'], specs['vres2'] ])) {
             var unit = specs['unit'];
 
             if (specs['hres2'].toString().length > 3) {
-                $('#des_fill1').html(specs['hres2'] + '&#x202f;&times;&#x202f;' + specs['vres2']);
+                var fill_1 = a_or_an(specs['hres2']) + ' ' + specs['hres2'] + '&#x202f;&times;&#x202f;' + specs['vres2'];
+                $('#des_fill1').html(fill_1);
+                $('#des_fill3').html(fill_1);
             }
             else {
-                $('#des_fill1').html(specs['hres2'] + "<span class='ratio'>&#x2236;</span>" + specs['vres2']);
+                $('#des_fill1').html(a_or_an(specs['hres2']) + ' ' + specs['hres2'] + "<span class='ratio'>&#x2236;</span>" + specs['vres2']);
             }
-            $('#des_fill2').html(LongDivide(specs['diag'], 1, LD_1to3dp) + unit.sym(0) + ' ' + specs['hres'] + '&#x202f;&times;&#x202f;' + specs['vres']);
+            var fill_2 = a_or_an(specs['diag']) + ' ' + LongDivide(specs['diag'], 1, LD_1to3dp) + unit.sym(0) + ' ' + specs['hres'] + '&#x202f;&times;&#x202f;' + specs['vres'];
+            $('#des_fill2').html(fill_2);
+            $('#des_fill4').html(fill_2);
             $('#description_extra1').css('display', 'block');
+            $('#description_extra2').css('display', 'block');
 
             // Only print "px" after the numbers if they are greater than 2 digits, so it won't show up for aspect ratios
             var px_optional = '';
             if (specs['hres2'].toString().length >= 3 || specs['vres2'].toString().length >= 3) {
                 px_optional = '~px';
             }
+
+            katex.render(
+
+                '\\begin{aligned}' +
+                'W_2 &= \\rm ' + LongDivide(specs['height'], 1, LD_5sf) + '~' + unit.abbr(0) +
+                '\\cdot \\left( \\afrac{' +
+                commasLaTeX(specs['hres2']) + px_optional +
+                '}{' +
+                commasLaTeX(specs['vres2']) + px_optional +
+                '} \\right) \\\\[5mm]' +
+                '&= \\rm ' + LongDivide(specs['height'], 1, LD_5sf) + '~' + unit.abbr(0) +
+                '\\cdot \\left(' +
+                LongDivide(specs['hres2'], specs['vres2'], LD_2to6dp_rep) +
+                '\\right)\\\\[5mm]' +
+                '&= \\boxed{\\rm ' +
+                LongDivide(Decimal(specs['hres']).div(specs['vres']).atan().cos().times(specs['diag']).times(specs['hres2']).div(specs['vres2']), 1, LD_5sf) + '~' + unit.abbr(0) +
+                //LongDivide(specs['diag'] * Math.cos(Math.atan(specs['hres'] / specs['vres'])) * (specs['hres2'] / specs['vres2']), 1, LD_5sf) + '~' + unit.abbr(0) +
+                '}' +
+                '\\end{aligned}',
+    
+                document.getElementById('eq3'), global_katexOptions
+            );
 
             katex.render(
 
@@ -105,10 +142,12 @@
                 '}' +
                 '\\end{aligned}',
     
-            document.getElementById('eq3'), global_katexOptions);
+                document.getElementById('eq4'), global_katexOptions
+            );
         }
         else {
             $('#description_extra1').css('display', 'none');
+            $('#description_extra2').css('display', 'none');
         }
 
         return;

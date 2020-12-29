@@ -79,7 +79,7 @@
             document.getElementById('eq3'), global_katexOptions
         );
 
-        if (isNum([ specs['hres'], specs['vres'], specs['diag'], specs['hres2'], specs['vres2'] ])) {
+        if (isPositive([ specs['hres'], specs['vres'], specs['diag'], specs['hres2'], specs['vres2'] ])) {
             var unit = specs['unit'];
 
             $('#des_fill1').html(specs['hres2'] + '&#x202f;&times;&#x202f;' + specs['vres2']);

@@ -5,7 +5,7 @@
 <div id='eq1' class='katex'></div>
 
 <div id='description_extra1' style='display:none;'>
-    For a <span id='des_fill1'>SIZE UNIT HRES&#x202f;&times;&#x202f;VRES</span> display,
+    For <span id='des_fill1'>a SIZE UNIT HRES&#x202f;&times;&#x202f;VRES</span> display,
 
     <div id='eq2' class='katex'></div>
 </div>
@@ -30,7 +30,7 @@
         if (isPositive([ specs['hres'], specs['vres'], specs['diag'] ])) {
             var unit = specs['unit'];
 
-            $('#des_fill1').html(LongDivide(specs['diag'], 1, LD_4sf) + unit.sym(0) + ' ' + specs['hres'] + '&#x202f;&times;&#x202f;' + specs['vres']);
+            $('#des_fill1').html(a_or_an(specs['diag']) + ' ' + LongDivide(specs['diag'], 1, LD_4sf) + unit.sym(0) + ' ' + specs['hres'] + '&#x202f;&times;&#x202f;' + specs['vres']);
 
             $('#description_extra1').css('display', 'block');
 
@@ -40,7 +40,8 @@
                 '\\textrm{An equation goes here!}' +
                 '\\end{aligned}',
     
-            document.getElementById('eq2'), global_katexOptions);
+                document.getElementById('eq2'), global_katexOptions
+            );
         }
         else {
             $('#description_extra1').css('display', 'none');

@@ -7,25 +7,28 @@
 
     where:
     <ul>
-        <li><em>L</em> is the physical height of the displays</li>
+        <li><em>L</em> is the physical <a onclick='selectRow(document.getElementById("selectHeight"));'>height</a> of the displays</li>
         <li><em>R<sub>2</sub></em> is the aspect ratio of the secondary display (horizontal resolution divided by vertical resolution)</li>
-        <li><em>S<sub>2</sub></em> is the resulting size of the secondary display</li>
     </ul>
+
+</div>
+
+<div id='description_extra1' style='display:none;'>
+    For <span id='des_fill1'>a HRES2<span class='ratio'>&times;</span>VRES2</span> secondary display with the same height as <span id='des_fill2'>a DIAG UNIT HRES&#x202f;&times;&#x202f;VRES</span> primary display, the secondary display's diagonal size is:<br><br>
+
+    <div id='eq3' class='katex'>
+        S<sub>2</sub> = L &div; cos(tan<sup>&minus;1</sup>(H<sub>2</sub>/V<sub>2</sub>))
+    </div>
+</div>
+
+<div>
 
     The <em><span style='font-style:normal'>cos(tan<sup>&minus;1</sup>(</span>R<sub>2</sub><span style='font-style:normal'>))</span></em> gives the ratio between the secondary display's height and diagonal size, <em>L<sub>2</sub>/S<sub>2</sub></em>. Since the height <em>L<sub>2</sub></em> is already known (the same as <em>L<sub>1</sub></em>), the corresponding diagonal size can be found.<br><br>
 
     To get an equation in terms of only the diagonal size and resolution of the displays (the most commonly available specifications), the equations for <a onclick='selectRow(document.getElementById("selectHeight"));'>height</a> and <a onclick='selectRow(document.getElementById("selectRatio"));'>aspect ratio</a> can be substituted for <em>L</em> and <em>R<sub>2</sub></em> in the previous equation:
 
     <div id='eq2' class='katex'>
-        S<sub>2</sub> = S<sub>1</sub> &times; cos(tan<sup>&minus;1</sup>(H<sub>1</sub>/V<sub>1</sub>)) ÷ cos(tan<sup>&minus;1</sup>(H<sub>2</sub>/V<sub>2</sub>))
-    </div>
-</div>
-
-<div id='description_extra1' style='display:none;'>
-    For a <span id='des_fill1'>HRES2<span class='ratio'>&times;</span>VRES2</span> secondary display with the same height as a <span id='des_fill2'>DIAG UNIT HRES&#x202f;&times;&#x202f;VRES</span> primary display, the secondary display's diagonal size is:<br><br>
-
-    <div id='eq3' class='katex'>
-        S<sub>2</sub> = S<sub>1</sub> &times; cos(tan<sup>&minus;1</sup>(H<sub>1</sub>/V<sub>1</sub>)) ÷ cos(tan<sup>&minus;1</sup>(H<sub>2</sub>/V<sub>2</sub>))
+        S<sub>2</sub> = S<sub>1</sub> &times; cos(tan<sup>&minus;1</sup>(H<sub>1</sub>/V<sub>1</sub>)) &div; cos(tan<sup>&minus;1</sup>(H<sub>2</sub>/V<sub>2</sub>))
     </div>
 </div>
 
@@ -54,16 +57,16 @@
             document.getElementById('eq2'), global_katexOptions
         );
 
-        if (isNum([ specs['hres'], specs['vres'], specs['diag'], specs['hres2'], specs['vres2'] ])) {
+        if (isPositive([ specs['hres'], specs['vres'], specs['diag'], specs['hres2'], specs['vres2'] ])) {
             var unit = specs['unit'];
 
             if (specs['hres2'].toString().length > 3) {
-                $('#des_fill1').html(specs['hres2'] + '&#x202f;&times;&#x202f;' + specs['vres2']);
+                $('#des_fill1').html(a_or_an(specs['hres2']) + ' ' + specs['hres2'] + '&#x202f;&times;&#x202f;' + specs['vres2']);
             }
             else {
-                $('#des_fill1').html(specs['hres2'] + "<span class='ratio'>&#x2236;</span>" + specs['vres2']);
+                $('#des_fill1').html(a_or_an(specs['hres2']) + ' ' + specs['hres2'] + "<span class='ratio'>&#x2236;</span>" + specs['vres2']);
             }
-            $('#des_fill2').html(LongDivide(specs['diag'], 1, LD_4sf) + unit.sym(0) + ' ' + specs['hres'] + '&#x202f;&times;&#x202f;' + specs['vres']);
+            $('#des_fill2').html(a_or_an(specs['diag']) + ' ' + LongDivide(specs['diag'], 1, LD_4sf) + unit.sym(0) + ' ' + specs['hres'] + '&#x202f;&times;&#x202f;' + specs['vres']);
 
             $('#description_extra1').css('display', 'block');
             //$('#description_extra2').css('display', 'block');
@@ -79,21 +82,25 @@
                 '\\begin{aligned}' +
                 'S_2 &= \\rm \\frac' +
                 '{' +
-                    LongDivide(specs['diag'], 1, LD_4sf) + '~' + unit.abbr(0) +
-                    '\\cdot \\Cos{\\Arctan{ \\afrac' +
-                    '{' + commasLaTeX(specs['hres']) + '~px}' +
-                    '{' + commasLaTeX(specs['vres']) + '~px}' +
-                    '}}' +
+                    LongDivide(specs['height'], 1, LD_5sf) + '~' + unit.abbr(0) +
                 '}{' +
                     '\\Cos{\\Arctan{ \\afrac' +
                     '{' + commasLaTeX(specs['hres2']) + px_optional + '}' +
                     '{' + commasLaTeX(specs['vres2']) + px_optional + '}' +
                     '}}' +
                 '}' +
-                '\\\\[10mm] &= \\boxed{\\rm ' +
+                '\\\\[10mm] &= \\afrac' +
+                '{' +
+                    LongDivide(specs['height'], 1, LD_5sf) + '~' + unit.abbr(0) +
+                '}{' +
+                    LongDivide(Decimal(specs['hres2']).div(specs['vres2']).atan().cos(), 1, LD_5sf) +
+                '}' +
+                '\\\\[5mm] &= \\boxed{\\rm ' +
                 LongDivide(
-                    specs['diag'] * Math.cos(Math.atan(specs['hres'] / specs['vres'])),
-                    Math.cos(Math.atan(specs['hres2'] / specs['vres2'])),
+                    Decimal(specs['hres']).div(specs['vres']).atan().cos().times(specs['diag']),
+                    //specs['diag'] * Math.cos(Math.atan(specs['hres'] / specs['vres'])),
+                    Decimal(specs['hres2']).div(specs['vres2']).atan().cos(),
+                    //Math.cos(Math.atan(specs['hres2'] / specs['vres2'])),
                     LD_5sf) +
                 '~' + unit.abbr(0) + '}' +
                 '\\end{aligned}',
