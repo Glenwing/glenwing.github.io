@@ -1,10 +1,12 @@
 ﻿html, body {
     margin:             0;
-    /*
+    
     position:           fixed;
-    */
+    top:                0;
+    left:               0;
+    
     height:             100%;
-    width:              100vw;
+    min-width:          100vw;
     padding:            0;
     background-color:   #1E1E1E;
     color:              #FFFFFF;
@@ -17,9 +19,11 @@
     font-size:          16px;
 }
 
+/*
 @viewport {
     min-width:          640px;
 }
+*/
 
 /* MAIN STRUCTURAL ELEMENTS */
 
@@ -35,10 +39,15 @@ div.page {
     grid-template-columns:  1fr;
 
     height:                 100%;
+    width:                  100vw;
 
     overflow-x:             auto;
+    scrollbar-width:        none;
 
     background-color:       #101010;
+}
+div.page::-webkit-scrollbar {
+    display:                none;
 }
 /*
 div.page {
