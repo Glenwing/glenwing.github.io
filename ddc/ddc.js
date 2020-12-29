@@ -1,19 +1,45 @@
 ﻿LongDivide.errors = false;
 
-global_inputVars = { // Used for keeping track of when the inputs have changed
+var global_inputVars = { // Used for keeping track of when the inputs have changed
     unit:  $('#UNIT_BTN').val(),
     diag:  $('#INPUT_SIZE').val(),
     hres:  $('#INPUT_HRES').val(),
     vres:  $('#INPUT_VRES').val(),
     hres2: $('#INPUT_HRES2').val(),
     vres2: $('#INPUT_VRES2').val(),
-}
+};
 
+global_katexOptions = {
+    throwOnError: false,
+    displayMode: true, 
+    strict: false,
+    macros: {
+        '\\afrac': '\\dfrac{\\raisebox{-0.1em}{#1}}{\\raisebox{-0.1em}{#2}}', // Aligned fraction
+        '\\mfrac': '\\dfrac{\\raisebox{-0.1em}{$#1$}}{\\raisebox{-0.1em}{$#2$}}', // Same as afrac, but auto math mode arguments
+        '\\Sin': '\\sin \\left( #1 \\right)', // Trig functions with scaling parentheses attached
+        '\\Cos': '\\cos \\left( #1 \\right)',
+        '\\Tan': '\\tan \\left( #1 \\right)',
+        '\\Arcsin': '\\sin ^{-1} \\left( #1 \\right)',
+        '\\Arccos': '\\cos ^{-1} \\left( #1 \\right)',
+        '\\Arctan': '\\tan ^{-1} \\left( #1 \\right)',
+        '\\ratio': '\\raisebox{0.1em}{:}',
+    }
+};
+
+var LD_2dp =    { p:2,      sep:['\\,', '\\,', false, false], approx:'', repeat:false };
+var LD_0to3dp = { p:[0,3],  sep:['\\,', '\\,', false, false], approx:'', repeat:false };
+var LD_1to3dp = { p:[1,3],  sep:['\\,', '\\,', false, false], approx:'', repeat:false };
+var LD_4sf =    { sf:4,     sep:['\\,', '\\,', false, false], approx:'', repeat:false };
+var LD_4sf_si = { sf:4,     sep:['\\,', '\\,', false, false], approx:'', repeat:false, si:true, unit_sep:'~' };
+var LD_5sf =    { sf:5,     sep:['\\,', '\\,', false, false], approx:'', repeat:false };
+
+var LD_2to6dp_rep = { p:[2,6], sep:['\\,', '\\,', false, false], approx:'', repeat:true, overline:['\\overline{', '}']  };
+var LD_rep =    { p:[2,6],  sep:['\\,', '\\,', false, false], overline:['\\overline{', '}'] };
 
 var global_selectedElement = ''; // Used for keeping track of which element is currently selected in the document
 
 
-global_DescriptionRegistry = { // Used for associating HTML files for loading detailed descriptions
+var global_DescriptionRegistry = { // Used for associating HTML files for loading detailed descriptions
     'INPUT_SIZE':       './DescriptionFiles/Description_DiagonalSize.html',
     'INPUT_HRES':       './DescriptionFiles/Description_InputHres.html',
     'INPUT_VRES':       './DescriptionFiles/Description_InputVres.html',
@@ -32,16 +58,16 @@ global_DescriptionRegistry = { // Used for associating HTML files for loading de
     'selectDiag2':      './DescriptionFiles/Description_Diag_MatchingHeight.html',
     'selectWidth2':     './DescriptionFiles/Description_Width_MatchingHeight.html',
     'selectHeight2':    './DescriptionFiles/Description_Height_MatchingHeight.html',
-    'selectDensity2':   './DescriptionFiles/Description_PixelDensity_Matching.html',
+    'selectPxDensity2': './DescriptionFiles/Description_PixelDensity_Matching.html',
     'selectRatio2':     './DescriptionFiles/Description_Ratio_Matching.html',
 
     'selectDiag3':      './DescriptionFiles/Description_Diag_MatchingDensity.html',
     'selectWidth3':     './DescriptionFiles/Description_Width_MatchingDensity.html',
     'selectHeight3':    './DescriptionFiles/Description_Height_MatchingDensity.html',
-    'selectDensity3':   './DescriptionFiles/Description_PixelDensity_Matching.html',
+    'selectPxDensity3': './DescriptionFiles/Description_PixelDensity_Matching.html',
     'selectRatio3':     './DescriptionFiles/Description_Ratio_Matching.html',
     'selectIdealRes':   './DescriptionFiles/Description_IdealResolution.html',
-}
+};
 
 function update() {
     // This function updates the results whenever one of the input fields is changed, as well as update the description in response to mouseover events.
@@ -106,38 +132,32 @@ function update() {
 
         display(new UNIT(unit_select),
             [
-                ['RESULT_DIAG',         1, diag.toFixed(3)      , (isPositive(size)) ],
-                ['RESULT_WIDTH',        1, width.toFixed(3)     , (isPositive([size, hres1, vres1])) ],
-                ['RESULT_HEIGHT',       1, height.toFixed(3)    , (isPositive([size, hres1, vres1])) ],
-                ['RESULT_AREA',         2, area.toFixed(3)      , (isPositive([size, hres1, vres1])) ],
-                ['RESULT_PX_DENSITY',   3, px_density.toFixed(3), (isPositive([size, hres1, vres1])) ],
-                ['RESULT_DIAG2',        1, diag2.toFixed(3)     , (isPositive(size) && isGTEOne([hres1, vres1, hres2, vres2])) ],
-                ['RESULT_DIAG3',        1, diag3.toFixed(3)     , (isPositive(size) && isGTEOne([hres1, vres1, hres2, vres2])) ],
-                ['RESULT_HEIGHT2',      1, height2.toFixed(3)   , (isPositive(size) && isGTEOne([hres1, vres1, hres2, vres2])) ],
-                ['RESULT_HEIGHT3',      1, height3.toFixed(3)   , (isPositive(size) && isGTEOne([hres1, vres1, hres2, vres2])) ],
-                ['RESULT_WIDTH2',       1, width2.toFixed(3)    , (isPositive(size) && isGTEOne([hres1, vres1, hres2, vres2])) ],
-                ['RESULT_WIDTH3',       1, width3.toFixed(3)    , (isPositive(size) && isGTEOne([hres1, vres1, hres2, vres2])) ],
-                ['RESULT_PX_DENSITY2',  3, density2.toFixed(3)  , (isPositive(size) && isGTEOne([hres1, vres1, hres2, vres2])) ],
-                ['RESULT_PX_DENSITY3',  3, density3.toFixed(3)  , (isPositive(size) && isGTEOne([hres1, vres1, hres2, vres2])) ],
+                ['RESULT_DIAG',         1, diag      , (isPositive(size)) ],
+                ['RESULT_WIDTH',        1, width     , (isPositive([size, hres1, vres1])) ],
+                ['RESULT_HEIGHT',       1, height    , (isPositive([size, hres1, vres1])) ],
+                ['RESULT_AREA',         2, area      , (isPositive([size, hres1, vres1])) ],
+                ['RESULT_PX_DENSITY',   3, px_density, (isPositive([size, hres1, vres1])) ],
+                ['RESULT_DIAG2',        1, diag2     , (isPositive(size) && isGTEOne([hres1, vres1, hres2, vres2])) ],
+                ['RESULT_DIAG3',        1, diag3     , (isPositive(size) && isGTEOne([hres1, vres1, hres2, vres2])) ],
+                ['RESULT_HEIGHT2',      1, height2   , (isPositive(size) && isGTEOne([hres1, vres1, hres2, vres2])) ],
+                ['RESULT_HEIGHT3',      1, height3   , (isPositive(size) && isGTEOne([hres1, vres1, hres2, vres2])) ],
+                ['RESULT_WIDTH2',       1, width2    , (isPositive(size) && isGTEOne([hres1, vres1, hres2, vres2])) ],
+                ['RESULT_WIDTH3',       1, width3    , (isPositive(size) && isGTEOne([hres1, vres1, hres2, vres2])) ],
+                ['RESULT_PX_DENSITY2',  3, density2  , (isPositive(size) && isGTEOne([hres1, vres1, hres2, vres2])) ],
+                ['RESULT_PX_DENSITY3',  3, density3  , (isPositive(size) && isGTEOne([hres1, vres1, hres2, vres2])) ],
                 //['RESULT_DENSITY_SIZE', 1, size2.toFixed(3)     , (isPositive([size, hres1, vres1, hres_den, vres_den])) ],
             ]
         );
 
-        if (hres2 == '21' && vres2 == '9' && $('#eq_height_cover').css('visibility') === 'hidden') {
-            activate219Warning();
-        }
-        else {
-            deactivate219Warning();
-        }
-
+        check_219Warning();
 
         if (isPositive(size) && isGTEOne([hres1, vres1])) {
             var width_cm;
             var width_in;
             var px_pitch_si;
             var px_pitch_in;
-            var LD_options_si = { 'si':true,  'p':3, 'repeat':false, 'approx':'', 'thousands':',', 'thousandths':'\u202f' };
-            var LD_options_in = { 'si':false, 'p':3, 'repeat':false, 'approx':'', 'thousands':',', 'thousandths':'\u202f' };
+            var LD_options_si = { 'si':true,  'sf':5, 'repeat':false, 'approx':'', 'sep':[',', '\u202f', false, false] };
+            var LD_options_in = { 'si':false, 'sf':5, 'repeat':false, 'approx':'', 'sep':[',', '\u202f', false, false] };
             if (unit_select === 'cm') {
                 width_cm = width;
                 width_in = width / 2.54;
@@ -459,26 +479,51 @@ function parseNum(str) {
     }
 }
 
+function a_or_an(num) {
+    if (isNum(num) === false) {
+        return NaN;
+    }
+
+    num = parseNum(num);
+
+    numstr = num.toString();
+    intdigits = numstr.length;
+    if (isFloat(num) == true) {
+        intdigits = Math.floor(num).toString().length;
+    }
+
+    if (intdigits == 1) {
+        if (num == 8) {
+            return 'an';
+        }
+    }
+    else if (numstr.substring(0, 1) == '8' || ((numstr.substring(0, 2) == '11' || numstr.substring(0, 2) == '18') && (intdigits == 4 || intdigits % 3 == 2))) {
+        return 'an';
+    }
+
+    return 'a';
+}
+
 
 function display(units, list) {
     var el;
+    var LD_options = { 'sf':5, 'repeat':false, 'approx':'', 'sep':[',', '\u202f', true, false] };
     for (var x = 0; x < list.length; x++) {
         if (isNaN(list[x][2]) == true || isFinite(list[x][2]) == false || list[x][3] == false) {
             $('#' + list[x][0] + ' > span').html('');
         }
         else {
             el = $('#' + list[x][0] + ' > span');
-            el.html(commas(list[x][2]));
+            el.html(LongDivide(list[x][2], 1, LD_options));
             if (list[x][1] == 1) {
-                el[0].innerHTML += units.sym()[0] + ' (' + commas((list[x][2] * units.conv()).toFixed(3)) + units.sym()[1] + ')';
+                el[0].innerHTML += units.sym(0) + ' (' + LongDivide(list[x][2] * units.conv(), 1, LD_options) + units.sym(1) + ')';
             }
             else if (list[x][1] == 2) {
-                el[0].innerHTML += '&nbsp;' + units.abbr()[0] + '<sup>2</sup> (' + commas((list[x][2] * units.conv() * units.conv()).toFixed(3)) + '&nbsp;' + units.abbr()[1] + '<sup>2</sup>)';
+                el[0].innerHTML += '&nbsp;' + units.abbr(0) + '<sup>2</sup> (' + LongDivide(list[x][2] * units.conv() * units.conv(), 1, LD_options) + '&nbsp;' + units.abbr(1) + '<sup>2</sup>)';
             }
             else if (list[x][1] == 3) {
-                el[0].innerHTML += '&nbsp;px/' + units.abbr()[0] + ' (' + commas((list[x][2] * (1 / units.conv())).toFixed(3)) + '&nbsp;px/' + units.abbr()[1] + ')';
+                el[0].innerHTML += '&nbsp;px/' + units.abbr(0) + ' (' + LongDivide(list[x][2], units.conv(), LD_options) + '&nbsp;px/' + units.abbr(1) + ')';
             }
-
         }
     }
     return;
@@ -494,28 +539,28 @@ class UNIT {
         this.constructor = function (mode) {
             this._primary(mode);
         };
-        this.full = function () {
-            if (this._primary == 'in') {
-                return ['inches', 'centimeters'];
+        this.full = function (x) {
+            if ((this._primary == 'in' && x == 0) || (this._primary == 'cm' && x == 1)) {
+                return 'inches';
             }
-            else if (this._primary == 'cm') {
-                return ['centimeters', 'inches'];
-            }
-        };
-        this.abbr = function () {
-            if (this._primary == 'in') {
-                return ['in', 'cm'];
-            }
-            else if (this._primary == 'cm') {
-                return ['cm', 'in'];
+            else if ((this._primary == 'cm' && x == 0) || (this._primary == 'in' && x == 1)) {
+                return 'centimetres';
             }
         };
-        this.sym = function () {
-            if (this._primary == 'in') {
-                return ['"', '&nbsp;cm'];
+        this.abbr = function (x) {
+            if ((this._primary == 'in' && x == 0) || (this._primary == 'cm' && x == 1)) {
+                return 'in';
             }
-            else if (this._primary == 'cm') {
-                return ['&nbsp;cm', '"'];
+            else if ((this._primary == 'cm' && x == 0) || (this._primary == 'in' && x == 1)) {
+                return 'cm';
+            }
+        };
+        this.sym = function (x) {
+            if ((this._primary == 'in' && x == 0) || (this._primary == 'cm' && x == 1)) {
+                return '&#x2ba;';
+            }
+            else if ((this._primary == 'cm' && x == 0) || (this._primary == 'in' && x == 1)) {
+                return '&nbsp;cm';
             }
         };
         this.conv = function () {
@@ -524,6 +569,10 @@ class UNIT {
             }
             else if (this._primary == 'cm') {
                 return 1 / 2.54;
+            }
+            else {
+                console.warn('Error in unit.conv()');
+                return 1;
             }
         };
     }
@@ -601,13 +650,13 @@ function commas(input) {
 
 function commas2(input) { // Same as commas(), but only adds commas for 5-digit numbers or more (10,000 or higher; 9999 and below are left without commas)
     if(input.toString().indexOf('.') > 3 || (input.toString().indexOf('.') == -1 && input.toString().length > 4 )) {
-        commas(input);
+        return commas(input);
     }
     else { return input.toString(); }
 }
 
-function commas3(input) { // Same as commas(), but adds LaTeX thin-spaces (\,) instead of commas
-    return (commas(input).replace(/\,/g, '\\,'));
+function commasLaTeX(input) { // Same as commas(), but adds LaTeX thin-spaces (\,) instead of commas
+    return (commas2(input).replace(/\,/g, '\\,'));
 }
 
 function copy_DIU_URL() {
@@ -654,11 +703,11 @@ function switchHeightDensity() {
         $('#results3').css('display', 'none');
         // $('#selectDiagHeight').css('display', 'table-row');
         // $('#selectDiagDensity').css('display', 'none');
-        $('#height_ratio_symbol').css('display', 'inline');
-        $('#height_times_symbol').css('display', 'none');
+        //$('#height_ratio_symbol').css('display', 'inline');
+        //$('#height_times_symbol').css('display', 'none');
         $('#INPUT_HRES2').attr('placeholder', '16');
         $('#INPUT_VRES2').attr('placeholder', '9');
-        $('#matchmaker_instructions').html('Aspect ratio or resolution of secondary display:');
+        $('#matchmaker_instructions').html('Resolution or aspect ratio of secondary display:');
         deselectRow();
         clearDescription();
     }
@@ -668,8 +717,8 @@ function switchHeightDensity() {
         $('#results3').css('display', 'block');
         // $('#selectDiagHeight').css('display', 'none');
         // $('#selectDiagDensity').css('display', 'table-row');
-        $('#height_ratio_symbol').css('display', 'none');
-        $('#height_times_symbol').css('display', 'inline');
+        //$('#height_ratio_symbol').css('display', 'none');
+        //$('#height_times_symbol').css('display', 'inline');
         $('#INPUT_HRES2').attr('placeholder', '1920');
         $('#INPUT_VRES2').attr('placeholder', '1080');
         $('#matchmaker_instructions').html('Resolution of secondary display:');
@@ -712,6 +761,16 @@ function deactivateMatchmaker() {
     update();
 }
 
+function check_219Warning() {
+    if ($('#INPUT_HRES2').val() == '21' && $('#INPUT_VRES2').val() == '9' && $('#eq_height_cover').css('visibility') === 'hidden') {
+        $('#21_9_warning').css('display', 'flex');
+    }
+    else {
+        $('#21_9_warning').css('display', 'none');
+    }
+}
+
+/*
 function activate219Warning() {
     $('#21_9_warning').css('display', 'flex');
 }
@@ -719,6 +778,7 @@ function activate219Warning() {
 function deactivate219Warning() {
     $('#21_9_warning').css('display', 'none');
 }
+*/
 
 function pleaseFillTheOtherSectionFirst() {
     if (!isNum($('#INPUT_SIZE').val())) { $('#INPUT_SIZE').focus(); }
@@ -746,7 +806,17 @@ function selectRow(el) {
     if (previousEl != el) {
         el.classList.add('selected');
         global_selectedElement = el;
-        $('#description').load(global_DescriptionRegistry[el.id]);
+        //console.log('el.descriptionContent:', el.descriptionContent);
+        if ($(el).data('descriptionContent') === undefined) {
+            $('#description').load(global_DescriptionRegistry[el.id], function() {
+                $(el).data('descriptionContent', $('#description').html());
+                $(el).data('descriptionFunction', global_DescriptionFunction);
+            });
+        }
+        else {
+            $('#description').html($(el).data('descriptionContent'));
+            global_DescriptionFunction = $(el).data('descriptionFunction');
+        }
     }
 }
 
@@ -787,9 +857,20 @@ document.addEventListener('mousemove', function(event) {
 });
 */
 
-function loadDescription(element) {
+function loadDescription(el) {
     if (global_selectedElement == '') {
-        $('#description').load(global_DescriptionRegistry[element.id]);
+        //$('#description').load(global_DescriptionRegistry[element.id]);
+        //console.log('$(el).data("descriptionContent"):', $(el).data('descriptionContent'));
+        if ($(el).data('descriptionContent') === undefined) {
+            $('#description').load(global_DescriptionRegistry[el.id], function() {
+                $(el).data('descriptionContent', $('#description').html());
+                $(el).data('descriptionFunction', global_DescriptionFunction);
+            });
+        }
+        else {
+            $('#description').html($(el).data('descriptionContent'));
+            global_DescriptionFunction = $(el).data('descriptionFunction');
+        }
     }
 }
 
@@ -917,6 +998,7 @@ window.onload = function pageLoad () {
 
     parseURL();
     update();
+    check_219Warning();
     $('#INPUT_SIZE').focus();
 }
 

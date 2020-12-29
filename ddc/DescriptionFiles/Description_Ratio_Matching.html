@@ -17,7 +17,7 @@
 </div>
 
 <div id='description_extra1' style='display:none;'>
-    For a <span id='des_fill1'>HRES2</span>&thinsp;&times;&thinsp;<span id='des_fill2'>VRES2</span> display, the aspect ratio is:
+    For a <span id='des_fill1'>HRES2&#x202f;&times;&#x202f;VRES2</span> display, the aspect ratio is:
 
     <div id='eq2' class='katex'>
         R = H:V = H/V = HRES2/VRES2
@@ -25,7 +25,7 @@
 </div>
 
 <div>
-    The aspect ratio is also commonly written <em>H</em><span class='ratio'>&#x2236;</span><em>V</em> with reduced whole numbers instead of carrying out the division operation. For example, the aspect ratio of the standard HD format 1920&thinsp;&times;&thinsp;1080 is 1.<span style='text-decoration:overline'>77</span>, but is typically written as 16<span class='ratio'>&#x2236;</span>9 rather than 1.<span style='text-decoration:overline'>77</span> or 1.<span style='text-decoration:overline'>77</span><span class='ratio'>&#x2236;</span>1. In general, this form is obtained by:
+    The aspect ratio is also commonly written <em>H</em><span class='ratio'>&#x2236;</span><em>V</em> with reduced whole numbers instead of carrying out the division operation. For example, the aspect ratio of the standard HD format 1920&#x202f;&times;&#x202f;1080 is 1.<span style='text-decoration:overline'>77</span>, but is typically written as 16<span class='ratio'>&#x2236;</span>9 rather than 1.<span style='text-decoration:overline'>77</span> or 1.<span style='text-decoration:overline'>77</span><span class='ratio'>&#x2236;</span>1. In general, this form is obtained by:
 
     <div id='eq3' class='katex'>
         R = (H/G):(V/G)
@@ -40,11 +40,11 @@
 </div>
 
 <div id='description_extra2' style='display:none;'>
-    For a <span id='des_fill3'>HRES</span>&thinsp;&times;&thinsp;<span id='des_fill4'>VRES</span> display, the aspect ratio in reduced whole number form is:
+    For a <span id='des_fill3'>HRES&#x202f;&times;&#x202f;VRES</span> display, the aspect ratio in reduced whole number form is:
 
     <div id='eq4' class='katex'>
         R = (H/G):(V/G)
-        = (HRES2/G):(VRES2/G)
+        = (H<sub>2</sub>/G):(V<sub>2</sub>/G)
     </div>
 </div><br><br><br><br>
 
@@ -57,28 +57,24 @@
     global_DescriptionFunction = function (specs) {
         katex.render(
 
-            '\\textrm{Aspect Ratio}~(R\\,) = H \\raisebox{0.1em}{:} V = \\frac{H}{V}',
+            '\\textrm{Aspect Ratio}~(R\\,) = H \\ratio V = \\mfrac{H}{V}',
     
-            document.getElementById('eq1'), { throwOnError: false, displayMode: true, strict:false }
+            document.getElementById('eq1'), global_katexOptions
         );
 
         katex.render(
 
-            'R = \\left( \\frac{H}{G} \\right) \\raisebox{0.1em}{:} \\left( \\frac{V}{G} \\right)',
+            'R = \\left( \\mfrac{H}{G} \\right) \\ratio \\left( \\mfrac{V}{G} \\right)',
     
-            document.getElementById('eq3'), { throwOnError: false, displayMode: true, strict:false }
+            document.getElementById('eq3'), global_katexOptions
         );
 
-        if (isNum(specs['ar1'])) {
-            var LD_rep = { overline:['\\overline{', '}'], p:[2,6], sep:['\\,', '\\,', true, false] };
-
+        if (isNum([ specs['hres2'], specs['vres2'] ])) {
             $('#description_extra1').css('display', 'block');
             $('#description_extra2').css('display', 'block');
 
-            $('#des_fill1').html(specs['hres2']);
-            $('#des_fill2').html(specs['vres2']);
-            $('#des_fill3').html(specs['hres2']);
-            $('#des_fill4').html(specs['vres2']);
+            $('#des_fill1').html(specs['hres2'] + '&#x202f;&times;&#x202f;' + specs['vres2']);
+            $('#des_fill3').html(specs['hres2'] + '&#x202f;&times;&#x202f;' + specs['vres2']);
 
             var AR_LaTeX = LongDivide(specs['hres2'], specs['vres2'], LD_rep)
             var eq = '';
@@ -88,19 +84,35 @@
 
             katex.render(
 
-                'R = H \\raisebox{0.1em}{:} V = \\frac{H}{V} = \\frac{' + commas3(specs['hres2']) + '~\\rm px}{' + commas3(specs['vres2']) + '~\\rm px}' + eq + ' \\boxed{' + AR_LaTeX + '}',
+                'R = H \\ratio V = \\mfrac{H}{V} = \\afrac{' +
+                commasLaTeX(specs['hres2']) +
+                '~px}{' +
+                commasLaTeX(specs['vres2']) + '~px}' +
+                eq + ' \\boxed{' + AR_LaTeX + '}',
         
-                document.getElementById('eq2'), { throwOnError: false, displayMode: true, strict:false }
+                document.getElementById('eq2'), global_katexOptions
             );
 
             katex.render(
 
                 '\\begin{aligned} R ' +
-                '&= \\left( \\frac{H}{G} \\right) \\raisebox{0.1em}{:} \\left( \\frac{V}{G} \\right)\\\\[4mm]' +
-                '&= \\left( \\frac{' + commas3(specs['hres2']) + '~\\rm px}{' + commas3(GCD(specs['hres2'], specs['vres2'])) + '} \\right) \\raisebox{0.1em}{:} \\left( \\frac{' + commas3(specs['vres2']) + '~\\rm px}{' + commas3(GCD(specs['hres2'], specs['vres2'])) + '} \\right)\\\\[4mm]' +
-                '&= \\boxed{ ' + commas3(specs['hres2'] / GCD(specs['hres2'], specs['vres2'])) + ' \\raisebox{0.1em}{:} ' + commas3(specs['vres2'] / GCD(specs['hres2'], specs['vres2'])) + '} \\end{aligned}',
+                '&= \\left( \\mfrac{H}{G} \\right) \\ratio \\left( \\mfrac{V}{G} \\right)\\\\[4mm]' +
+                '&= \\left( \\afrac{' +
+                commasLaTeX(specs['hres2']) +
+                '~px}{' +
+                commasLaTeX(GCD(specs['hres2'], specs['vres2'])) +
+                '} \\right) \\ratio \\left( \\afrac{' +
+                commasLaTeX(specs['vres2']) +
+                '~px}{' +
+                commasLaTeX(GCD(specs['hres2'], specs['vres2'])) +
+                '} \\right)\\\\[4mm]' +
+                '&= \\boxed{ ' +
+                commasLaTeX(specs['hres2'] / GCD(specs['hres2'], specs['vres2'])) +
+                ' \\ratio ' +
+                commasLaTeX(specs['vres2'] / GCD(specs['hres2'], specs['vres2'])) +
+                '} \\end{aligned}',
         
-                document.getElementById('eq4'), { throwOnError: false, displayMode: true, strict:false }
+                document.getElementById('eq4'), global_katexOptions
             );
 
 

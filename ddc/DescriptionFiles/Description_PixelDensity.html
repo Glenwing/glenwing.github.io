@@ -28,7 +28,7 @@
 </div>
     
 <div id='description_extra' style='display:none;'>
-    For a <span id='des_fill1'>SIZE UNIT_SYM HRES</span>&thinsp;&times;&thinsp;<span id='des_fill2'>VRES</span> display, the pixel density is:
+    For a <span id='des_fill1'>SIZE UNIT HRES&#x202f;&times;&#x202f;VRES</span> display, the pixel density is:
 
     <div id='eq3' class='katex'>D = √(HRES<sup>2</sup> + VRES<sup>2</sup>) / SIZE</div>
 </div><br><br><br><br>
@@ -45,38 +45,60 @@
     global_DescriptionFunction = function (specs) {
         katex.render(
 
-            '\\textrm{Pixel Density}~(D\\,) = \\frac{\\raisebox{-0.1em}{$H$}}{\\raisebox{-0.1em}{$W$}} = \\frac{\\raisebox{-0.1em}{$V$}}{\\raisebox{-0.1em}{$L$}}',
+            //'\\textrm{Pixel Density}~(D\\,) = \\frac{\\raisebox{-0.1em}{$H$}}{\\raisebox{-0.1em}{$W$}} = \\frac{\\raisebox{-0.1em}{$V$}}{\\raisebox{-0.1em}{$L$}}',
+
+            '\\textrm{Pixel Density}~(D\\,) = \\mfrac{H}{W} = \\mfrac{V}{L}',
     
-            document.getElementById('eq1'), { throwOnError: false, displayMode: true, strict:false }
+            document.getElementById('eq1'), global_katexOptions
         );
 
         katex.render(
 
-            'D = \\frac{\\raisebox{-0.1em}{$\\sqrt{H^2 + V^2}$}}{\\raisebox{-0.1em}{$S$}}',
+            'D = \\mfrac{\\sqrt{H^2 + V^2}}{S}',
     
-            document.getElementById('eq2'), { throwOnError: false, displayMode: true, strict:false }
+            document.getElementById('eq2'), global_katexOptions
         );
 
         if (isNum([ specs['hres'], specs['vres'], specs['diag'] ])) {
             var unit = specs['unit'];
-            var LD_5sf =    { sf:5,    sep:['\\,', '\\,', true, false], approx:'', repeat:false };
-            var LD_1to3dp = { p:[1,3], sep:['\\,', '\\,', true, false], approx:'', repeat:false };
 
-            $('#des_fill1').html(LongDivide(specs['diag'], 1, LD_1to3dp) + unit.sym()[0] + ' ' + specs['hres']);
-            $('#des_fill2').html(specs['vres']);
+            $('#des_fill1').html(LongDivide(specs['diag'], 1, LD_4sf) + unit.sym(0) + ' ' + specs['hres'] + '&#x202f;&times;&#x202f;' + specs['vres']);
 
             $('#description_extra').css('display', 'block');
 
             katex.render(
 
                 '\\begin{aligned}' +
-                'D &= \\rm \\frac{\\sqrt{(' + commas3(specs['hres']) + '~px)^2 + (' + commas3(specs['vres']) + '~px)^2}}{' + commas3(specs['diag']) + '~' + unit.abbr()[0] + '} \\\\[4mm]' +
-                '&= \\rm \\frac{\\sqrt{' + commas3((specs['hres'] * specs['hres']) + (specs['vres'] * specs['vres'])) + '~px^2}}{' + commas3(specs['diag']) + '~' + unit.abbr()[0] + '} \\\\[4mm]' +
-                '&= \\rm \\frac{' + commas3(Math.sqrt((specs['hres'] * specs['hres']) + (specs['vres'] * specs['vres'])).toFixed(2)) + '~px}{' + commas3(specs['diag']) + '~' + unit.abbr()[0] + '} \\\\[4mm]' +
-                '&= \\boxed{\\rm ' + LongDivide(specs['px_density'], 1, LD_5sf) + '~px/' + unit.abbr()[0] + '}' +
+                'D &= \\rm \\frac{\\sqrt{' +
+                    '(' + commasLaTeX(specs['hres']) + '~px)^2' +
+                    '+' +
+                    '(' + commasLaTeX(specs['vres']) + '~px)^2' +
+                '}} {' +
+                    commasLaTeX(specs['diag']) + '~' + unit.abbr(0) +
+                '}' +
+                '\\\\[4mm]' +
+                '&= \\rm \\frac{\\sqrt{' +
+                commasLaTeX((specs['hres'] * specs['hres']) + (specs['vres'] * specs['vres'])) + '~px^2}}{' +
+                commasLaTeX(specs['diag']) + '~' + unit.abbr(0) +
+                '} \\\\[4mm]' +
+                '&= \\rm \\frac{' +
+                    LongDivide(
+                        Decimal(specs['hres']).pow(2).add(Decimal(specs['vres']).pow(2)).sqrt(),
+                        1,
+                        LD_5sf) +
+                    '~px}{' +
+                        commasLaTeX(specs['diag']) + '~' + unit.abbr(0) +
+                    '}' +
+                '\\\\[4mm]' +
+                '&= \\boxed{\\rm ' +
+                    LongDivide(
+                        Decimal(specs['hres']).pow(2).add(Decimal(specs['vres']).pow(2)).sqrt(),
+                        specs['diag'],
+                        LD_5sf) + '~px/' + unit.abbr(0) + '}' +
                 '\\end{aligned}',
     
-            document.getElementById('eq3'), { throwOnError: false, displayMode: true, strict:false });
+                document.getElementById('eq3'), global_katexOptions
+            );
         }
         else {
             $('#description_extra').css('display', 'none');

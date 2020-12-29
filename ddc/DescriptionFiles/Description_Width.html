@@ -15,11 +15,10 @@
 </div>
 
 <div id='description_extra1' style='display:none;'>
-    For a <span id='des_fill1'>SIZE UNIT_SYM HRES</span>&thinsp;&times;&thinsp;<span id='des_fill2'>VRES</span> display:
+    For a <span id='des_fill1'>SIZE UNIT HRES&#x202f;&times;&#x202f;VRES</span> display:
 
     <div id='eq2' class='katex'>
         W = SIZE &times; sin(tan<sup>-1</sup>(HRES/VRES))
-        L = SIZE &times; cos(tan<sup>-1</sup>(HRES/VRES))
     </div>
 
     Please note that these are the dimensions of the <i>screen only</i>, the viewable image area of the display. It does not include the borders of the casing around the screen.<br><br>
@@ -37,7 +36,7 @@
         = 87.1&nbsp;% of S
     </div>
 
-    However, it is generally safer to use the resolution, because aspect ratios are sometimes subject to rounding or approximation. For example, displays with resolutions of 2560&thinsp;&times;&thinsp;1080 and 3440&thinsp;&times;&thinsp;1440, despite being commonly known as "21<span class='ratio'>&#x2236;</span>9" formats, are not actually an exact 21<span class='ratio'>&#x2236;</span>9 ratio (and, in fact, are not even the same ratio as each other). Using the aspect ratio instead of resolution would lead to an inaccurate result in this situation. Many online calculators, such as <a target='_blank' href="http://www.displaywars.com/27-inch-16x9-vs-34-inch-21x9">Display Wars</a>, make this mistake with the "21<span class='ratio'>&#x2236;</span>9" option in their menus, and encourage people to use aspect ratio instead of resolution.<br><br>
+    However, it is generally safer to use the resolution, because aspect ratios are sometimes subject to rounding or approximation. For example, displays with resolutions of 2560&#x202f;&times;&#x202f;1080 and 3440&#x202f;&times;&#x202f;1440, despite being commonly known as "21<span class='ratio'>&#x2236;</span>9" formats, are not actually an exact 21<span class='ratio'>&#x2236;</span>9 ratio (and, in fact, are not even the same ratio as each other). Using the aspect ratio instead of resolution would lead to an inaccurate result in this situation. Many online calculators, such as <a target='_blank' href="http://www.displaywars.com/27-inch-16x9-vs-34-inch-21x9">Display Wars</a>, make this mistake with the "21<span class='ratio'>&#x2236;</span>9" option in their menus, and encourage people to use aspect ratio instead of resolution.<br><br>
 
     In most discussions about how to calculate these figures, the solutions tend to start with the Pythagorean theorem and solve from there.<sup><a target='_blank' href='https://www.reddit.com/r/askmath/comments/9qt5an/monitor_size/'>[1]</a></sup><sup><a target='_blank' href='https://www.reddit.com/r/thinkpad/comments/ckd8fa/how_to_calculate_screen_dimensions_screen_size/'>[2]</a></sup> That's a valid technique, but it's a lot simpler to approach it from the other direction using trig functions.<br><br>
     
@@ -49,31 +48,31 @@
 
     <div id='eq6' class='katex'>S<sup>2</sup> = W<sup>2</sup> + L<sup>2</sup></div>
 
-    <em>S</em>, the diagonal size, is a known value which we can plug in, but we don't know what <em>W</em> and <em>L</em> are. It might appear that we have one equation with two unknowns, an unsolvable scenario. However, since we also know the resolution of the monitor, we know the relationship between <em>W</em> and <em>L</em> even if we don't know their values; <em>W</em> is equal to <em>L</em> times the aspect ratio, which is <em>H/V</em>. So, the equation becomes:
+    <em>S</em>, the diagonal size, is a known value which we can plug in, but we don't know what <em>W</em> and <em>L</em> are. It might appear that we have one equation with two unknowns, an unsolvable scenario. However, since we also know the resolution of the monitor, we know the relationship between <em>W</em> and <em>L</em> even if we don't know their values; <em>L</em> is equal to <em>W</em> divided by the <a onclick='selectRow(document.getElementById("selectRatio"));'>aspect ratio</a> <em>R</em>, which is <em>H/V</em>. So, the equation becomes:
 
     <div id='eq7' class='katex'>
-        S<sup>2</sup> = W<sup>2</sup> + L<sup>2</sup> = ((H/V))&times;L)<sup>2</sup> + L<sup>2</sup>
-        S<sup>2</sup> = (H<sup>2</sup>/V<sup>2</sup>)L<sup>2</sup> + L<sup>2</sup>
-        S<sup>2</sup> = L<sup>2</sup>((H<sup>2</sup>/V<sup>2</sup>) + 1)
+        S<sup>2</sup> = W<sup>2</sup> + L<sup>2</sup> = W<sup>2</sup> + (W &times; (V/H)))<sup>2</sup>
+        S<sup>2</sup> = (V<sup>2</sup>/H<sup>2</sup>)W<sup>2</sup> + W<sup>2</sup>
+        S<sup>2</sup> = W<sup>2</sup>((V<sup>2</sup>/H<sup>2</sup>) + 1)
     </div>
 
-    Isolate the desired variable, <em>L</em>:
+    Isolate the desired variable, <em>W</em>:
     
     <div id='eq8' class='katex'>
-        S<sup>2</sup>/((H<sup>2</sup>/V<sup>2</sup>) + 1) = L<sup>2</sup>
+        S<sup>2</sup>/((V<sup>2</sup>/H<sup>2</sup>) + 1) = W<sup>2</sup>
     </div>
 
     Take the square root of both sides:
     
     <div id='eq9' class='katex'>
-        L = √(S<sup>2</sup>/((H<sup>2</sup>/V<sup>2</sup>) + 1)) = S/√((H<sup>2</sup>/V<sup>2</sup>) + 1)
+        W = √(S<sup>2</sup>/((V<sup>2</sup>/H<sup>2</sup>) + 1)) = S/√((V<sup>2</sup>/H<sup>2</sup>) + 1)
     </div>
 
-    This gives the height of the display, in whatever length units you used for the diagonal measurement. The same formula, but with <em>H</em> and <em>V</em> switched, will give you the width instead (or you can simply multiply the result for height by the aspect ratio (<em>H/V</em>) to get the width more quickly). The trigonometric formulas are a bit simpler in my opinion (no one likes stacked fractions), but everyone has their preferences.
-</div><br><br><br><br>
+    This gives the width of the display, in whatever length units you used for the diagonal measurement. The same formula, but with <em>H</em> and <em>V</em> switched, will give you the height instead (or you can simply divide the result for width by the aspect ratio (<em>H/V</em>) to get the height more quickly). The trigonometric formulas are a bit simpler in my opinion (no one likes stacked fractions), but everyone has their preferences.
+</div>
+<div style='height:2em;'>
 
-
-
+</div>
 
 
 <script>
@@ -85,113 +84,94 @@
         katex.render(
 
             '\\begin{aligned}' +
-            '\\textrm{Width}~(W) &= S \\cdot \\sin \\left( \\tan ^{-1} \\left( \\frac{\\raisebox{-0.1em}{$H$}}{\\raisebox{-0.1em}{$V$}} \\right) \\right) \\\\[5mm]' +
-            '\\textrm{Height}~(L) &= S \\cdot \\cos \\left( \\tan ^{-1} \\left( \\frac{\\raisebox{-0.1em}{$H$}}{\\raisebox{-0.1em}{$V$}} \\right) \\right)' +
+            '\\textrm{Width}~(W)  &= S \\cdot \\Sin{\\Arctan{ \\mfrac{H}{V} }} \\\\[5mm]' +
+            '\\textrm{Height}~(L) &= S \\cdot \\Cos{\\Arctan{ \\mfrac{H}{V} }}' +
             '\\end{aligned}',
     
-            document.getElementById('eq1'), { throwOnError: false, displayMode: true, strict:false }
+            document.getElementById('eq1'), global_katexOptions
         );
         katex.render(
 
             '\\frac{H}{V}',
     
-            document.getElementById('eq3'), { throwOnError: false, displayMode: false, strict:false }
+            document.getElementById('eq3'), { throwOnError: false, displayMode: false, strict: false }
         );
         katex.render(
 
             '\\begin{aligned}' +
-            'W &= S \\cdot \\sin \\left( \\tan ^{-1} \\left( \\frac{\\raisebox{-0.1em}{$16$}}{\\raisebox{-0.1em}{$9$}} \\right) \\right)' +
-            ' \\\\[5mm] &= S \\cdot \\sin \\left( \\tan ^{-1} \\left( 1.\\overline{77} \\right) \\right)' +
+            'W &= S \\cdot \\Sin{\\Arctan{ \\afrac{16}{9} }}' +
+            ' \\\\[5mm] &= S \\cdot \\Sin{\\Arctan{ 1.\\overline{77} }}' +
             ' \\\\[5mm] &= S \\cdot 0.872 ' +
             ' \\\\[5mm] &= \\textrm{87.2~\\% of } S' +
             '\\end{aligned}',
     
-            document.getElementById('eq4'), { throwOnError: false, displayMode: true, strict:false }
+            document.getElementById('eq4'), global_katexOptions
         );
 
         if (isNum([ specs['hres'], specs['vres'], specs['diag'] ])) {
-            var LD_0to3dp = { p:[0,3], sep:['\\,', '\\,', true, false], approx:'', repeat:false };
-            var LD_1to3dp = { p:[1,3], sep:['\\,', '\\,', true, false], approx:'', repeat:false };
-            var LD_5sf =    { sf:5, sep:['\\,', '\\,', true, false], approx:'', repeat:false };
             var unit = specs['unit'];
-            $('#des_fill1').html(LongDivide(specs['diag'], 1, LD_1to3dp) + unit.sym()[0] + ' ' + specs['hres']);
-            $('#des_fill2').html(specs['vres']);
+            $('#des_fill1').html(LongDivide(specs['diag'], 1, LD_4sf) + unit.sym(0) + ' ' + specs['hres'] + '&#x202f;&times;&#x202f;' + specs['vres']);
 
             $('#description_extra1').css('display', 'block');
 
             katex.render(
 
                 '\\begin{aligned}' +
-                'W &= \\rm ' + LongDivide(specs['diag'], 1, LD_1to3dp) + '~' + unit.abbr()[0] + ' \\cdot \\sin \\left( \\tan ^{-1} \\left( \\frac{\\raisebox{-0.1em}{$' + commas3(specs['hres']) + '$}}{\\raisebox{-0.1em}{$' + commas3(specs['vres']) + '$}} \\right) \\right)' +
-                ' = \\boxed{\\rm ' + LongDivide(Decimal(specs['hres'] / specs['vres']).atan().sin().times(specs['diag']), 1, LD_5sf) + '~' + unit.abbr()[0] + '} \\\\[5mm] ' +
-                'L &= \\rm ' + LongDivide(specs['diag'], 1, LD_1to3dp) + '~' + unit.abbr()[0] + ' \\cdot \\cos \\left( \\tan ^{-1} \\left( \\frac{\\raisebox{-0.1em}{$' + commas3(specs['hres']) + '$}}{\\raisebox{-0.1em}{$' + commas3(specs['vres']) + '$}} \\right) \\right)' +
-                ' = \\boxed{\\rm ' + LongDivide(Decimal(specs['hres'] / specs['vres']).atan().cos().times(specs['diag']), 1, LD_5sf) + '~' + unit.abbr()[0] + '}' +
+                'W &= \\rm ' +
+                LongDivide(specs['diag'], 1, LD_4sf) + '~' + unit.abbr(0) +
+                ' \\cdot \\Sin{\\Arctan{ \\afrac{' +
+                commasLaTeX(specs['hres']) +
+                '~px}{' +
+                commasLaTeX(specs['vres']) +
+                '~px} }}' +
+                '\\\\[5mm] &= \\boxed{\\rm ' +
+                    LongDivide(
+                        Decimal(specs['hres'] / specs['vres']).atan().sin().times(specs['diag']),
+                        1,
+                        LD_5sf
+                    ) + '~' + unit.abbr(0) +
+                '}' +
                 '\\end{aligned}',
     
-                document.getElementById('eq2'), { throwOnError: false, displayMode: true, strict:false }
+                document.getElementById('eq2'), global_katexOptions
             );       
 
             katex.render(
 
                 'S^2 = W^2 + L^2',
 
-                document.getElementById('eq6'), { throwOnError: false, displayMode: true, strict:false }
+                document.getElementById('eq6'), global_katexOptions
             );
             katex.render(
 
                 '\\begin{aligned}' +
-                'S^2 &= \\left( L \\cdot \\frac{\\raisebox{-0.1em}{$H$}}{\\raisebox{-0.1em}{$V$}} \\right)^2 + L^2' +
-                ' \\\\[5mm] S^2 &= L^2 \\frac{\\raisebox{-0.1em}{$H^2$}}{\\raisebox{-0.1em}{$V^2$}} + L^2' +
-                ' \\\\[5mm] S^2 &= L^2 \\left( \\frac{\\raisebox{-0.1em}{$H^2$}}{\\raisebox{-0.1em}{$V^2$}} + 1 \\right)' +
+                'S^2 &= W^2 + L^2' +
+                '\\\\[5mm] &= W^2 + \\left( \\mfrac{W}{R} \\right)^2' +
+                '\\\\[5mm] &= W^2 + \\left( \\mfrac{W}{H/V} \\right)^2' +
+                '\\\\[5mm] &= W^2 + \\left( W \\cdot \\mfrac{V}{H} \\right)^2' +
+                '\\\\[5mm] &= W^2 + W^2 \\left( \\mfrac{V}{H} \\right)^2' +
+                '\\\\[5mm] S^2 &= W^2 \\left( 1 + \\left(\\mfrac{V}{H} \\right)^2 \\right)' +
                 '\\end{aligned}',
 
-                document.getElementById('eq7'), { throwOnError: false, displayMode: true, strict:false }
+                document.getElementById('eq7'), global_katexOptions
             );
             katex.render(
 
-                '\\frac{\\raisebox{-0.1em}{$S^2$}}{\\raisebox{-0.1em}{$\\dfrac{\\raisebox{-0.1em}{$H^2$}}{\\raisebox{-0.1em}{$V^2$}} + 1$}} = L^2',
+                '\\mfrac{S^2}{\\left( \\mfrac{V}{H} \\right)^2 + 1} = W^2',
 
-                document.getElementById('eq8'), { throwOnError: false, displayMode: true, strict:false }
+                document.getElementById('eq8'), global_katexOptions
             );
             katex.render(
 
                 '\\begin{aligned}' +
 
-                'L &= \\sqrt{' +
-                    '\\frac{' +
-                        '\\raisebox{-0.1em}{$S^2$}' +
-                    '}{' +
-                        '{' +
-                            '\\left(' +
-                                '\\frac{' +
-                                    'H' +
-                                '}{' +
-                                    'V' +
-                                '}' +
-                            '\\right)^2 + 1' +
-                        '}' +
-                    '}' +
-                '} \\\\[5mm]' +
+                'W &= \\sqrt{ \\mfrac{S^2}{ \\left( \\frac{V}{H} \\right)^2 + 1 } } \\\\[10mm]' +
 
-                '&= \\frac{' +
-                    '\\raisebox{-0.1em}{$S$}' +
-                '}{' +
-                    '\\raisebox{-0.1em}{$' +
-                        '\\sqrt{' +
-                            '\\left(' +
-                                '\\frac{' +
-                                    'H' +
-                                '}{' +
-                                    'V' +
-                                '}' +
-                            '\\right)^2 + 1' +
-                        '}' +
-                    '$}' +
-                '}' +
+                '&= \\mfrac{S}{ \\sqrt{ \\left( \\frac{V}{H} \\right)^2 + 1 } }' +
                 
                 '\\end{aligned}',
 
-                document.getElementById('eq9'), { throwOnError: false, displayMode: true, strict:false }
+                document.getElementById('eq9'), global_katexOptions
             );
         }
         else {

@@ -1,10 +1,8 @@
-<div id='description_extra1' style='display:none;'>
-    This is the diagonal size that a <span id='des_fill1'>HRES2<span class='ratio'>&#x2236;</span>VRES2</span> display needs to have in order to be the same vertical height as a <span id='des_fill2'>DIAG UNIT HRES&thinsp;&times;&thinsp;VRES</span> display.<br><br>
-
-    The size is calculated as:
+<div>
+    This is the diagonal size that the secondary display needs to have in order to be the same vertical height as the primary display. The size is calculated as:
 
     <div id='eq1' class='katex'>
-        S<sub>2</sub> = L ÷ cos(tan<sup>-1</sup>(R<sub>2</sub>))
+        Secondary Display Diagonal Size (S<sub>2</sub>) = L ÷ cos(tan<sup>-1</sup>(R<sub>2</sub>))
     </div>
 
     where:
@@ -14,12 +12,22 @@
         <li><em>S<sub>2</sub></em> is the resulting size of the secondary display</li>
     </ul>
 
-    The <em><span style='font-style:normal'>cos(tan<sup>&minus;1</sup>(</span>R<sub>2</sub><span style='font-style:normal'>))</span></em> gives the ratio between the secondary display's height and diagonal size, <em>L<sub>2</sub>/S<sub>2</sub></em>. Since the height <em>L<sub>2</sub></em> is already known (the same as <em>L<sub>1</sub></em>), the corresponding diagonal size can be found.
+    The <em><span style='font-style:normal'>cos(tan<sup>&minus;1</sup>(</span>R<sub>2</sub><span style='font-style:normal'>))</span></em> gives the ratio between the secondary display's height and diagonal size, <em>L<sub>2</sub>/S<sub>2</sub></em>. Since the height <em>L<sub>2</sub></em> is already known (the same as <em>L<sub>1</sub></em>), the corresponding diagonal size can be found.<br><br>
 
+    To get an equation in terms of only the diagonal size and resolution of the displays (the most commonly available specifications), the equations for <a onclick='selectRow(document.getElementById("selectHeight"));'>height</a> and <a onclick='selectRow(document.getElementById("selectRatio"));'>aspect ratio</a> can be substituted for <em>L</em> and <em>R<sub>2</sub></em> in the previous equation:
 
+    <div id='eq2' class='katex'>
+        S<sub>2</sub> = S<sub>1</sub> &times; cos(tan<sup>&minus;1</sup>(H<sub>1</sub>/V<sub>1</sub>)) ÷ cos(tan<sup>&minus;1</sup>(H<sub>2</sub>/V<sub>2</sub>))
+    </div>
 </div>
 
+<div id='description_extra1' style='display:none;'>
+    For a <span id='des_fill1'>HRES2<span class='ratio'>&times;</span>VRES2</span> secondary display with the same height as a <span id='des_fill2'>DIAG UNIT HRES&#x202f;&times;&#x202f;VRES</span> primary display, the secondary display's diagonal size is:<br><br>
 
+    <div id='eq3' class='katex'>
+        S<sub>2</sub> = S<sub>1</sub> &times; cos(tan<sup>&minus;1</sup>(H<sub>1</sub>/V<sub>1</sub>)) ÷ cos(tan<sup>&minus;1</sup>(H<sub>2</sub>/V<sub>2</sub>))
+    </div>
+</div>
 
 
 
@@ -30,30 +38,68 @@
     
     global_DescriptionFunction = function (specs) {
 
+        katex.render(
+
+            '\\begin{aligned}' +
+            '\\textrm{Secondary Display Size}~(S_2) = \\mfrac{ L }{ \\Cos{\\Arctan{R_2}} }' + 
+            '\\end{aligned}',
+
+            document.getElementById('eq1'), global_katexOptions
+        );
+
+        katex.render(
+
+            'S_2 = \\mfrac{S_1 \\cdot \\Cos{\\Arctan{ \\dfrac{H_1}{V_1} }} }{ \\Cos{\\Arctan{ \\dfrac{H_2}{V_2} }} }',
+
+            document.getElementById('eq2'), global_katexOptions
+        );
+
         if (isNum([ specs['hres'], specs['vres'], specs['diag'], specs['hres2'], specs['vres2'] ])) {
-            var LD_4sf = { sf:4, sep:['\\,', '\\,', true, false], approx:'', repeat:false };
-            var LD_5sf = { sf:5, sep:['\\,', '\\,', true, false], approx:'', repeat:false };
-            var LD_1to3dp = { p:[1,3], sep:['\\,', '\\,', true, false], approx:'', repeat:false };
             var unit = specs['unit'];
 
             if (specs['hres2'].toString().length > 3) {
-                $('#des_fill1').html(specs['hres2'] + '&thinsp;&times;&thinsp;' + specs['vres2']);
+                $('#des_fill1').html(specs['hres2'] + '&#x202f;&times;&#x202f;' + specs['vres2']);
             }
             else {
                 $('#des_fill1').html(specs['hres2'] + "<span class='ratio'>&#x2236;</span>" + specs['vres2']);
             }
-            $('#des_fill2').html(LongDivide(specs['diag'], 1, LD_1to3dp) + unit.sym()[0] + ' ' + specs['hres'] + '&thinsp;&times;&thinsp;' + specs['vres']);
+            $('#des_fill2').html(LongDivide(specs['diag'], 1, LD_4sf) + unit.sym(0) + ' ' + specs['hres'] + '&#x202f;&times;&#x202f;' + specs['vres']);
 
             $('#description_extra1').css('display', 'block');
             //$('#description_extra2').css('display', 'block');
 
+            // Only print "px" after the numbers if they are greater than 2 digits, so it won't show up for aspect ratios
+            var px_optional = '';
+            if (specs['hres2'].toString().length >= 3 || specs['vres2'].toString().length >= 3) {
+                px_optional = '~px';
+            }
+
             katex.render(
 
                 '\\begin{aligned}' +
-                'S_2 = \\frac{L}{\\cos \\left( \\tan^{-1} \\left( R_2 \\right) \\right) }' + 
+                'S_2 &= \\rm \\frac' +
+                '{' +
+                    LongDivide(specs['diag'], 1, LD_4sf) + '~' + unit.abbr(0) +
+                    '\\cdot \\Cos{\\Arctan{ \\afrac' +
+                    '{' + commasLaTeX(specs['hres']) + '~px}' +
+                    '{' + commasLaTeX(specs['vres']) + '~px}' +
+                    '}}' +
+                '}{' +
+                    '\\Cos{\\Arctan{ \\afrac' +
+                    '{' + commasLaTeX(specs['hres2']) + px_optional + '}' +
+                    '{' + commasLaTeX(specs['vres2']) + px_optional + '}' +
+                    '}}' +
+                '}' +
+                '\\\\[10mm] &= \\boxed{\\rm ' +
+                LongDivide(
+                    specs['diag'] * Math.cos(Math.atan(specs['hres'] / specs['vres'])),
+                    Math.cos(Math.atan(specs['hres2'] / specs['vres2'])),
+                    LD_5sf) +
+                '~' + unit.abbr(0) + '}' +
                 '\\end{aligned}',
-    
-            document.getElementById('eq1'), { throwOnError: false, displayMode: true, strict:false });
+
+                document.getElementById('eq3'), global_katexOptions
+            );
         }
         else {
             $('#description_extra1').css('display', 'none');

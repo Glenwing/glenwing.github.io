@@ -5,7 +5,7 @@
 <div id='eq1' class='katex'></div>
 
 <div id='description_extra1' style='display:none;'>
-    For a <span id='des_fill1'>SIZE UNIT_SYM HRES</span>&thinsp;&times;&thinsp;<span id='des_fill2'>VRES</span> display,
+    For a <span id='des_fill1'>SIZE UNIT HRES&#x202f;&times;&#x202f;VRES</span> display,
 
     <div id='eq2' class='katex'></div>
 </div>
@@ -24,15 +24,13 @@
 
             '\\textrm{An equation goes here!}',
     
-            document.getElementById('eq1'), { throwOnError: false, displayMode: true, strict:false }
+            document.getElementById('eq1'), global_katexOptions
         );
 
         if (isNum([ specs['hres'], specs['vres'], specs['diag'] ])) {
             var unit = specs['unit'];
-            var LD_1to3dp = { p:[1,3], sep:['\\,', '\\,', true, false], approx:'', repeat:false };
 
-            $('#des_fill1').html(LongDivide(specs['diag'], 1, LD_1to3dp) + unit.sym()[0] + ' ' + specs['hres']);
-            $('#des_fill2').html(specs['vres']);
+            $('#des_fill1').html(LongDivide(specs['diag'], 1, LD_4sf) + unit.sym(0) + ' ' + specs['hres'] + '&#x202f;&times;&#x202f;' + specs['vres']);
 
             $('#description_extra1').css('display', 'block');
 
@@ -42,7 +40,7 @@
                 '\\textrm{An equation goes here!}' +
                 '\\end{aligned}',
     
-            document.getElementById('eq2'), { throwOnError: false, displayMode: true, strict:false });
+            document.getElementById('eq2'), global_katexOptions);
         }
         else {
             $('#description_extra1').css('display', 'none');

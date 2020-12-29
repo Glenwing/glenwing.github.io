@@ -1,0 +1,112 @@
+<div>
+    This is the pixel density of the secondary display when it has the same vertical height as the primary display.<br><br>
+
+    Pixel density is the display's horizontal resolution divided by its physical width, or its vertical resolution divided by its physical height. Both methods will yield the same result if the display has square pixels (which is the case on all modern displays).
+
+    <div id='eq1' class='katex'>
+        Pixel Density (D) = H/W = V/L
+    </div>
+
+    where:
+    <ul>
+        <li><em>H</em> and <em>V</em> are the horizontal and vertical resolution of the display</li>
+        <li><em>W</em> and <em>L</em> are the physical width and height of the display panel</li>
+    </ul>
+
+    To calculate the pixel density of a secondary display based on the specifications of the primary display when the two displays have matching height, it is most convenient to use the formula involving height, since it is the same for both displays.
+
+    <div id='eq2' class='katex'>
+        Pixel Density (D<sub>2</sub>) = V<sub>2</sub>/L<sub>1</sub>
+    </div>
+</div>
+
+
+<div id='description_extra1' style='display:none;'>
+    For a <span id='des_fill3'>HRES2&#x202f;&times;&#x202f;VRES2</span> display with the same height as a <span id='des_fill4'>DIAG UNIT HRES&#x202f;&times;&#x202f;VRES</span> display, the pixel density is:
+
+    <div id='eq3' class='katex'>
+        D<sub>2</sub> = V<sub>2</sub>/L<sub>1</sub>
+    </div>
+</div>
+
+
+
+
+
+<script>
+    if (window.location.href.indexOf('DescriptionFiles') != -1) {
+        window.location.replace(window.location.href.substring(0, window.location.href.indexOf('DescriptionFiles')));
+    }
+    
+    global_DescriptionFunction = function (specs) {
+        katex.render(
+
+            '\\textrm{Pixel Density}~(D\\,) = \\mfrac{H}{W} = \\mfrac{V}{L}',
+    
+            document.getElementById('eq1'), global_katexOptions
+        );
+        
+        katex.render(
+
+            'D_2 = \\frac{V_2}{L_1}',
+    
+            document.getElementById('eq2'), global_katexOptions
+        );
+
+        if (isNum([ specs['hres'], specs['vres'], specs['diag'], specs['hres2'], specs['vres2'] ])) {
+            var unit = specs['unit'];
+
+            $('#des_fill1').html(specs['hres2'] + '&#x202f;&times;&#x202f;' + specs['vres2'] );
+            $('#des_fill2').html(LongDivide(specs['diag'], 1, LD_4sf) + unit.sym(0) + ' ' + specs['hres'] + '&#x202f;&times;&#x202f;' + specs['vres'] );
+            $('#des_fill3').html(specs['hres2'] + '&#x202f;&times;&#x202f;' + specs['vres2'] );
+            $('#des_fill4').html(LongDivide(specs['diag'], 1, LD_4sf) + unit.sym(0) + ' ' + specs['hres'] + '&#x202f;&times;&#x202f;' + specs['vres']);
+
+            $('#description_extra1').css('display', 'block');
+
+            katex.render(
+
+                '\\begin{aligned}' +
+                'D_2 &= \\frac{V_2}{L_1}' +
+                '\\\\[5mm]' +
+                '&= \\frac{V_2}{S_1 \\cdot \\Cos{\\Arctan{ \\dfrac{H_1}{V_1} }} }' +
+                '\\\\[10mm]' +
+                '&= \\rm \\frac' +
+                    '{' + commasLaTeX(specs['vres2']) + '~px}' +
+                    '{' + LongDivide(specs['diag'], 1, LD_4sf) + '~' + unit.abbr(0) +
+                    '\\cdot \\Cos{\\Arctan{ \\dfrac{' + commasLaTeX(specs['hres']) + '~px}{' + commasLaTeX(specs['vres']) +
+                    '~px} }}' +
+                '}' +
+                '\\\\[10mm]' +
+                '&= \\rm \\frac' +
+                '{' + commasLaTeX(specs['vres2']) + '~px}' +
+                '{' +
+                    LongDivide(
+                        Decimal(specs['hres']).div(specs['vres']).atan().cos().times(specs['diag']),
+                        //specs['diag'] * Math.cos(Math.atan(specs['hres'] / specs['vres'])),
+                        1,
+                        LD_5sf
+                    ) +
+                    '~' + unit.abbr(0) +
+                '}' +
+                '\\\\[5mm]' +
+                '&= \\boxed{\\rm' +
+                    LongDivide(
+                        specs['vres2'],
+                        Decimal(specs['hres']).div(specs['vres']).atan().cos().times(specs['diag']),
+                        //specs['diag'] * Math.cos(Math.atan(specs['hres'] / specs['vres'])),
+                        LD_5sf
+                    ) + '~px/' + unit.abbr(0) +
+                '}' +
+                '\\end{aligned}',
+    
+            document.getElementById('eq3'), global_katexOptions);
+        }
+        else {
+            $('#description_extra1').css('display', 'none');
+        }
+
+        return;
+    }
+
+    update();
+</script>

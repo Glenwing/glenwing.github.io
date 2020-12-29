@@ -1,15 +1,18 @@
 ﻿html, body {
     margin:             0;
+    /*
     position:           fixed;
-    top:                0;
-    min-height:         100vh;
+    */
+    height:             100vh;
+    width:              100vw;
     padding:            0;
     background-color:   #1E1E1E;
     color:              #FFFFFF;
+    
     overflow-y:         hidden;
     overflow-x:         hidden;
-
-    font-family:        "IBM Plex Sans";
+    
+    font-family:        "IBM Plex Sans", "Merriweather Sans", sans-serif;
     font-weight:        300;
     font-size:          16px;
 }
@@ -20,6 +23,22 @@
 
 /* MAIN STRUCTURAL ELEMENTS */
 
+div.page {
+    /*
+    display:                flex;
+    flex-flow:              column nowrap;
+    justify-content:        flex-start;
+    align-items:            flex-start;
+    */
+    display:                grid;
+    grid-template-rows:     50px 1fr;
+    grid-template-columns:  1fr;
+
+    overflow-x:             auto;
+
+    background-color:   #101010;
+}
+/*
 div.page {
     display:            flex;
     flex-flow:          column nowrap;
@@ -32,13 +51,40 @@ div.page {
     overflow-y:         hidden;
     overflow-x:         hidden;
 }
+*/
+
+div.main {
+    display:                grid;
+    grid-template-rows:     1fr;
+    grid-template-columns:  300px 1fr;
+}
+div.content {
+    display:                grid;
+    grid-template-rows:     1fr;
+    grid-template-columns:  688px 664px 1fr;
+    /*
+    height:                 calc(100vh - 50px);
+    overflow-y:             scroll;
+    */
+}
 
 
 
-div.page div.topbar {
+div.topbar {
     font-family:        "IBM Plex Sans-Condensed", sans-serif;
     font-weight:        300;
     font-size:          1.4rem;
+
+    position:           sticky;
+    top:                0;
+    left:               0;
+    
+    grid-column:        span 4;
+    
+    display:            flex;
+    flex-flow:          row nowrap;
+    justify-content:    space-between;
+    z-index:            1;
 
     width:              100vw;
     min-width:          0px;
@@ -57,8 +103,8 @@ div.topbar span {
 }
 
 
-
-div.page div.main {
+/*
+body.page div.main {
     display:            flex;
     flex:               1 1 100vw;
     flex-flow:          row nowrap;
@@ -66,15 +112,20 @@ div.page div.main {
     overflow-y:         hidden;
     overflow-x:         auto;
 }
+*/
 
 
-
-div.main div.sidebar {
+div.sidebar {
     display:            flex;
     flex-flow:          column nowrap;
     flex:               none;
+    
     overflow-y:         auto;
 
+    height:             calc(100vh - 50px - 24px);
+    
+    position:           sticky;
+    
     font-size:          1rem;
     vertical-align:     top;
     width:              300px;
@@ -119,8 +170,8 @@ div.sidebar div.spacer {
 }
 
 
-
-div.main div.content {
+/*
+div.content {
     font-size:          1rem;
     display:            flex;
     flex-flow:          row nowrap;
@@ -135,6 +186,7 @@ div.main div.content {
     padding:            0px;
     
 }
+*/
 
 
 /* UNIVERSAL ELEMENT STYLES */
@@ -242,6 +294,13 @@ div.diu {
     padding-left:       32px;
 
     background-color:   #1E1E1E;
+
+    height:             calc(100vh - 50px - 16px - 16px);
+    overflow-y:         auto;
+    scrollbar-width:    none;
+}
+div.diu::-webkit-scrollbar {
+    display:            none;
 }
 div.description {
     display:            flex;
@@ -249,6 +308,7 @@ div.description {
     flex:               none;
     width:              600px;
 
+    font-family:        "IBM Plex Sans", "Merriweather Sans", sans-serif;
     font-size:          1.1rem;
     font-weight:        300;
     line-height:        140%;
@@ -258,6 +318,9 @@ div.description {
     padding-top:        100px;
 
     background-color:   #1E1E1E;
+
+    height:             calc(100vh - 50px - 32px - 100px);
+    overflow-y:         auto;
 }
 div.rightside_filler {
     display:            flex;
@@ -321,7 +384,8 @@ svg.warning_icon {
     margin-left:        16px;
 }
 svg.warning_icon path {
-    fill:               #CC2222;
+    /*fill:               #CC2222;*/
+    fill:               #FFCC00;
 }
 div.warning_219 {
     display:            none;
@@ -334,10 +398,17 @@ div.warning_219 {
 
     padding:            16px;
     margin-bottom:      24px;
-    border:             1px solid #CC2222;
+    /*border:             1px solid #CC2222;*/
+    border:             1px solid #FFCC00;
     border-radius:      8px;
 
     background-color:   #141414;
+}
+span.warning_219 {
+    color:              #FFCC00;
+    font-size:          140%;
+    font-weight:        400;
+    line-height:        200%;
 }
 div.eq_height_cover {
     visibility:         visible;
@@ -975,4 +1046,44 @@ em sub, em sup {
     src: url("../assets/fonts/CMU Serif (Bold Slanted).ttf") format('truetype');
     font-weight: 700;
     font-style:  oblique;
+}
+
+
+
+
+@font-face {
+    font-family: 'Merriweather Sans';
+    src: url("../assets/fonts/MerriweatherSans-Light.ttf");
+    font-weight: 300;
+    font-style:  normal;
+}
+@font-face {
+    font-family: 'Merriweather Sans';
+    src: url("../assets/fonts/MerriweatherSans-Regular.ttf");
+    font-weight: 400;
+    font-style:  normal;
+}
+@font-face {
+    font-family: 'Merriweather Sans';
+    src: url("../assets/fonts/MerriweatherSans-Medium.ttf");
+    font-weight: 500;
+    font-style:  normal;
+}
+@font-face {
+    font-family: 'Merriweather Sans';
+    src: url("../assets/fonts/MerriweatherSans-SemiBold.ttf");
+    font-weight: 600;
+    font-style:  normal;
+}
+@font-face {
+    font-family: 'Merriweather Sans';
+    src: url("../assets/fonts/MerriweatherSans-Bold.ttf");
+    font-weight: 700;
+    font-style:  normal;
+}
+@font-face {
+    font-family: 'Merriweather Sans';
+    src: url("../assets/fonts/MerriweatherSans-ExtraBold.ttf");
+    font-weight: 800;
+    font-style:  normal;
 }

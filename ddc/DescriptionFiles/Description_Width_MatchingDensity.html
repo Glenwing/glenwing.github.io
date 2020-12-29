@@ -1,16 +1,51 @@
 <div>
-    Content goes here!
+    This is the width of the secondary display when the two displays have matching pixel density. Since the size of the pixels is the same on both displays, the ratio between the physical widths is the same as the ratio between the horizontal resolutions of the two displays:
 </div>
 
-<div id='eq1' class='katex'></div>
+<div id='eq1' class='katex'>
+    W<sub>2</sub> / W<sub>1</sub> = H<sub>2</sub> / H<sub>1</sub>
+</div>
+
+<div>
+    The width of the secondary display is therefore:
+</div>
+
+<div id='eq2' class='katex'>
+    Secondary Display Width (W<sub>2</sub>) = W<sub>1</sub> &middot; (H<sub>2</sub> / H<sub>1</sub>)
+</div>
+
+<div>
+    where:
+    <ul>
+        <li><em>W<sub>1</sub></em> and <em>W<sub>2</sub></em> are the physical widths of the display panels</li>
+        <li><em>H<sub>1</sub></em> and <em>H<sub>2</sub></em> are the horizontal resolutions of the displays</li>
+    </ul>
+</div>
+
+<div>
+    It is often more convenient to have an equation in terms of diagonal size and resolution alone, since those are the most readily available specifications for displays. This can be done by substituting the equation for <a onclick='selectRow(document.getElementById("selectWidth"));'>width</a> into the previous equation:
+</div>
+
+<div id='eq3' class='katex'>
+    W<sub>2</sub> = S<sub>1</sub> &middot; sin(tan<sup>&minus;1</sup>(H<sub>1</sub>/V<sub>1</sub>)) &middot; (H<sub>2</sub> / H<sub>1</sub>)
+</div>
+
+<div>
+    where:
+    <ul>
+        <li><em>S<sub>1</sub></em> is the diagonal size of the primary display panel</li>
+        <li><em>V<sub>1</sub></em> is the vertical resolution of the primary display</li>
+        <li>Other variables are as defined previously</li>
+    </ul>
+</div>
 
 <div id='description_extra1' style='display:none;'>
-    For a <span id='des_fill1'>SIZE UNIT_SYM HRES</span>&thinsp;&times;&thinsp;<span id='des_fill2'>VRES</span> display,
+    For a <span id='des_fill1'>HRES&#x202f;&times;&#x202f;VRES</span> secondary display with the same pixel density as a <span id='des_fill2'>SIZE UNIT HRES&#x202f;&times;&#x202f;VRES</span> primary display, the width of the secondary display is:
 
-    <div id='eq2' class='katex'></div>
+    <div id='eq4' class='katex'>
+        W<sub>2</sub> = S<sub>1</sub> &middot; sin(tan<sup>&minus;1</sup>(H<sub>1</sub>/V<sub>1</sub>)) &middot; (H<sub>2</sub> / H<sub>1</sub>)
+    </div>
 </div>
-
-
 
 
 
@@ -22,27 +57,67 @@
     global_DescriptionFunction = function (specs) {
         katex.render(
 
-            '\\textrm{An equation goes here!}',
+            '\\mfrac{W_2}{W_1}' +
+            ' = \\mfrac{H_2}{H_1}',
     
-            document.getElementById('eq1'), { throwOnError: false, displayMode: true, strict:false }
+            document.getElementById('eq1'), global_katexOptions
         );
 
-        if (isNum([ specs['hres'], specs['vres'], specs['diag'] ])) {
-            var unit = specs['unit'];
-            var LD_1to3dp = { p:[1,3], sep:['\\,', '\\,', true, false], approx:'', repeat:false };
+        katex.render(
 
-            $('#des_fill1').html(LongDivide(specs['diag'], 1, LD_1to3dp) + unit.sym()[0] + ' ' + specs['hres']);
-            $('#des_fill2').html(specs['vres']);
+            '\\textrm{Secondary Display Width}~(W_2)' +
+            ' = W_1 \\cdot \\mfrac{H_2}{H_1}',
+
+            document.getElementById('eq2'), global_katexOptions
+        );
+
+        katex.render(
+
+            'W_2' +
+            ' = S_1 \\cdot \\Sin{\\Arctan{ \\mfrac{H_1}{V_1} }} \\cdot \\left( \\mfrac{H_2}{H_1} \\right)',
+    
+            document.getElementById('eq3'), global_katexOptions
+        );
+
+        if (isNum([ specs['hres'], specs['vres'], specs['diag'], specs['hres2'], specs['vres2'] ])) {
+            var unit = specs['unit'];
+
+            $('#des_fill1').html(specs['hres2'] + '&#x202f;&times;&#x202f;' + specs['vres2']);
+            $('#des_fill2').html(LongDivide(specs['diag'], 1, LD_1to3dp) + unit.sym(0) + ' ' + specs['hres'] + '&#x202f;&times;&#x202f;' + specs['vres']);
 
             $('#description_extra1').css('display', 'block');
 
             katex.render(
 
                 '\\begin{aligned}' +
-                '\\textrm{An equation goes here!}' +
+                'W_2' +
+                ' &= \\rm ' + LongDivide(specs['diag'], 1, LD_4sf) + '~' + unit.abbr(0) +
+                ' \\cdot \\Sin{\\Arctan{ \\afrac{' +
+                commasLaTeX(specs['hres']) + '~px' +
+                '}{' +
+                commasLaTeX(specs['vres']) + '~px' +
+                '} }} \\cdot \\left( \\afrac{' +
+                commasLaTeX(specs['hres2']) + '~px' +
+                '}{' +
+                commasLaTeX(specs['hres']) + '~px' +
+                '} \\right)' +
+                '\\\\[5mm]' +
+                ' &= \\rm ' +
+                LongDivide(specs['diag'], 1, LD_4sf) + '~' + unit.abbr(0) +
+                '\\cdot \\left( ' +
+                LongDivide(Decimal(specs['hres']).div(specs['vres']).atan().sin(), 1, LD_4sf) +
+                //LongDivide(Math.sin(Math.atan(specs['hres']/specs['vres'])), 1, LD_4sf) +
+                '\\right) \\cdot \\left(' +
+                LongDivide(specs['hres2'], specs['hres'], LD_2to6dp_rep) +
+                '\\right)' +
+                '\\\\[5mm]' +
+                ' &= \\boxed{\\rm ' +
+                LongDivide(Decimal(specs['hres']).div(specs['vres']).atan().sin().times(specs['diag']).times(specs['hres2']), specs['hres'], LD_5sf) + '~' + unit.abbr(0) +
+                //LongDivide(specs['diag'] * Math.sin(Math.atan(specs['hres']/specs['vres'])) * specs['hres2'], specs['hres'], LD_5sf) + '~' + unit.abbr(0) +
+                '}' +
                 '\\end{aligned}',
     
-            document.getElementById('eq2'), { throwOnError: false, displayMode: true, strict:false });
+            document.getElementById('eq4'), global_katexOptions);
         }
         else {
             $('#description_extra1').css('display', 'none');

@@ -2,7 +2,7 @@
     This the is the total number of pixels on the display. Total pixel count is calculated as:
 
     <div id='eq1' class='katex'>
-        Total Pixels (P) = H &times; V
+        Total Pixels (P) = H&#x202f;&times;&#x202f;V
     </div>
 
     where:
@@ -14,11 +14,11 @@
 
 <div id='description_extra' style='display:none;'>
     <div>
-        For a <span id='des_fill1'>HRES</span>&thinsp;&times;&thinsp;<span id='des_fill2'>VRES</span> display, the total pixel count is:
+        For a <span id='des_fill1'>HRES&#x202f;&times;&#x202f;VRES</span> display, the total pixel count is:
     </div>
 
     <div id='eq2' class='katex'>
-        P = HRES &times; VRES
+        P = HRES&#x202f;&times;&#x202f;VRES
     </div>
 </div><br><br><br><br>
 
@@ -36,21 +36,25 @@
 
             '\\textrm{Total Pixels}~(T) = H \\times V',
     
-            document.getElementById('eq1'), { throwOnError: false }
+            document.getElementById('eq1'), global_katexOptions
         );
 
         if (isNum([ specs['hres'], specs['vres'] ])) {
-            $('#des_fill1').html(specs['hres']);
-            $('#des_fill2').html(specs['vres']);
+            $('#des_fill1').html(specs['hres'] + '&#x202f;&times;&#x202f;' + specs['vres']);
 
             $('#description_extra').css('display', 'block');
 
             katex.render(
 
-                '\\begin{aligned}T &= \\rm ' + commas3(specs['hres']) + '~px \\times ' + commas3(specs['vres']) + '~lines\\\\[1mm]' +
-                '&= \\boxed{\\rm ' + commas3(specs['total_px']) + '~px} \\end{aligned}',
+                '\\begin{aligned}' +
+                'T &= \\rm ' +
+                commasLaTeX(specs['hres']) + '~px \\times ' +
+                commasLaTeX(specs['vres']) + '~lines\\\\[1mm]' +
+                '&= \\boxed{\\rm ' +
+                commasLaTeX(specs['total_px']) + '~px}' +
+                '\\end{aligned}',
     
-                document.getElementById('eq2'), { throwOnError: false, displayMode: true, strict:false }
+                document.getElementById('eq2'), global_katexOptions
             );
         }
         else {
