@@ -66,6 +66,7 @@ div.page {
 
 div.main {
     display:                grid;
+    height:                 calc(100% - 50px);
     grid-template-rows:     1fr;
     grid-template-columns:  300px 1fr;
 }
