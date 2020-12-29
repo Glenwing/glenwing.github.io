@@ -13,6 +13,7 @@ global_katexOptions = {
     throwOnError: false,
     displayMode: true, 
     strict: false,
+    minRuleThickness: 0.06,
     macros: {
         '\\afrac': '\\dfrac{\\raisebox{-0.1em}{#1}}{\\raisebox{-0.1em}{#2}}', // Aligned fraction
         '\\mfrac': '\\dfrac{\\raisebox{-0.1em}{$#1$}}{\\raisebox{-0.1em}{$#2$}}', // Same as afrac, but auto math mode arguments
@@ -968,40 +969,6 @@ function roundRect(ctx, x, y, width, height, radius, fill, stroke) {
     }
   }
 
-
-window.onload = function pageLoad () {
-    var unit_btn = document.getElementById('UNIT_BTN');
-    if (unit_btn.value = "") { unit_btn.value = "in"; unit_btn.innerHTML = "in"; }
-    var unit_radio = $('#unit_radio input[type="radio"]:checked').val();
-
-    unit_btn.value = unit_radio;
-    unit_btn.innerHTML = unit_radio;
-
-    // Fills the elements on the page with the event listeners necessary for the mouseover descriptions to work
-
-    var tables = [document.getElementById('results1'), document.getElementById('results2'), document.getElementById('results3')];
-    for (var a = 0; a < tables.length; a++) {
-        var rows = tables[a].children[0].children;
-        for (var b = 0; b < rows.length; b++) {
-            if (rows[b].classList.contains('selectable') != -1) {
-                rows[b].addEventListener('click', function (event) { selectRow(event.currentTarget); });
-                rows[b].addEventListener('mouseenter', function (event) { loadDescription(event.currentTarget) });
-                rows[b].addEventListener('mouseleave',  function () { clearDescription() });
-            }
-        }
-    }
-    var otherElements = [$('#INPUT_SIZE')[0], $('#INPUT_HRES')[0], $('#INPUT_VRES')[0], $('#INPUT_HRES2')[0], $('#INPUT_VRES2')[0]];
-    for (var a = 0; a < otherElements.length; a++) {
-        otherElements[a].addEventListener('mouseenter', function (event) { loadDescription(event.currentTarget) });
-        otherElements[a].addEventListener('mouseleave',  function () { clearDescription() });
-    }
-
-    parseURL();
-    update();
-    check_219Warning();
-    $('#INPUT_SIZE').focus();
-}
-
 function parseURL() {
     var hash = window.location.hash.substr(1);
     if (hash === 'matchmaker') {
@@ -1097,3 +1064,47 @@ function parseURL() {
         }
     }
 }
+
+
+window.onload = function pageLoad () {
+    var unit_btn = document.getElementById('UNIT_BTN');
+    if (unit_btn.value = "") { unit_btn.value = "in"; unit_btn.innerHTML = "in"; }
+    var unit_radio = $('#unit_radio input[type="radio"]:checked').val();
+
+    unit_btn.value = unit_radio;
+    unit_btn.innerHTML = unit_radio;
+
+    // Fills the elements on the page with the event listeners necessary for the mouseover descriptions to work
+
+    var tables = [document.getElementById('results1'), document.getElementById('results2'), document.getElementById('results3')];
+    for (var a = 0; a < tables.length; a++) {
+        var rows = tables[a].children[0].children;
+        for (var b = 0; b < rows.length; b++) {
+            if (rows[b].classList.contains('selectable') != -1) {
+                rows[b].addEventListener('click', function (event) { selectRow(event.currentTarget); });
+                rows[b].addEventListener('mouseenter', function (event) { loadDescription(event.currentTarget) });
+                rows[b].addEventListener('mouseleave',  function () { clearDescription() });
+            }
+        }
+    }
+    var otherElements = [$('#INPUT_SIZE')[0], $('#INPUT_HRES')[0], $('#INPUT_VRES')[0], $('#INPUT_HRES2')[0], $('#INPUT_VRES2')[0]];
+    for (var a = 0; a < otherElements.length; a++) {
+        otherElements[a].addEventListener('mouseenter', function (event) { loadDescription(event.currentTarget) });
+        otherElements[a].addEventListener('mouseleave',  function () { clearDescription() });
+    }
+
+    parseURL();
+    update();
+    check_219Warning();
+    $('#INPUT_SIZE').focus();
+
+    let vh = window.innerHeight * 0.01;
+    // Then we set the value in the --vh custom property to the root of the document
+    document.documentElement.style.setProperty('--truevh', `${vh}px`);
+}
+
+window.addEventListener('resize', () => {
+    // We execute the same script as before
+    let vh = window.innerHeight * 0.01;
+    document.documentElement.style.setProperty('--vh', `${vh}px`);
+  });
