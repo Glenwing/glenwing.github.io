@@ -30,8 +30,9 @@ var LD_2dp =    { p:2,      sep:['\\,', '\\,', false, false], approx:'', repeat:
 var LD_0to3dp = { p:[0,3],  sep:['\\,', '\\,', false, false], approx:'', repeat:false };
 var LD_1to3dp = { p:[1,3],  sep:['\\,', '\\,', false, false], approx:'', repeat:false };
 var LD_4sf =    { sf:4,     sep:['\\,', '\\,', false, false], approx:'', repeat:false };
-var LD_4sf_si = { sf:4,     sep:['\\,', '\\,', false, false], approx:'', repeat:false, si:true, unit_sep:'~' };
 var LD_5sf =    { sf:5,     sep:['\\,', '\\,', false, false], approx:'', repeat:false };
+var LD_4sf_si = { sf:4,     sep:['\\,', '\\,', false, false], approx:'', repeat:false, si:true, unit_sep:'~' };
+var LD_5sf_si = { sf:5,     sep:['\\,', '\\,', false, false], approx:'', repeat:false, si:true, unit_sep:'~' };
 
 var LD_2to6dp_rep = { p:[2,6], sep:['\\,', '\\,', false, false], approx:'', repeat:true, overline:['\\overline{', '}']  };
 var LD_rep =    { p:[2,6],  sep:['\\,', '\\,', false, false], overline:['\\overline{', '}'] };

@@ -84,12 +84,12 @@
                     '+' +
                     '(' + commasLaTeX(specs['vres']) + '~px)^2' +
                 '}} {' +
-                    commasLaTeX(specs['diag']) + '~' + unit.abbr(0) +
+                    LongDivide(specs['diag'], 1, LD_4sf) + '~' + unit.abbr(0) +
                 '}' +
                 '\\\\[4mm]' +
                 '&= \\rm \\frac{\\sqrt{' +
                 commasLaTeX((specs['hres'] * specs['hres']) + (specs['vres'] * specs['vres'])) + '~px^2}}{' +
-                commasLaTeX(specs['diag']) + '~' + unit.abbr(0) +
+                LongDivide(specs['diag'], 1, LD_4sf) + '~' + unit.abbr(0) +
                 '} \\\\[4mm]' +
                 '&= \\rm \\frac{' +
                     LongDivide(
@@ -97,7 +97,7 @@
                         1,
                         LD_5sf) +
                     '~px}{' +
-                        commasLaTeX(specs['diag']) + '~' + unit.abbr(0) +
+                        LongDivide(specs['diag'], 1, LD_4sf) + '~' + unit.abbr(0) +
                     '}' +
                 '\\\\[4mm]' +
                 '&= \\boxed{\\rm ' +

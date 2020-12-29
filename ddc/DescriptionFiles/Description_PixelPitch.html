@@ -97,7 +97,7 @@
         if (isPositive([ specs['hres'], specs['vres'], specs['diag'] ])) {
             var unit = specs['unit'];
             $('#des_fill1').html(LongDivide(specs['diag'], 1, LD_4sf) + unit.sym(0) + ' ' + specs['hres'] + '&#x202f;&times;&#x202f;' + specs['vres']);
-            $('#des_fill2').html(LongDivide(specs['width'], 1, LD_4sf) + unit.sym(0));
+            $('#des_fill2').html(LongDivide(specs['width'], 1, LD_5sf) + unit.sym(0));
             $('#des_fill3').html(specs['hres']);
             $('#des_fill4').html(LongDivide(specs['diag'], 1, LD_4sf) + unit.sym(0) + ' ' + specs['hres'] + '&#x202f;&times;&#x202f;' + specs['vres']);
 
@@ -106,16 +106,16 @@
 
             var result1 = '';
             if (unit.abbr(0) === 'in') {
-                result1 = LongDivide(specs['width'], specs['hres'], LD_4sf) + '~' + unit.abbr(0) + '/px';
+                result1 = LongDivide(specs['width'], specs['hres'], LD_5sf) + '~' + unit.abbr(0) + '/px';
                 if (specs['width'] / specs['hres'] < 0.1 && unit.abbr(0) === 'in') {
-                    result1 += '\\\\[5mm] &= \\boxed{\\rm ' + LongDivide(specs['width'] * 1000, specs['hres'], LD_4sf) + '~mil/px}';
+                    result1 += '\\\\[5mm] &= \\boxed{\\rm ' + LongDivide(specs['width'] * 1000, specs['hres'], LD_5sf) + '~mil/px}';
                 }
-                result1 += '\\\\[5mm] &= \\boxed{\\rm ' + LongDivide(specs['width'] * 0.0254, specs['hres'], LD_4sf_si) + 'm/px}';
+                result1 += '\\\\[5mm] &= \\boxed{\\rm ' + LongDivide(specs['width'] * 0.0254, specs['hres'], LD_5sf_si) + 'm/px}';
             }
             else {
-                result1 = LongDivide(specs['width'], specs['hres'], LD_4sf) + '~cm/px';
+                result1 = LongDivide(specs['width'], specs['hres'], LD_5sf) + '~cm/px';
                 result1 += ' \\\\[5mm] &= \\boxed{\\rm ' +
-                LongDivide(specs['width'] / 100, specs['hres'], LD_4sf_si) +
+                LongDivide(specs['width'] / 100, specs['hres'], LD_5sf_si) +
                 'm/px}';
             }
 
@@ -123,7 +123,7 @@
 
                 '\\begin{aligned}' +
                 'P = \\mfrac{W}{H} = \\rm \\afrac' +
-                '{' + LongDivide(specs['width'], 1, LD_4sf) + '~' + unit.abbr(0) + '}' +
+                '{' + LongDivide(specs['width'], 1, LD_5sf) + '~' + unit.abbr(0) + '}' +
                 '{' + commasLaTeX(specs['hres']) + '~px}' +
                 '&= \\rm' + result1 +
                 '\\end{aligned}',
@@ -147,7 +147,7 @@
                         commasLaTeX((specs['hres'] * specs['hres']) + (specs['vres'] * specs['vres'])) + '~px^2' +
                     '}}' +
                 '\\\\[5mm] &= \\rm \\afrac' +
-                '{' + LongDivide(specs['diag'], 1, LD_4sf) + '~' + unit.abbr(0) + '}' +
+                '{' + LongDivide(specs['diag'], 1, LD_5sf) + '~' + unit.abbr(0) + '}' +
                 '{' + LongDivide(
                     Decimal(specs['hres']).pow(2).add(Decimal(specs['vres']).pow(2)).sqrt(),
                     //Math.sqrt((specs['hres'] * specs['hres']) + (specs['vres'] * specs['vres'])),
