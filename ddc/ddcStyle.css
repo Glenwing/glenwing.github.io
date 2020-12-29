@@ -135,8 +135,6 @@ div.sidebar {
 
     height:             calc(100vh - 50px - 24px);
     
-    position:           sticky;
-    
     font-size:          1rem;
     vertical-align:     top;
     width:              300px;
