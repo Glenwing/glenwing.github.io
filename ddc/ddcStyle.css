@@ -3,7 +3,7 @@
     /*
     position:           fixed;
     */
-    height:             100vh;
+    height:             100%;
     width:              100vw;
     padding:            0;
     background-color:   #1E1E1E;
@@ -34,9 +34,11 @@ div.page {
     grid-template-rows:     50px 1fr;
     grid-template-columns:  1fr;
 
+    height:                 100%;
+
     overflow-x:             auto;
 
-    background-color:   #101010;
+    background-color:       #101010;
 }
 /*
 div.page {
