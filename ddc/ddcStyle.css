@@ -141,6 +141,7 @@ div.sidebar {
     overflow-y:         auto;
 
     height:             calc(100vh - 50px - 24px);
+    height:             calc((var(--truevh, 1vh) * 100) - 50px - 24px);
     
     font-size:          1rem;
     vertical-align:     top;
@@ -312,6 +313,8 @@ div.diu {
     background-color:   #1E1E1E;
 
     height:             calc(100vh - 50px - 16px - 16px);
+    height:             calc((var(--truevh, 1vh) * 100) - 50px - 16px - 16px);
+
     overflow-y:         auto;
     scrollbar-width:    none;
 }
@@ -336,6 +339,7 @@ div.description {
     background-color:   #1E1E1E;
 
     height:             calc(100vh - 50px - 32px - 100px);
+    height:             calc((var(--truevh, 1vh) * 100) - 50px - 32px - 100px);
     overflow-y:         auto;
 }
 div.rightside_filler {
