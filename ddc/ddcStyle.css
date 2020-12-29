@@ -9,7 +9,7 @@ html, body {
     top:                0;
     left:               0;
     
-    height:             100%;
+    height:             calc(var(--truevh, 1vh) * 100);
     min-width:          100vw;
     padding:            0;
     background-color:   #1E1E1E;
@@ -47,6 +47,7 @@ div.page {
     height:                 calc(var(--truevh, 1vh) * 100);
 
     overflow-x:             auto;
+    overflow-y:             hidden;
     scrollbar-width:        none;
 
     background-color:       #101010;
