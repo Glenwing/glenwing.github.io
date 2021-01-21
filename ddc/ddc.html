@@ -1,4 +1,4 @@
-﻿<div class="ddc">
+﻿<div class="ddc main">
     <h1>
         <div style="display:flex; flex-flow:row nowrap; justify-content: space-between;">
             Display Dimensions Calculator
@@ -8,6 +8,7 @@
         </div>
         <hr>
     </h1>
+
     <div class="main_calc">
         <input id="INPUT_SIZE" class="large" value="" type="text" placeholder="24" onchange="update();" oninput="this.onchange();" onfocus="this.select();" tabindex="2" />
         <button id="UNIT_BTN" class="unit" value="" onclick="changeUnit(this); update();" tabindex="1"></button>
@@ -30,7 +31,7 @@
         </div>
     </div>
     <!-- SECOND SEGMENT -->
-    <div class="header">Results</div>
+    <div class="tbheader">Results</div>
     <table id="results1" class="ddc">
         <tr class="selectable" id="selectDiag">
             <td class="label">Diagonal Size</td>
@@ -157,7 +158,7 @@
         <button id="matchmaker_button_height" class="matchmaker" onclick="activateMatchmaker();"><span>Match height<br>with another display</span></button>
     </div>
 </div>
-<div id="description" class="description"></div>
+<div id="description" class="ddc description"></div>
 
 <script src='./ddc/ddc.js'></script>
 <script>

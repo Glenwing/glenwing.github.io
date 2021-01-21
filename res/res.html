@@ -1,4 +1,4 @@
-<div class="ddc">
+<div class='res main'>
     <h1>
         <div style="display:flex; flex-flow:row nowrap; justify-content: space-between;">
             Screen Resolution Check
@@ -9,26 +9,58 @@
         <hr>
     </h1>
 
-    <div class="header">Your Screen Resolution</div>
+
+
+    Your screen resolution has been detected as:<br><br>
+
+    <div id='TrueResDiv' class='res bigresult'></div><br>
+
+    <div class='res zoomwarning'><span>This result can be influenced by browser zoom.</span> Set your browser to 100% zoom.</div><br>
+
+    <div class='res maintext'>
+        This result is based on the <code>window.screen.width</code> and <code>window.screen.height</code> properties provided by JavaScript. These values are multiplied by the <code>window.devicePixelRatio</code> to get the above result. This accounts for OS scaling.<br><br>
+        
+        Many other online resolution checking websites fail to do this, and they will therefore give incorrect results when OS scaling is enabled (which is the default situation when using Apple computers with a Retina display, or high-resolution displays on Windows).
+    </div><br>
+
+    <div style='display:none;'>
+        However, the above result may still be incorrect due to various other circumstances, such as using browzer zoom. OS scaling changes the values of <code>window.screen.width</code> and <code>window.devicePixelRatio</code> inversely, but browser zoom changes the <code>devicePixelRatio</code> <i>without</i> changing the values of <code>window.screen.width</code> or <code>height</code>. This means that the calculation to obtain the original screen resolution is different depending on whether browser zoom or OS scaling is in effect.<br><br>
+
+        Since both OS scaling and browser zoom are combined into the device pixel ratio value, so there is no way to tell which one is being used. Therefore, this calculator assumes the OS scaling is in effect, since this is a more common situation.    
+    </div>
+
+    <div class="tbheader">Results</div>
     <table id="results1" class="ddc">
-        <tr class="selectable" id="selectEffRes">
-            <td class="label">JS window.screen</td>
-            <td id="RESULT_EFFRES" class="result number"><span></span></td>
+        <tr class="selectable" id="selectWindowScreenWidth">
+            <td class="label">window.screen.width</td>
+            <td id="RESULT_WS_W" class="result number"><span></span></td>
         </tr>
-        <tr class="selectable" id="selectScaling">
-            <td class="label">Device Pixel Ratio</td>
-            <td id="RESULT_SCALING" class="result number"><span></span></td>
+        <tr class="selectable" id="selectWindowScreenHeight">
+            <td class="label">window.screen.height</td>
+            <td id="RESULT_WS_H" class="result number"><span></span></td>
         </tr>
-        <tr class="selectable" id="selectTrueRes">
-            <td class="label">Calculated Resolution</td>
-            <td id="RESULT_TRUERES" class="result number"><span></span></td>
+        <tr class="selectable" id="selectPxRatio">
+            <td class="label">window.devicePixelRatio</td>
+            <td id="RESULT_PXRATIO" class="result number"><span></span></td>
         </tr>
-        <tr class="selectable" id="selectAvailRes">
-            <td class="label">Available Resolution</td>
-            <td id="RESULT_AVAILRES" class="result number"><span></span></td>
+        <tr class="selectable" id="selectCalculatedWidth">
+            <td class="label">Calculated Width</td>
+            <td id="RESULT_CALC_W" class="result number"><span></span></td>
+        </tr>
+        <tr class="selectable" id="selectToleranceWidth">
+            <td class="label">Width Uncertainty</td>
+            <td id="RESULT_TOL_W" class="result number"><span></span></td>
+        </tr>
+        <tr class="selectable" id="selectCalculatedHeight">
+            <td class="label">Calculated Height</td>
+            <td id="RESULT_CALC_H" class="result number"><span></span></td>
+        </tr>
+        <tr class="selectable" id="selectToleranceHeight">
+            <td class="label">Height Uncertainty</td>
+            <td id="RESULT_TOL_H" class="result number"><span></span></td>
         </tr>
     </table>
 </div>
-<div id="description" class="description"></div>
+<div id="description" class="res description"></div>
 
 <script src='./res/res.js'></script>

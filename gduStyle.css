@@ -1,5 +1,10 @@
 ﻿:root {
     --truevh:           1vh;
+    --textcolor:        #DDDDDD;
+    --bgcolor:          #101010;
+    --fgcolor:          #1E1E1E;
+    --errorcolor:       #CC2222;
+    --warningcolor:     #FFCC00;
 }
 
 html, body {
@@ -12,7 +17,7 @@ html, body {
     height:             calc(var(--truevh, 1vh) * 100);
     min-width:          100vw;
     padding:            0;
-    background-color:   #1E1E1E;
+    background-color:   --fgcolor;
     color:              #FFFFFF;
     
     overflow-y:         hidden;
@@ -50,7 +55,7 @@ div.page {
     overflow-y:             hidden;
     scrollbar-width:        none;
 
-    background-color:       #101010;
+    background-color:       var(--bgcolor);
 }
 div.page::-webkit-scrollbar {
     display:                none;
@@ -70,7 +75,7 @@ div.page {
 }
 */
 
-div.main {
+div.frame {
     display:                grid;
     height:                 calc(100% - 50px);
     height:                 calc((var(--truevh, 1vh) * 100) - 50px);
@@ -163,11 +168,11 @@ div.sidebar div.item {
     padding:            8px;
     padding-left:       16px;
 
-    border-bottom:      1px solid #1E1E1E;
+    border-bottom:      1px solid var(--fgcolor);
     cursor:             pointer;
 }
 div.sidebar div.item.top {
-    border-top:         1px solid #1E1E1E;
+    border-top:         1px solid var(--fgcolor);
 }
 div.sidebar div.item:hover{
     background-color:   #323232;
@@ -177,12 +182,12 @@ div.sidebar div.item:active{
 }
 div.sidebar div.item.selected {
     font-weight:        500;
-    background-color:   #1E1E1E;
+    background-color:   var(--fgcolor);
     cursor:             default;
 }
 div.sidebar div.spacer {
     flex:               1 1 40px;
-    border-bottom:      1px solid #1E1E1E;
+    border-bottom:      1px solid var(--fgcolor);
 
     min-height:         40px;
 }
@@ -236,7 +241,7 @@ input[type="text"] {
     content:            attr(tooltip);
 
     opacity:            0;
-    background-color:   #101010;
+    background-color:   var(--bgcolor);
     border-radius:      5px;
     border:             1px solid #323232;
 
@@ -291,65 +296,24 @@ li {
     padding-bottom:     3px;
 }
 
-
-
-/* PAGE-SPECIFIC CONTENT */
-
-
-
-div.contentwrapper {
-    display:            flex;
-    flex-flow:          row nowrap;
+code {
+    font-family:        'inconsolata', monospace;
+    font-weight:        500;
+    color:              var(--textcolor);
+    display:            inline;
+    background-color:   rgba(128,128,128,0.4);
+    border:             0.15em solid transparent;
+    border-radius:      0.2em 0.2em;
 }
-div.ddc {
-    display:            flex;
-    flex-flow:          column nowrap;
-    flex:               none;
-    align-items:        stretch;
 
-    width:              640px;
-    padding:            16px;
-    padding-left:       32px;
-
-    background-color:   #1E1E1E;
-
-    height:             calc(100vh - 50px - 16px - 16px);
-    height:             calc((var(--truevh, 1vh) * 100) - 50px - 16px - 16px);
-
-    overflow-y:         auto;
-    scrollbar-width:    none;
-}
-div.ddc::-webkit-scrollbar {
-    display:            none;
-}
-div.description {
-    display:            flex;
-    flex-flow:          column nowrap;
-    flex:               none;
-    width:              600px;
-
-    font-family:        "IBM Plex Sans", "Merriweather Sans", sans-serif;
-    font-size:          1.1rem;
-    font-weight:        300;
-    line-height:        140%;
-    color:              #DDDDDD;
-
-    padding:            32px;
-    padding-top:        100px;
-
-    background-color:   #1E1E1E;
-
-    height:             calc(100vh - 50px - 32px - 100px);
-    height:             calc((var(--truevh, 1vh) * 100) - 50px - 32px - 100px);
-    overflow-y:         auto;
-}
 div.rightside_filler {
     display:            flex;
     width:              100%;
     position:           sticky;
     top:                0px;
-    background-color:   #101010;
+    background-color:   var(--bgcolor);
 }
+
 h1 {
     flex:               none;
     width:              100%;
@@ -363,6 +327,7 @@ h1 {
     padding:            12px 0px;
     cursor:             default;
 }
+
 span.version {
     align-self:         flex-end;
     font-size:          50%;
@@ -371,6 +336,51 @@ span.version {
 
 
 
+/* PAGE-SPECIFIC CONTENT: DDC */
+
+
+div.ddc.main {
+    display:            flex;
+    flex-flow:          column nowrap;
+    flex:               none;
+    align-items:        stretch;
+
+    width:              640px;
+    padding:            16px;
+    padding-left:       32px;
+
+    background-color:   var(--fgcolor);
+
+    height:             calc(100vh - 50px - 16px - 16px);
+    height:             calc((var(--truevh, 1vh) * 100) - 50px - 16px - 16px);
+
+    overflow-y:         auto;
+    scrollbar-width:    none;
+}
+div.ddc.main::-webkit-scrollbar {
+    display:            none;
+}
+div.ddc.description {
+    display:            flex;
+    flex-flow:          column nowrap;
+    flex:               none;
+    width:              600px;
+
+    font-family:        "IBM Plex Sans", "Merriweather Sans", sans-serif;
+    font-size:          1.1rem;
+    font-weight:        300;
+    line-height:        140%;
+    color:              var(--textcolor);
+
+    padding:            32px;
+    padding-top:        100px;
+
+    background-color:   var(--fgcolor);
+
+    height:             calc(100vh - 50px - 32px - 100px);
+    height:             calc((var(--truevh, 1vh) * 100) - 50px - 32px - 100px);
+    overflow-y:         auto;
+}
 div.ddc div.main_calc {
     display:            flex;
     flex-flow:          row nowrap;
@@ -380,6 +390,81 @@ div.ddc div.main_calc {
     padding-bottom:     24px;
     min-width:          0px;
 }
+
+
+/* PAGE SPECIFIC CONTENT: RES */
+
+div.res.main {
+    display:            flex;
+    flex-flow:          column nowrap;
+    flex:               none;
+    align-items:        stretch;
+
+    width:              640px;
+    padding:            16px;
+    padding-left:       32px;
+
+    background-color:   var(--fgcolor);
+
+    height:             calc(100vh - 50px - 16px - 16px);
+    height:             calc((var(--truevh, 1vh) * 100) - 50px - 16px - 16px);
+
+    overflow-y:         auto;
+    scrollbar-width:    none;
+}
+div.res.main::-webkit-scrollbar {
+    display:            none;
+}
+div.res.bigresult {
+    display:            flex;
+    flex-flow:          row nowrap;
+    justify-self:       center;
+    justify-content:    center;
+    align-items:        center;
+    font-size:          2rem;
+    font-weight:        200;
+}
+div.res.bigresult span.uncertainty {
+    font-size:          1.25rem;
+}
+div.res {
+    color:              var(--textcolor);
+}
+div.res.maintext {
+    line-height:        140%;
+}
+div.res.description {
+    display:            flex;
+    flex-flow:          column nowrap;
+    flex:               none;
+    width:              600px;
+
+    font-family:        "IBM Plex Sans", "Merriweather Sans", sans-serif;
+    font-size:          1.1rem;
+    font-weight:        300;
+    line-height:        140%;
+    color:              var(--textcolor);
+
+    padding:            32px;
+    padding-top:        100px;
+
+    background-color:   var(--fgcolor);
+
+    height:             calc(100vh - 50px - 32px - 100px);
+    height:             calc((var(--truevh, 1vh) * 100) - 50px - 32px - 100px);
+    overflow-y:         auto;
+}
+div.res.zoomwarning {
+    font-size:          90%;
+    text-align:         center;
+}
+div.res.zoomwarning span {
+    color:              var(--errorcolor);
+}
+
+
+
+
 div.ddc div.eq_height_section {
     position:           relative;
     display:            none; /* Normally flex */
@@ -405,8 +490,7 @@ svg.warning_icon {
     margin-left:        16px;
 }
 svg.warning_icon path {
-    /*fill:               #CC2222;*/
-    fill:               #FFCC00;
+    fill:               var(--warningcolor);
 }
 div.warning_219 {
     display:            none;
@@ -419,14 +503,13 @@ div.warning_219 {
 
     padding:            16px;
     margin-bottom:      24px;
-    /*border:             1px solid #CC2222;*/
-    border:             1px solid #FFCC00;
+    border:             1px solid var(--warningcolor);
     border-radius:      8px;
 
     background-color:   #141414;
 }
 span.warning_219 {
-    color:              #FFCC00;
+    color:              var(--warningcolor);
     font-size:          140%;
     font-weight:        400;
     line-height:        200%;
@@ -457,10 +540,10 @@ div.eq_height_cover:hover{
 }
 div.eq_height_cover span{
     font-size:          1.1rem;
-    color:              #CC2222;
+    color:              var(--errorcolor);
     border-radius:      5px;
     padding:            8px;
-    border:             1px solid #CC2222;
+    border:             1px solid var(--errorcolor);
     cursor:             default;
 }
 
@@ -667,7 +750,7 @@ div.copylink.bad:active svg.copylinkbutton path {
 
 
 
-div.ddc div.header {
+div.tbheader {
     flex:               none;
     align-self:         stretch;
 
