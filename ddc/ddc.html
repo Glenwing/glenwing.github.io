@@ -1,0 +1,202 @@
+﻿<div class="ddc">
+    <h1>
+        <div style="display:flex; flex-flow:row nowrap; justify-content: space-between;">
+            Display Dimensions Calculator
+            <span class="version">
+                <span style='color:#CC2222;'>DRAFT</span> 12
+            </span>
+        </div>
+        <hr>
+    </h1>
+    <div class="main_calc">
+        <input id="INPUT_SIZE" class="large" value="" type="text" placeholder="24" onchange="update();" oninput="this.onchange();" onfocus="this.select();" tabindex="2" />
+        <button id="UNIT_BTN" class="unit" value="" onclick="changeUnit(this); update();" tabindex="1"></button>
+        <form id="unit_radio" style="display:none;">
+            <input id="in_radio" name="unit_radio" value="in" type="radio" checked />
+            <input id="cm_radio" name="unit_radio" value="cm" type="radio" />
+        </form>
+        <input id="INPUT_HRES" class="large" value="" type="text" placeholder="1920" onchange="update();" oninput="this.onchange();" onfocus="this.select();"tabindex="3" />
+        <span class="large_times">&#10005;</span>
+        <input id="INPUT_VRES" class="large" value="" type="text" placeholder="1080" onchange="update();" oninput="this.onchange();" onfocus="this.select();"tabindex="4" />
+        <div class="copylink" id="COPY_BTN" onclick="copy_DIU_URL();" tooltip="Copy a link with these settings">
+            <svg class="copylinkbutton copy" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:cc="http://creativecommons.org/ns#" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:svg="http://www.w3.org/2000/svg" xmlns="http://www.w3.org/2000/svg" xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd" xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape" inkscape:version="1.0 (4035a4fb49, 2020-05-01)" sodipodi:docname="content_copy_white_48px.svg" id="svg4" version="1.1" x="0px" y="0px" viewBox="0 0 48 48" height="48" width="48">
+                <path id="path2" d="M32 2H8C5.79 2 4 3.79 4 6v28h4V6h24V2zm6 8H16c-2.21 0-4 1.79-4 4v28c0 2.21 1.79 4 4 4h22c2.21 0 4-1.79 4-4V14c0-2.21-1.79-4-4-4zm0 32H16V14h22v28z" />
+            </svg>
+            <!--<img class="copylinkbutton" src="../assets/content_copy_white_48px.svg">-->
+            <svg class="copylinkbutton link" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:cc="http://creativecommons.org/ns#" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:svg="http://www.w3.org/2000/svg" xmlns="http://www.w3.org/2000/svg" xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd" xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape" inkscape:version="1.0 (4035a4fb49, 2020-05-01)" sodipodi:docname="link-white-48dp.svg" id="svg6" version="1.1" height="48px" width="48px" fill="white" viewBox="0 0 24 24">
+                <path id="path4" d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z" />
+            </svg>
+            <!--<img class="copylinkbutton" src="../assets/link-white-48dp.svg">-->
+        </div>
+    </div>
+    <!-- SECOND SEGMENT -->
+    <div class="header">Results</div>
+    <table id="results1" class="ddc">
+        <tr class="selectable" id="selectDiag">
+            <td class="label">Diagonal Size</td>
+            <td id="RESULT_DIAG" class="result number"><span></span></td>
+        </tr>
+        <tr class="selectable" id="selectWidth">
+            <td class="label">Width</td>
+            <td id="RESULT_WIDTH" class="result number"><span></span></td>
+        </tr>
+        <tr class="selectable" id="selectHeight">
+            <td class="label">Height</td>
+            <td id="RESULT_HEIGHT" class="result number"><span></span></td>
+        </tr>
+        <tr class="selectable" id="selectArea">
+            <td class="label">Area</td>
+            <td id="RESULT_AREA" class="result number"><span></span></td>
+        </tr>
+        <tr class="selectable" id="selectRatio">
+            <td class="label">Ratio</td>
+            <td id="RESULT_RATIO" class="result number"><span></span></td>
+        </tr>
+        <tr class="selectable" id="selectTotalPx">
+            <td class="label">Total Pixels</td>
+            <td id="RESULT_TOTAL_PX" class="result number"><span></span></td>
+        </tr>
+        <tr class="selectable" id="selectPxDensity">
+            <td class="label">Pixel Density</td>
+            <td id="RESULT_PX_DENSITY" class="result number"><span></span></td>
+        </tr>
+        <tr class="selectable" id="selectPxPitch">
+            <td class="label">Pixel Pitch</td>
+            <td id="RESULT_PX_PITCH" class="result number"><span></span></td>
+        </tr>
+    </table>
+    <!-- THIRD SEGMENT -->
+    <div id="eq_height_section" class="eq_height_section">
+        <div id="eq_height_cover" class="eq_height_cover" onclick="pleaseFillTheOtherSectionFirst();">
+            <span>Fill in the specifications of the primary display first</span>
+        </div>
+        <h1>
+            <span id='secondary_title'>Secondary Display with Matching Height</span>
+            <hr>
+        </h1>
+        <div id="matchmaker_instructions" style="font-size:120%; align-self:center;">Resolution or aspect ratio of secondary display:</div>
+        <div class="eq_height_input">
+            <input id="INPUT_HRES2" class="large" type="text" placeholder="16" onchange="update();" oninput="this.onchange();" onfocus="this.select();" />
+            <span class="large_ratio" id="height_ratio_symbol" style='display:none;'>&#x2236;</span>
+            <span class="large_times" id="height_times_symbol">&#10005;</span>
+            <input id="INPUT_VRES2" class="large" type="text" placeholder="9" onchange="update();" oninput="this.onchange();" onfocus="this.select();" />
+            <div>
+                <form id="height_density_select" class='height_density_select' onclick='switchHeightDensity();'>
+                    <label><input id="height_radio" name="height_density" value="height" type="radio" checked /><span>Match height</span></label>
+                    <label><input id="density_radio" name="height_density" value="density" type="radio" /><span>Match pixel density</span></label>
+                </form>
+            </div>
+        </div>
+        <div id="21_9_warning" class="warning_219">
+            <svg class="warning_icon" version="1.1" id="Capa_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 486.463 486.463" style="enable-background:new 0 0 486.463 486.463; flex:none;" xml:space="preserve" height="486.463" width="486.463">
+                <path d="M243.225,333.382c-13.6,0-25,11.4-25,25s11.4,25,25,25c13.1,0,25-11.4,24.4-24.4 C268.225,344.682,256.925,333.382,243.225,333.382z"/>
+                <path d="M474.625,421.982c15.7-27.1,15.8-59.4,0.2-86.4l-156.6-271.2c-15.5-27.3-43.5-43.5-74.9-43.5s-59.4,16.3-74.9,43.4 l-156.8,271.5c-15.6,27.3-15.5,59.8,0.3,86.9c15.6,26.8,43.5,42.9,74.7,42.9h312.8 C430.725,465.582,458.825,449.282,474.625,421.982z M440.625, 402.382c-8.7,15-24.1,23.9-41.3,23.9h-312.8 c-17,0-32.3-8.7-40.8-23.4c-8.6-14.9-8.7-32.7-0.1-47.7l156.8-271.4c8.5-14.9,23.7-23.7,40.9-23.7c17.1,0,32.4,8.9,40.9,23.8 l156.7,271.4C449.325,369.882,449.225,387.482,440.625,402.382z"/>
+                <path d="M237.025,157.882c-11.9,3.4-19.3,14.2-19.3,27.3c0.6,7.9,1.1,15.9,1.7,23.8c1.7,30.1,3.4,59.6,5.1,89.7 c0.6,10.2,8.5,17.6,18.7,17.6c10.2,0, 18.2-7.9,18.7-18.2c0-6.2,0-11.9,0.6-18.2c1.1-19.3,2.3-38.6,3.4-57.9 c0.6-12.5,1.7-25,2.3-37.5c0-4.5-0.6-8.5-2.3-12.5C260.825,160.782,248.925,155.082,237.025,157.882z"/>
+            </svg>
+            <div style="margin-left:32px;">
+                <span class="warning_219">Warning</span><br>Formats commonly known as "21<span class="ratio">&#x2236;</span>9" are not an exact 21<span class="ratio">&#x2236;</span>9 ratio. The results will be slightly inaccurate if the ratio is not correct.
+                <ul style="padding-left:16px;">
+                    <li>2560&thinsp;&times;&thinsp;1080 is a <a onclick="setRatio(64,27);">64<span class="ratio">&#x2236;</span>27</a> ratio (21.<span style="text-decoration:overline">3</span><span class="ratio">&#x2236;</span>9)</li>
+                    <li>3440&thinsp;&times;&thinsp;1440 is a <a onclick="setRatio(43,18);">43<span class="ratio">&#x2236;</span>18</a> ratio (21.5<span class="ratio">&#x2236;</span>9)</li>
+                    <li>3840&thinsp;&times;&thinsp;1600 is a <a onclick="setRatio(12, 5);">12<span class="ratio">&#x2236;</span>5</a> ratio (21.6<span class="ratio">&#x2236;</span>9)</li>
+                    <li>5120&thinsp;&times;&thinsp;2160 is a <a onclick="setRatio(64,27);">64<span class="ratio">&#x2236;</span>27</a> ratio (21.<span style="text-decoration:overline">3</span><span class="ratio">&#x2236;</span>9)</li>
+                </ul>
+            </div>
+        </div>
+        <div class="header">Results</div>
+        <table id="results2" class="ddc">
+            <tr class="selectable" id="selectDiag2">
+                <td class="label">Diagonal Size Needed</td>
+                <td id="RESULT_DIAG2" class="result number"><span></span></td>
+            </tr>
+            <tr class="selectable" id="selectIdealRes" style='display:none'>
+                <td class="label">Ideal Resolution<br />(to also match pixel density)</td>
+                <td id="RESULT_OPT_RES" class="result number"><span></span></td>
+            </tr>
+            <tr class="selectable" id="selectWidth2">
+                <td class="label">Width</td>
+                <td id="RESULT_WIDTH2" class="result number"><span></span></td>
+            </tr>
+            <tr class="selectable" id="selectHeight2">
+                <td class="label">Height</td>
+                <td id="RESULT_HEIGHT2" class="result number"><span></span></td>
+            </tr>
+            <tr class="selectable" id="selectRatio2" style='display:none;'>
+                <td class="label">Ratio</td>
+                <td id="RESULT_RATIO2" class="result number"><span></span></td>
+            </tr>
+            <tr class="selectable" id="selectPxDensity2">
+                <td class="label">Pixel Density</td>
+                <td id="RESULT_PX_DENSITY2" class="result number"><span></span></td>
+            </tr>
+        </table>
+        <table id="results3" class="ddc" style='display:none;'>
+            <tr class="selectable" id="selectDiag3">
+                <td class="label">Diagonal Size Needed</td>
+                <td id="RESULT_DIAG3" class="result number"><span></span></td>
+            </tr>
+            <tr class="selectable" id="selectWidth3">
+                <td class="label">Width</td>
+                <td id="RESULT_WIDTH3" class="result number"><span></span></td>
+            </tr>
+            <tr class="selectable" id="selectHeight3">
+                <td class="label">Height</td>
+                <td id="RESULT_HEIGHT3" class="result number"><span></span></td>
+            </tr>
+            <tr class="selectable" id="selectRatio3">
+                <td class="label">Ratio</td>
+                <td id="RESULT_RATIO3" class="result number"><span></span></td>
+            </tr>
+            <tr class="selectable" id="selectPxDensity3" style='display:none;'>
+                <td class="label">Pixel Density</td>
+                <td id="RESULT_PX_DENSITY3" class="result number"><span></span></td>
+            </tr>
+        </table>
+    </div>
+    <div id="matchmaker_button" class="matchmaker_button_container">
+        <button id="matchmaker_button_height" class="matchmaker" onclick="activateMatchmaker();"><span>Match height<br>with another display</span></button>
+    </div>
+</div>
+<div id="description" class="description"></div>
+
+<script src='newddc.js'></script>
+<script>
+    function ddcload() {
+        var unit_btn = document.getElementById('UNIT_BTN');
+        if (unit_btn.value = "") { unit_btn.value = "in"; unit_btn.innerHTML = "in"; }
+        var unit_radio = $('#unit_radio input[type="radio"]:checked').val();
+
+        unit_btn.value = unit_radio;
+        unit_btn.innerHTML = unit_radio;
+
+        // Fills the elements on the page with the event listeners necessary for the mouseover descriptions to work
+
+        var tables = [document.getElementById('results1'), document.getElementById('results2'), document.getElementById('results3')];
+        for (var a = 0; a < tables.length; a++) {
+            var rows = tables[a].children[0].children;
+            for (var b = 0; b < rows.length; b++) {
+                if (rows[b].classList.contains('selectable') != -1) {
+                    rows[b].addEventListener('click', function (event) { selectRow(event.currentTarget); });
+                    rows[b].addEventListener('mouseenter', function (event) { loadDescription(event.currentTarget) });
+                    rows[b].addEventListener('mouseleave',  function () { clearDescription() });
+                }
+            }
+        }
+        var otherElements = [$('#INPUT_SIZE')[0], $('#INPUT_HRES')[0], $('#INPUT_VRES')[0], $('#INPUT_HRES2')[0], $('#INPUT_VRES2')[0]];
+        for (var a = 0; a < otherElements.length; a++) {
+            otherElements[a].addEventListener('mouseenter', function (event) { loadDescription(event.currentTarget) });
+            otherElements[a].addEventListener('mouseleave',  function () { clearDescription() });
+        }
+
+        parseURL();
+        update();
+        check_219Warning();
+        $('#INPUT_SIZE').focus();
+
+        let vh = window.innerHeight * 0.01;
+        // Then we set the value in the --vh custom property to the root of the document
+        document.documentElement.style.setProperty('--truevh', `${vh}px`);
+    }
+
+    ddcload();
+</script>

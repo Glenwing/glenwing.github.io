@@ -1,0 +1,73 @@
+﻿<!DOCTYPE html>
+
+<script src="./assets/jquery-3.2.0.min.js"></script>
+<script src="./assets/DebugControl.js"></script>
+<script src="./LongDivide/decimal.min.js"></script>
+<script src="./LongDivide/LongDivide.js"></script>
+<script src="./assets/katex/katex.min.js"></script>
+<script src="gdu.js"></script>
+
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml">
+
+<meta name="viewport" content="height=device-height, width=device-width, initial-scale=0.5, minimum-scale=0.25">
+
+<head>
+    <title>Display Info Utilities</title>
+    <link rel="stylesheet" type="text/css" href="./assets/katex/katex.min.css" />
+    <link rel="stylesheet" type="text/css" href="./gduStyle.css" />
+</head>
+
+<body>
+    <div class="page">
+        <div class="topbar"><!-- Span is required here, otherwise the left-padding adds to the width of the topbar div, causing a horizontal scrollbar to appear -->
+            <span>Glenwing's Display Utilities</span>
+        </div>
+        <div class="main">
+            <div class="sidebar">
+                <div class="item top selected" id="Sidebar_DDC">
+                    Display Dimensions Calculator
+                </div>
+                <div class="item" id="Sidebar_Matchmaker" onclick="activateMatchmaker();">
+                    Display Matchmaker
+                </div>
+                <div class="item" id="Sidebar_DRC" onclick="activatePage(this.id);">
+                <!----<div class="item" id="Sidebar_DRC" onclick="location.href='../bandwidth/index.html'"><!---->
+                    Video Data Rate Calculator
+                </div>
+                <div class="item" id="Sidebar_Res" style='display:none;'>
+                    Screen Resolution Check
+                </div>
+                <div class="item" id="Sidebar_DPI" style='display:none;'>
+                    Mouse DPI and Scaling Calculator
+                </div>
+                <div class="item" id="Sidebar_Adapters" style='display:none;'>
+                    Guide to Display Cables and Adapters
+                </div>
+                <div class="item" id="Sidebar_Multi" style='display:none;'>
+                    Guide to Multi-Display Configurations
+                </div>
+                <div class="item" id="Sidebar_Specs" style='display:none;'>
+                    Guide to Display Specifications
+                </div>
+                <div class="item" id="Sidebar_Articles" style='display:none;'>
+                    Articles
+                </div>
+                <div class="item" id="Sidebar_Docs" style='display:none;'>
+                    Documents and Standards
+                </div>
+                <div class="item" id="Sidebar_Testing" style='display:none;'>
+                    Product Testing
+                </div>
+                <div class="spacer">
+                </div>
+                <div class="item" id="Sidebar_About">
+                    About
+                </div>
+            </div>
+
+            <div class="content" id="MainWindow">
+                frame.html
+            </div>
+        </div> <!-- class="main" -->
+</body>
+</html>
