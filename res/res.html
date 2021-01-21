@@ -3,7 +3,7 @@
         <div style="display:flex; flex-flow:row nowrap; justify-content: space-between;">
             Screen Resolution Check
             <span class="version">
-                <span style='color:#CC2222;'>DRAFT</span>
+                <span style='color:#CC2222;'>DRAFT</span> 1
             </span>
         </div>
         <hr>
@@ -11,17 +11,21 @@
 
     <div class="header">Your Screen Resolution</div>
     <table id="results1" class="ddc">
-        <tr class="selectable" id="selectTrueRes">
-            <td class="label">Screen Resolution</td>
-            <td id="RESULT_TRUERES" class="result number"><span></span></td>
+        <tr class="selectable" id="selectEffRes">
+            <td class="label">A: window.width &amp; window.height</td>
+            <td id="RESULT_EFFRES" class="result number"><span></span></td>
         </tr>
         <tr class="selectable" id="selectScaling">
-            <td class="label">Scaling Ratio</td>
+            <td class="label">B: window.devicePixelRatio</td>
             <td id="RESULT_SCALING" class="result number"><span></span></td>
         </tr>
-        <tr class="selectable" id="selectEffRes">
-            <td class="label">Effective Resolution</td>
-            <td id="RESULT_EFFRES" class="result number"><span></span></td>
+        <tr class="selectable" id="selectTrueRes">
+            <td class="label">C: A &times; B</td>
+            <td id="RESULT_TRUERES" class="result number"><span></span></td>
+        </tr>
+        <tr class="selectable" id="selectAvailRes">
+            <td class="label">D: window.availWidth &amp; Height</td>
+            <td id="RESULT_AVAILRES" class="result number"><span></span></td>
         </tr>
     </table>
 </div>
