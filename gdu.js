@@ -227,20 +227,20 @@ function activatePage(sidebarID) {
     $('#' + sidebarID).addClass('selected');
     $('#' + sidebarID).attr('onclick', '');
 
-    if (sidebarID === 'Sidebar_Matchmaker' && oldChild.id === 'Sidebar_DDC') {
-        activateMatchmaker();
-    }
-    else if (sidebarID === 'Sidebar_DDC' && oldChild.id === 'Sidebar_Matchmaker') {
-        deactivateMatchmaker();
-    }
-    else {
+    //if (sidebarID === 'Sidebar_Matchmaker' && oldChild.id === 'Sidebar_DDC') {
+    //    activateMatchmaker();
+    //}
+    //else if (sidebarID === 'Sidebar_DDC' && oldChild.id === 'Sidebar_Matchmaker') {
+    //    deactivateMatchmaker();
+    //}
+    //else {
         if      (sidebarID === 'Sidebar_DDC') { frameLoadPage(sidebarID, $('#' + sidebarID).data('dir'), ''); }
         else if (sidebarID === 'Sidebar_Matchmaker') { frameLoadPage('Sidebar_DDC', $('#' + sidebarID).data('dir'), '#matchmaker'); }
         else if (sidebarID === 'Sidebar_Res') { frameLoadPage(sidebarID, $('#' + sidebarID).data('dir')); }
         else {
             DEBUG('activatePage was called with an unknown ID.');
         }
-    }
+    //}
 
 }
 
