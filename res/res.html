@@ -20,9 +20,9 @@
     <div class='res maintext'>
         This result is based on the <code>window.screen.width</code> and <code>window.screen.height</code> properties provided by JavaScript. These values are multiplied by the <code>window.devicePixelRatio</code> to get the above result. This compensates for OS scaling.<br><br>
         
-        Many other online resolution checking websites fail to do this, and they will therefore give incorrect results when OS scaling is enabled (such as with Apple computers with a "Retina" display, or high-resolution displays on Windows).<br><br>
+        Many other online resolution checking websites fail to do this, and they will therefore give incorrect results when OS scaling is enabled (such as on Apple computers with a "Retina" display, mobile devices, or high-resolution displays on Windows).<br><br>
 
-        In devices with arbitrary scaling ratios (particularly mobile devices), some unavoidable error is introduced because <code>window.screen.width</code> and <code>height</code> are rounded to integer values. Therefore, an uncertainty range (i.e. "&pm;1 px") is provided in that situation, which represents the maximum possible deviation from the true value.
+        On devices with arbitrary scaling ratios (particularly mobile devices), some unavoidable error is introduced because <code>window.screen.width</code> and <code>height</code> are rounded to integer values. In this situation, an uncertainty range (i.e. "&pm;1 px") is provided, which represents the maximum possible deviation from the true value.
     </div><br>
 
     <div style='display:none;'>
