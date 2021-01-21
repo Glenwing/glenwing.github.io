@@ -1,12 +1,12 @@
 function redirectToFrame(directoryName, queryString) {
     if (window.location.href.indexOf('glenwing.github.io/' + directoryName + '/') != -1) {
-        localStorage.setItem('directoryName', directoryName);
-        localStorage.setItem('queryString', queryString);
+        sessionStorage.setItem('directoryName', directoryName);
+        sessionStorage.setItem('queryString', queryString);
         window.location.replace(window.location.href.substring(0, window.location.href.indexOf('glenwing.github.io/' + directoryName + '/')) + 'glenwing.github.io/frame.html');
     }
 }
 
-function frameLoadPage(directoryName, suffix) {
+function frameLoadPage(sidebarID, directoryName, suffix) {
     if (suffix === undefined) { suffix = ''; }
     try {
         history.replaceState(null, null, directoryName + suffix);
@@ -15,10 +15,18 @@ function frameLoadPage(directoryName, suffix) {
         DEBUG('URL change falling back to hard load due to DOMException.');
         //window.location.replace(window.location.href.substring(0, window.location.href.indexOf('glenwing.github.io')) + 'glenwing.github.io/' + directoryName + '/' + directoryName + '.html' + suffix);
     }
-    $('#MainWindow').load('./' + directoryName + '/' + directoryName + '.html');
+    if ($('#' + sidebarID).data('pageCache') === undefined) {
+        console.log('Loading new page');
+        $('#MainWindow').load('./' + directoryName + '/' + directoryName + '.html', function () {
+            $('#' + sidebarID).data('pageCache', $('#MainWindow').html());
+        });
+    }
+    else {
+        console.log('Loading page from cache');
+        $('#MainWindow').html($.parseHTML($('#' + sidebarID).data('pageCache')));
+    }
 }
 
 function navigateToDir(dir) {
     return window.location.href.substring(0, window.location.href.indexOf('glenwing.github.io')) + 'glenwing.github.io/' + dir;
 }
-

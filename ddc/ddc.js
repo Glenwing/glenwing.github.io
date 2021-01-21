@@ -76,7 +76,6 @@ var global_DescriptionRegistry = { // Used for associating HTML files for loadin
 function update() {
     // This function updates the results whenever one of the input fields is changed, as well as update the description in response to mouseover events.
 
-    
     var size = parseNum($('#INPUT_SIZE').val());
     //var unit_select = $('#unit_select input[type="radio"]:checked').val();
     var unit_select = $('#UNIT_BTN').val();
@@ -841,6 +840,42 @@ function parseURL() {
         }
     }
 }
+
+
+function ddcload() {
+    var unit_btn = document.getElementById('UNIT_BTN');
+    if (unit_btn.value = "") { unit_btn.value = "in"; unit_btn.innerHTML = "in"; }
+    var unit_radio = $('#unit_radio input[type="radio"]:checked').val();
+
+    unit_btn.value = unit_radio;
+    unit_btn.innerHTML = unit_radio;
+
+    // Fills the elements on the page with the event listeners necessary for the mouseover descriptions to work
+
+    var tables = [document.getElementById('results1'), document.getElementById('results2'), document.getElementById('results3')];
+    for (var a = 0; a < tables.length; a++) {
+        var rows = tables[a].children[0].children;
+        for (var b = 0; b < rows.length; b++) {
+            if (rows[b].classList.contains('selectable') != -1) {
+                rows[b].addEventListener('click', function (event) { selectRow(event.currentTarget); });
+                rows[b].addEventListener('mouseenter', function (event) { loadDescription(event.currentTarget) });
+                rows[b].addEventListener('mouseleave',  function () { clearDescription() });
+            }
+        }
+    }
+    var otherElements = [$('#INPUT_SIZE')[0], $('#INPUT_HRES')[0], $('#INPUT_VRES')[0], $('#INPUT_HRES2')[0], $('#INPUT_VRES2')[0]];
+    for (var a = 0; a < otherElements.length; a++) {
+        otherElements[a].addEventListener('mouseenter', function (event) { loadDescription(event.currentTarget) });
+        otherElements[a].addEventListener('mouseleave',  function () { clearDescription() });
+    }
+
+    parseURL();
+    update();
+    check_219Warning();
+    $('#INPUT_SIZE').focus();
+}
+
+ddcload();
 
 /* 
 window.onload = function pageLoad () {

@@ -234,9 +234,9 @@ function activatePage(sidebarID) {
         deactivateMatchmaker();
     }
     else {
-        if      (sidebarID === 'Sidebar_DDC') { frameLoadPage('ddc'); }
-        else if (sidebarID === 'Sidebar_Matchmaker') { frameLoadPage('ddc', '#matchmaker'); }
-        else if (sidebarID === 'Sidebar_Res') { frameLoadPage('res'); }
+        if      (sidebarID === 'Sidebar_DDC') { frameLoadPage(sidebarID, 'ddc'); }
+        else if (sidebarID === 'Sidebar_Matchmaker') { frameLoadPage('Sidebar_DDC', 'ddc', '#matchmaker'); }
+        else if (sidebarID === 'Sidebar_Res') { frameLoadPage(sidebarID, 'res'); }
         else {
             DEBUG('activatePage was called with an unknown ID.');
         }
@@ -251,8 +251,8 @@ window.addEventListener('resize', () => {
 });
 
 window.onload = function () {
-    var directoryName = localStorage.getItem('directoryName');
-    var queryString = localStorage.getItem('queryString');
+    var directoryName = sessionStorage.getItem('directoryName');
+    var queryString = sessionStorage.getItem('queryString');
     if (directoryName === null) { directoryName = 'ddc'; }
     if (queryString === null) { queryString = ''; }
     var sidebarID = null;
@@ -267,11 +267,17 @@ window.onload = function () {
         DEBUG('URL change skipped due to DOMException.');
         //window.location.href = window.location.href.replace('glenwing.github.io', 'glenwing.github.io/' + directoryName + '/' + directoryName + '.html' + queryString);
     }
-    $('#' + sidebarID).addClass('selected');
-    $('#' + sidebarID).attr('onclick', '');
-    $('#Sidebar_DDC').removeClass('selected');
-    $('#Sidebar_DDC').attr('onclick', 'activatePage(this.id)');
+
+    frameLoadPage(sidebarID, directoryName, '');
+    /*
+    if (directoryName !== 'ddc') {
+        $('#' + sidebarID).addClass('selected');
+        $('#' + sidebarID).attr('onclick', '');
+        $('#Sidebar_DDC').removeClass('selected');
+        $('#Sidebar_DDC').attr('onclick', 'activatePage(this.id)');
+    }
     $('#MainWindow').load(pathName + '/' + directoryName + '.html');
+    */
     
     let vh = window.innerHeight * 0.01;
     document.documentElement.style.setProperty('--truevh', `${vh}px`);
