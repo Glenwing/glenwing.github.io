@@ -221,5 +221,8 @@ window.addEventListener('resize', () => {
 
 window.onload = function () {
     var directoryName = localStorage.getItem('directoryName');
-    history.replaceState(null, '', window.location.pathname.replace('frame.html', directoryName));
+    if (directoryName === null) { directoryName = 'ddc'; }
+    var pathName = window.location.pathname.replace('frame.html', directoryName);
+    history.replaceState(null, '', pathName);
+    $('#MainWindow').load(pathName + '/' + directoryName + '.html');
 };
