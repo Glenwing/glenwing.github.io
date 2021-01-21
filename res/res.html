@@ -1,0 +1,30 @@
+<div class="ddc">
+    <h1>
+        <div style="display:flex; flex-flow:row nowrap; justify-content: space-between;">
+            Screen Resolution Check
+            <span class="version">
+                <span style='color:#CC2222;'>DRAFT</span>
+            </span>
+        </div>
+        <hr>
+    </h1>
+
+    <div class="header">Your Screen Resolution</div>
+    <table id="results1" class="ddc">
+        <tr class="selectable" id="selectTrueRes">
+            <td class="label">Screen Resolution</td>
+            <td id="RESULT_TRUERES" class="result number"><span></span></td>
+        </tr>
+        <tr class="selectable" id="selectScaling">
+            <td class="label">Scaling Ratio</td>
+            <td id="RESULT_SCALING" class="result number"><span></span></td>
+        </tr>
+        <tr class="selectable" id="selectEffRes">
+            <td class="label">Effective Resolution</td>
+            <td id="RESULT_EFFRES" class="result number"><span></span></td>
+        </tr>
+    </table>
+</div>
+<div id="description" class="description"></div>
+
+<script src='./res/res.js'></script>

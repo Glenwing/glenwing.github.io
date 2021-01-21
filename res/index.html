@@ -1,0 +1,17 @@
+<script src='../redirect.js'></script>
+
+<html>
+<body style='background-color:#101010'>
+</body>
+</html>
+
+<script>
+    var url = window.location.href;
+    var urlQmark = url.indexOf('?');
+    var urlLength = url.length;
+    var query = '';
+    if (urlQmark != -1) {
+        query = url.substring(urlQmark, urlLength);
+    }
+    redirectToFrame('res', query);
+</script>

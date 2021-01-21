@@ -187,11 +187,11 @@ function activateMatchmaker() {
     $('#selectTotalPx').css('display', 'none');
     $('#selectPxPitch').css('display', 'none');
 
-    $('#Sidebar_DDC').removeClass('selected');
-    $('#Sidebar_DDC').attr('onclick', 'deactivateMatchmaker();');
+    //$('#Sidebar_DDC').removeClass('selected');
+    //$('#Sidebar_DDC').attr('onclick', 'deactivateMatchmaker();');
 
-    $('#Sidebar_Matchmaker').addClass('selected');
-    $('#Sidebar_Matchmaker').attr('onclick', '');
+    //$('#Sidebar_Matchmaker').addClass('selected');
+    //$('#Sidebar_Matchmaker').attr('onclick', '');
 
     update();
 }
@@ -204,13 +204,48 @@ function deactivateMatchmaker() {
     $('#selectTotalPx').css('display', 'table-row');
     $('#selectPxPitch').css('display', 'table-row');
 
-    $('#Sidebar_Matchmaker').removeClass('selected');
-    $('#Sidebar_Matchmaker').attr('onclick', 'activateMatchmaker();');
+    //$('#Sidebar_Matchmaker').removeClass('selected');
+    //$('#Sidebar_Matchmaker').attr('onclick', 'activateMatchmaker();');
 
-    $('#Sidebar_DDC').addClass('selected');
-    $('#Sidebar_DDC').attr('onclick', '');
+    //$('#Sidebar_DDC').addClass('selected');
+    //$('#Sidebar_DDC').attr('onclick', '');
 
     update();
+}
+
+function activatePage(sidebarID) {
+    var children = document.getElementById('Sidebar').children;
+    var oldChild = null;
+    for (var i = 0; i < children.length; i++) {
+        oldChild = children[i];
+        if (oldChild.classList.contains('selected')) {
+            $(oldChild).removeClass('selected');
+            $(oldChild).attr('onclick', 'activatePage(this.id)');
+            break;
+        }
+    }
+    $('#' + sidebarID).addClass('selected');
+    $('#' + sidebarID).attr('onclick', '');
+
+    if (sidebarID === 'Sidebar_Matchmaker' && oldChild.id === 'Sidebar_DDC') {
+        activateMatchmaker();
+    }
+    else if (sidebarID === 'Sidebar_DDC' && oldChild.id === 'Sidebar_Matchmaker') {
+        deactivateMatchmaker();
+    }
+    else {
+        if      (sidebarID === 'Sidebar_DDC') { window.location.href = navigateToDir('ddc/index.html'); }
+        else if (sidebarID === 'Sidebar_Matchmaker') { window.location.href = navigateToDir('ddc/index.html#matchmaker'); }
+        else if (sidebarID === 'Sidebar_Res') { window.location.href = navigateToDir('res/index.html'); }
+        else {
+            DEBUG('activatePage was called with an unknown ID.');
+        }
+    }
+
+}
+
+function navigateToDir(dir) {
+    return window.location.href.substring(0, window.location.href.indexOf('glenwing.github.io')) + 'glenwing.github.io/' + dir;
 }
 
 window.addEventListener('resize', () => {
@@ -224,7 +259,21 @@ window.onload = function () {
     var queryString = localStorage.getItem('queryString');
     if (directoryName === null) { directoryName = 'ddc'; }
     if (queryString === null) { queryString = ''; }
+    var sidebarID = null;
+    if (directoryName === 'ddc') { sidebarID = 'Sidebar_DDC'; }
+    else if (directoryName === 'res') { sidebarID = 'Sidebar_Res'; }
+
     var pathName = window.location.pathname.replace('frame.html', directoryName);
-    history.replaceState(null, '', pathName + queryString);
+    try {
+        history.replaceState(null, '', pathName + queryString);
+    }
+    catch (DOMException) {
+        DEBUG('URL change skipped due to DOMException.');
+        //window.location.href = window.location.href.replace('glenwing.github.io', 'glenwing.github.io/' + directoryName + '/' + directoryName + '.html' + queryString);
+    }
+    $('#Sidebar_DDC').removeClass('selected');
+    $('#Sidebar_DDC').attr('onclick', 'activatePage(this.id)');
+    $('#' + sidebarID).addClass('selected');
+    $('#' + sidebarID).attr('onclick', '');
     $('#MainWindow').load(pathName + '/' + directoryName + '.html');
 };

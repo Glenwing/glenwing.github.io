@@ -23,18 +23,18 @@
             <span>Glenwing's Display Utilities</span>
         </div>
         <div class="main">
-            <div class="sidebar">
+            <div class="sidebar" id="Sidebar">
                 <div class="item top selected" id="Sidebar_DDC">
                     Display Dimensions Calculator
                 </div>
-                <div class="item" id="Sidebar_Matchmaker" onclick="activateMatchmaker();">
-                    Display Matchmaker
+                <div class="item" id="Sidebar_Matchmaker" onclick="activatePage(this.id);">
+                    Display Size Matcher
                 </div>
-                <div class="item" id="Sidebar_DRC" onclick="activatePage(this.id);">
+                <div class="item" id="Sidebar_DRC" style='display:none;'>
                 <!----<div class="item" id="Sidebar_DRC" onclick="location.href='../bandwidth/index.html'"><!---->
                     Video Data Rate Calculator
                 </div>
-                <div class="item" id="Sidebar_Res" style='display:none;'>
+                <div class="item" id="Sidebar_Res" onclick="activatePage(this.id);">
                     Screen Resolution Check
                 </div>
                 <div class="item" id="Sidebar_DPI" style='display:none;'>
