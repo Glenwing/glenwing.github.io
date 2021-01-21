@@ -8,11 +8,11 @@
 
 <script>
     var url = window.location.href;
-    var urlQmark = href.indexOf('?');
-    var urlLength = href.length;
+    var urlQmark = url.indexOf('?');
+    var urlLength = url.length;
     var query = '';
     if (urlQmark != -1) {
-        query = href.substring(urlQmark, urlLength);
+        query = url.substring(urlQmark, urlLength);
     }
     redirectToFrame('ddc', query);
 </script>
