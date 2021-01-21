@@ -238,8 +238,7 @@ function activatePage(sidebarID) {
             $('#MainWindow').load('./ddc/ddc.html');
         }
         else if (sidebarID === 'Sidebar_Matchmaker') {// window.location.href = navigateToDir('ddc/index.html#matchmaker'); }
-            $('#MainWindow').load('./ddc/ddc.html');
-            activateMatchmaker();
+            $('#MainWindow').load('./ddc/ddc.html', activateMatchmaker);
         }
         else if (sidebarID === 'Sidebar_Res') {// window.location.href = navigateToDir('res/index.html'); }
             $('#MainWindow').load('./res/res.html');
@@ -278,9 +277,9 @@ window.onload = function () {
         DEBUG('URL change skipped due to DOMException.');
         //window.location.href = window.location.href.replace('glenwing.github.io', 'glenwing.github.io/' + directoryName + '/' + directoryName + '.html' + queryString);
     }
-    $('#Sidebar_DDC').removeClass('selected');
-    $('#Sidebar_DDC').attr('onclick', 'activatePage(this.id)');
     $('#' + sidebarID).addClass('selected');
     $('#' + sidebarID).attr('onclick', '');
+    $('#Sidebar_DDC').removeClass('selected');
+    $('#Sidebar_DDC').attr('onclick', 'activatePage(this.id)');
     $('#MainWindow').load(pathName + '/' + directoryName + '.html');
 };
