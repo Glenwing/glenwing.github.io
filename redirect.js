@@ -1,4 +1,4 @@
-function redirectToFrame(directoryName, query) {
+function redirectToFrame(directoryName, queryString) {
     if (window.location.href.indexOf('glenwing.github.io/' + directoryName + '/') != -1) {
         localStorage.setItem('directoryName', directoryName);
         localStorage.setItem('queryString', queryString);
