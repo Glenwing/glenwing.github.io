@@ -363,7 +363,6 @@ function display(units, list) {
     return;
 }
 
-
 class UNIT {
     constructor(mode) {
         this._primary = mode;

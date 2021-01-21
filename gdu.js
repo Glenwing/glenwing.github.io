@@ -234,24 +234,14 @@ function activatePage(sidebarID) {
         deactivateMatchmaker();
     }
     else {
-        if      (sidebarID === 'Sidebar_DDC') {// window.location.href = navigateToDir('ddc/index.html'); }
-            $('#MainWindow').load('./ddc/ddc.html');
-        }
-        else if (sidebarID === 'Sidebar_Matchmaker') {// window.location.href = navigateToDir('ddc/index.html#matchmaker'); }
-            $('#MainWindow').load('./ddc/ddc.html', activateMatchmaker);
-        }
-        else if (sidebarID === 'Sidebar_Res') {// window.location.href = navigateToDir('res/index.html'); }
-            $('#MainWindow').load('./res/res.html');
-        }
+        if      (sidebarID === 'Sidebar_DDC') { frameLoadPage('ddc'); }
+        else if (sidebarID === 'Sidebar_Matchmaker') { frameLoadPage('ddc', '#matchmaker'); }
+        else if (sidebarID === 'Sidebar_Res') { frameLoadPage('res'); }
         else {
             DEBUG('activatePage was called with an unknown ID.');
         }
     }
 
-}
-
-function navigateToDir(dir) {
-    return window.location.href.substring(0, window.location.href.indexOf('glenwing.github.io')) + 'glenwing.github.io/' + dir;
 }
 
 window.addEventListener('resize', () => {
@@ -282,4 +272,7 @@ window.onload = function () {
     $('#Sidebar_DDC').removeClass('selected');
     $('#Sidebar_DDC').attr('onclick', 'activatePage(this.id)');
     $('#MainWindow').load(pathName + '/' + directoryName + '.html');
+    
+    let vh = window.innerHeight * 0.01;
+    document.documentElement.style.setProperty('--truevh', `${vh}px`);
 };
