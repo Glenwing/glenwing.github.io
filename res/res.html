@@ -18,9 +18,11 @@
     <div class='res zoomwarning'><span>This result can be influenced by browser zoom.</span> Set your browser to 100% zoom.</div><br>
 
     <div class='res maintext'>
-        This result is based on the <code>window.screen.width</code> and <code>window.screen.height</code> properties provided by JavaScript. These values are multiplied by the <code>window.devicePixelRatio</code> to get the above result. This accounts for OS scaling.<br><br>
+        This result is based on the <code>window.screen.width</code> and <code>window.screen.height</code> properties provided by JavaScript. These values are multiplied by the <code>window.devicePixelRatio</code> to get the above result. This compensates for OS scaling.<br><br>
         
-        Many other online resolution checking websites fail to do this, and they will therefore give incorrect results when OS scaling is enabled (which is the default situation when using Apple computers with a Retina display, or high-resolution displays on Windows).
+        Many other online resolution checking websites fail to do this, and they will therefore give incorrect results when OS scaling is enabled (such as with Apple computers with a "Retina" display, or high-resolution displays on Windows).<br><br>
+
+        In devices with arbitrary scaling ratios (particularly mobile devices), some unavoidable error is introduced because <code>window.screen.width</code> is rounded to an integer value. Therefore, an uncertainty range (i.e. "&pm;1 px") is provided for those devices. The true resolution is somewhere within the given range.
     </div><br>
 
     <div style='display:none;'>
