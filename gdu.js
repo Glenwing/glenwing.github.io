@@ -234,9 +234,16 @@ function activatePage(sidebarID) {
         deactivateMatchmaker();
     }
     else {
-        if      (sidebarID === 'Sidebar_DDC') { window.location.href = navigateToDir('ddc/index.html'); }
-        else if (sidebarID === 'Sidebar_Matchmaker') { window.location.href = navigateToDir('ddc/index.html#matchmaker'); }
-        else if (sidebarID === 'Sidebar_Res') { window.location.href = navigateToDir('res/index.html'); }
+        if      (sidebarID === 'Sidebar_DDC') {// window.location.href = navigateToDir('ddc/index.html'); }
+            $('#MainWindow').load('./ddc/ddc.html');
+        }
+        else if (sidebarID === 'Sidebar_Matchmaker') {// window.location.href = navigateToDir('ddc/index.html#matchmaker'); }
+            $('#MainWindow').load('./ddc/ddc.html');
+            activateMatchmaker();
+        }
+        else if (sidebarID === 'Sidebar_Res') {// window.location.href = navigateToDir('res/index.html'); }
+            $('#MainWindow').load('./res/res.html');
+        }
         else {
             DEBUG('activatePage was called with an unknown ID.');
         }
