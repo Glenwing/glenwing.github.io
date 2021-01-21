@@ -22,7 +22,7 @@
         
         Many other online resolution checking websites fail to do this, and they will therefore give incorrect results when OS scaling is enabled (such as with Apple computers with a "Retina" display, or high-resolution displays on Windows).<br><br>
 
-        In devices with arbitrary scaling ratios (particularly mobile devices), some unavoidable error is introduced because <code>window.screen.width</code> is rounded to an integer value. Therefore, an uncertainty range (i.e. "&pm;1 px") is provided for those devices. The true resolution is somewhere within the given range.
+        In devices with arbitrary scaling ratios (particularly mobile devices), some unavoidable error is introduced because <code>window.screen.width</code> and <code>height</code> are rounded to integer values. Therefore, an uncertainty range (i.e. "&pm;1 px") is provided in that situation, which represents the maximum possible deviation from the true value.
     </div><br>
 
     <div style='display:none;'>

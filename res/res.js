@@ -28,8 +28,8 @@ function updateRes() {
     $('#RESULT_WS_W').html(window_W + '&nbsp;px');
     $('#RESULT_WS_H').html(window_H + '&nbsp;px');
     $('#RESULT_PXRATIO').html(LongDivide(pxRatio, 1, {p: [2, 8], approx:''}));
-    $('#RESULT_CALC_W').html(calc_W + '&nbsp;px');
-    $('#RESULT_CALC_H').html(calc_H + '&nbsp;px');
+    $('#RESULT_CALC_W').html(LongDivide(calc_W, 1, {p: [0, 4], approx:''}) + '&nbsp;px');
+    $('#RESULT_CALC_H').html(LongDivide(calc_H, 1, {p: [0, 4], approx:''}) + '&nbsp;px');
     $('#RESULT_TOL_W').html('&pm;' + Uncertainty_W + '&nbsp;px');
     $('#RESULT_TOL_H').html('&pm;' + Uncertainty_H + '&nbsp;px');
 
