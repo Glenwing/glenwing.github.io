@@ -639,7 +639,9 @@ function loadDescription(el) {
         //$('#description').load(global_DescriptionRegistry[element.id]);
         //console.log('$(el).data("descriptionContent"):', $(el).data('descriptionContent'));
         if ($(el).data('descriptionContent') === undefined) {
-            $('#description').load(global_DescriptionRegistry[el.id], function() {
+            var slash = '';
+            if (window.location.pathname.indexOf('ddc/') == -1) { slash = '/'; }
+            $('#description').load(slash + global_DescriptionRegistry[el.id], function() {
                 $(el).data('descriptionContent', $('#description').html());
                 $(el).data('descriptionFunction', global_DescriptionFunction);
             });
@@ -753,7 +755,7 @@ function parseURL() {
 
     var query = new URLSearchParams(window.location.search);
 
-    var spec = query.get('spec').replace('_', '.');
+    var spec = query.get('spec');
     var match = query.get('match');
 
     var diag, unit, hres, vres;

@@ -979,7 +979,7 @@ function parseURL() {
 
     var query = new URLSearchParams(window.location.search);
 
-    var spec = query.get('spec').replace('_', '.');
+    var spec = query.get('spec');
     var match = query.get('match');
 
     var diag, unit, hres, vres;
@@ -1068,7 +1068,7 @@ function parseURL() {
 }
 
 
-window.onload = function pageLoad () {
+window.onload = function () {
     var unit_btn = document.getElementById('UNIT_BTN');
     if (unit_btn.value = "") { unit_btn.value = "in"; unit_btn.innerHTML = "in"; }
     var unit_radio = $('#unit_radio input[type="radio"]:checked').val();

@@ -7,5 +7,12 @@
 </html>
 
 <script>
-    redirectToFrame('ddc');
+    var url = window.location.href;
+    var urlQmark = href.indexOf('?');
+    var urlLength = href.length;
+    var query = '';
+    if (urlQmark != -1) {
+        query = href.substring(urlQmark, urlLength);
+    }
+    redirectToFrame('ddc', query);
 </script>
