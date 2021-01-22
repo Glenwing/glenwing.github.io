@@ -877,6 +877,8 @@ function ddcload() {
 
 ddcload();
 
+$('#Sidebar_DDC').data('onload', ddcload);
+
 /* 
 window.onload = function pageLoad () {
     var unit_btn = document.getElementById('UNIT_BTN');

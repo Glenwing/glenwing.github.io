@@ -227,21 +227,16 @@ function activatePage(sidebarID) {
     $('#' + sidebarID).addClass('selected');
     $('#' + sidebarID).attr('onclick', '');
 
-    //if (sidebarID === 'Sidebar_Matchmaker' && oldChild.id === 'Sidebar_DDC') {
-    //    activateMatchmaker();
-    //}
-    //else if (sidebarID === 'Sidebar_DDC' && oldChild.id === 'Sidebar_Matchmaker') {
-    //    deactivateMatchmaker();
-    //}
-    //else {
+    if (sidebarID === 'Sidebar_DDC' && oldChild.id === 'Sidebar_Matchmaker') { deactivateMatchmaker(); }
+    else if (sidebarID === 'Sidebar_Matchmaker' && oldChild.id === 'Sidebar_DDC') { activateMatchmaker(); }
+    else {
         if      (sidebarID === 'Sidebar_DDC') { frameLoadPage(sidebarID, $('#' + sidebarID).data('dir'), ''); }
         else if (sidebarID === 'Sidebar_Matchmaker') { frameLoadPage('Sidebar_DDC', $('#' + sidebarID).data('dir'), '#matchmaker'); }
         else if (sidebarID === 'Sidebar_Res') { frameLoadPage(sidebarID, $('#' + sidebarID).data('dir')); }
         else {
             DEBUG('activatePage was called with an unknown ID.');
         }
-    //}
-
+    }
 }
 
 window.addEventListener('resize', () => {
@@ -250,7 +245,13 @@ window.addEventListener('resize', () => {
     document.documentElement.style.setProperty('--vh', `${vh}px`);
 });
 
+function pageLoadFunction () { return; };
+
 window.onload = function () {
+    var sidebarItems = document.getElementById('Sidebar').children;
+    for (var i = 0; i < sidebarItems.length; i++) {
+        $(sidebarItems[i]).data('onload', function () { return; });
+    }
     var directoryName = sessionStorage.getItem('directoryName');
     var queryString = sessionStorage.getItem('queryString');
     if (directoryName === null) { directoryName = 'ddc'; }

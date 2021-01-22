@@ -39,5 +39,7 @@ function updateRes() {
 updateRes();
 
 window.onresize = function () {
-    updateRes();
+    if ($('#Sidebar_Res').hasClass('selected')) {
+        updateRes();
+    }
 }

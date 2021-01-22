@@ -24,6 +24,8 @@ function frameLoadPage(sidebarID, directoryName, suffix) {
     else {
         //console.log('Loading page from cache');
         $('#MainWindow').html($.parseHTML($('#' + sidebarID).data('pageCache')));
+        pageLoadTemp = $('#' + sidebarID).data('onload');
+        pageLoadTemp();
         if (suffix === '#matchmaker') {
             activateMatchmaker();
         }
@@ -32,4 +34,8 @@ function frameLoadPage(sidebarID, directoryName, suffix) {
 
 function navigateToDir(dir) {
     return window.location.href.substring(0, window.location.href.indexOf('glenwing.github.io')) + 'glenwing.github.io/' + dir;
+}
+
+function pageLoadTemp() {
+    return;
 }
