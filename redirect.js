@@ -8,12 +8,14 @@ function redirectToFrame(directoryName, queryString) {
 
 function frameLoadPage(sidebarID, directoryName, suffix) {
     if (suffix === undefined) { suffix = ''; }
-    try {
-        history.replaceState(null, null, directoryName + suffix);
-    }
-    catch (DOMException) {
-        DEBUG('URL change falling back to hard load due to DOMException.');
-        //window.location.replace(window.location.href.substring(0, window.location.href.indexOf('glenwing.github.io')) + 'glenwing.github.io/' + directoryName + '/' + directoryName + '.html' + suffix);
+    if (window.location.pathname.indexOf(directoryName) == -1) {
+        try {
+            history.replaceState(null, null, directoryName + suffix);
+        }
+        catch (DOMException) {
+            DEBUG('URL change falling back to hard load due to DOMException.');
+            //window.location.replace(window.location.href.substring(0, window.location.href.indexOf('glenwing.github.io')) + 'glenwing.github.io/' + directoryName + '/' + directoryName + '.html' + suffix);
+        }
     }
     if ($('#' + sidebarID).data('pageCache') === undefined) {
         //console.log('Loading new page');

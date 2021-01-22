@@ -254,6 +254,7 @@ window.onload = function () {
     }
     var directoryName = sessionStorage.getItem('directoryName');
     var queryString = sessionStorage.getItem('queryString');
+    console.log('queryString:', queryString);
     if (directoryName === null) { directoryName = 'ddc'; }
     if (queryString === null) { queryString = ''; }
     var sidebarID = null;
