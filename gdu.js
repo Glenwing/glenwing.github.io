@@ -254,7 +254,7 @@ window.onload = function () {
     }
     var directoryName = sessionStorage.getItem('directoryName');
     var queryString = sessionStorage.getItem('queryString');
-    console.log('queryString:', queryString);
+    console.log('window.onload: queryString =', queryString);
     if (directoryName === null) { directoryName = 'ddc'; }
     if (queryString === null) { queryString = ''; }
     var sidebarID = null;
@@ -262,8 +262,10 @@ window.onload = function () {
     else if (directoryName === 'res') { sidebarID = 'Sidebar_Res'; }
 
     var pathName = window.location.pathname.replace('frame.html', directoryName);
+    console.log('window.onload: href =', window.location.href);
     try {
         history.replaceState(null, '', pathName + queryString);
+        console.log('history.replaceState:', window.location.href);
     }
     catch (DOMException) {
         DEBUG('URL change skipped due to DOMException.');
