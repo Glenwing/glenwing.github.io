@@ -1,15 +1,17 @@
-function redirectToFrame(directoryName, queryString) {
+function redirectToFrame(sidebarID, queryString) {
+    var directoryName = $('#' + sidebarID).data('dir');
     if (window.location.href.indexOf('glenwing.github.io/' + directoryName + '/') != -1) {
+        sessionStorage.setItem('sidebarID', sidebarID);
         sessionStorage.setItem('directoryName', directoryName);
         sessionStorage.setItem('queryString', queryString);
         console.log('redirectToFrame:', directoryName, queryString);
-        window.location.replace(window.location.href.substring(0, window.location.href.indexOf('glenwing.github.io/' + directoryName + '/')) + 'glenwing.github.io/frame.html');
+        window.location.replace(window.location.href.substring(0, window.location.href.indexOf('glenwing.github.io/')) + 'glenwing.github.io/frame.html');
     }
 }
 
 function frameLoadPage(sidebarID, directoryName, suffix) {
-    console.log('frameLoadPage:', sidebarID, directoryName, suffix);
     if (suffix === undefined) { suffix = ''; }
+    console.log('frameLoadPage:', sidebarID, directoryName, suffix);
     if (window.location.pathname.indexOf(directoryName) == -1) {
         DEBUG('frameLoadPage: history.replaceState triggered');
         try {
@@ -20,7 +22,7 @@ function frameLoadPage(sidebarID, directoryName, suffix) {
             //window.location.replace(window.location.href.substring(0, window.location.href.indexOf('glenwing.github.io')) + 'glenwing.github.io/' + directoryName + '/' + directoryName + '.html' + suffix);
         }
     }
-    if ($('#' + sidebarID).data('pageCache') === undefined) {
+    if ($('#' + sidebarID).data('pageCache') === '') {
         //console.log('Loading new page');
         $('#MainWindow').load('./' + directoryName + '/' + directoryName + '.html', function () {
             $('#' + sidebarID).data('pageCache', $('#MainWindow').html());
@@ -29,7 +31,7 @@ function frameLoadPage(sidebarID, directoryName, suffix) {
     else {
         //console.log('Loading page from cache');
         $('#MainWindow').html($.parseHTML($('#' + sidebarID).data('pageCache')));
-        pageLoadFunction = $('#' + sidebarID).data('onload');
+        pageLoadFunction = $('#' + sidebarID).data('onLoad');
         pageLoadFunction();
         if (suffix === '#matchmaker') {
             activateMatchmaker();

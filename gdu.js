@@ -227,8 +227,8 @@ function activatePage(sidebarID) {
     $('#' + sidebarID).addClass('selected');
     $('#' + sidebarID).attr('onclick', '');
 
-    if (sidebarID === 'Sidebar_DDC' && oldChild.id === 'Sidebar_Matchmaker') { deactivateMatchmaker(); }
-    else if (sidebarID === 'Sidebar_Matchmaker' && oldChild.id === 'Sidebar_DDC') { activateMatchmaker(); }
+    if (sidebarID === 'Sidebar_DDC' && oldChild.id === 'Sidebar_Matchmaker' && $('#Sidebar_DDC').data('pageCache') === '') { deactivateMatchmaker(); }
+    else if (sidebarID === 'Sidebar_Matchmaker' && oldChild.id === 'Sidebar_DDC' && $('#Sidebar_DDC').data('pageCache') === '') { activateMatchmaker(); }
     else {
         if      (sidebarID === 'Sidebar_DDC') { frameLoadPage(sidebarID, $('#' + sidebarID).data('dir'), ''); }
         else if (sidebarID === 'Sidebar_Matchmaker') { frameLoadPage('Sidebar_DDC', $('#' + sidebarID).data('dir'), '#matchmaker'); }
@@ -248,15 +248,25 @@ window.addEventListener('resize', () => {
 function pageLoadFunction () { return; };
 
 window.onload = function () {
+    // On page load, assign an empty data object to each sidebar item. This will contain a cached "pageload" function that is executed when the page is loaded.
     var sidebarItems = document.getElementById('Sidebar').children;
     for (var i = 0; i < sidebarItems.length; i++) {
-        $(sidebarItems[i]).data('onload', function () { return; });
+        $(sidebarItems[i]).data('onLoad', function () { return; });
+        $(sidebarItems[i]).data('pageCache', '');
     }
+
+    // Retrieve the directory and query string from session storage. These will contain data about which page to load if this page was loaded via redirect
+    // If this page was loaded directly, then the values will be null, and in that case a default value is assigned.
+    var sidebarID = sessionStorage.getItem('sidebarID');
     var directoryName = sessionStorage.getItem('directoryName');
     var queryString = sessionStorage.getItem('queryString');
     console.log('window.onload: queryString =', queryString);
+    if (sidebarID === null) { sidebarID = 'Sidebar_DDC'; }
     if (directoryName === null) { directoryName = 'ddc'; }
     if (queryString === null) { queryString = ''; }
+
+    // Assign a sidebar ID based on the given directory name.
+/*
     var sidebarID = null;
     if (directoryName === 'ddc') {
         if (queryString.indexOf('#matchmaker') != -1) {
@@ -267,7 +277,7 @@ window.onload = function () {
         }
     }
     else if (directoryName === 'res') { sidebarID = 'Sidebar_Res'; }
-
+ */
     var pathName = window.location.pathname.replace('frame.html', directoryName);
     console.log('window.onload: href =', window.location.href);
     try {

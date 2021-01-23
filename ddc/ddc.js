@@ -877,7 +877,7 @@ function ddcload() {
 
 ddcload();
 
-$('#Sidebar_DDC').data('onload', ddcload);
+$('#Sidebar_DDC').data('onLoad', ddcload);
 
 /* 
 window.onload = function pageLoad () {

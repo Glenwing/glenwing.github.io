@@ -334,6 +334,10 @@ span.version {
     color:              #646464;
 }
 
+span.version span {
+    color:              var(--errorcolor);
+}
+
 
 
 /* PAGE-SPECIFIC CONTENT: DDC */

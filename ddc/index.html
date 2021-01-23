@@ -14,5 +14,6 @@
     if (urlQmark != -1) {
         query = url.substring(urlQmark, urlLength);
     }
-    redirectToFrame('ddc', query);
+    if (query.indexOf('#matchmaker') == -1) { redirectToFrame('Sidebar_DDC', query); }
+    else { redirectToFrame('Sidebar_Matchmaker', query); }
 </script>
