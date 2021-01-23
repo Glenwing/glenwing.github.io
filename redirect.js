@@ -34,9 +34,11 @@ function frameLoadPage(sidebarID, directoryName, suffix) {
         pageLoadFunction = $('#' + sidebarID).data('onLoad');
         pageLoadFunction();
         if ((sidebarID === 'Sidebar_DDC' || sidebarID === 'Sidebar_Matchmaker') && suffix.indexOf('#matchmaker') !== -1) {
+            console.log('frameLoadPage: activateMatchmaker()');
             activateMatchmaker();
         }
         else {
+            console.log('frameLoadPage: deactivateMatchmaker()');
             deactivateMatchmaker();
         }
     }
