@@ -658,11 +658,11 @@ function loadDescription(el) {
 function clearDescription() {
     if (global_selectedElement == '') {
         $('#description').html('');
-        global_DescriptionFunction = function(specs) { return; };
+        global_DescriptionFunction = function() { return; };
     }
 }
 
-var global_DescriptionFunction = function(specs) { return; };
+var global_DescriptionFunction = function() { return; };
 
 
 // https://stackoverflow.com/questions/1255512/how-to-draw-a-rounded-rectangle-on-html-canvas
