@@ -180,12 +180,13 @@ function GCD(a, b) {
 }
 
 function activateMatchmaker() {
-    $('#matchmaker_button').css('display', 'none');
-    $('#eq_height_section').css('display', 'flex');
 
-    $('#selectArea').css('display', 'none');
-    $('#selectTotalPx').css('display', 'none');
-    $('#selectPxPitch').css('display', 'none');
+    if ($('#matchmaker_button').length > 0) { $('#matchmaker_button').css('display', 'none'); }
+    if ($('#eq_height_section').length > 0) { $('#eq_height_section').css('display', 'flex'); }
+
+    if ($('#selectArea').length > 0) { $('#selectArea').css('display', 'none'); }
+    if ($('#selectTotalPx').length > 0) { $('#selectTotalPx').css('display', 'none'); }
+    if ($('#selectPxPitch').length > 0) { $('#selectPxPitch').css('display', 'none'); }
 
     //$('#Sidebar_DDC').removeClass('selected');
     //$('#Sidebar_DDC').attr('onclick', 'deactivateMatchmaker();');
