@@ -581,7 +581,9 @@ function selectRow(el) {
     if (previousEl != el) {
         el.classList.add('selected');
         global_selectedElement = el;
-        if ($(el).data('descriptionContent') === undefined) {
+        loadDescription(el);
+
+        /* if ($(el).data('descriptionContent') === undefined) {
             $('#description').load('ddc/' + global_DescriptionRegistry[el.id], function() {
                 $(el).data('descriptionContent', $('#description').html());
                 $(el).data('descriptionFunction', global_DescriptionFunction);
@@ -589,11 +591,11 @@ function selectRow(el) {
             });
         }
         else {
-            console.log('selectRow cache loaded');
             $('#description').html($(el).data('descriptionContent'));
             global_DescriptionFunction = $(el).data('descriptionFunction');
             //$('#description').html(el.id + '<br><br>' + $('#description').html());
-        }
+        } */
+
     }
 }
 
@@ -635,12 +637,10 @@ document.addEventListener('mousemove', function(event) {
 */
 
 function loadDescription(el) {
-    if (global_selectedElement == '') {
+    //if (global_selectedElement == '') {
         //$('#description').load(global_DescriptionRegistry[element.id]);
         //console.log('$(el).data("descriptionContent"):', $(el).data('descriptionContent'));
         if ($(el).data('descriptionContent') === undefined) {
-            var slash = '';
-            if (window.location.pathname.indexOf('ddc/') == -1) { slash = '/'; }
             $('#description').load('ddc/' + global_DescriptionRegistry[el.id], function() {
                 $(el).data('descriptionContent', $('#description').html());
                 $(el).data('descriptionFunction', global_DescriptionFunction);
@@ -652,7 +652,7 @@ function loadDescription(el) {
             global_DescriptionFunction = $(el).data('descriptionFunction');
             //$('#description').html(el.id + '<br><br>' + $('#description').html());
         }
-    }
+    //}
 }
 
 function clearDescription() {
@@ -862,14 +862,14 @@ function ddcLoad() {
         for (var b = 0; b < rows.length; b++) {
             if (rows[b].classList.contains('selectable') != -1) {
                 rows[b].addEventListener('click', function (event) { selectRow(event.currentTarget); });
-                rows[b].addEventListener('mouseenter', function (event) { loadDescription(event.currentTarget) });
+                rows[b].addEventListener('mouseenter', function (event) { if (global_selectedElement == '') { loadDescription(event.currentTarget) }});
                 rows[b].addEventListener('mouseleave',  function () { clearDescription() });
             }
         }
     }
     var otherElements = [$('#INPUT_SIZE')[0], $('#INPUT_HRES')[0], $('#INPUT_VRES')[0], $('#INPUT_HRES2')[0], $('#INPUT_VRES2')[0]];
     for (var a = 0; a < otherElements.length; a++) {
-        otherElements[a].addEventListener('mouseenter', function (event) { loadDescription(event.currentTarget) });
+        otherElements[a].addEventListener('mouseenter', function (event) { if (global_selectedElement == '') { loadDescription(event.currentTarget) }});
         otherElements[a].addEventListener('mouseleave',  function () { clearDescription() });
     }
 
