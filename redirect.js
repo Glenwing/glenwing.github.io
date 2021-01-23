@@ -33,7 +33,10 @@ function frameLoadPage(sidebarID, directoryName, suffix) {
         $('#MainWindow').html($.parseHTML($('#' + sidebarID).data('pageCache')));
         pageLoadFunction = $('#' + sidebarID).data('onLoad');
         pageLoadFunction();
-        if (suffix === '#matchmaker') {
+        if (suffix.indexOf('#matchmaker') === -1) {
+            deactivateMatchmaker();
+        }
+        else {
             activateMatchmaker();
         }
     }

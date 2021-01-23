@@ -197,12 +197,13 @@ function activateMatchmaker() {
 }
 
 function deactivateMatchmaker() {
-    $('#matchmaker_button').css('display', 'flex');
-    $('#eq_height_section').css('display', 'none');
 
-    $('#selectArea').css('display', 'table-row');
-    $('#selectTotalPx').css('display', 'table-row');
-    $('#selectPxPitch').css('display', 'table-row');
+    if ($('#matchmaker_button').length > 0) { $('#matchmaker_button').css('display', 'flex'); }
+    if ($('#eq_height_section').length > 0) { $('#eq_height_section').css('display', 'none'); }
+
+    if ($('#selectArea').length > 0) { $('#selectArea').css('display', 'table-row'); }
+    if ($('#selectTotalPx').length > 0) { $('#selectTotalPx').css('display', 'table-row'); }
+    if ($('#selectPxPitch').length > 0) { $('#selectPxPitch').css('display', 'table-row'); }
 
     //$('#Sidebar_Matchmaker').removeClass('selected');
     //$('#Sidebar_Matchmaker').attr('onclick', 'activateMatchmaker();');
@@ -227,8 +228,8 @@ function activatePage(sidebarID) {
     $('#' + sidebarID).addClass('selected');
     $('#' + sidebarID).attr('onclick', '');
 
-    if (sidebarID === 'Sidebar_DDC' && oldChild.id === 'Sidebar_Matchmaker' && $('#Sidebar_DDC').data('pageCache') !== '') { console.log('activatePage: deactivateMatchmaker()'); deactivateMatchmaker(); ddcload(); }
-    else if (sidebarID === 'Sidebar_Matchmaker' && oldChild.id === 'Sidebar_DDC' && $('#Sidebar_DDC').data('pageCache') !== '') { console.log('activatePage: activateMatchmaker()'); activateMatchmaker(); ddcload(); }
+    if (sidebarID === 'Sidebar_DDC' && oldChild.id === 'Sidebar_Matchmaker' && $('#Sidebar_DDC').data('pageCache') !== '') { deactivateMatchmaker(); ddcload(); }
+    else if (sidebarID === 'Sidebar_Matchmaker' && oldChild.id === 'Sidebar_DDC' && $('#Sidebar_DDC').data('pageCache') !== '') { activateMatchmaker(); ddcload(); }
     else {
         if      (sidebarID === 'Sidebar_DDC') { frameLoadPage(sidebarID, $('#' + sidebarID).data('dir'), ''); }
         else if (sidebarID === 'Sidebar_Matchmaker') { frameLoadPage('Sidebar_DDC', $('#' + sidebarID).data('dir'), '#matchmaker'); }
