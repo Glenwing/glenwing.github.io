@@ -227,8 +227,8 @@ function activatePage(sidebarID) {
     $('#' + sidebarID).addClass('selected');
     $('#' + sidebarID).attr('onclick', '');
 
-    if (sidebarID === 'Sidebar_DDC' && oldChild.id === 'Sidebar_Matchmaker' && $('#Sidebar_DDC').data('pageCache') === '') { deactivateMatchmaker(); }
-    else if (sidebarID === 'Sidebar_Matchmaker' && oldChild.id === 'Sidebar_DDC' && $('#Sidebar_DDC').data('pageCache') === '') { activateMatchmaker(); }
+    if (sidebarID === 'Sidebar_DDC' && oldChild.id === 'Sidebar_Matchmaker' && $('#Sidebar_DDC').data('pageCache') !== '') { console.log('activatePage: deactivateMatchmaker()'); deactivateMatchmaker(); ddcload(); }
+    else if (sidebarID === 'Sidebar_Matchmaker' && oldChild.id === 'Sidebar_DDC' && $('#Sidebar_DDC').data('pageCache') !== '') { console.log('activatePage: activateMatchmaker()'); activateMatchmaker(); ddcload(); }
     else {
         if      (sidebarID === 'Sidebar_DDC') { frameLoadPage(sidebarID, $('#' + sidebarID).data('dir'), ''); }
         else if (sidebarID === 'Sidebar_Matchmaker') { frameLoadPage('Sidebar_DDC', $('#' + sidebarID).data('dir'), '#matchmaker'); }
@@ -283,6 +283,6 @@ window.onload = function () {
     }
 
     // Load the selected page
-    console.log('ID:', sidebarID);
+    console.log('frame.html onload: sidebarID =', sidebarID);
     activatePage(sidebarID);
 };
