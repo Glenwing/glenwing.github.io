@@ -294,3 +294,15 @@ window.onload = function () {
     console.log('frame.html onload: sidebarID =', sidebarID);
     activatePage(sidebarID);
 };
+
+
+
+window.onresize = function () {
+    // Set CSS properties for setting page height
+    let vh = window.innerHeight * 0.01;
+    document.documentElement.style.setProperty('--truevh', `${vh}px`);
+    
+    if ($('#Sidebar_Res').hasClass('selected')) {
+        updateRes();
+    }
+}
