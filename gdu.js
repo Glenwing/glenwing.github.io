@@ -258,7 +258,14 @@ window.onload = function () {
     if (directoryName === null) { directoryName = 'ddc'; }
     if (queryString === null) { queryString = ''; }
     var sidebarID = null;
-    if (directoryName === 'ddc') { sidebarID = 'Sidebar_DDC'; }
+    if (directoryName === 'ddc') {
+        if (queryString.indexOf('#matchmaker') != -1) {
+            sidebarID = 'Sidebar_Matchmaker';
+        }
+        else {
+            sidebarID = 'Sidebar_DDC';
+        }
+    }
     else if (directoryName === 'res') { sidebarID = 'Sidebar_Res'; }
 
     var pathName = window.location.pathname.replace('frame.html', directoryName);
