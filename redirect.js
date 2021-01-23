@@ -1,10 +1,10 @@
 function redirectToFrame(sidebarID, queryString) {
-    var directoryName = document.getElementById(sidebarID).dataset.dir;
+    //var directoryName = document.getElementById(sidebarID).dataset.dir;
     if (window.location.href.indexOf('glenwing.github.io/' + directoryName + '/') != -1) {
         sessionStorage.setItem('sidebarID', sidebarID);
-        sessionStorage.setItem('directoryName', directoryName);
+        //sessionStorage.setItem('directoryName', directoryName);
         sessionStorage.setItem('queryString', queryString);
-        console.log('redirectToFrame:', directoryName, queryString);
+        //console.log('redirectToFrame:', directoryName, queryString);
         window.location.replace(window.location.href.substring(0, window.location.href.indexOf('glenwing.github.io/')) + 'glenwing.github.io/frame.html');
     }
 }

@@ -263,8 +263,9 @@ window.onload = function () {
     // Retrieve the directory and query string from session storage. These will contain data about which page to load if this page was loaded via redirect
     // If this page was loaded directly, then the values will be null, and in that case a default value is assigned.
     var sidebarID = sessionStorage.getItem('sidebarID');
-    var directoryName = sessionStorage.getItem('directoryName');
+    //var directoryName = sessionStorage.getItem('directoryName');
     var queryString = sessionStorage.getItem('queryString');
+    var directoryName = $('#' + sidebarID).data('dir');
     console.log('window.onload: queryString =', queryString);
     if (sidebarID === null) { sidebarID = 'Sidebar_DDC'; }
     if (directoryName === null) { directoryName = 'ddc'; }
