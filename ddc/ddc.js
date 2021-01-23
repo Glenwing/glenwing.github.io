@@ -842,7 +842,7 @@ function parseURL() {
 }
 
 
-function ddcload() {
+function ddcLoad() {
     var unit_btn = document.getElementById('UNIT_BTN');
     if (unit_btn.value = "") { unit_btn.value = "in"; unit_btn.innerHTML = "in"; }
     var unit_radio = $('#unit_radio input[type="radio"]:checked').val();
@@ -852,7 +852,7 @@ function ddcload() {
 
     // Fills the elements on the page with the event listeners necessary for the mouseover descriptions to work
 
-    var tables = [document.getElementById('results1'), document.getElementById('results2'), document.getElementById('results3')];
+    var tables = [document.getElementById('ddc_results1'), document.getElementById('ddc_results2'), document.getElementById('ddc_results3')];
     for (var a = 0; a < tables.length; a++) {
         var rows = tables[a].children[0].children;
         for (var b = 0; b < rows.length; b++) {
@@ -875,9 +875,9 @@ function ddcload() {
     $('#INPUT_SIZE').focus();
 }
 
-ddcload();
+$('#Sidebar_DDC').data('onLoad', ddcLoad);
 
-$('#Sidebar_DDC').data('onLoad', ddcload);
+ddcLoad();
 
 /* 
 window.onload = function pageLoad () {

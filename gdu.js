@@ -180,8 +180,8 @@ function GCD(a, b) {
 }
 
 function activateMatchmaker() {
-
     if ($('#Sidebar_DDC').hasClass('selected') || $('#Sidebar_Matchmaker').hasClass('selected')) {
+        console.log('activateMatchmaker() triggered');
         if ($('#matchmaker_button').length > 0) { $('#matchmaker_button').css('display', 'none'); }
         if ($('#eq_height_section').length > 0) { $('#eq_height_section').css('display', 'flex'); }
 
@@ -201,8 +201,8 @@ function activateMatchmaker() {
 }
 
 function deactivateMatchmaker() {
-
     if ($('#Sidebar_DDC').hasClass('selected') || $('#Sidebar_Matchmaker').hasClass('selected')) {
+        console.log('deactivateMatchmaker() triggered');
         if ($('#matchmaker_button').length > 0) { $('#matchmaker_button').css('display', 'flex'); }
         if ($('#eq_height_section').length > 0) { $('#eq_height_section').css('display', 'none'); }
 
@@ -235,8 +235,8 @@ function activatePage(sidebarID) {
     $('#' + sidebarID).addClass('selected');
     $('#' + sidebarID).attr('onclick', '');
 
-    if (sidebarID === 'Sidebar_DDC' && oldChild.id === 'Sidebar_Matchmaker' && $('#Sidebar_DDC').data('pageCache') !== '') { deactivateMatchmaker(); ddcload(); }
-    else if (sidebarID === 'Sidebar_Matchmaker' && oldChild.id === 'Sidebar_DDC' && $('#Sidebar_DDC').data('pageCache') !== '') { activateMatchmaker(); ddcload(); }
+    if (sidebarID === 'Sidebar_DDC' && oldChild.id === 'Sidebar_Matchmaker' && $('#Sidebar_DDC').data('pageCache') !== '') { deactivateMatchmaker(); $('#Sidebar_DDC').data('onLoad'); }
+    else if (sidebarID === 'Sidebar_Matchmaker' && oldChild.id === 'Sidebar_DDC' && $('#Sidebar_DDC').data('pageCache') !== '') { activateMatchmaker(); $('#Sidebar_DDC').data('onLoad'); }
     else {
         if      (sidebarID === 'Sidebar_DDC') { frameLoadPage(sidebarID, $('#' + sidebarID).data('dir'), ''); }
         else if (sidebarID === 'Sidebar_Matchmaker') { frameLoadPage('Sidebar_DDC', $('#' + sidebarID).data('dir'), '#matchmaker'); }
@@ -271,7 +271,6 @@ window.onload = function () {
     // Retrieve the directory and query string from session storage. These will contain data about which page to load if this page was loaded via redirect
     // If this page was loaded directly, then the values will be null, and in that case a default value is assigned.
     var sidebarID = sessionStorage.getItem('sidebarID');
-    //var directoryName = sessionStorage.getItem('directoryName');
     var queryString = sessionStorage.getItem('queryString');
     var directoryName = $('#' + sidebarID).data('dir');
     console.log('window.onload: queryString =', queryString);
@@ -301,7 +300,7 @@ window.onresize = function () {
     // Set CSS properties for setting page height
     let vh = window.innerHeight * 0.01;
     document.documentElement.style.setProperty('--truevh', `${vh}px`);
-    
+
     if ($('#Sidebar_Res').hasClass('selected')) {
         updateRes();
     }
