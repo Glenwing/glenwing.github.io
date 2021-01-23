@@ -1,5 +1,5 @@
 function redirectToFrame(sidebarID, queryString) {
-    var directoryName = $('#' + sidebarID).data('dir');
+    var directoryName = document.getElementById('sidebarID').dataset.dir;
     if (window.location.href.indexOf('glenwing.github.io/' + directoryName + '/') != -1) {
         sessionStorage.setItem('sidebarID', sidebarID);
         sessionStorage.setItem('directoryName', directoryName);

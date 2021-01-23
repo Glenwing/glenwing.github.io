@@ -248,7 +248,12 @@ window.addEventListener('resize', () => {
 function pageLoadFunction () { return; };
 
 window.onload = function () {
-    // On page load, assign an empty data object to each sidebar item. This will contain a cached "pageload" function that is executed when the page is loaded.
+    // Set CSS properties for setting page height
+    let vh = window.innerHeight * 0.01;
+    document.documentElement.style.setProperty('--truevh', `${vh}px`);
+
+    // On page load, assign empty data objects to each sidebar item. These will cache the HTML of the page and a JS function to be executed when the page is loaded.
+    // Initially these are empty, but will be filled on the first time each page is loaded, and thereafter will be used as a cache
     var sidebarItems = document.getElementById('Sidebar').children;
     for (var i = 0; i < sidebarItems.length; i++) {
         $(sidebarItems[i]).data('onLoad', function () { return; });
@@ -265,19 +270,7 @@ window.onload = function () {
     if (directoryName === null) { directoryName = 'ddc'; }
     if (queryString === null) { queryString = ''; }
 
-    // Assign a sidebar ID based on the given directory name.
-/*
-    var sidebarID = null;
-    if (directoryName === 'ddc') {
-        if (queryString.indexOf('#matchmaker') != -1) {
-            sidebarID = 'Sidebar_Matchmaker';
-        }
-        else {
-            sidebarID = 'Sidebar_DDC';
-        }
-    }
-    else if (directoryName === 'res') { sidebarID = 'Sidebar_Res'; }
- */
+    // Use History API to replace URL with the selected page
     var pathName = window.location.pathname.replace('frame.html', directoryName);
     console.log('window.onload: href =', window.location.href);
     try {
@@ -286,21 +279,9 @@ window.onload = function () {
     }
     catch (DOMException) {
         DEBUG('URL change skipped due to DOMException.');
-        //window.location.href = window.location.href.replace('glenwing.github.io', 'glenwing.github.io/' + directoryName + '/' + directoryName + '.html' + queryString);
     }
 
+    // Load the selected page
     console.log('ID:', sidebarID);
     activatePage(sidebarID);
-    /*
-    if (directoryName !== 'ddc') {
-        $('#' + sidebarID).addClass('selected');
-        $('#' + sidebarID).attr('onclick', '');
-        $('#Sidebar_DDC').removeClass('selected');
-        $('#Sidebar_DDC').attr('onclick', 'activatePage(this.id)');
-    }
-    $('#MainWindow').load(pathName + '/' + directoryName + '.html');
-    */
-    
-    let vh = window.innerHeight * 0.01;
-    document.documentElement.style.setProperty('--truevh', `${vh}px`);
 };
