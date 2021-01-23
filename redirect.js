@@ -4,7 +4,7 @@ function redirectToFrame(sidebarID, queryString) {
         sessionStorage.setItem('sidebarID', sidebarID);
         //sessionStorage.setItem('directoryName', directoryName);
         sessionStorage.setItem('queryString', queryString);
-        //console.log('redirectToFrame:', directoryName, queryString);
+        console.log('redirectToFrame:', sidebarID, queryString);
         window.location.replace(window.location.href.substring(0, window.location.href.indexOf('glenwing.github.io/')) + 'glenwing.github.io/frame.html');
     //}
 }
@@ -33,11 +33,11 @@ function frameLoadPage(sidebarID, directoryName, suffix) {
         $('#MainWindow').html($.parseHTML($('#' + sidebarID).data('pageCache')));
         pageLoadFunction = $('#' + sidebarID).data('onLoad');
         pageLoadFunction();
-        if (suffix.indexOf('#matchmaker') === -1) {
-            deactivateMatchmaker();
+        if ((sidebarID === 'Sidebar_DDC' || sidebarID === 'Sidebar_Matchmaker') && suffix.indexOf('#matchmaker') !== -1) {
+            activateMatchmaker();
         }
         else {
-            activateMatchmaker();
+            deactivateMatchmaker();
         }
     }
 }
