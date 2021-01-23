@@ -581,16 +581,18 @@ function selectRow(el) {
     if (previousEl != el) {
         el.classList.add('selected');
         global_selectedElement = el;
-        //console.log('el.descriptionContent:', el.descriptionContent);
         if ($(el).data('descriptionContent') === undefined) {
-            $('#description').load(global_DescriptionRegistry[el.id], function() {
+            $('#description').load('ddc/' + global_DescriptionRegistry[el.id], function() {
                 $(el).data('descriptionContent', $('#description').html());
                 $(el).data('descriptionFunction', global_DescriptionFunction);
+                //$('#description').html(el.id + '<br><br>' + $('#description').html());
             });
         }
         else {
+            console.log('selectRow cache loaded');
             $('#description').html($(el).data('descriptionContent'));
             global_DescriptionFunction = $(el).data('descriptionFunction');
+            //$('#description').html(el.id + '<br><br>' + $('#description').html());
         }
     }
 }
@@ -642,11 +644,13 @@ function loadDescription(el) {
             $('#description').load('ddc/' + global_DescriptionRegistry[el.id], function() {
                 $(el).data('descriptionContent', $('#description').html());
                 $(el).data('descriptionFunction', global_DescriptionFunction);
+                //$('#description').html(el.id + '<br><br>' + $('#description').html());
             });
         }
         else {
             $('#description').html($(el).data('descriptionContent'));
             global_DescriptionFunction = $(el).data('descriptionFunction');
+            //$('#description').html(el.id + '<br><br>' + $('#description').html());
         }
     }
 }
