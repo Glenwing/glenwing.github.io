@@ -192,11 +192,13 @@
      * @private
      */
     var firefox18 = function () {
-        console.log(mediaQueryBinarySearch('resolution', '', 0, 10, 20, 0.0001));
+        console.log('resolution:', mediaQueryBinarySearch('resolution', 'dppx', 0, 10, 20, 0.0001));
+        console.log('min-resolution:', mediaQueryBinarySearch('min-resolution', 'dppx', 0, 10, 20, 0.0001));
+        console.log('max-resolution:', mediaQueryBinarySearch('max-resolution', 'dppx', 0, 10, 20, 0.0001));
         //var zoom = Decimal(mediaQueryBinarySearch('resolution', '', 0, 10, 20, 0.0001));
         return {
             //zoom: zoom,
-            //zoom: firefox4().zoom,
+            zoom: firefox4().zoom,
             devicePxPerCssPx: devicePixelRatio()
         };
     };
