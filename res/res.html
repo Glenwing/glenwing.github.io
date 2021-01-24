@@ -3,15 +3,15 @@
         <div style="display:flex; flex-flow:row nowrap; justify-content: space-between;">
             Screen Resolution Check
             <span class="version">
-                <span>DRAFT</span> 3
+                <span>DRAFT</span> 4
             </span>
         </div>
         <hr>
     </h1>
 
+    <p style='color:#CC2222'>This page is a work in progress and does not function correctly yet.</p>
 
-
-    Your screen resolution has been detected as:<br><br>
+    <p>Your screen resolution has been detected as:</p>
 
     <div id='TrueResDiv' class='res bigresult'></div><br>
 
@@ -29,13 +29,37 @@
 
     <div class="tbheader">Results</div>
     <table id="resResultTable_1" class="ddc">
+        <tr class="selectable" id="selectScreenWidth">
+            <td class="label">screen.width</td>
+            <td id="RESULT_S_W" class="result number"><span></span></td>
+        </tr>
         <tr class="selectable" id="selectWindowScreenWidth">
             <td class="label">window.screen.width</td>
             <td id="RESULT_WS_W" class="result number"><span></span></td>
         </tr>
+        <tr class="selectable" id="selectWindowInnerWidth">
+            <td class="label">window.innerWidth</td>
+            <td id="RESULT_W_IW" class="result number"><span></span></td>
+        </tr>
+        <tr class="selectable" id="selectWindowOuterWidth">
+            <td class="label">window.outerWidth</td>
+            <td id="RESULT_W_OW" class="result number"><span></span></td>
+        </tr>
+        <tr class="selectable" id="selectScreenHeight">
+            <td class="label">screen.height</td>
+            <td id="RESULT_S_H" class="result number"><span></span></td>
+        </tr>
         <tr class="selectable" id="selectWindowScreenHeight">
             <td class="label">window.screen.height</td>
             <td id="RESULT_WS_H" class="result number"><span></span></td>
+        </tr>
+        <tr class="selectable" id="selectWindowInnerHeight">
+            <td class="label">window.innerHeight</td>
+            <td id="RESULT_W_IH" class="result number"><span></span></td>
+        </tr>
+        <tr class="selectable" id="selectWindowOuterHeight">
+            <td class="label">window.outerHeight</td>
+            <td id="RESULT_W_OH" class="result number"><span></span></td>
         </tr>
         <tr class="selectable" id="selectPxRatio">
             <td class="label">window.devicePixelRatio</td>
@@ -64,6 +88,10 @@
         <tr class="selectable" id="selectToleranceHeight">
             <td class="label">Height Uncertainty</td>
             <td id="RESULT_TOL_H" class="result number"><span></span></td>
+        </tr>
+        <tr class="selectable" id="selectUA">
+            <td class="label">User Agent</td>
+            <td id="RESULT_UA" class="result number"><span></span></td>
         </tr>
         <tr class="selectable" id="selectBrowser">
             <td class="label">Browser</td>
