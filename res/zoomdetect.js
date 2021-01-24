@@ -30,7 +30,8 @@
      * @private
      */
     var devicePixelRatio = function () {
-        return window.devicePixelRatio || 1;
+        var temp = window.devicePixelRatio || 1;
+        return Decimal(temp);
     };
 
     /**
@@ -40,8 +41,8 @@
      */
     var fallback = function () {
         return {
-            zoom: 1,
-            devicePxPerCssPx: 1
+            zoom: Decimal(1),
+            devicePxPerCssPx: Decimal(1)
         };
     };
     /**
@@ -51,10 +52,10 @@
      * @private
      **/
     var ie8 = function () {
-        var zoom = screen.deviceXDPI / screen.logicalXDPI;
+        var zoom = Decimal(screen.deviceXDPI).div(screen.logicalXDPI);
         return {
             zoom: zoom,
-            devicePxPerCssPx: zoom * devicePixelRatio()
+            devicePxPerCssPx: zoom.times(devicePixelRatio())
         };
     };
 
@@ -65,10 +66,10 @@
      * @private
      */
     var ie10 = function () {
-        var zoom = document.documentElement.offsetHeight / window.innerHeight;
+        var zoom = Decimal(document.documentElement.offsetHeight).div(window.innerHeight);
         return {
             zoom: zoom,
-            devicePxPerCssPx: zoom * devicePixelRatio()
+            devicePxPerCssPx: zoom.times(devicePixelRatio())
         };
     };
 
@@ -78,10 +79,11 @@
 	*/
     var chrome = function()
     {
-    	var zoom = window.outerWidth / window.innerWidth;
+        var zoom = Decimal(window.outerWidth).div(window.innerWidth);
+        var uncertainty = Decimal(0.5).div(window.innerWidth);
         return {
             zoom: zoom,
-            devicePxPerCssPx: zoom * devicePixelRatio()
+            devicePxPerCssPx: zoom.times(devicePixelRatio())
         };	    
     }
 
@@ -91,10 +93,10 @@
 	*/
     var safari= function()
     {
-    	var zoom = document.documentElement.clientWidth / window.innerWidth;
+    	var zoom = Decimal(document.documentElement.clientWidth).div(window.innerWidth);
         return {
             zoom: zoom,
-            devicePxPerCssPx: zoom * devicePixelRatio()
+            devicePxPerCssPx: zoom.times(devicePixelRatio())
         };	    
     }
 	
@@ -108,11 +110,11 @@
      * @private
      */
     var webkitMobile = function () {
-        var deviceWidth = (Math.abs(window.orientation) == 90) ? screen.height : screen.width;
-        var zoom = deviceWidth / window.innerWidth;
+        var deviceWidth = (Math.abs(window.orientation) == 90) ? Decimal(screen.height) : Decimal(screen.width);
+        var zoom = deviceWidth.div(window.innerWidth);
         return {
             zoom: zoom,
-            devicePxPerCssPx: zoom * devicePixelRatio()
+            devicePxPerCssPx: zoom.times(devicePixelRatio())
         };
     };
 
@@ -151,13 +153,13 @@
         container.appendChild(div);
 
         document.body.appendChild(container);
-        var zoom = 1000 / div.clientHeight;
+        var zoom = Decimal(1000).div(div.clientHeight);
         //zoom = Math.round(zoom * 100000000) / 100000000;
         document.body.removeChild(container);
 
         return{
             zoom: zoom,
-            devicePxPerCssPx: zoom * devicePixelRatio()
+            devicePxPerCssPx: zoom.times(devicePixelRatio())
         };
     };
 
@@ -172,7 +174,7 @@
      * @private
      */
     var firefox4 = function () {
-        var zoom = mediaQueryBinarySearch('min--moz-device-pixel-ratio', '', 0, 10, 20, 0.0001);
+        var zoom = Decimal(mediaQueryBinarySearch('min--moz-device-pixel-ratio', '', 0, 10, 20, 0.0001));
         //zoom = Math.round(zoom * 100) / 100;
         return {
             zoom: zoom,
@@ -205,11 +207,11 @@
      * @private
      */
     var opera11 = function () {
-        var zoom = window.top.outerWidth / window.top.innerWidth;
+        var zoom = Decimal(window.top.outerWidth).div(window.top.innerWidth);
         //zoom = Math.round(zoom * 100) / 100;
         return {
             zoom: zoom,
-            devicePxPerCssPx: zoom * devicePixelRatio()
+            devicePxPerCssPx: zoom.times(devicePixelRatio())
         };
     };
 
@@ -271,50 +273,60 @@
      * @private
      */
     var detectFunction = (function () {
+        $('#RESULT_BROWSER').html('Unknown');
         var func = fallback;
         //IE8+
         if (!isNaN(screen.logicalXDPI) && !isNaN(screen.systemXDPI)) {
+            $('#RESULT_BROWSER').html('IE8');
             DEBUG('ie8');
             func = ie8;
         }
         // IE10+ / Touch
         else if (window.navigator.msMaxTouchPoints) {
+            $('#RESULT_BROWSER').html('IE10');
             DEBUG('ie10');
             func = ie10;
         }
 		//chrome
 		else if(!!window.chrome && !(!!window.opera || navigator.userAgent.indexOf(' Opera') >= 0)){
+            $('#RESULT_BROWSER').html('Chrome');
             DEBUG('chrome');
 			func = chrome;
 		}
 		//safari
 		else if(Object.prototype.toString.call(window.HTMLElement).indexOf('Constructor') > 0){
+            $('#RESULT_BROWSER').html('Safari');
             DEBUG('safari');
 			func = safari;
 		}	
         //Mobile Webkit
         else if ('orientation' in window && 'webkitRequestAnimationFrame' in window) {
+            $('#RESULT_BROWSER').html('Webkit Mobile');
             DEBUG('webkitMobile');
             func = webkitMobile;
         }
         //WebKit
         else if ('webkitRequestAnimationFrame' in window) {
+            $('#RESULT_BROWSER').html('Webkit');
             DEBUG('webkit');
             func = webkit;
         }
         //Opera
         else if (navigator.userAgent.indexOf('Opera') >= 0) {
+            $('#RESULT_BROWSER').html('Opera 11+');
             DEBUG('opera11');
             func = opera11;
         }
         //Last one is Firefox
         //FF 18.x
         else if (window.devicePixelRatio) {
+            $('#RESULT_BROWSER').html('Firefox 18+');
             DEBUG('firefox18');
             func = firefox18;
         }
         //FF 4.0 - 17.x
         else if (firefox4().zoom > 0.001) {
+            $('#RESULT_BROWSER').html('Firefox 4');
             DEBUG('firefox4');
             func = firefox4;
         }

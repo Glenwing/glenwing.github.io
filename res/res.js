@@ -27,19 +27,28 @@ function updateRes() {
 
     var zoomValues = getZoomValues();
     var combinedRatio = zoomValues['combined'];
-    var zoomRatio = Math.round(zoomValues['browser'] * 1000)/1000;
-    //var osRatio = zoomValues['os'];
-    var osRatio = Math.round(window.devicePixelRatio * 1000 / zoomRatio) / 1000;
+    var zoomRatio = zoomValues['browser'];
+    var osRatio = zoomValues['os'];
+    //var osRatio = window.devicePixelRatio.div(zoomRatio);
 
     var calc_W = window_W * osRatio;
     var calc_H = window_H * osRatio;
-    var round_W = Math.round(window_W * osRatio);
-    var round_H = Math.round(window_H * osRatio);
-
+    //var round_W = Math.round(window_W * osRatio);
+    //var round_H = Math.round(window_H * osRatio);
+    var round_W = osRatio.times(window_W).toFixed(0);
+    var round_H = osRatio.times(window_H).toFixed(0);
+/* 
     var Uncertainty_W_Below = Math.round((window_W - 0.5) * osRatio - calc_W);
     var Uncertainty_W_Above = -1 * Math.round((calc_W - (window_W + 0.5) * osRatio));
     var Uncertainty_H_Below = Math.round((window_H - 0.5) * osRatio - calc_H);
     var Uncertainty_H_Above = -1 * Math.round((calc_H - (window_H + 0.5) * osRatio));
+    var Uncertainty_W = Math.max(Uncertainty_W_Below, Uncertainty_W_Above);
+    var Uncertainty_H = Math.max(Uncertainty_H_Below, Uncertainty_H_Above);
+ */
+    var Uncertainty_W_Below = osRatio.times(window_W - 0.5).minus(calc_W).toFixed(0, Decimal.ROUND_HALF_UP);
+    var Uncertainty_W_Above = osRatio.times(window_W + 0.5).minus(calc_W).times(-1).toFixed(0, Decimal.ROUND_HALF_DOWN);
+    var Uncertainty_H_Below = osRatio.times(window_H - 0.5).minus(calc_H).toFixed(0, Decimal.ROUND_HALF_UP);
+    var Uncertainty_H_Above = osRatio.times(window_H + 0.5).minus(calc_H).times(-1).toFixed(0, Decimal.ROUND_HALF_DOWN);
     var Uncertainty_W = Math.max(Uncertainty_W_Below, Uncertainty_W_Above);
     var Uncertainty_H = Math.max(Uncertainty_H_Below, Uncertainty_H_Above);
 
@@ -53,9 +62,9 @@ function updateRes() {
     }
 
 
-    $('#RESULT_ZOOM_RATIO').html(LongDivide(zoomRatio * 100, 1, {p: [0, 2], approx:''} ) + '%');
+    $('#RESULT_ZOOM_RATIO').html(LongDivide(zoomRatio.times(100), 1, {p: [0, 8], approx:''} ) + '%');
     //$('#RESULT_COMBINED_RATIO').html(zoomValues['combined']);
-    $('#RESULT_OS_RATIO').html(LongDivide(osRatio * 100, 1, {p: [0, 2], approx:''} ) + '%');
+    $('#RESULT_OS_RATIO').html(LongDivide(osRatio.times(100), 1, {p: [0, 8], approx:''} ) + '%');
 
     $('#RESULT_WS_W').html(window_W + '&nbsp;px');
     $('#RESULT_WS_H').html(window_H + '&nbsp;px');
@@ -79,10 +88,9 @@ function updateRes() {
 }
 
 function getZoomValues () {
-    var browserRatio = parseFloat(detectZoom.zoom())
-    console.log(browserRatio);
-    var combinedRatio = window.devicePixelRatio || 1; //parseFloat(detectZoom.device())
-    var osRatio = combinedRatio / browserRatio;
+    var browserRatio = detectZoom.zoom()
+    var combinedRatio = Decimal(window.devicePixelRatio)
+    var osRatio = combinedRatio.div(browserRatio);
     //combinedRatio = window.devicePixelRatio;
     //browserRatio = combinedRatio / osRatio;
     return {
