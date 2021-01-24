@@ -338,6 +338,21 @@ span.version span {
     color:              var(--errorcolor);
 }
 
+div.figure {
+    text-align:         center;
+    padding:            0.5em 0;
+    line-height:        200%;
+}
+
+div.figure span {
+    font-weight:        500;
+    padding-right:      0.5em;
+}
+
+p {
+    margin:             0.5em 0;
+}
+
 
 
 /* PAGE-SPECIFIC CONTENT: DDC */
@@ -461,6 +476,7 @@ div.res.description {
 div.res.zoomwarning {
     font-size:          90%;
     text-align:         center;
+    display:            none;
 }
 div.res.zoomwarning span {
     color:              var(--errorcolor);
@@ -842,7 +858,7 @@ div.katex {
     font-size:          1.2rem;
     width:              100%;
     text-align:         center;
-    margin:             25px 10px;
+    margin:             10px 10px;
 }
 div.caption {
     margin-top:         0px;

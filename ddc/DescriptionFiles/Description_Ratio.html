@@ -79,9 +79,8 @@
 
             var AR_LaTeX = LongDivide(specs['hres'], specs['vres'], LD_rep)
             var eq = '';
-            if (AR_LaTeX.indexOf('\u2248') == -1) {
-                eq = '=';
-            }
+            if (AR_LaTeX.indexOf('\u2248') == -1) { eq = '='; }
+            else { AR_LaTeX = AR_LaTeX.replace('\u2248', ''); eq = '\\approx'; }
 
             katex.render(
 

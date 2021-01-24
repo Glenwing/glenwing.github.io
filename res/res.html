@@ -3,7 +3,7 @@
         <div style="display:flex; flex-flow:row nowrap; justify-content: space-between;">
             Screen Resolution Check
             <span class="version">
-                <span>DRAFT</span> 1
+                <span>DRAFT</span> 2
             </span>
         </div>
         <hr>
@@ -15,24 +15,20 @@
 
     <div id='TrueResDiv' class='res bigresult'></div><br>
 
-    <div class='res zoomwarning'><span>This result can be influenced by browser zoom.</span> Set your browser to 100% zoom.</div><br>
-
     <div class='res maintext'>
-        This result is based on the <code>window.screen.width</code> and <code>window.screen.height</code> properties provided by JavaScript. These values are multiplied by the <code>window.devicePixelRatio</code> to get the above result. This compensates for OS scaling.<br><br>
-        
-        Many other online resolution checking websites fail to do this, and they will therefore give incorrect results when OS scaling is enabled (such as on Apple computers with a "Retina" display, mobile devices, or high-resolution displays on Windows).<br><br>
-
-        On devices with arbitrary scaling ratios (particularly mobile devices), some unavoidable error is introduced because <code>window.screen.width</code> and <code>height</code> are rounded to integer values. In this situation, an uncertainty range (i.e. "&pm;1 px") is provided, which represents the maximum possible deviation from the true value.
+        <p id='restext_os'>
+            Your operating system is configured with <span id='restext_os_number'>100%</span> scaling. This gives you a desktop space equivalent to a <span id='restext_effres'></span> display. Other resolution checking websites may report this number as the screen resolution because they do not correct for OS scaling. This is common on Apple computers with a "retina" display, mobile devices, and high-resolution displays on Windows.
+        </p>
+        <p>
+            This result is based on the <code>window.screen.width</code> and <code>window.screen.height</code> properties provided by JavaScript. Those values are multiplied by the OS scaling ratio to obtain the final result above.
+        </p>
+        <p>
+            On devices with arbitrary scaling ratios (particularly mobile devices), some unavoidable error is introduced because <code>window.screen.width</code> and <code>height</code> are rounded to integer values, so the final result can deviate by as much as &pm;0.5 times the OS scaling ratio. As a result, an uncertainty range is provided in this situation (i.e. "&pm;1 px") which represents the maximum possible deviation from the true value.
+        </p>
     </div><br>
 
-    <div style='display:none;'>
-        However, the above result may still be incorrect due to various other circumstances, such as using browzer zoom. OS scaling changes the values of <code>window.screen.width</code> and <code>window.devicePixelRatio</code> inversely, but browser zoom changes the <code>devicePixelRatio</code> <i>without</i> changing the values of <code>window.screen.width</code> or <code>height</code>. This means that the calculation to obtain the original screen resolution is different depending on whether browser zoom or OS scaling is in effect.<br><br>
-
-        Since both OS scaling and browser zoom are combined into the device pixel ratio value, so there is no way to tell which one is being used. Therefore, this calculator assumes the OS scaling is in effect, since this is a more common situation.    
-    </div>
-
     <div class="tbheader">Results</div>
-    <table id="results1" class="ddc">
+    <table id="resResultTable_1" class="ddc">
         <tr class="selectable" id="selectWindowScreenWidth">
             <td class="label">window.screen.width</td>
             <td id="RESULT_WS_W" class="result number"><span></span></td>
@@ -43,7 +39,15 @@
         </tr>
         <tr class="selectable" id="selectPxRatio">
             <td class="label">window.devicePixelRatio</td>
-            <td id="RESULT_PXRATIO" class="result number"><span></span></td>
+            <td id="RESULT_PX_RATIO" class="result number"><span></span></td>
+        </tr>
+        <tr class="selectable" id="selectZoomRatio">
+            <td class="label">Browser Zoom Ratio</td>
+            <td id="RESULT_ZOOM_RATIO" class="result number"><span></span></td>
+        </tr>
+        <tr class="selectable" id="selectOSRatio">
+            <td class="label">OS Scaling Ratio</td>
+            <td id="RESULT_OS_RATIO" class="result number"><span></span></td>
         </tr>
         <tr class="selectable" id="selectCalculatedWidth">
             <td class="label">Calculated Width</td>
@@ -65,4 +69,5 @@
 </div>
 <div id="description" class="res description"></div>
 
+<script src='./res/zoomdetect.js'></script>
 <script src='./res/res.js'></script>

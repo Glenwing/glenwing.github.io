@@ -1,0 +1,95 @@
+<p>
+    This is the number of pixels along the horizontal axis of the display reported by the operating system. It is accessed through the browser via the JavaScript <code>window.screen.width</code> property.
+</p>
+
+<p>
+    If OS scaling is at 100% (Figures 1 and 2) then <code>window.screen.width</code> is equal to the true horizontal resolution of the display.
+</p>
+
+<div class='figure'>
+    <img width='90%' src='./res/images/WindowsScaling.png'><br>
+    <span>Figure 1:</span>OS scaling set to 100% in Windows
+</div>
+
+<p>
+    However, if OS scaling is enabled (such as on Apple computers with "retina" displays, most mobile devices, and with high-resolution displays on Windows), the operating system will report a different resolution than the actual screen resolution, in order to cause applications to render UI elements at a different size. The <code>window.screen.width</code> value in this case is equal to the true resolution divided by the OS scaling ratio.
+</p>
+
+<p>
+    For example, on a 3840&#x202f;&times;&#x202f;2160 display, the horizontal resolution is 3840, and <code>window.screen.width</code> will report 3840 if the OS scaling is set to 100%. However, if the OS scaling is changed to 150%, then <code>window.screen.width</code> will instead return: 
+</p>
+
+<div class='katex' id='eq1'>
+    Hres &div; Scale = 3840 &div; 150% = 3840 &div; 1.5 = 2560
+</div>
+
+<p>
+    Fortunately, the system also provides the scaling ratio, accessed via the <code>window.devicePixelRatio</code> property, so the resolution given by the browser can be multpilied by the scaling ratio to undo the division shown above and obtain the true resolution of the display.
+</p>
+
+<p>
+    However, there are two additional problems. The first is a loss of precision. The resolution provided by the browser is rounded to the nearest integer value. This means that if the true resolution is not evenly divisible by the scaling ratio, some error will be introduced. This problem is most frequently encountered with mobile devices, which often use arbitrary scaling ratios.
+</p>
+
+<p>
+    For example, a 1080&#x202f;&times;&#x202f;1920 phone might use a scaling ratio of 2.55. This means that the OS will report a resolution of:
+</p>
+
+<div class='katex' id='eq2'>
+    Hres &div; Scale = 1080 &div; 2.55 = 423.529&#x202f;41
+</div>
+
+<p>
+    This is rounded to an integer value, so <code>window.screen.width</code> will return 424. If we attempt to calculate the true resolution back from this information, the result is slightly off due to the rounded input value:
+</p>
+
+<div class='katex' id='eq3'>
+    424 &times; 2.55 = 1081.2
+</div>
+
+<p>
+    Since the system does not provide a direct report of the true resolution of the display, it can only be obtained by calculating it from these rounded values, so the error is unavoidable. The best that can be done is to calculate the maximum error bounds by calculating the resolution assuming maximum rounding, to establish an uncertainty range. This is discussed in more detail here.
+</p>
+
+<p>
+    The second problem is that the value of <code>window.devicePixelRatio</code> is not simply the OS scaling ratio. It is the OS scaling ratio multiplied by the browser zoom ratio. If the browser is at 100% zoom, then it doesn't affect the value, but if browser zoom is used, then the <code>window.devicePixelRatio</code> will no longer be the correct value for reverse-calculating the true resolution.
+</p>
+
+<p>
+    For example, if a 3840&#x202f;&times;&#x202f;2160 with 150% OS scaling is used, then <code>window.screen.width</code> will return a value of 2560 as explained earlier. The OS scaling ratio is 1.5, and the value of <code>window.devicePixelRatio</code> will also be 1.5. However, if the browser is also set to 150% zoom, then the value of <code>window.devicePixelRatio</code> will change to 1.5 &times; 1.5 = 2.25.
+</p>
+
+<p>
+    Unlike OS scaling, browser zoom doesn't affect the value of <code>window.screen.width</code>, so it will remain at 2560 while the pixel ratio value is increased to 2.25. Multiplying the value of <code>window.screen.width</code> by <code>window.devicePixelRatio</code> will not give the true resolution in this case.
+</p>
+
+<script>
+    if (window.location.href.indexOf('DescriptionFiles') != -1) {
+        window.location.replace(window.location.href.substring(0, window.location.href.indexOf('DescriptionFiles')));
+    }
+    
+    global_DescriptionFunction = function () {
+        katex.render(
+
+            '\\rm \\afrac{Hres}{Scale} = \\mfrac{3840}{150\\%} = \\mfrac{3840}{1.50} = 2560',
+    
+            document.getElementById('eq1'), global_katexOptions
+        );
+        
+        katex.render(
+
+            '\\rm \\afrac{Hres}{Scale} = \\mfrac{1080}{2.55} = 423.529\\,41',
+    
+            document.getElementById('eq2'), global_katexOptions
+        );
+        
+        katex.render(
+
+            '\\rm 424 \\times 2.55 = 1081.2',
+    
+            document.getElementById('eq3'), global_katexOptions
+        );
+
+        return;
+    }
+</script>

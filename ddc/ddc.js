@@ -518,8 +518,8 @@ function switchHeightDensity() {
     var selectedButton = $('input[name=height_density]:checked', '#height_density_select').val();
     if (selectedButton === 'height') {
         $('#secondary_title').html('Secondary Display with Matching Height');
-        $('#results2').css('display', 'block');
-        $('#results3').css('display', 'none');
+        $('#ddc_results2').css('display', 'block');
+        $('#ddc_results3').css('display', 'none');
         // $('#selectDiagHeight').css('display', 'table-row');
         // $('#selectDiagDensity').css('display', 'none');
         //$('#height_ratio_symbol').css('display', 'inline');
@@ -532,8 +532,8 @@ function switchHeightDensity() {
     }
     else if (selectedButton === 'density') {
         $('#secondary_title').html('Secondary Display with Matching Pixel Density');
-        $('#results2').css('display', 'none');
-        $('#results3').css('display', 'block');
+        $('#ddc_results2').css('display', 'none');
+        $('#ddc_results3').css('display', 'block');
         // $('#selectDiagHeight').css('display', 'none');
         // $('#selectDiagDensity').css('display', 'table-row');
         //$('#height_ratio_symbol').css('display', 'none');
@@ -749,7 +749,7 @@ function roundRect(ctx, x, y, width, height, radius, fill, stroke) {
     }
   }
 
-function parseURL() {
+function ddcParseURL() {
     var hash = window.location.hash.substr(1);
     if (hash === 'matchmaker') {
         activateMatchmaker();
@@ -873,7 +873,7 @@ function ddcLoad() {
         otherElements[a].addEventListener('mouseleave',  function () { clearDescription() });
     }
 
-    parseURL();
+    ddcParseURL();
     update();
     check_219Warning();
     $('#INPUT_SIZE').focus();
