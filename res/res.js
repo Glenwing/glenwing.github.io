@@ -67,6 +67,15 @@ function updateRes() {
 
     $('#TrueResDiv').html(round_W + unc_str_W + '&#x202f;&times;&#x202f;' + round_H + unc_str_H);
 
+    if (Math.abs(osRatio - 1) > 0.001) {
+        $('#restext_os').css('display', 'block');
+        $('#restext_os_number').html(LongDivide(osRatio * 100, 1, {p: [0, 2], approx:''}) + '%');
+        $('#restext_effres').html(Math.round(window_W) + '&#x202f;&times;&#x202f;' + Math.round(window_H));
+    }
+    else {
+        $('#restext_os').css('display', 'none');
+    }
+
 }
 
 function getZoomValues () {
