@@ -192,8 +192,11 @@
      * @private
      */
     var firefox18 = function () {
+        console.log(mediaQueryBinarySearch('resolution', '', 0, 10, 20, 0.0001));
+        //var zoom = Decimal(mediaQueryBinarySearch('resolution', '', 0, 10, 20, 0.0001));
         return {
-            zoom: firefox4().zoom,
+            //zoom: zoom,
+            //zoom: firefox4().zoom,
             devicePxPerCssPx: devicePixelRatio()
         };
     };
