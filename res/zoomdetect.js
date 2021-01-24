@@ -103,7 +103,7 @@
 
     /**
      * Mobile WebKit
-     * the trick: window.innerWIdth is in CSS pixels, while
+     * the trick: window.innerWidth is in CSS pixels, while
      * screen.width and screen.height are in system pixels.
      * And there are no scrollbars to mess up the measurement.
      * @return {Object}
