@@ -3,7 +3,7 @@
         <div style="display:flex; flex-flow:row nowrap; justify-content: space-between;">
             Screen Resolution Check
             <span class="version">
-                <span>DRAFT</span> 7
+                <span>DRAFT</span> 8
             </span>
         </div>
         <hr>
@@ -81,6 +81,10 @@
             <td class="label">OS Scaling Ratio</td>
             <td id="RESULT_OS_RATIO" class="result number"><span></span></td>
         </tr>
+        <tr class="selectable" id="selectViewportScale">
+            <td class="label">Viewport Scale</td>
+            <td id="RESULT_VP_RATIO" class="result number"><span></span></td>
+        </tr>
         <tr class="selectable" id="selectCalculatedWidth">
             <td class="label">Calculated Width</td>
             <td id="RESULT_CALC_W" class="result number"><span></span></td>
@@ -110,4 +114,5 @@
 <div id="description" class="res description"></div>
 
 <script src='./res/zoomdetect.js'></script>
+<script src='./res/resDetect.js'></script>
 <script src='./res/res.js'></script>

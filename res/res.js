@@ -25,23 +25,26 @@ function updateRes() {
     var window_H = window.screen.height;
     //var pxRatio = window.devicePixelRatio;
 
-    var window_IW = window.innerWidth;
-    var window_OW = window.outerWidth;
-    var window_IH = window.innerHeight;
-    var window_OH = window.outerHeight;
-
-    var zoomValues = getZoomValues();
-    var combinedRatio = zoomValues['combined'];
-    var zoomRatio = zoomValues['browser'];
-    var osRatio = zoomValues['os'];
+    //var zoomValues = getZoomValues();
+    //var combinedRatio = zoomValues['combined'];
+    //var zoomRatio = zoomValues['browser'];
+    //var osRatio = zoomValues['os'];
     //var osRatio = window.devicePixelRatio.div(zoomRatio);
 
-    var calc_W = window_W * osRatio;
-    var calc_H = window_H * osRatio;
+    var zoomValues = resDetect();
+    var scale = zoomValues['resScale'];
+    var os = zoomValues['osScale'];
+    var zoom = zoomValues['zoomScale'];
+    var vp = zoomValues['viewportScale'];
+    var engine = zoomValues['engine'];
+    var pxRatio = zoomValues['pxRatio'];
+
+    var calc_W = window_W * scale;
+    var calc_H = window_H * scale;
     //var round_W = Math.round(window_W * osRatio);
     //var round_H = Math.round(window_H * osRatio);
-    var round_W = osRatio.times(window_W).toFixed(0);
-    var round_H = osRatio.times(window_H).toFixed(0);
+    var round_W = scale.times(window_W).toFixed(0);
+    var round_H = scale.times(window_H).toFixed(0);
 /* 
     var Uncertainty_W_Below = Math.round((window_W - 0.5) * osRatio - calc_W);
     var Uncertainty_W_Above = -1 * Math.round((calc_W - (window_W + 0.5) * osRatio));
@@ -50,10 +53,10 @@ function updateRes() {
     var Uncertainty_W = Math.max(Uncertainty_W_Below, Uncertainty_W_Above);
     var Uncertainty_H = Math.max(Uncertainty_H_Below, Uncertainty_H_Above);
  */
-    var Uncertainty_W_Below = osRatio.times(window_W - 0.5).minus(calc_W).times(-1).toFixed(0, Decimal.ROUND_HALF_UP);
-    var Uncertainty_W_Above = osRatio.times(window_W + 0.5).minus(calc_W).toFixed(0, Decimal.ROUND_HALF_DOWN);
-    var Uncertainty_H_Below = osRatio.times(window_H - 0.5).minus(calc_H).times(-1).toFixed(0, Decimal.ROUND_HALF_UP);
-    var Uncertainty_H_Above = osRatio.times(window_H + 0.5).minus(calc_H).toFixed(0, Decimal.ROUND_HALF_DOWN);
+    var Uncertainty_W_Below = scale.times(window_W - 0.5).minus(calc_W).times(-1).toFixed(0, Decimal.ROUND_HALF_UP);
+    var Uncertainty_W_Above = scale.times(window_W + 0.5).minus(calc_W).toFixed(0, Decimal.ROUND_HALF_DOWN);
+    var Uncertainty_H_Below = scale.times(window_H - 0.5).minus(calc_H).times(-1).toFixed(0, Decimal.ROUND_HALF_UP);
+    var Uncertainty_H_Above = scale.times(window_H + 0.5).minus(calc_H).toFixed(0, Decimal.ROUND_HALF_DOWN);
     var Uncertainty_W = Math.max(Uncertainty_W_Below, Uncertainty_W_Above);
     var Uncertainty_H = Math.max(Uncertainty_H_Below, Uncertainty_H_Above);
 
@@ -67,9 +70,10 @@ function updateRes() {
     }
 
 
-    $('#RESULT_ZOOM_RATIO').html(LongDivide(zoomRatio.times(100), 1, {p: [0, 8], approx:''} ) + '%');
+    $('#RESULT_ZOOM_RATIO').html(LongDivide(zoom.times(100), 1, {p: [0, 8], approx:''} ) + '%');
     //$('#RESULT_COMBINED_RATIO').html(zoomValues['combined']);
-    $('#RESULT_OS_RATIO').html(LongDivide(osRatio.times(100), 1, {p: [0, 8], approx:''} ) + '%');
+    $('#RESULT_OS_RATIO').html(LongDivide(os.times(100), 1, {p: [0, 8], approx:''} ) + '%');
+    $('#RESULT_VP_RATIO').html(LongDivide(vp.times(100), 1, {p: [0, 8], approx:''} ) + '%');
 
     $('#RESULT_S_W').html(screen.width + '&nbsp;px');
     $('#RESULT_D_CW').html(document.documentElement.clientWidth + '&nbsp;px');
@@ -77,11 +81,11 @@ function updateRes() {
     $('#RESULT_S_H').html(screen.height + '&nbsp;px');
     $('#RESULT_D_CH').html(document.documentElement.clientHeight + '&nbsp;px');
     $('#RESULT_WS_H').html(window_H + '&nbsp;px');
-    $('#RESULT_W_IW').html(window_IW + '&nbsp;px');
-    $('#RESULT_W_OW').html(window_OW + '&nbsp;px');
-    $('#RESULT_W_IH').html(window_IH + '&nbsp;px');
-    $('#RESULT_W_OH').html(window_OH + '&nbsp;px');
-    $('#RESULT_PX_RATIO').html(LongDivide(combinedRatio, 1, {p: [2, 6], approx:''}));
+    $('#RESULT_W_IW').html(window.innerWidth + '&nbsp;px');
+    $('#RESULT_W_OW').html(window.outerWidth + '&nbsp;px');
+    $('#RESULT_W_IH').html(window.innerHeight + '&nbsp;px');
+    $('#RESULT_W_OH').html(window.outerHeight + '&nbsp;px');
+    $('#RESULT_PX_RATIO').html(LongDivide(pxRatio, 1, {p: [2, 6], approx:''}));
     $('#RESULT_CALC_W').html(LongDivide(calc_W, 1, {p: [0, 4], approx:''}) + '&nbsp;px');
     $('#RESULT_CALC_H').html(LongDivide(calc_H, 1, {p: [0, 4], approx:''}) + '&nbsp;px');
     $('#RESULT_TOL_W').html('&pm;' + Uncertainty_W + '&nbsp;px');
@@ -89,9 +93,9 @@ function updateRes() {
 
     $('#TrueResDiv').html(round_W + unc_str_W + '&#x202f;&times;&#x202f;' + round_H + unc_str_H);
 
-    if (Math.abs(osRatio - 1) > 0.001) {
+    if (Math.abs(os - 1) > 0.001) {
         $('#restext_os').css('display', 'block');
-        $('#restext_os_number').html(LongDivide(osRatio * 100, 1, {p: [0, 2], approx:''}) + '%');
+        $('#restext_os_number').html(LongDivide(os * 100, 1, {p: [0, 2], approx:''}) + '%');
         $('#restext_effres').html(Math.round(window_W) + '&#x202f;&times;&#x202f;' + Math.round(window_H));
     }
     else {
@@ -99,6 +103,7 @@ function updateRes() {
     }
 
     $('#RESULT_UA').html(navigator.userAgent);
+    $('#RESULT_BROWSER').html(engine);
 
 }
 
