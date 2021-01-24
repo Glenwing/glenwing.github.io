@@ -72,8 +72,10 @@ function updateRes() {
     $('#RESULT_OS_RATIO').html(LongDivide(osRatio.times(100), 1, {p: [0, 8], approx:''} ) + '%');
 
     $('#RESULT_S_W').html(screen.width + '&nbsp;px');
+    $('#RESULT_D_CW').html(document.documentElement.clientWidth + '&nbsp;px');
     $('#RESULT_WS_W').html(window_W + '&nbsp;px');
     $('#RESULT_S_H').html(screen.height + '&nbsp;px');
+    $('#RESULT_D_CH').html(document.documentElement.clientHeight + '&nbsp;px');
     $('#RESULT_WS_H').html(window_H + '&nbsp;px');
     $('#RESULT_W_IW').html(window_IW + '&nbsp;px');
     $('#RESULT_W_OW').html(window_OW + '&nbsp;px');
