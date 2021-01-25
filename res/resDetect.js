@@ -44,11 +44,14 @@ function resDetect() {
         if (viewportScale < 1 && window.innerHeight > window.outerHeight) {
             viewportScale = Decimal(viewportScale);
         }
+        else {
+            viewportScale = Decimal(1);
+        }
     }
     else {
         viewportScale = Decimal(1);
     }
-    //console.log('viewportScale =', viewportScale);
+    console.log('viewportScale =', viewportScale);
 
     // Determine output
     var zoom = Decimal(1); // Browser Zoom
