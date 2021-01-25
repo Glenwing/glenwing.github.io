@@ -54,6 +54,7 @@ div.page {
     overflow-x:             auto;
     overflow-y:             hidden;
     scrollbar-width:        none;
+    -ms-overflow-style:     none;
 
     background-color:       var(--bgcolor);
 }
@@ -375,6 +376,7 @@ div.ddc.main {
 
     overflow-y:         auto;
     scrollbar-width:    none;
+    -ms-overflow-style: none;
 }
 div.ddc.main::-webkit-scrollbar {
     display:            none;
@@ -430,6 +432,7 @@ div.res.main {
 
     overflow-y:         auto;
     scrollbar-width:    none;
+    -ms-overflow-style: none;
 }
 div.res.main::-webkit-scrollbar {
     display:            none;
