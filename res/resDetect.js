@@ -28,7 +28,7 @@ function resDetect() {
     // Get viewport scale to compensate for zoom on mobile devices
     var metaContent = document.querySelector('meta[name="viewport"]').content;
     //console.log('metaContent =', metaContent);
-    var viewportScale = Decimal(parseNum(
+    var viewportScale = parseNum(
         metaContent.substring(
             metaContent.indexOf('initial-scale=') + ('initial-scale=').length,
             metaContent.length
@@ -39,9 +39,11 @@ function resDetect() {
                 metaContent.length
             ).indexOf(',')
         )
-    ));
-    if (isNum(viewportScale) == true && window.innerHeight > window.outerHeight) {
-        viewportScale = Decimal(viewportScale);
+    );
+    if (isNum(viewportScale) == true) {
+        if (viewportScale < 1 && window.innerHeight > window.outerHeight) {
+            viewportScale = Decimal(viewportScale);
+        }
     }
     else {
         viewportScale = Decimal(1);
