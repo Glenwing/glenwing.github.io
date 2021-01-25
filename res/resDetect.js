@@ -41,7 +41,7 @@ function resDetect() {
         )
     );
 
-    if (UA.indexOf('mobi') >= 0) {
+    if (UA.indexOf('mobi') != -1) {
         viewportScale = Decimal(viewportScale);
     }
     else {
@@ -70,6 +70,11 @@ function resDetect() {
         zoom = zoom_raw.toDecimalPlaces(2);
         osScale = pxRatio.div(zoom).toDecimalPlaces(2);
         resScale = pxRatio;
+
+        if (UA.indexOf('mobi') != -1) {
+            osScale = zoom;
+            zoom = Decimal(1);
+        }
     }
     else if (engine == 'Blink') {
         if (window.outerWidth == window.innerWidth + 16) {

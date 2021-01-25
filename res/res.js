@@ -53,9 +53,9 @@ function updateRes() {
     var Uncertainty_W = Math.max(Uncertainty_W_Below, Uncertainty_W_Above);
     var Uncertainty_H = Math.max(Uncertainty_H_Below, Uncertainty_H_Above);
  */
-    var Uncertainty_W_Below = scale.times(window_W - 0.5).minus(calc_W).times(-1).toFixed(0, Decimal.ROUND_HALF_UP);
+    var Uncertainty_W_Below = scale.times(window_W - 0.5).minus(calc_W).times(-1).toFixed(0, Decimal.ROUND_HALF_DOWN);
     var Uncertainty_W_Above = scale.times(window_W + 0.5).minus(calc_W).toFixed(0, Decimal.ROUND_HALF_DOWN);
-    var Uncertainty_H_Below = scale.times(window_H - 0.5).minus(calc_H).times(-1).toFixed(0, Decimal.ROUND_HALF_UP);
+    var Uncertainty_H_Below = scale.times(window_H - 0.5).minus(calc_H).times(-1).toFixed(0, Decimal.ROUND_HALF_DOWN);
     var Uncertainty_H_Above = scale.times(window_H + 0.5).minus(calc_H).toFixed(0, Decimal.ROUND_HALF_DOWN);
     var Uncertainty_W = Math.max(Uncertainty_W_Below, Uncertainty_W_Above);
     var Uncertainty_H = Math.max(Uncertainty_H_Below, Uncertainty_H_Above);
