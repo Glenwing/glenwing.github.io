@@ -1,7 +1,7 @@
-function resDetect() {
+function resDetect () {
     var pxRatio;
     try { pxRatio = Decimal(window.devicePixelRatio); }
-    catch { pxRatio = 1; }
+    catch (error) { pxRatio = Decimal(1); }
 
     // Determine rendering engine
     var UA = navigator.userAgent.toLowerCase();
@@ -47,7 +47,8 @@ function resDetect() {
     else {
         viewportScale = Decimal(1);
     }
-    /* if (isNum(viewportScale) == true) {
+    /*
+    if (isNum(viewportScale) == true) {
         if (viewportScale < 1 && window.innerHeight > window.outerHeight) {
             viewportScale = Decimal(viewportScale);
         }
@@ -57,7 +58,8 @@ function resDetect() {
     }
     else {
         viewportScale = Decimal(1);
-    } */
+    } 
+    */
     console.log('viewportScale =', viewportScale);
 
     // Determine output
@@ -136,7 +138,7 @@ function mediaQueryBinarySearch (property, unit, a, b, maxIter, epsilon) {
     }
     return ratio;
 
-    function binarySearch(a, b, maxIter) {
+    function binarySearch (a, b, maxIter) {
         var mid = (a + b) / 2;
         if (maxIter <= 0 || b - a < epsilon) {
             return mid;

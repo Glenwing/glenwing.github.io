@@ -23,13 +23,6 @@ var LD_5sf =    { sf:5,     sep:['\\,', '\\,', false, false], approx:'', repeat:
 function updateRes() {
     var window_W = window.screen.width;
     var window_H = window.screen.height;
-    //var pxRatio = window.devicePixelRatio;
-
-    //var zoomValues = getZoomValues();
-    //var combinedRatio = zoomValues['combined'];
-    //var zoomRatio = zoomValues['browser'];
-    //var osRatio = zoomValues['os'];
-    //var osRatio = window.devicePixelRatio.div(zoomRatio);
 
     var zoomValues = resDetect();
     var scale = zoomValues['resScale'];
@@ -41,18 +34,8 @@ function updateRes() {
 
     var calc_W = window_W * scale;
     var calc_H = window_H * scale;
-    //var round_W = Math.round(window_W * osRatio);
-    //var round_H = Math.round(window_H * osRatio);
     var round_W = scale.times(window_W).toFixed(0);
     var round_H = scale.times(window_H).toFixed(0);
-/* 
-    var Uncertainty_W_Below = Math.round((window_W - 0.5) * osRatio - calc_W);
-    var Uncertainty_W_Above = -1 * Math.round((calc_W - (window_W + 0.5) * osRatio));
-    var Uncertainty_H_Below = Math.round((window_H - 0.5) * osRatio - calc_H);
-    var Uncertainty_H_Above = -1 * Math.round((calc_H - (window_H + 0.5) * osRatio));
-    var Uncertainty_W = Math.max(Uncertainty_W_Below, Uncertainty_W_Above);
-    var Uncertainty_H = Math.max(Uncertainty_H_Below, Uncertainty_H_Above);
- */
     var Uncertainty_W_Below = scale.times(window_W - 0.5).minus(calc_W).times(-1).toFixed(0, Decimal.ROUND_HALF_DOWN);
     var Uncertainty_W_Above = scale.times(window_W + 0.5).minus(calc_W).toFixed(0, Decimal.ROUND_HALF_DOWN);
     var Uncertainty_H_Below = scale.times(window_H - 0.5).minus(calc_H).times(-1).toFixed(0, Decimal.ROUND_HALF_DOWN);
@@ -71,7 +54,6 @@ function updateRes() {
 
 
     $('#RESULT_ZOOM_RATIO').html(LongDivide(zoom.times(100), 1, {p: [0, 8], approx:''} ) + '%');
-    //$('#RESULT_COMBINED_RATIO').html(zoomValues['combined']);
     $('#RESULT_OS_RATIO').html(LongDivide(os.times(100), 1, {p: [0, 8], approx:''} ) + '%');
     $('#RESULT_VP_RATIO').html(LongDivide(vp.times(100), 1, {p: [0, 8], approx:''} ) + '%');
 
@@ -105,19 +87,6 @@ function updateRes() {
     $('#RESULT_UA').html(navigator.userAgent);
     $('#RESULT_BROWSER').html(engine);
 
-}
-
-function getZoomValues () {
-    var browserRatio = detectZoom.zoom()
-    var combinedRatio = Decimal(window.devicePixelRatio)
-    var osRatio = combinedRatio.div(browserRatio);
-    //combinedRatio = window.devicePixelRatio;
-    //browserRatio = combinedRatio / osRatio;
-    return {
-        browser: browserRatio,
-        combined: combinedRatio,
-        os: osRatio,
-    }
 }
 
 var global_selectedElement = ''; // Used for keeping track of which element is currently selected in the document
