@@ -6,17 +6,21 @@ function resDetect () {
     // Determine rendering engine
     var UA = navigator.userAgent.toLowerCase();
     var engine = '';
-    if (UA.indexOf('like gecko') != -1 && UA.indexOf('chrome') != -1) {
+    if (UA.indexOf('edge/') != -1) {
+        DEBUG('Browser rendering engine: EdgeHTML');
+        engine = 'Edge';
+    }
+    else if (UA.indexOf('like gecko') != -1 && UA.indexOf('chrome/') != -1) {
         // Chrome / Opera / Blink
-        DEBUG('Browser rendering engine: Blink (Chrome, Opera)');
+        DEBUG('Browser rendering engine: Blink (Chrome, Opera, Edge)');
         engine = 'Blink';
     }
-    else if (UA.indexOf('like gecko') != -1 && UA.indexOf('applewebkit') != -1) {
+    else if (UA.indexOf('like gecko') != -1 && UA.indexOf('applewebkit/') != -1) {
         // WebKit
         DEBUG('Browser rendering engine: WebKit (Safari)');
         engine = 'WebKit';
     }
-    else if (UA.indexOf('gecko') != -1) {
+    else if (UA.indexOf('gecko/') != -1) {
         // Gecko / Firefox
         DEBUG('Browser rendering engine: Gecko (Firefox)');
         engine = 'Gecko';
@@ -77,6 +81,9 @@ function resDetect () {
             osScale = zoom;
             zoom = Decimal(1);
         }
+    }
+    else if (engine == 'Edge') {
+        resScale = pxRatio;
     }
     else if (engine == 'Blink') {
         if (window.outerWidth == window.innerWidth + 16) {
