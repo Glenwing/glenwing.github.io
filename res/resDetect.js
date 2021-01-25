@@ -26,9 +26,9 @@ function resDetect() {
     }
 
     // Get viewport scale to compensate for zoom on mobile devices
-    metaContent = document.querySelector('meta[name="viewport"]').content;
+    var metaContent = document.querySelector('meta[name="viewport"]').content;
     //console.log('metaContent =', metaContent);
-    viewportScale = Decimal(parseNum(
+    var viewportScale = parseNum(
         metaContent.substring(
             metaContent.indexOf('initial-scale=') + ('initial-scale=').length,
             metaContent.length
@@ -39,13 +39,20 @@ function resDetect() {
                 metaContent.length
             ).indexOf(',')
         )
-    ));
+    );
+    if (isNum(viewportScale) == true) {
+        viewportScale = Decimal(viewportScale);
+    }
+    else {
+        viewportScale = 1;
+    }
     //console.log('viewportScale =', viewportScale);
 
     // Determine output
-    var zoom; // Browser Zoom
-    var scale; // OS Scale
-    var scaleToUse; // Which scale factor to use in calculating the resolution based on the window.screen.width
+    var zoom = 1; // Browser Zoom
+    var zoom_raw = 1; // Browser Zoom (no rounding)
+    var scale = 1; // OS Scale
+    var scaleToUse = 1; // Which scale factor to use in calculating the resolution based on the window.screen.width
     if (engine == 'gecko') {
         zoom_raw = Decimal(mediaQueryBinarySearch('min-resolution', 'dppx', 0, 10, 20, 0.0001));
         zoom = zoom_raw.toDecimalPlaces(2);
