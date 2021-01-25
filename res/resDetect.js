@@ -6,17 +6,17 @@ function resDetect() {
     // Determine rendering engine
     var UA = navigator.userAgent.toLowerCase();
     var engine = '';
-    if (UA.indexOf('like gecko') > 0 && UA.indexOf('chrome') > 0) {
+    if (UA.indexOf('like gecko') != -1 && UA.indexOf('chrome') != -1) {
         // Chrome / Opera / Blink
         DEBUG('Browser rendering engine: Blink (Chrome, Opera)');
         engine = 'Blink';
     }
-    else if (UA.indexOf('like gecko') > 0 && UA.indexOf('applewebkit') > 0) {
+    else if (UA.indexOf('like gecko') != -1 && UA.indexOf('applewebkit') != -1) {
         // WebKit
         DEBUG('Browser rendering engine: WebKit (Safari)');
         engine = 'WebKit';
     }
-    else if (UA.indexOf('gecko') > 0) {
+    else if (UA.indexOf('gecko') != -1) {
         // Gecko / Firefox
         DEBUG('Browser rendering engine: Gecko (Firefox)');
         engine = 'Gecko';
@@ -40,7 +40,14 @@ function resDetect() {
             ).indexOf(',')
         )
     );
-    if (isNum(viewportScale) == true) {
+
+    if (UA.indexOf('mobi') >= 0) {
+        viewportScale = Decimal(viewportScale);
+    }
+    else {
+        viewportScale = Decimal(1);
+    }
+    /* if (isNum(viewportScale) == true) {
         if (viewportScale < 1 && window.innerHeight > window.outerHeight) {
             viewportScale = Decimal(viewportScale);
         }
@@ -50,7 +57,7 @@ function resDetect() {
     }
     else {
         viewportScale = Decimal(1);
-    }
+    } */
     console.log('viewportScale =', viewportScale);
 
     // Determine output
