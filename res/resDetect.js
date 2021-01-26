@@ -64,7 +64,7 @@ function resDetect () {
         viewportScale = Decimal(1);
     } 
     */
-    console.log('viewportScale =', viewportScale);
+    //console.log('viewportScale =', viewportScale);
 
     // Determine output
     var zoom = Decimal(1); // Browser Zoom
@@ -72,15 +72,18 @@ function resDetect () {
     var osScale = Decimal(1); // OS Scale
     var resScale = Decimal(1); // Which scale factor to use in calculating the resolution based on the window.screen.width
     if (engine == 'Gecko') {
-        zoom_raw = Decimal(mediaQueryBinarySearch('min-resolution', 'dppx', 0, 10, 20, 0.0001));
-        zoom = zoom_raw.toDecimalPlaces(2);
-        osScale = pxRatio.div(zoom).toDecimalPlaces(2);
+        //zoom_raw = Decimal(mediaQueryBinarySearch('min-resolution', 'dppx', 0, 10, 20, 0.0001));
+        //zoom = zoom_raw.toDecimalPlaces(2);
+        //osScale = pxRatio.div(zoom).toDecimalPlaces(2);
+        zoom = Decimal(1);
+        osScale = pxRatio;
         resScale = pxRatio;
-
+        /* 
         if (UA.indexOf('mobi') != -1) {
             osScale = zoom;
             zoom = Decimal(1);
         }
+         */
     }
     else if (engine == 'EdgeHTML') {
         resScale = pxRatio;
@@ -106,7 +109,7 @@ function resDetect () {
 
     return {
         'pxRatio': pxRatio,
-        'zoomRaw': zoom_raw,
+        //'zoomRaw': zoom_raw,
         'zoomScale': zoom,
         'osScale': osScale,
         'viewportScale': viewportScale,

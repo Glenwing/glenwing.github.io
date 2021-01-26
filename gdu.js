@@ -181,7 +181,7 @@ function GCD(a, b) {
 
 function activateMatchmaker() {
     if ($('#Sidebar_DDC').hasClass('selected') || $('#Sidebar_Matchmaker').hasClass('selected')) {
-        console.log('activateMatchmaker() triggered');
+        //console.log('activateMatchmaker() triggered');
         if ($('#matchmaker_button').length > 0) { $('#matchmaker_button').css('display', 'none'); }
         if ($('#eq_height_section').length > 0) { $('#eq_height_section').css('display', 'flex'); }
 
@@ -202,7 +202,7 @@ function activateMatchmaker() {
 
 function deactivateMatchmaker() {
     if ($('#Sidebar_DDC').hasClass('selected') || $('#Sidebar_Matchmaker').hasClass('selected')) {
-        console.log('deactivateMatchmaker() triggered');
+        //console.log('deactivateMatchmaker() triggered');
         if ($('#matchmaker_button').length > 0) { $('#matchmaker_button').css('display', 'flex'); }
         if ($('#eq_height_section').length > 0) { $('#eq_height_section').css('display', 'none'); }
 
@@ -273,14 +273,14 @@ window.onload = function () {
     var sidebarID = sessionStorage.getItem('sidebarID');
     var queryString = sessionStorage.getItem('queryString');
     var directoryName = $('#' + sidebarID).data('dir');
-    console.log('window.onload: queryString =', queryString);
+    //console.log('window.onload: queryString =', queryString);
     if (sidebarID === null) { sidebarID = 'Sidebar_DDC'; }
     if (directoryName === null) { directoryName = 'ddc'; }
     if (queryString === null) { queryString = ''; }
 
     // Use History API to replace URL with the selected page
     var pathName = window.location.pathname.replace('frame.html', directoryName);
-    console.log('window.onload: href =', window.location.href);
+    //console.log('window.onload: href =', window.location.href);
     try {
         history.replaceState(null, '', pathName + queryString);
         console.log('history.replaceState:', window.location.href);
@@ -290,7 +290,7 @@ window.onload = function () {
     }
 
     // Load the selected page
-    console.log('frame.html onload: sidebarID =', sidebarID);
+    //console.log('frame.html onload: sidebarID =', sidebarID);
     activatePage(sidebarID);
 };
 

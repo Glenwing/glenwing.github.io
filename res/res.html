@@ -3,7 +3,7 @@
         <div style="display:flex; flex-flow:row nowrap; justify-content: space-between;">
             Screen Resolution Check
             <span class="version">
-                <span>DRAFT</span> 17
+                <span>DRAFT</span> 18
             </span>
         </div>
         <hr>
@@ -51,7 +51,7 @@
             The given result may deviate slightly from the true resolution of the display due to rounding errors in the information provided by the browser. An uncertainty range is provided, which represents the maximum possible deviation. The true resolution could be anywhere inside this range.
         </p>
         <p>
-            The CSS pixel scaling ratio reported by the browser, <code>window.devicePixelRatio</code>, is the OS system scale and the browser zoom level combined. However, in Blink-based browsers, the effective screen resolution, <code>window.screen.width</code>, is affected by system scaling only, not by zoom level. So multiplying the reported screen width by the total pixel scaling ratio will yield an incorrect result if the browser zoom is not at 100%.
+            Determining true resolution is difficult in Blink-based browsers. The CSS pixel scaling ratio reported by the browser, <code>window.devicePixelRatio</code>, is the OS system scale and the browser zoom level combined. However, in Blink-based browsers, the effective screen resolution, <code>window.screen.width</code>, is affected by system scaling only, not by zoom level. So multiplying the reported screen width by the total pixel scaling ratio will yield an incorrect result if the browser zoom is not at 100%.
         </p>
         <p>
             Instead, in Blink-based browsers the screen resolution must be determined using <code>window.innerWidth</code> and <code>window.outerWidth</code>. The <code>innerWidth</code> is affected by the zoom level while the <code>outerWidth</code> is not, so the ratio of these values will give the browser zoom level which can then be removed from the CSS pixel ratio to determine the OS scaling ratio alone. The width of the screen can then be calculated by multiplying <code>window.screen.width</code> with the OS scaling ratio.
@@ -63,10 +63,10 @@
 
     <div class='res mainText' id='mainText_GeckoEdgeWebKit' style='display:none;'>
         <p>
-            Your browser rendering engine has been detected as <b id='textFill_Gecko_1'></b>, the engine used by <span id='textFill_Gecko_2'>Firefox</span>.
+            Your browser rendering engine has been detected as <b id='textFill_Gecko_1'>[engine]</b>, the engine used by <span id='textFill_Gecko_2'>[browser]</span>.
         </p>    
         <p>
-            Your system is configured with <b id='textFill_Gecko_3'>[scale]</b> scaling, which gives you desktop space equivalent to a <b id='textFill_Gecko_4'>[resolution]</b> display.
+            Your system is configured with <b id='textFill_Gecko_3'>[scale]</b> total system scaling and browser zoom, which gives you desktop space equivalent to a <b id='textFill_Gecko_4'>[resolution]</b> display.
         </p>            
         <p>
             Other resolution detection websites may incorrectly report that number as the screen resolution because they do not account for the system scaling which is used on many modern machines such as Apple "retina display" computers, mobile devices, and Windows computers with high-density displays.

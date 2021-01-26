@@ -53,9 +53,15 @@ function updateRes() {
     }
 
 
-    $('#RESULT_ZOOM_RATIO').html(LongDivide(zoom.times(100), 1, {p: [0, 8], approx:''} ) + '%');
-    $('#RESULT_OS_RATIO').html(LongDivide(os.times(100), 1, {p: [0, 8], approx:''} ) + '%');
-    $('#RESULT_VP_RATIO').html(LongDivide(vp.times(100), 1, {p: [0, 8], approx:''} ) + '%');
+    if (engine === 'Blink') {
+        $('#RESULT_ZOOM_RATIO').html(LongDivide(zoom.times(100), 1, {p: [0, 8], approx:''} ) + ' %');
+        $('#RESULT_OS_RATIO').html(LongDivide(os.times(100), 1, {p: [0, 8], approx:''} ) + ' %');
+    }
+    else {
+        $('#RESULT_ZOOM_RATIO').html('?');
+        $('#RESULT_OS_RATIO').html('?');
+    }
+    $('#RESULT_VP_RATIO').html(LongDivide(vp.times(100), 1, {p: [0, 8], approx:''} ) + ' %');
 
     $('#RESULT_WS_W').html(window_W + '&nbsp;px');
     $('#RESULT_WS_H').html(window_H + '&nbsp;px');
@@ -84,7 +90,7 @@ function updateRes() {
     $('#RESULT_BROWSER').html(engine);
 
     if (engine === 'Blink') {
-        $('#textFill_Blink_1').html(LongDivide(os.times(100), 1, {p: [0, 1], approx:''} ) + '%')
+        $('#textFill_Blink_1').html(LongDivide(os.times(100), 1, {p: 0, approx:''} ) + '%');
         $('#textFill_Blink_2').html(Math.round(window.screen.width) + '&#x202f;&times;&#x202f;' + Math.round(window.screen.height));
 
         $('#mainText_GeckoEdgeWebKit').css('display', 'none');
@@ -100,10 +106,10 @@ function updateRes() {
             $('#textFill_Gecko_2').html('Safari');
         }
         else if (engine === 'EdgeHTML') {
-            $('#textFill_Gecko_2').html('versions of Edge prior to 2019');
+            $('#textFill_Gecko_2').html('old versions of Edge (prior to 2019)');
         }
 
-        $('#textFill_Gecko_3').html(LongDivide(os.times(100), 1, {p: [0, 1], approx:''} ) + '%');
+        $('#textFill_Gecko_3').html(LongDivide(pxRatio.times(100), 1, {p: [0, 2], approx:''} ) + '%');
         $('#textFill_Gecko_4').html(Math.round(window.screen.width) + '&#x202f;&times;&#x202f;' + Math.round(window.screen.height));
         
         $('#mainText_Blink').css('display', 'none');
