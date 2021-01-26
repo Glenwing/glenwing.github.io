@@ -3,7 +3,7 @@
         <div style="display:flex; flex-flow:row nowrap; justify-content: space-between;">
             Screen Resolution Check
             <span class="version">
-                <span>DRAFT</span> 18
+                <span>DRAFT</span> 19
             </span>
         </div>
         <hr>
@@ -23,7 +23,7 @@
         </p>
     </div>
 
-    <div id='TrueResDiv' class='res bigresult'></div>
+    <div id='TrueResDiv' class='res bigResult'></div>
 
     <div class='res maintext' style='display:none;'>
         <p id='restext_os'>
@@ -40,14 +40,20 @@
     <div class='res mainText' id='mainText_Blink' style='display:none;'>
         <p>
             Your browser rendering engine has been detected as <b>Blink</b>, the engine used by Chrome, Opera, and Edge. <span class='warning'>Blink-based browsers may give incorrect results</span> if additional browser utilities are docked on the sides, such as the developer console or the Opera sidebar. For highest confidence in this utility, Firefox is recommended.
-        </p>    
-        <p>
-            Your system is configured with <b id='textFill_Blink_1'>[scale]</b> scaling, which gives you desktop space equivalent to a <b id='textFill_Blink_2'>[resolution]</b> display.
-        </p>            
-        <p>
-            Other resolution detection websites may incorrectly report that number as the screen resolution because they do not account for the system scaling which is used on many modern machines such as Apple "retina display" computers, mobile devices, and Windows computers with high-density displays.
         </p>
-        <p>
+        <div id='scaledRes_Blink' style='display:none'>
+            <p>
+                Your system is configured with <b id='textFill_Blink_1'>[scale]</b> scaling, which gives you desktop space equivalent to a display with a resolution of:
+            </p> 
+
+            <div id='textFill_Blink_2' class='res smallResult'></div>
+
+            <p>
+
+                Other resolution detection websites may incorrectly report that number as the screen resolution because they do not account for the system scaling which is used on many modern machines such as Apple "retina display" computers, mobile devices, and Windows computers with high-density displays.
+            </p>
+        </div>
+        <p id='uncertainty_Blink' style='display:none;'>
             The given result may deviate slightly from the true resolution of the display due to rounding errors in the information provided by the browser. An uncertainty range is provided, which represents the maximum possible deviation. The true resolution could be anywhere inside this range.
         </p>
         <p>
@@ -64,14 +70,19 @@
     <div class='res mainText' id='mainText_GeckoEdgeWebKit' style='display:none;'>
         <p>
             Your browser rendering engine has been detected as <b id='textFill_Gecko_1'>[engine]</b>, the engine used by <span id='textFill_Gecko_2'>[browser]</span>.
-        </p>    
-        <p>
-            Your system is configured with <b id='textFill_Gecko_3'>[scale]</b> total system scaling and browser zoom, which gives you desktop space equivalent to a <b id='textFill_Gecko_4'>[resolution]</b> display.
-        </p>            
-        <p>
-            Other resolution detection websites may incorrectly report that number as the screen resolution because they do not account for the system scaling which is used on many modern machines such as Apple "retina display" computers, mobile devices, and Windows computers with high-density displays.
         </p>
-        <p>
+        <div id='scaledRes_Gecko' style='display:none;'>
+            <p>
+                Your system is configured with <b id='textFill_Gecko_3'>[scale]</b> total system scaling and browser zoom, which gives you desktop space equivalent to a display with a resolution of:
+            </p>
+
+            <div id='textFill_Gecko_4' class='res smallResult'></div>
+
+            <p>
+                Other resolution detection websites may incorrectly report that number as the screen resolution because they do not account for the system scaling which is used on many modern machines such as Apple "retina display" computers, mobile devices, and Windows computers with high-density displays.
+            </p>
+        </div>
+        <p id='uncertainty_Gecko' style='display:none;'>
             The given result may deviate slightly from the true resolution of the display due to rounding errors in the information provided by the browser. An uncertainty range is provided, which represents the maximum possible deviation. The true resolution could be anywhere inside this range.
         </p>
         <p>
@@ -96,14 +107,6 @@
         <tr class="selectable" id="selectWindowScreenHeight">
             <td class="label">window.screen.height</td>
             <td id="RESULT_WS_H" class="result number"><span></span></td>
-        </tr>
-        <tr class="selectable" id="selectWindowInnerHeight">
-            <td class="label">window.innerHeight</td>
-            <td id="RESULT_W_IH" class="result number"><span></span></td>
-        </tr>
-        <tr class="selectable" id="selectWindowOuterHeight">
-            <td class="label">window.outerHeight</td>
-            <td id="RESULT_W_OH" class="result number"><span></span></td>
         </tr>
         <tr class="selectable" id="selectPxRatio">
             <td class="label">window.devicePixelRatio</td>

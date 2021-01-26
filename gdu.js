@@ -283,7 +283,7 @@ window.onload = function () {
     //console.log('window.onload: href =', window.location.href);
     try {
         history.replaceState(null, '', pathName + queryString);
-        console.log('history.replaceState:', window.location.href);
+        //console.log('history.replaceState:', window.location.href);
     }
     catch (DOMException) {
         DEBUG('URL change skipped due to DOMException.');

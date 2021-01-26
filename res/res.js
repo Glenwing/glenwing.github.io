@@ -50,6 +50,13 @@ function updateRes() {
         unc_str_W = '<span class="uncertainty">&#x202f;(&pm;' + Uncertainty_W + ')</span>';
         unc_str_H = '<span class="uncertainty">&#x202f;(&pm;' + Uncertainty_H + ')</span>';
         times_symbol = '&nbsp;&times;&nbsp;';
+
+        $('#uncertainty_Blink').css('display', 'block');
+        $('#uncertainty_Gecko').css('display', 'block');
+    }
+    else {
+        $('#uncertainty_Blink').css('display', 'none');
+        $('#uncertainty_Gecko').css('display', 'none');
     }
 
 
@@ -67,8 +74,8 @@ function updateRes() {
     $('#RESULT_WS_H').html(window_H + '&nbsp;px');
     $('#RESULT_W_IW').html(window.innerWidth + '&nbsp;px');
     $('#RESULT_W_OW').html(window.outerWidth + '&nbsp;px');
-    $('#RESULT_W_IH').html(window.innerHeight + '&nbsp;px');
-    $('#RESULT_W_OH').html(window.outerHeight + '&nbsp;px');
+    //$('#RESULT_W_IH').html(window.innerHeight + '&nbsp;px');
+    //$('#RESULT_W_OH').html(window.outerHeight + '&nbsp;px');
     $('#RESULT_PX_RATIO').html(LongDivide(pxRatio, 1, {p: [2, 6], approx:''}));
     $('#RESULT_CALC_W').html(LongDivide(calc_W, 1, {p: [0, 4], approx:''}) + '&nbsp;px');
     $('#RESULT_CALC_H').html(LongDivide(calc_H, 1, {p: [0, 4], approx:''}) + '&nbsp;px');
@@ -81,9 +88,15 @@ function updateRes() {
         $('#restext_os').css('display', 'block');
         $('#restext_os_number').html(LongDivide(os * 100, 1, {p: [0, 2], approx:''}) + '%');
         $('#restext_effres').html(Math.round(window_W) + '&#x202f;&times;&#x202f;' + Math.round(window_H));
+
+        $('#scaledRes_Blink').css('display', 'block');
+        $('#scaledRes_Gecko').css('display', 'block');
     }
     else {
         $('#restext_os').css('display', 'none');
+
+        $('#scaledRes_Blink').css('display', 'none');
+        $('#scaledRes_Gecko').css('display', 'none');
     }
 
     //$('#RESULT_UA').html(navigator.userAgent);

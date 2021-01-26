@@ -445,19 +445,6 @@ div.res.main {
 div.res.main::-webkit-scrollbar {
     display:            none;
 }
-div.res.bigresult {
-    display:            flex;
-    flex-flow:          row nowrap;
-    justify-self:       center;
-    justify-content:    center;
-    align-items:        center;
-    font-size:          2rem;
-    font-weight:        200;
-    padding:            8px 0px;
-}
-div.res.bigresult span.uncertainty {
-    font-size:          1.25rem;
-}
 div.res {
     color:              var(--textcolor);
 }
@@ -489,7 +476,30 @@ div.res.description {
     overflow-y:         auto;
 }
 div.res b {
-    font-weight:        500;
+    font-weight:        600;
+}
+div.res.bigResult {
+    display:            flex;
+    flex-flow:          row nowrap;
+    justify-self:       center;
+    justify-content:    center;
+    align-items:        center;
+    font-size:          2rem;
+    font-weight:        200;
+    padding:            8px 0px;
+}
+div.res.bigResult span.uncertainty {
+    font-size:          1.5rem;
+}
+div.res.smallResult {
+    display:            flex;
+    flex-flow:          row nowrap;
+    justify-self:       center;
+    justify-content:    center;
+    align-items:        center;
+    font-size:          1.5rem;
+    font-weight:        200;
+    padding:            4px 0px;
 }
 
 
