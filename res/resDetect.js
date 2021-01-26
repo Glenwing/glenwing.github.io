@@ -71,6 +71,12 @@ function resDetect () {
     var zoom_raw = Decimal(1); // Browser Zoom (no rounding)
     var osScale = Decimal(1); // OS Scale
     var resScale = Decimal(1); // Which scale factor to use in calculating the resolution based on the window.screen.width
+
+    var zoom_tol_above = Decimal(0);
+    var zoom_tol_below = Decimal(0);
+    var os_tol_above = Decimal(0);
+    var os_tol_below = Decimal(0);
+
     if (engine == 'Gecko') {
         //zoom_raw = Decimal(mediaQueryBinarySearch('min-resolution', 'dppx', 0, 10, 20, 0.0001));
         //zoom = zoom_raw.toDecimalPlaces(2);
@@ -92,13 +98,24 @@ function resDetect () {
         if (window.outerWidth == window.innerWidth + 16) {
             // This condition indicates 100% zoom but with a non-maximized window
             zoom_raw = Decimal(1);
+            zoom_tol_above = Decimal(0);
+            zoom_tol_above = Decimal(0);
         }
         else {
             zoom_raw = Decimal(window.outerWidth).div(window.innerWidth).div(viewportScale);
+
+            zoom_tol_above = Decimal(window.outerWidth).times(Decimal(1).div(window.innerWidth).minus(Decimal(1).div(window.innerWidth + 0.5)));
+            zoom_tol_below = Decimal(window.outerWidth).times(Decimal(1).div(window.innerWidth - 0.5).minus(Decimal(1).div(window.innerWidth)));
+            console.log('Zoom uncertainty: +' + zoom_tol_above.toFixed(8) + ', -' + zoom_tol_below.toFixed(8));
         }
         zoom = zoom_raw;
         osScale = pxRatio.div(zoom).toDecimalPlaces(2);
         resScale = osScale;
+
+        os_tol_above = pxRatio.div(zoom).minus(pxRatio.div(zoom.plus(zoom_tol_above))).plus(0.005);
+        os_tol_below = pxRatio.div(zoom.minus(zoom_tol_below)).minus(pxRatio.div(zoom)).plus(0.005);
+
+        console.log('OS scale uncertainty: +' + os_tol_above.toFixed(8) + ', -' + os_tol_below.toFixed(8));
     }
     else if (engine == 'WebKit') {
         // Placeholder for now
@@ -115,6 +132,10 @@ function resDetect () {
         'viewportScale': viewportScale,
         'resScale': resScale,
         'engine': engine,
+        'zoom_tol_above': zoom_tol_above,
+        'zoom_tol_below': zoom_tol_below,
+        'os_tol_above': os_tol_above,
+        'os_tol_below': os_tol_below,
     }
 }
 

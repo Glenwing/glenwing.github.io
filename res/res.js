@@ -18,7 +18,8 @@ global_katexOptions = {
     }
 };
 
-var LD_5sf =    { sf:5,     sep:['\\,', '\\,', false, false], approx:'', repeat:false };
+var LD_5sf = { sf:5, sep:['\\,', '\\,', false, false], approx:'', repeat:false };
+var LD_0to6dp = { p: [0, 6], sep:['', '', false, false], approx:'' }
 
 function updateRes() {
     var window_W = window.screen.width;
@@ -31,6 +32,10 @@ function updateRes() {
     var vp = zoomValues['viewportScale'];
     var engine = zoomValues['engine'];
     var pxRatio = zoomValues['pxRatio'];
+    var zoom_tol_above = zoomValues['zoom_tol_above'];
+    var zoom_tol_below = zoomValues['zoom_tol_below'];
+    var os_tol_above = zoomValues['os_tol_above'];
+    var os_tol_below = zoomValues['os_tol_below'];
 
     var calc_W = window_W * scale;
     var calc_H = window_H * scale;
@@ -61,8 +66,8 @@ function updateRes() {
 
 
     if (engine === 'Blink') {
-        $('#RESULT_ZOOM_RATIO').html(LongDivide(zoom.times(100), 1, {p: [0, 8], approx:''} ) + ' %');
-        $('#RESULT_OS_RATIO').html(LongDivide(os.times(100), 1, {p: [0, 8], approx:''} ) + ' %');
+        $('#RESULT_ZOOM_RATIO').html(LongDivide(zoom.times(100), 1, LD_0to6dp) + ' % (+' + LongDivide(zoom_tol_above.times(100), 1, LD_0to6dp) + '%, &minus;' + LongDivide(zoom_tol_below.times(100), 1, LD_0to6dp) + '%)');
+        $('#RESULT_OS_RATIO').html(LongDivide(os.times(100), 1, LD_0to6dp) + ' % (+' + LongDivide(os_tol_above.times(100), 1, LD_0to6dp) + '%, &minus;' + LongDivide(os_tol_below.times(100), 1, LD_0to6dp) + '%)');
     }
     else {
         $('#RESULT_ZOOM_RATIO').html('?');
