@@ -354,6 +354,14 @@ p {
     margin:             0.5em 0;
 }
 
+*.warning {
+    color:              var(--warningcolor);
+}
+
+*.error {
+    color:              var(--errorcolor);
+}
+
 
 
 /* PAGE-SPECIFIC CONTENT: DDC */
@@ -445,6 +453,7 @@ div.res.bigresult {
     align-items:        center;
     font-size:          2rem;
     font-weight:        200;
+    padding:            8px 0px;
 }
 div.res.bigresult span.uncertainty {
     font-size:          1.25rem;
@@ -452,8 +461,11 @@ div.res.bigresult span.uncertainty {
 div.res {
     color:              var(--textcolor);
 }
-div.res.maintext {
+div.res.mainText {
     line-height:        140%;
+}
+div.res.mainText p {
+    margin:             0.8em 0em;
 }
 div.res.description {
     display:            flex;
@@ -476,13 +488,8 @@ div.res.description {
     height:             calc((var(--truevh, 1vh) * 100) - 50px - 32px - 100px);
     overflow-y:         auto;
 }
-div.res.zoomwarning {
-    font-size:          90%;
-    text-align:         center;
-    display:            none;
-}
-div.res.zoomwarning span {
-    color:              var(--errorcolor);
+div.res b {
+    font-weight:        500;
 }
 
 

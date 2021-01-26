@@ -3,20 +3,30 @@
         <div style="display:flex; flex-flow:row nowrap; justify-content: space-between;">
             Screen Resolution Check
             <span class="version">
-                <span>DRAFT</span> 16
+                <span>DRAFT</span> 17
             </span>
         </div>
         <hr>
     </h1>
 
-    <p style='color:#CC2222'>This page is a work in progress and does not function correctly yet.</p>
+    <div>
+        <p style='color:#CC2222'>
+            This page is a work in progress and does not function correctly yet.
+        </p>
 
-    <p>Your screen resolution has been detected as:</p>
+        <p>
+            This utility attempts to determine your screen resolution. <b>There is no way for any web-based utility like this to be completely foolproof</b> because it is dependent on information provided by the browser. There is no direct access to system information. You should check your screen resolution from system settings rather than a website if possible.
+        </p>
 
-    <div id='TrueResDiv' class='res bigresult'></div><br>
+        <p>
+            Your screen resolution has been detected as:
+        </p>
+    </div>
 
-    <div class='res maintext'>
-        <p id='restext_os' style='display:none;'>
+    <div id='TrueResDiv' class='res bigresult'></div>
+
+    <div class='res maintext' style='display:none;'>
+        <p id='restext_os'>
             Your operating system is configured with <span id='restext_os_number'>100%</span> scaling. This gives you a desktop space equivalent to a <span id='restext_effres'></span> display. Other resolution checking websites may report this number as the screen resolution because they do not correct for OS scaling. This is common on Apple computers with a "retina" display, mobile devices, and high-resolution displays on Windows.
         </p>
         <p>
@@ -25,21 +35,55 @@
         <p>
             On devices with arbitrary scaling ratios (particularly mobile devices), some unavoidable error is introduced because <code>window.screen.width</code> and <code>height</code> are rounded to integer values, so the final result can deviate by as much as &pm;0.5 times the OS scaling ratio. As a result, an uncertainty range is provided in this situation (i.e. "&pm;1 px") which represents the maximum possible deviation from the true value.
         </p>
-    </div><br>
+    </div>
 
+    <div class='res mainText' id='mainText_Blink' style='display:none;'>
+        <p>
+            Your browser rendering engine has been detected as <b>Blink</b>, the engine used by Chrome, Opera, and Edge. <span class='warning'>Blink-based browsers may give incorrect results</span> if additional browser utilities are docked on the sides, such as the developer console or the Opera sidebar. For highest confidence in this utility, Firefox is recommended.
+        </p>    
+        <p>
+            Your system is configured with <b id='textFill_Blink_1'>[scale]</b> scaling, which gives you desktop space equivalent to a <b id='textFill_Blink_2'>[resolution]</b> display.
+        </p>            
+        <p>
+            Other resolution detection websites may incorrectly report that number as the screen resolution because they do not account for the system scaling which is used on many modern machines such as Apple "retina display" computers, mobile devices, and Windows computers with high-density displays.
+        </p>
+        <p>
+            The given result may deviate slightly from the true resolution of the display due to rounding errors in the information provided by the browser. An uncertainty range is provided, which represents the maximum possible deviation. The true resolution could be anywhere inside this range.
+        </p>
+        <p>
+            The CSS pixel scaling ratio reported by the browser, <code>window.devicePixelRatio</code>, is the OS system scale and the browser zoom level combined. However, in Blink-based browsers, the effective screen resolution, <code>window.screen.width</code>, is affected by system scaling only, not by zoom level. So multiplying the reported screen width by the total pixel scaling ratio will yield an incorrect result if the browser zoom is not at 100%.
+        </p>
+        <p>
+            Instead, in Blink-based browsers the screen resolution must be determined using <code>window.innerWidth</code> and <code>window.outerWidth</code>. The <code>innerWidth</code> is affected by the zoom level while the <code>outerWidth</code> is not, so the ratio of these values will give the browser zoom level which can then be removed from the CSS pixel ratio to determine the OS scaling ratio alone. The width of the screen can then be calculated by multiplying <code>window.screen.width</code> with the OS scaling ratio.
+        </p>
+        <p>
+            However, this can lead to other inaccuracies, since <code>innerWidth</code> and <code>outerWidth</code>, in addition to introducing further rounding error, will also be slightly different even when the browser is not zoomed (2&nbsp;px in Chrome, or 16&nbsp;px when the window is not maximized, but the behavior differs by browser). The <code>innerWidth</code> value is also affected by docked interfaces like the developer console or the Opera sidebar (watch what happens to the results when you press <code>F12</code>!).
+        </p>
+    </div>
+
+    <div class='res mainText' id='mainText_GeckoEdgeWebKit' style='display:none;'>
+        <p>
+            Your browser rendering engine has been detected as <b id='textFill_Gecko_1'></b>, the engine used by <span id='textFill_Gecko_2'>Firefox</span>.
+        </p>    
+        <p>
+            Your system is configured with <b id='textFill_Gecko_3'>[scale]</b> scaling, which gives you desktop space equivalent to a <b id='textFill_Gecko_4'>[resolution]</b> display.
+        </p>            
+        <p>
+            Other resolution detection websites may incorrectly report that number as the screen resolution because they do not account for the system scaling which is used on many modern machines such as Apple "retina display" computers, mobile devices, and Windows computers with high-density displays.
+        </p>
+        <p>
+            The given result may deviate slightly from the true resolution of the display due to rounding errors in the information provided by the browser. An uncertainty range is provided, which represents the maximum possible deviation. The true resolution could be anywhere inside this range.
+        </p>
+        <p>
+            The screen resolution is determined by reading the <code>window.screen.width</code> property provided by the browser. This gives the "equivalent resolution" with scaling applied. The browser also gives the scaling ratio used by the system, <code>window.devicePixelRatio</code>. Multiplying these values gives the original screen resolution (although with potential rounding errors).
+        </p>
+    </div>
+    <br>
     <div class="tbheader">Results</div>
     <table id="resResultTable_1" class="ddc">
-        <tr class="selectable" id="selectScreenWidth">
-            <td class="label">screen.width</td>
-            <td id="RESULT_S_W" class="result number"><span></span></td>
-        </tr>
         <tr class="selectable" id="selectWindowScreenWidth">
             <td class="label">window.screen.width</td>
             <td id="RESULT_WS_W" class="result number"><span></span></td>
-        </tr>
-        <tr class="selectable" id="selectDocumentClientWidth">
-            <td class="label">document.documentElement.clientWidth</td>
-            <td id="RESULT_D_CW" class="result number"><span></span></td>
         </tr>
         <tr class="selectable" id="selectWindowInnerWidth">
             <td class="label">window.innerWidth</td>
@@ -49,17 +93,9 @@
             <td class="label">window.outerWidth</td>
             <td id="RESULT_W_OW" class="result number"><span></span></td>
         </tr>
-        <tr class="selectable" id="selectScreenHeight">
-            <td class="label">screen.height</td>
-            <td id="RESULT_S_H" class="result number"><span></span></td>
-        </tr>
         <tr class="selectable" id="selectWindowScreenHeight">
             <td class="label">window.screen.height</td>
             <td id="RESULT_WS_H" class="result number"><span></span></td>
-        </tr>
-        <tr class="selectable" id="selectDocumentClientHeight">
-            <td class="label">document.documentElement.clientHeight</td>
-            <td id="RESULT_D_CH" class="result number"><span></span></td>
         </tr>
         <tr class="selectable" id="selectWindowInnerHeight">
             <td class="label">window.innerHeight</td>
@@ -101,12 +137,8 @@
             <td class="label">Height Uncertainty</td>
             <td id="RESULT_TOL_H" class="result number"><span></span></td>
         </tr>
-        <tr class="selectable" id="selectUA">
-            <td class="label">User Agent</td>
-            <td id="RESULT_UA" class="result number"><span></span></td>
-        </tr>
         <tr class="selectable" id="selectBrowser">
-            <td class="label">Browser</td>
+            <td class="label">Browser Rendering Engine</td>
             <td id="RESULT_BROWSER" class="result number"><span></span></td>
         </tr>
     </table>

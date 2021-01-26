@@ -57,11 +57,7 @@ function updateRes() {
     $('#RESULT_OS_RATIO').html(LongDivide(os.times(100), 1, {p: [0, 8], approx:''} ) + '%');
     $('#RESULT_VP_RATIO').html(LongDivide(vp.times(100), 1, {p: [0, 8], approx:''} ) + '%');
 
-    $('#RESULT_S_W').html(screen.width + '&nbsp;px');
-    $('#RESULT_D_CW').html(document.documentElement.clientWidth + '&nbsp;px');
     $('#RESULT_WS_W').html(window_W + '&nbsp;px');
-    $('#RESULT_S_H').html(screen.height + '&nbsp;px');
-    $('#RESULT_D_CH').html(document.documentElement.clientHeight + '&nbsp;px');
     $('#RESULT_WS_H').html(window_H + '&nbsp;px');
     $('#RESULT_W_IW').html(window.innerWidth + '&nbsp;px');
     $('#RESULT_W_OW').html(window.outerWidth + '&nbsp;px');
@@ -75,7 +71,7 @@ function updateRes() {
 
     $('#TrueResDiv').html(round_W + unc_str_W + '&#x202f;&times;&#x202f;' + round_H + unc_str_H);
 
-    if (Math.abs(os - 1) > 0.001) {
+    if (Math.abs(window.screen.width - round_W) > 1 || Math.abs(window.screen.height - round_H) > 1) {
         $('#restext_os').css('display', 'block');
         $('#restext_os_number').html(LongDivide(os * 100, 1, {p: [0, 2], approx:''}) + '%');
         $('#restext_effres').html(Math.round(window_W) + '&#x202f;&times;&#x202f;' + Math.round(window_H));
@@ -84,8 +80,35 @@ function updateRes() {
         $('#restext_os').css('display', 'none');
     }
 
-    $('#RESULT_UA').html(navigator.userAgent);
+    //$('#RESULT_UA').html(navigator.userAgent);
     $('#RESULT_BROWSER').html(engine);
+
+    if (engine === 'Blink') {
+        $('#textFill_Blink_1').html(LongDivide(os.times(100), 1, {p: [0, 1], approx:''} ) + '%')
+        $('#textFill_Blink_2').html(Math.round(window.screen.width) + '&#x202f;&times;&#x202f;' + Math.round(window.screen.height));
+
+        $('#mainText_GeckoEdgeWebKit').css('display', 'none');
+        $('#mainText_Blink').css('display', 'block');
+    }
+    else if (engine === 'Gecko' || engine === 'EdgeHTML' || engine === 'WebKit') {
+        $('#textFill_Gecko_1').html(engine);
+
+        if (engine === 'Gecko') {
+            $('#textFill_Gecko_2').html('Firefox');
+        }
+        else if (engine === 'WebKit') {
+            $('#textFill_Gecko_2').html('Safari');
+        }
+        else if (engine === 'EdgeHTML') {
+            $('#textFill_Gecko_2').html('versions of Edge prior to 2019');
+        }
+
+        $('#textFill_Gecko_3').html(LongDivide(os.times(100), 1, {p: [0, 1], approx:''} ) + '%');
+        $('#textFill_Gecko_4').html(Math.round(window.screen.width) + '&#x202f;&times;&#x202f;' + Math.round(window.screen.height));
+        
+        $('#mainText_Blink').css('display', 'none');
+        $('#mainText_GeckoEdgeWebKit').css('display', 'block');        
+    }
 
 }
 

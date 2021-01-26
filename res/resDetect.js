@@ -8,7 +8,7 @@ function resDetect () {
     var engine = '';
     if (UA.indexOf('edge/') != -1) {
         DEBUG('Browser rendering engine: EdgeHTML');
-        engine = 'Edge';
+        engine = 'EdgeHTML';
     }
     else if (UA.indexOf('like gecko') != -1 && UA.indexOf('chrome/') != -1) {
         // Chrome / Opera / Blink
@@ -82,7 +82,7 @@ function resDetect () {
             zoom = Decimal(1);
         }
     }
-    else if (engine == 'Edge') {
+    else if (engine == 'EdgeHTML') {
         resScale = pxRatio;
     }
     else if (engine == 'Blink') {
