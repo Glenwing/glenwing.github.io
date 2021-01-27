@@ -872,29 +872,24 @@ function ddcLoad() {
         otherElements[a].addEventListener('mouseenter', function (event) { if (global_selectedElement == '') { loadDescription(event.currentTarget) }});
         otherElements[a].addEventListener('mouseleave',  function () { clearDescription() });
     }
-
-    $('[data-toggle="tooltip"]').tooltip();
-    $('#COPY_BTN').tooltip({
-        title: 'Copy a link with these settings',
-        placement: 'top',
-        animation: true,
-        trigger: 'hover focus',
-        delay: {show:600, hide:0},
-    })
-    /* $('#COPY_BTN')[0].addEventListener('shown.bs.tooltip', function (event) {
-        console.log('setting delay to 0');
-        $(event.currentTarget).tooltip({animation:true, delay: 0});
+    
+    $('#COPY_BTN')[0].addEventListener('mouseenter', function (event) {
+        //console.log('Mouse enter');
+        $('[data-toggle="tooltip"]').tooltip();
+        $('#COPY_BTN').tooltip({
+            title: 'Copy a link with these settings',
+            placement: 'top',
+            animation: true,
+            trigger: 'manual',
+            delay: {show:600, hide:0},
+        })
+        $(event.currentTarget).tooltip('toggle'); // tooltip('show') ignores delay
     });
-    $('#COPY_BTN')[0].addEventListener('hidden.bs.tooltip', function (event) {
-        console.log('setting delay to 600');
-        $(event.currentTarget).tooltip({animation:true, delay: 600});
-    }); */
-    /* 
     $('#COPY_BTN')[0].addEventListener('mouseleave', function (event) {
-        $(event.currentTarget).tooltip('hide');
-        $(event.currentTarget).tooltip({animation:true, delay: 600});
+        //console.log('Mouse leave');
+        $(event.currentTarget).tooltip('dispose'); // tooltip('hide') doesn't cancel 'show' calls that are still in the waiting-for-delay phase
     });
- */
+ 
     ddcParseURL();
     update();
     check_219Warning();
@@ -904,42 +899,3 @@ function ddcLoad() {
 $('#Sidebar_DDC').data('onLoad', ddcLoad);
 
 ddcLoad();
-
-/* 
-window.onload = function pageLoad () {
-    var unit_btn = document.getElementById('UNIT_BTN');
-    if (unit_btn.value = "") { unit_btn.value = "in"; unit_btn.innerHTML = "in"; }
-    var unit_radio = $('#unit_radio input[type="radio"]:checked').val();
-
-    unit_btn.value = unit_radio;
-    unit_btn.innerHTML = unit_radio;
-
-    // Fills the elements on the page with the event listeners necessary for the mouseover descriptions to work
-
-    var tables = [document.getElementById('results1'), document.getElementById('results2'), document.getElementById('results3')];
-    for (var a = 0; a < tables.length; a++) {
-        var rows = tables[a].children[0].children;
-        for (var b = 0; b < rows.length; b++) {
-            if (rows[b].classList.contains('selectable') != -1) {
-                rows[b].addEventListener('click', function (event) { selectRow(event.currentTarget); });
-                rows[b].addEventListener('mouseenter', function (event) { loadDescription(event.currentTarget) });
-                rows[b].addEventListener('mouseleave',  function () { clearDescription() });
-            }
-        }
-    }
-    var otherElements = [$('#INPUT_SIZE')[0], $('#INPUT_HRES')[0], $('#INPUT_VRES')[0], $('#INPUT_HRES2')[0], $('#INPUT_VRES2')[0]];
-    for (var a = 0; a < otherElements.length; a++) {
-        otherElements[a].addEventListener('mouseenter', function (event) { loadDescription(event.currentTarget) });
-        otherElements[a].addEventListener('mouseleave',  function () { clearDescription() });
-    }
-
-    parseURL();
-    update();
-    check_219Warning();
-    $('#INPUT_SIZE').focus();
-
-    let vh = window.innerHeight * 0.01;
-    // Then we set the value in the --vh custom property to the root of the document
-    document.documentElement.style.setProperty('--truevh', `${vh}px`);
-}
- */
