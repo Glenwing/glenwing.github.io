@@ -873,6 +873,17 @@ function ddcLoad() {
         otherElements[a].addEventListener('mouseleave',  function () { clearDescription() });
     }
 
+    $('[data-toggle="tooltip"]').tooltip();
+    $('#COPY_BTN').tooltip({
+        title: 'Copy a link with these settings',
+        placement: 'top',
+        animation: true,
+        trigger: 'manual',
+        delay: 600,
+    })
+    $('#COPY_BTN')[0].addEventListener('mouseenter', function (event) { $(event.currentTarget).tooltip('toggle'); });
+    $('#COPY_BTN')[0].addEventListener('mouseleave', function (event) { $(event.currentTarget).tooltip('hide'); });
+
     ddcParseURL();
     update();
     check_219Warning();

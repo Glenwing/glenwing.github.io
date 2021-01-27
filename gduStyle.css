@@ -256,6 +256,18 @@ input[type="text"] {
     transition-delay:   600ms;
 }
 
+.tooltip > .tooltip-inner {
+    font-size:          1rem;
+    background-color:   var(--bgcolor);
+    border-radius:      5px;
+    border:             1px solid #323232;
+    padding:            6px 8px;
+    max-width:          240px;
+}
+.tooltip.bottom > .tooltip-arrow {
+    border-bottom:      1px solid #323232;
+}
+
 a, a:visited {
     color:              #AAAAAA;
     text-decoration:    none;
@@ -787,7 +799,6 @@ div.copylink.good:active svg.copylinkbutton path {
 div.copylink.bad:active svg.copylinkbutton path {
     fill:               rgb(200, 64, 64);
 }
-
 
 
 div.tbheader {

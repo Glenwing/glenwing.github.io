@@ -31,7 +31,6 @@ function resDetect () {
 
     // Get viewport scale to compensate for zoom on mobile devices
     var metaContent = document.querySelector('meta[name="viewport"]').content;
-    //console.log('metaContent =', metaContent);
     var viewportScale = parseNum(
         metaContent.substring(
             metaContent.indexOf('initial-scale=') + ('initial-scale=').length,
@@ -51,20 +50,6 @@ function resDetect () {
     else {
         viewportScale = Decimal(1);
     }
-    /*
-    if (isNum(viewportScale) == true) {
-        if (viewportScale < 1 && window.innerHeight > window.outerHeight) {
-            viewportScale = Decimal(viewportScale);
-        }
-        else {
-            viewportScale = Decimal(1);
-        }
-    }
-    else {
-        viewportScale = Decimal(1);
-    } 
-    */
-    //console.log('viewportScale =', viewportScale);
 
     // Determine output
     var zoom = Decimal(1); // Browser Zoom
@@ -78,9 +63,6 @@ function resDetect () {
     var os_tol_below = Decimal(0);
 
     if (engine == 'Gecko') {
-        //zoom_raw = Decimal(mediaQueryBinarySearch('min-resolution', 'dppx', 0, 10, 20, 0.0001));
-        //zoom = zoom_raw.toDecimalPlaces(2);
-        //osScale = pxRatio.div(zoom).toDecimalPlaces(2);
         zoom = Decimal(1);
         osScale = pxRatio;
         resScale = pxRatio;
@@ -136,50 +118,6 @@ function resDetect () {
         'zoom_tol_below': zoom_tol_below,
         'os_tol_above': os_tol_above,
         'os_tol_below': os_tol_below,
-    }
-}
-
-function mediaQueryBinarySearch (property, unit, a, b, maxIter, epsilon) {
-    var matchMedia;
-    var head, style, div;
-    if (window.matchMedia) {
-        matchMedia = window.matchMedia;
-    } else {
-        head = document.getElementsByTagName('head')[0];
-        style = document.createElement('style');
-        head.appendChild(style);
-
-        div = document.createElement('div');
-        div.className = 'mediaQueryBinarySearch';
-        div.style.display = 'none';
-        document.body.appendChild(div);
-
-        matchMedia = function (query) {
-            style.sheet.insertRule('@media ' + query + '{.mediaQueryBinarySearch ' + '{text-decoration: underline} }', 0);
-            var matched = getComputedStyle(div, null).textDecoration == 'underline';
-            style.sheet.deleteRule(0);
-            return {matches: matched};
-        };
-    }
-    
-    var ratio = binarySearch(a, b, maxIter);
-    if (div) {
-        head.removeChild(style);
-        document.body.removeChild(div);
-    }
-    return ratio;
-
-    function binarySearch (a, b, maxIter) {
-        var mid = (a + b) / 2;
-        if (maxIter <= 0 || b - a < epsilon) {
-            return mid;
-        }
-        var query = "(" + property + ":" + mid + unit + ")";
-        if (matchMedia(query).matches) {
-            return binarySearch(mid, b, maxIter - 1);
-        } else {
-            return binarySearch(a, mid, maxIter - 1);
-        }
     }
 }
 

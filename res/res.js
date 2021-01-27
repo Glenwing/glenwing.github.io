@@ -57,10 +57,13 @@ function updateRes() {
         times_symbol = '&nbsp;&times;&nbsp;';
 
         $('#uncertainty_Blink').css('display', 'block');
+        $('#uncertainty_Blink_2').css('display', 'inline');
         $('#uncertainty_Gecko').css('display', 'block');
+
     }
     else {
         $('#uncertainty_Blink').css('display', 'none');
+        $('#uncertainty_Blink_2').css('display', 'none');
         $('#uncertainty_Gecko').css('display', 'none');
     }
 
@@ -90,10 +93,6 @@ function updateRes() {
     $('#TrueResDiv').html(round_W + unc_str_W + '&#x202f;&times;&#x202f;' + round_H + unc_str_H);
 
     if (Math.abs(window.screen.width - round_W) > 1 || Math.abs(window.screen.height - round_H) > 1) {
-        $('#restext_os').css('display', 'block');
-        $('#restext_os_number').html(LongDivide(os * 100, 1, {p: [0, 2], approx:''}) + '%');
-        $('#restext_effres').html(Math.round(window_W) + '&#x202f;&times;&#x202f;' + Math.round(window_H));
-
         $('#scaledRes_Blink').css('display', 'block');
         $('#scaledRes_Gecko').css('display', 'block');
     }
