@@ -311,7 +311,7 @@ li {
 }
 
 code {
-    font-family:        'inconsolata', monospace;
+    font-family:        'Inconsolata', monospace;
     font-weight:        500;
     color:              var(--textcolor);
     display:            inline;
