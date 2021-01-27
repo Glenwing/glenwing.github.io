@@ -1,3 +1,7 @@
+.fade {
+    transition: opacity 40ms linear;
+  }
+
 .tooltip {
     position: absolute;
     z-index: 1070;

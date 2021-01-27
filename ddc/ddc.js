@@ -878,12 +878,23 @@ function ddcLoad() {
         title: 'Copy a link with these settings',
         placement: 'top',
         animation: true,
-        trigger: 'manual',
-        delay: 600,
+        trigger: 'hover focus',
+        delay: {show:600, hide:0},
     })
-    $('#COPY_BTN')[0].addEventListener('mouseenter', function (event) { $(event.currentTarget).tooltip('toggle'); });
-    $('#COPY_BTN')[0].addEventListener('mouseleave', function (event) { $(event.currentTarget).tooltip('hide'); });
-
+    /* $('#COPY_BTN')[0].addEventListener('shown.bs.tooltip', function (event) {
+        console.log('setting delay to 0');
+        $(event.currentTarget).tooltip({animation:true, delay: 0});
+    });
+    $('#COPY_BTN')[0].addEventListener('hidden.bs.tooltip', function (event) {
+        console.log('setting delay to 600');
+        $(event.currentTarget).tooltip({animation:true, delay: 600});
+    }); */
+    /* 
+    $('#COPY_BTN')[0].addEventListener('mouseleave', function (event) {
+        $(event.currentTarget).tooltip('hide');
+        $(event.currentTarget).tooltip({animation:true, delay: 600});
+    });
+ */
     ddcParseURL();
     update();
     check_219Warning();
