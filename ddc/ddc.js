@@ -1,6 +1,8 @@
-﻿LongDivide.errors = false;
+﻿console.log('ddc.js');
 
-var global_inputVars = { // Used for keeping track of when the inputs have changed
+LongDivide.errors = false;
+
+var global_DDCInputVars = { // Used for keeping track of when the inputs have changed
     unit:  $('#UNIT_BTN').val(),
     diag:  $('#INPUT_SIZE').val(),
     hres:  $('#INPUT_HRES').val(),
@@ -9,25 +11,6 @@ var global_inputVars = { // Used for keeping track of when the inputs have chang
     vres2: $('#INPUT_VRES2').val(),
 };
 
-global_katexOptions = {
-    throwOnError: false,
-    displayMode: true, 
-    strict: false,
-    //trust: true,
-    minRuleThickness: 0.06,
-    macros: {
-        '\\afrac': '\\dfrac{\\raisebox{-0.1em}{#1}}{\\raisebox{-0.1em}{#2}}', // Aligned fraction
-        '\\mfrac': '\\dfrac{\\raisebox{-0.1em}{$#1$}}{\\raisebox{-0.1em}{$#2$}}', // Same as afrac, but auto math mode arguments
-        '\\Sin': '\\sin \\left( #1 \\right)', // Trig functions with scaling parentheses attached
-        '\\Cos': '\\cos \\left( #1 \\right)',
-        '\\Tan': '\\tan \\left( #1 \\right)',
-        '\\Arcsin': '\\sin ^{-1} \\left( #1 \\right)',
-        '\\Arccos': '\\cos ^{-1} \\left( #1 \\right)',
-        '\\Arctan': '\\tan ^{-1} \\left( #1 \\right)',
-        '\\ratio': '\\raisebox{0.1em}{:}',
-        //'\\micro': '\\includegraphics[width=0.55em]{..\\assets\\CMUmu.svg}'
-    }
-};
 
 var LD_2dp =    { p:2,      sep:['\\,', '\\,', false, false], approx:'', repeat:false };
 var LD_0to3dp = { p:[0,3],  sep:['\\,', '\\,', false, false], approx:'', repeat:false };
@@ -40,40 +23,10 @@ var LD_5sf_si = { sf:5,     sep:['\\,', '\\,', false, false], approx:'', repeat:
 var LD_2to6dp_rep = { p:[2,6], sep:['\\,', '\\,', false, false], approx:'', repeat:true, overline:['\\overline{', '}']  };
 var LD_rep =    { p:[2,6],  sep:['\\,', '\\,', false, false], overline:['\\overline{', '}'] };
 
-var global_selectedElement = ''; // Used for keeping track of which element is currently selected in the document
+//var global_selectedElement = ''; // Used for keeping track of which element is currently selected in the document
 
 
-var global_DescriptionRegistry = { // Used for associating HTML files for loading detailed descriptions
-    'INPUT_SIZE':       './DescriptionFiles/Description_DiagonalSize.html',
-    'INPUT_HRES':       './DescriptionFiles/Description_InputHres.html',
-    'INPUT_VRES':       './DescriptionFiles/Description_InputVres.html',
-    'INPUT_HRES2':      './DescriptionFiles/Description_InputHres2.html',
-    'INPUT_VRES2':      './DescriptionFiles/Description_InputVres2.html',
-
-    'selectRatio':      './DescriptionFiles/Description_Ratio.html',
-    'selectTotalPx':    './DescriptionFiles/Description_TotalPixels.html',
-    'selectPxDensity':  './DescriptionFiles/Description_PixelDensity.html',
-    'selectPxPitch':    './DescriptionFiles/Description_PixelPitch.html',
-    'selectDiag':       './DescriptionFiles/Description_DiagonalSize.html',
-    'selectWidth':      './DescriptionFiles/Description_Width.html',
-    'selectHeight':     './DescriptionFiles/Description_Height.html',
-    'selectArea':       './DescriptionFiles/Description_Area.html',
-
-    'selectDiag2':      './DescriptionFiles/Description_Diag_MatchingHeight.html',
-    'selectWidth2':     './DescriptionFiles/Description_Width_MatchingHeight.html',
-    'selectHeight2':    './DescriptionFiles/Description_Height_MatchingHeight.html',
-    'selectPxDensity2': './DescriptionFiles/Description_PixelDensity_Matching.html',
-    'selectRatio2':     './DescriptionFiles/Description_Ratio_Matching.html',
-
-    'selectDiag3':      './DescriptionFiles/Description_Diag_MatchingDensity.html',
-    'selectWidth3':     './DescriptionFiles/Description_Width_MatchingDensity.html',
-    'selectHeight3':    './DescriptionFiles/Description_Height_MatchingDensity.html',
-    'selectPxDensity3': './DescriptionFiles/Description_PixelDensity_Matching.html',
-    'selectRatio3':     './DescriptionFiles/Description_Ratio_Matching.html',
-    'selectIdealRes':   './DescriptionFiles/Description_IdealResolution.html',
-};
-
-function update() {
+function updateDDC() {
     // This function updates the results whenever one of the input fields is changed, as well as update the description in response to mouseover events.
 
     var size = parseNum($('#INPUT_SIZE').val());
@@ -108,12 +61,12 @@ function update() {
     var opt_res = parseInt(vres1 * ar2) + '&thinsp;&times;&thinsp;' + vres1;
 
     if (
-        global_inputVars['unit']  !== $('#UNIT_BTN').val() ||
-        global_inputVars['diag']  !== $('#INPUT_SIZE').val() ||
-        global_inputVars['hres']  !== $('#INPUT_HRES').val() ||
-        global_inputVars['vres']  !== $('#INPUT_VRES').val() ||
-        global_inputVars['hres2'] !== $('#INPUT_HRES2').val() ||
-        global_inputVars['vres2'] !== $('#INPUT_VRES2').val()
+        global_DDCInputVars['unit']  !== $('#UNIT_BTN').val() ||
+        global_DDCInputVars['diag']  !== $('#INPUT_SIZE').val() ||
+        global_DDCInputVars['hres']  !== $('#INPUT_HRES').val() ||
+        global_DDCInputVars['vres']  !== $('#INPUT_VRES').val() ||
+        global_DDCInputVars['hres2'] !== $('#INPUT_HRES2').val() ||
+        global_DDCInputVars['vres2'] !== $('#INPUT_VRES2').val()
     ) {
         //var hres_den = parseInt(parseNum($('#INPUT_HRES_DENSITY').val()));
         //var vres_den = parseInt(parseNum($('#INPUT_VRES_DENSITY').val()));
@@ -285,16 +238,16 @@ function update() {
     }
     */
 
-    global_inputVars['unit'] = $('#UNIT_BTN').val();
-    global_inputVars['diag'] = $('#INPUT_SIZE').val();
-    global_inputVars['hres'] = $('#INPUT_HRES').val();
-    global_inputVars['vres'] = $('#INPUT_VRES').val();
-    global_inputVars['hres2'] = $('#INPUT_HRES2').val();
-    global_inputVars['vres2'] = $('#INPUT_VRES2').val();
+    global_DDCInputVars['unit'] = $('#UNIT_BTN').val();
+    global_DDCInputVars['diag'] = $('#INPUT_SIZE').val();
+    global_DDCInputVars['hres'] = $('#INPUT_HRES').val();
+    global_DDCInputVars['vres'] = $('#INPUT_VRES').val();
+    global_DDCInputVars['hres2'] = $('#INPUT_HRES2').val();
+    global_DDCInputVars['vres2'] = $('#INPUT_VRES2').val();
 
     // Refresh Description
     if ($('#description').html != '') {
-        global_DescriptionFunction( {
+        var descriptionSpecs = {
             'diag':         diag,
             'unit':         new UNIT($('#UNIT_BTN').val()),
             'hres':         hres1,
@@ -310,7 +263,10 @@ function update() {
             'ar2':          ar2,
             'diag2':        diag2,
             'opt_res':      opt_res,
-        } );
+        };
+        //console.log(descriptionSpecs);
+        //console.log(global_DescriptionFunction);
+        global_DescriptionFunction( descriptionSpecs );
     }
     else { return; }
 
@@ -571,10 +527,11 @@ function pleaseFillTheOtherSectionFirst() {
 function setRatio(a, b) {
     $('#INPUT_HRES2').val(a);
     $('#INPUT_VRES2').val(b);
-    update();
+    updateDDC();
 }
 
 
+/*
 function selectRow(el) {
     previousEl = global_selectedElement || '';
     if (previousEl != '') { deselectRow(); }
@@ -594,11 +551,13 @@ function selectRow(el) {
             $('#description').html($(el).data('descriptionContent'));
             global_DescriptionFunction = $(el).data('descriptionFunction');
             //$('#description').html(el.id + '<br><br>' + $('#description').html());
-        } */
+        }
 
     }
 }
+*/
 
+/*
 function deselectRow() {
     global_selectedElement = global_selectedElement || '';
     if (global_selectedElement != '') {
@@ -606,6 +565,7 @@ function deselectRow() {
         global_selectedElement = '';
     }
 }
+/**/
 
 /* Clears description when clicking anywhere else on the screen (except on excluded elements)
 document.addEventListener('click', function(event) {
@@ -624,11 +584,11 @@ document.addEventListener('click', function(event) {
     }
     return;
 });
-/*  */
 
 document.addEventListener('keydown', function(event) {
     if (event.key === 'Escape' || event.keyCode === 27) { deselectRow(); $('#description').html(''); }
 });
+*/
 
 /*
 document.addEventListener('mousemove', function(event) {
@@ -636,7 +596,8 @@ document.addEventListener('mousemove', function(event) {
 });
 */
 
-function loadDescription(el) {
+/*
+var loadDescription = function (el) {
     //if (global_selectedElement == '') {
         //$('#description').load(global_DescriptionRegistry[element.id]);
         //console.log('$(el).data("descriptionContent"):', $(el).data('descriptionContent'));
@@ -663,6 +624,7 @@ function clearDescription() {
 }
 
 var global_DescriptionFunction = function() { return; };
+*/
 
 
 // https://stackoverflow.com/questions/1255512/how-to-draw-a-rounded-rectangle-on-html-canvas
@@ -847,6 +809,36 @@ function ddcParseURL() {
 
 
 function ddcLoad() {
+    global_DescriptionRegistry = { // Used for associating HTML files for loading detailed descriptions
+        'INPUT_SIZE':       './DescriptionFiles/Description_DiagonalSize.html',
+        'INPUT_HRES':       './DescriptionFiles/Description_InputHres.html',
+        'INPUT_VRES':       './DescriptionFiles/Description_InputVres.html',
+        'INPUT_HRES2':      './DescriptionFiles/Description_InputHres2.html',
+        'INPUT_VRES2':      './DescriptionFiles/Description_InputVres2.html',
+    
+        'selectRatio':      './DescriptionFiles/Description_Ratio.html',
+        'selectTotalPx':    './DescriptionFiles/Description_TotalPixels.html',
+        'selectPxDensity':  './DescriptionFiles/Description_PixelDensity.html',
+        'selectPxPitch':    './DescriptionFiles/Description_PixelPitch.html',
+        'selectDiag':       './DescriptionFiles/Description_DiagonalSize.html',
+        'selectWidth':      './DescriptionFiles/Description_Width.html',
+        'selectHeight':     './DescriptionFiles/Description_Height.html',
+        'selectArea':       './DescriptionFiles/Description_Area.html',
+    
+        'selectDiag2':      './DescriptionFiles/Description_Diag_MatchingHeight.html',
+        'selectWidth2':     './DescriptionFiles/Description_Width_MatchingHeight.html',
+        'selectHeight2':    './DescriptionFiles/Description_Height_MatchingHeight.html',
+        'selectPxDensity2': './DescriptionFiles/Description_PixelDensity_Matching.html',
+        'selectRatio2':     './DescriptionFiles/Description_Ratio_Matching.html',
+    
+        'selectDiag3':      './DescriptionFiles/Description_Diag_MatchingDensity.html',
+        'selectWidth3':     './DescriptionFiles/Description_Width_MatchingDensity.html',
+        'selectHeight3':    './DescriptionFiles/Description_Height_MatchingDensity.html',
+        'selectPxDensity3': './DescriptionFiles/Description_PixelDensity_Matching.html',
+        'selectRatio3':     './DescriptionFiles/Description_Ratio_Matching.html',
+        'selectIdealRes':   './DescriptionFiles/Description_IdealResolution.html',
+    };
+
     var unit_btn = document.getElementById('UNIT_BTN');
     if (unit_btn.value = "") { unit_btn.value = "in"; unit_btn.innerHTML = "in"; }
     var unit_radio = $('#unit_radio input[type="radio"]:checked').val();
@@ -861,16 +853,16 @@ function ddcLoad() {
         var rows = tables[a].children[0].children;
         for (var b = 0; b < rows.length; b++) {
             if (rows[b].classList.contains('selectable') != -1) {
-                rows[b].addEventListener('click', function (event) { selectRow(event.currentTarget); });
-                rows[b].addEventListener('mouseenter', function (event) { if (global_selectedElement == '') { loadDescription(event.currentTarget) }});
-                rows[b].addEventListener('mouseleave',  function () { clearDescription() });
+                rows[b].addEventListener('click', function (event) { selectRow(event.currentTarget); updateDDC(); });
+                rows[b].addEventListener('mouseenter', function (event) { if (global_selectedElement == '') { loadDescription(event.currentTarget, updateDDC); }});
+                rows[b].addEventListener('mouseleave', function () { clearDescription(); });
             }
         }
     }
     var otherElements = [$('#INPUT_SIZE')[0], $('#INPUT_HRES')[0], $('#INPUT_VRES')[0], $('#INPUT_HRES2')[0], $('#INPUT_VRES2')[0]];
     for (var a = 0; a < otherElements.length; a++) {
-        otherElements[a].addEventListener('mouseenter', function (event) { if (global_selectedElement == '') { loadDescription(event.currentTarget) }});
-        otherElements[a].addEventListener('mouseleave',  function () { clearDescription() });
+        otherElements[a].addEventListener('mouseenter', function (event) { if (global_selectedElement == '') { loadDescription(event.currentTarget, updateDDC); }});
+        otherElements[a].addEventListener('mouseleave', function () { clearDescription(); });
     }
     
     $('#COPY_BTN')[0].addEventListener('mouseenter', function (event) {
@@ -891,11 +883,12 @@ function ddcLoad() {
     });
  
     ddcParseURL();
-    update();
+    updateDDC();
     check_219Warning();
     $('#INPUT_SIZE').focus();
 }
 
 $('#Sidebar_DDC').data('onLoad', ddcLoad);
+console.log('ddc.js loaded');
 
 ddcLoad();

@@ -179,6 +179,25 @@ function GCD(a, b) {
     }
 }
 
+global_katexOptions = {
+    throwOnError: false,
+    displayMode: true, 
+    strict: false,
+    //trust: true,
+    minRuleThickness: 0.06,
+    macros: {
+        '\\afrac': '\\dfrac{\\raisebox{-0.1em}{#1}}{\\raisebox{-0.1em}{#2}}', // Aligned fraction
+        '\\mfrac': '\\dfrac{\\raisebox{-0.1em}{$#1$}}{\\raisebox{-0.1em}{$#2$}}', // Same as afrac, but auto math mode arguments
+        '\\Sin': '\\sin \\left( #1 \\right)', // Trig functions with scaling parentheses attached
+        '\\Cos': '\\cos \\left( #1 \\right)',
+        '\\Tan': '\\tan \\left( #1 \\right)',
+        '\\Arcsin': '\\sin ^{-1} \\left( #1 \\right)',
+        '\\Arccos': '\\cos ^{-1} \\left( #1 \\right)',
+        '\\Arctan': '\\tan ^{-1} \\left( #1 \\right)',
+        '\\ratio': '\\raisebox{0.1em}{:}',
+        //'\\micro': '\\includegraphics[width=0.55em]{..\\assets\\CMUmu.svg}'
+    }
+};
 
 katex.oldRender = katex.render;
 katex.render = function (expression, baseNode, options) {
@@ -204,7 +223,7 @@ function activateMatchmaker() {
         //$('#Sidebar_Matchmaker').attr('onclick', '');
 
         if (window.location.href.indexOf('#matchmaker') === -1) { history.replaceState(null, null, window.location.href + '#matchmaker'); }
-        update();
+        updateDDC();
     }
 }
 
@@ -225,11 +244,12 @@ function deactivateMatchmaker() {
         //$('#Sidebar_DDC').attr('onclick', '');
 
         if (window.location.href.indexOf('#matchmaker') !== -1) { history.replaceState(null, null, window.location.href.replace('#matchmaker', '')); }
-        update();
+        updateDDC();
     }
 }
 
 function activatePage(sidebarID) {
+    global_selectedPage = ($('#' + sidebarID).data('dir'));
     var children = document.getElementById('Sidebar').children;
     var oldChild = null;
     for (var i = 0; i < children.length; i++) {
@@ -254,6 +274,56 @@ function activatePage(sidebarID) {
         }
     }
 }
+
+var global_selectedPage = '';
+var global_selectedElement = '';
+var global_DescriptionFunction = function() { return; };
+
+function selectRow(el) {
+    previousEl = global_selectedElement || '';
+    if (previousEl != '') { deselectRow(); }
+    if (previousEl != el) {
+        el.classList.add('selected');
+        global_selectedElement = el;
+        loadDescription(el);
+    }
+}
+
+function deselectRow() {
+    global_selectedElement = global_selectedElement || '';
+    if (global_selectedElement != '') {
+        global_selectedElement.classList.remove('selected');
+        global_selectedElement = '';
+    }
+}
+
+document.addEventListener('keydown', function(event) {
+    if (event.key === 'Escape' || event.keyCode === 27) { deselectRow(); $('#description').html(''); }
+});
+
+var loadDescription = function (el, callback) {
+    if ($(el).data('descriptionContent') === undefined) {
+        $('#description').load(global_selectedPage + '/' + global_DescriptionRegistry[el.id], function() {
+            $(el).data('descriptionContent', $('#description').html());
+            $(el).data('descriptionFunction', global_DescriptionFunction);
+            if (callback !== undefined) { callback(); }
+            //global_DescriptionFunction();
+        });
+    }
+    else {
+        $('#description').html($(el).data('descriptionContent'));
+        global_DescriptionFunction = $(el).data('descriptionFunction');
+        //global_DescriptionFunction();
+    }
+}
+
+function clearDescription() {
+    if (global_selectedElement == '') {
+        $('#description').html('');
+        global_DescriptionFunction = function() { return; };
+    }
+}
+
 
 window.addEventListener('resize', () => {
     // We execute the same script as before

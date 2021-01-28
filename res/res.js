@@ -133,8 +133,9 @@ function updateRes() {
 
 }
 
+/*
 var global_selectedElement = ''; // Used for keeping track of which element is currently selected in the document
-var global_DescriptionFunction = function() { return; };
+var global_resDescriptionFunction = function() { return; };
 
 function selectRow(el) {
     previousEl = global_selectedElement || '';
@@ -142,7 +143,7 @@ function selectRow(el) {
     if (previousEl != el) {
         el.classList.add('selected');
         global_selectedElement = el;
-        loadDescription(el);
+        load_resDescription(el);
     }
 }
 
@@ -153,6 +154,7 @@ function deselectRow() {
         global_selectedElement = '';
     }
 }
+*/
 
 /* Clears description when clicking anywhere else on the screen (except on excluded elements)
 document.addEventListener('click', function(event) {
@@ -167,52 +169,54 @@ document.addEventListener('click', function(event) {
 });
 /*  */
 
+/*
 document.addEventListener('keydown', function(event) {
     if (event.key === 'Escape') { deselectRow(); $('#description').html(''); }
 });
 
-function loadDescription(el) {
+function load_resDescription (el) {
     if ($(el).data('descriptionCache') === '') {
         $('#description').load('res/' + $(el).data('descriptionFilepath'), function() {
             $(el).data('descriptionCache', $('#description').html());
-            $(el).data('descriptionOnLoad', global_DescriptionFunction);
-            global_DescriptionFunction();
+            $(el).data('descriptionOnLoad', global_resDescriptionFunction);
+            global_resDescriptionFunction();
         });
     }
     else {
         $('#description').html($(el).data('descriptionCache'));
-        global_DescriptionFunction = $(el).data('descriptionOnLoad');
-        global_DescriptionFunction();
+        global_resDescriptionFunction = $(el).data('descriptionOnLoad');
+        global_resDescriptionFunction();
     }
 }
 
-function clearDescription() {
+function clear_resDescription() {
     if (global_selectedElement == '') {
         $('#description').html('');
-        global_DescriptionFunction = function() { return; };
+        global_resDescriptionFunction = function() { return; };
     }
 }
+*/
 
-
-var global_DescriptionRegistry = { // Used for associating HTML files for loading detailed descriptions
-    'selectWindowScreenWidth':  'DescriptionFiles/Description_WS_Width.html',
-    'selectWindowScreenHeight': 'DescriptionFiles/Description_WS_Height.html',
-    'selectPxRatio':            'DescriptionFiles/Description_Px_Ratio.html',
-    'selectZoomRatio':          'DescriptionFiles/Description_Zoom_Ratio.html',
-    'selectOSRatio':            'DescriptionFiles/Description_OS_Ratio.html',
-    'selectCalculatedWidth':    'DescriptionFiles/Description_Calc_Width.html',
-    'selectToleranceWidth':     'DescriptionFiles/Description_Tol_Width.html',
-    'selectCalculatedHeight':   'DescriptionFiles/Description_Calc_Height.html',
-    'selectToleranceHeight':    'DescriptionFiles/Description_Tol_Height.html',
-};
 
 function resLoad() {
+    global_DescriptionRegistry = { // Used for associating HTML files for loading detailed descriptions
+        'selectWindowScreenWidth':  'DescriptionFiles/Description_WS_Width.html',
+        'selectWindowScreenHeight': 'DescriptionFiles/Description_WS_Height.html',
+        'selectPxRatio':            'DescriptionFiles/Description_Px_Ratio.html',
+        'selectZoomRatio':          'DescriptionFiles/Description_Zoom_Ratio.html',
+        'selectOSRatio':            'DescriptionFiles/Description_OS_Ratio.html',
+        'selectCalculatedWidth':    'DescriptionFiles/Description_Calc_Width.html',
+        'selectToleranceWidth':     'DescriptionFiles/Description_Tol_Width.html',
+        'selectCalculatedHeight':   'DescriptionFiles/Description_Calc_Height.html',
+        'selectToleranceHeight':    'DescriptionFiles/Description_Tol_Height.html',
+    };
+
     // Fills the elements on the page with the event listeners necessary for the mouseover descriptions to work
     var resResultTableRows = document.getElementById('resResultTable_1').children[0].children;
     for (var a = 0; a < resResultTableRows.length; a++) {
         if (resResultTableRows[a].classList.contains('selectable') != -1) {
             resResultTableRows[a].addEventListener('click', function (event) { selectRow(event.currentTarget); });
-            resResultTableRows[a].addEventListener('mouseenter', function (event) { if (global_selectedElement == '') { loadDescription(event.currentTarget) }});
+            resResultTableRows[a].addEventListener('mouseenter', function (event) { if (global_selectedElement == '') { loadDescription(event.currentTarget); global_DescriptionFunction(); }});
             resResultTableRows[a].addEventListener('mouseleave',  function () { clearDescription() });
             resResultTableRows[a].dataset.descriptionFilepath = global_DescriptionRegistry[resResultTableRows[a].id];
             resResultTableRows[a].dataset.descriptionCache = '';
