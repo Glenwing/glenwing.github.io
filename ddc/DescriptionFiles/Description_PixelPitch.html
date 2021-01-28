@@ -130,6 +130,14 @@
     
                 document.getElementById('eq2'), global_katexOptions
             );
+/* 
+            eq2html = $('#eq2').html();
+            if (eq2html.indexOf('µ') != -1) {
+                console.log('Mu detected');
+                $('#eq2').html(eq2html.replace('µ', '<span style="font-family:CMU Serif">µ</span>'));
+            }
+*/
+            //$('#eq2').html($('#eq2').html().replaceAll('<span class="mord">µ</span>', '<span class="mord" style="font-family:CMU Serif">µ</span>'));
 
             
 

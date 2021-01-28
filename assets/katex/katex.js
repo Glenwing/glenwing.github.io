@@ -17241,6 +17241,8 @@ var katex_render = function render(expression, baseNode, options) {
   baseNode.textContent = "";
   var node = katex_renderToDomTree(expression, options).toNode();
   baseNode.appendChild(node);
+  // The following line added by Glenwing on 2021-01-27 to support upright Mu character
+  // baseNode.innerHTML = baseNode.innerHTML.replaceAll('<span class="mord">µ</span>', '<span class="mord" style="font-family:Latin Modern Serif">µ</span>');
 }; // KaTeX's styles don't work properly in quirks mode. Print out an error, and
 // disable rendering.
 

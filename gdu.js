@@ -179,6 +179,14 @@ function GCD(a, b) {
     }
 }
 
+
+katex.oldRender = katex.render;
+katex.render = function (expression, baseNode, options) {
+    katex.oldRender(expression, baseNode, options);
+    baseNode.innerHTML = baseNode.innerHTML.replaceAll('<span class="mord">µ</span>', '<span class="mord" style="font-family:Latin Modern Serif">µ</span>');
+}
+
+
 function activateMatchmaker() {
     if ($('#Sidebar_DDC').hasClass('selected') || $('#Sidebar_Matchmaker').hasClass('selected')) {
         //console.log('activateMatchmaker() triggered');

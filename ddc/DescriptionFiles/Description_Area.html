@@ -2,7 +2,8 @@
     This is the surface area of the face of the display panel. Area is calculated as:
 
     <div id='eq1' class='katex'>
-        Area (A) = W&#x202f;&times;&#x202f;L
+        <span class="katex-display"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mtext>Area&nbsp;</mtext><mo stretchy="false">(</mo><mi>A</mi><mo stretchy="false">)</mo><mo>=</mo><mi>W</mi><mo>×</mo><mi>L</mi></mrow><annotation encoding="application/x-tex">\textrm{Area}~(A) = W \times L</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height: 1em; vertical-align: -0.25em;"></span><span class="mord text"><span class="mord textrm">Area</span></span><span class="mspace nobreak">&nbsp;</span><span class="mopen">(</span><span class="mord mathdefault">A</span><span class="mclose">)</span><span class="mspace" style="margin-right: 0.277778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right: 0.277778em;"></span></span><span class="base"><span class="strut" style="height: 0.76666em; vertical-align: -0.08333em;"></span><span class="mord mathdefault" style="margin-right: 0.13889em;">W</span><span class="mspace" style="margin-right: 0.222222em;"></span><span class="mbin">×</span><span class="mspace" style="margin-right: 0.222222em;"></span></span><span class="base"><span class="strut" style="height: 0.68333em; vertical-align: 0em;"></span><span class="mord mathdefault">L</span></span></span></span></span>
+        <!-- Area (A) = W&#x202f;&times;&#x202f;L -->
     </div>
 
     where:
@@ -30,13 +31,14 @@
     }
     
     global_DescriptionFunction = function (specs) {
+/*         
         katex.render(
 
             '\\textrm{Area}~(A) = W \\times L',
     
             document.getElementById('eq1'), global_katexOptions
         );
-
+ */
         if (isPositive([ specs['hres'], specs['vres'], specs['diag'] ])) {
             var unit = specs['unit'];
 
