@@ -1,6 +1,4 @@
-﻿console.log('ddc.js');
-
-LongDivide.errors = false;
+﻿LongDivide.errors = false;
 
 var global_DDCInputVars = { // Used for keeping track of when the inputs have changed
     unit:  $('#UNIT_BTN').val(),
@@ -859,11 +857,16 @@ function ddcLoad() {
             }
         }
     }
-    var otherElements = [$('#INPUT_SIZE')[0], $('#INPUT_HRES')[0], $('#INPUT_VRES')[0], $('#INPUT_HRES2')[0], $('#INPUT_VRES2')[0]];
-    for (var a = 0; a < otherElements.length; a++) {
-        otherElements[a].addEventListener('mouseenter', function (event) { if (global_selectedElement == '') { loadDescription(event.currentTarget, updateDDC); }});
-        otherElements[a].addEventListener('mouseleave', function () { clearDescription(); });
+    var inputFields = [$('#INPUT_SIZE')[0], $('#INPUT_HRES')[0], $('#INPUT_VRES')[0], $('#INPUT_HRES2')[0], $('#INPUT_VRES2')[0]];
+    for (var a = 0; a < inputFields.length; a++) {
+        inputFields[a].addEventListener('mouseenter', function (event) { if (global_selectedElement == '') { loadDescription(event.currentTarget, updateDDC); }});
+        inputFields[a].addEventListener('mouseleave', function () { clearDescription(); });
+        inputFields[a].addEventListener('input', function () { updateDDC(); } );
     }
+    $('#UNIT_BTN').click( function () {
+        changeUnit(this);
+        updateDDC();
+    });
     
     $('#COPY_BTN')[0].addEventListener('mouseenter', function (event) {
         //console.log('Mouse enter');
@@ -889,6 +892,5 @@ function ddcLoad() {
 }
 
 $('#Sidebar_DDC').data('onLoad', ddcLoad);
-console.log('ddc.js loaded');
 
 ddcLoad();

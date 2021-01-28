@@ -3,22 +3,22 @@
         <div style="display:flex; flex-flow:row nowrap; justify-content: space-between;">
             Display Dimensions Calculator
             <span class="version">
-                <span>DRAFT</span> 22
+                <span>DRAFT</span> 23
             </span>
         </div>
         <hr>
     </h1>
 
     <div class="main_calc">
-        <input id="INPUT_SIZE" class="large" value="" type="text" placeholder="24" onchange="update();" oninput="this.onchange();" onfocus="this.select();" tabindex="2" />
-        <button id="UNIT_BTN" class="unit" value="" onclick="changeUnit(this); update();" tabindex="1"></button>
+        <input id="INPUT_SIZE" class="large" value="" type="text" placeholder="24" onfocus="this.select();" tabindex="2" />
+        <button id="UNIT_BTN" class="unit" value="" tabindex="1"></button>
         <form id="unit_radio" style="display:none;">
             <input id="in_radio" name="unit_radio" value="in" type="radio" checked />
             <input id="cm_radio" name="unit_radio" value="cm" type="radio" />
         </form>
-        <input id="INPUT_HRES" class="large" value="" type="text" placeholder="1920" onchange="update();" oninput="this.onchange();" onfocus="this.select();"tabindex="3" />
+        <input id="INPUT_HRES" class="large" value="" type="text" placeholder="1920" onfocus="this.select();"tabindex="3" />
         <span class="large_times">&#10005;</span>
-        <input id="INPUT_VRES" class="large" value="" type="text" placeholder="1080" onchange="update();" oninput="this.onchange();" onfocus="this.select();"tabindex="4" />
+        <input id="INPUT_VRES" class="large" value="" type="text" placeholder="1080"onfocus="this.select();"tabindex="4" />
         <div class="copylink hasTooltip" id="COPY_BTN" onclick="copy_DIU_URL();">
             <svg class="copylinkbutton copy" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:cc="http://creativecommons.org/ns#" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:svg="http://www.w3.org/2000/svg" xmlns="http://www.w3.org/2000/svg" xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd" xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape" inkscape:version="1.0 (4035a4fb49, 2020-05-01)" sodipodi:docname="content_copy_white_48px.svg" id="svg4" version="1.1" x="0px" y="0px" viewBox="0 0 48 48" height="48" width="48">
                 <path id="path2" d="M32 2H8C5.79 2 4 3.79 4 6v28h4V6h24V2zm6 8H16c-2.21 0-4 1.79-4 4v28c0 2.21 1.79 4 4 4h22c2.21 0 4-1.79 4-4V14c0-2.21-1.79-4-4-4zm0 32H16V14h22v28z" />
@@ -77,10 +77,10 @@
         </h1>
         <div id="matchmaker_instructions" style="font-size:120%; align-self:center;">Resolution or aspect ratio of secondary display:</div>
         <div class="eq_height_input">
-            <input id="INPUT_HRES2" class="large" type="text" placeholder="2560" onchange="update();" oninput="this.onchange();" onfocus="this.select();" />
+            <input id="INPUT_HRES2" class="large" type="text" placeholder="2560" onfocus="this.select();" />
             <span class="large_ratio" id="height_ratio_symbol" style='display:none;'>&#x2236;</span>
             <span class="large_times" id="height_times_symbol">&#10005;</span>
-            <input id="INPUT_VRES2" class="large" type="text" placeholder="1080" onchange="update();" oninput="this.onchange();" onfocus="this.select();" />
+            <input id="INPUT_VRES2" class="large" type="text" placeholder="1080" onfocus="this.select();" />
             <div>
                 <form id="height_density_select" class='height_density_select' onclick='switchHeightDensity();'>
                     <label><input id="height_radio" name="height_density" value="height" type="radio" checked /><span>Match height</span></label>

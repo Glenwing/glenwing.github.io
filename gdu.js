@@ -279,13 +279,13 @@ var global_selectedPage = '';
 var global_selectedElement = '';
 var global_DescriptionFunction = function() { return; };
 
-function selectRow(el) {
-    previousEl = global_selectedElement || '';
-    if (previousEl != '') { deselectRow(); }
-    if (previousEl != el) {
+function selectRow(el, callback) {
+    previousEl = global_selectedElement;
+    if (previousEl !== '') { deselectRow(); } // Deselect currently selected row first
+    if (previousEl !== el) {
         el.classList.add('selected');
         global_selectedElement = el;
-        loadDescription(el);
+        loadDescription(el, callback); // Callback may be undefined, it will be handled in loadDescription()
     }
 }
 
@@ -302,18 +302,28 @@ document.addEventListener('keydown', function(event) {
 });
 
 var loadDescription = function (el, callback) {
-    if ($(el).data('descriptionContent') === undefined) {
+    console.log('Load Description for ID ' + el.id);
+    if ($(el).data('descriptionCache') === undefined) {
+        console.log('Description loading from URL: ' + global_selectedPage + '/' + global_DescriptionRegistry[el.id]);
         $('#description').load(global_selectedPage + '/' + global_DescriptionRegistry[el.id], function() {
-            $(el).data('descriptionContent', $('#description').html());
-            $(el).data('descriptionFunction', global_DescriptionFunction);
-            if (callback !== undefined) { callback(); }
+            console.log('Finished loading page');
+            $(el).data('descriptionCache', $('#description').html());
+            $(el).data('descriptionScript', global_DescriptionFunction);
+            if (callback !== undefined) { console.log('Executing callback function'); callback(); }
             //global_DescriptionFunction();
         });
     }
     else {
-        $('#description').html($(el).data('descriptionContent'));
-        global_DescriptionFunction = $(el).data('descriptionFunction');
-        //global_DescriptionFunction();
+        console.log('Description loading from cache');
+        $('#description').html($(el).data('descriptionCache'));
+        if ($(el).data('descriptionScript') !== undefined) {
+            global_DescriptionFunction = $(el).data('descriptionScript');
+        }
+        else {
+            console.log('Description script was undefined, setting blank function')
+            global_DescriptionFunction = function () { return; }
+        }
+        if (callback !== undefined) { console.log('Executing callback function'); callback(); }
     }
 }
 
