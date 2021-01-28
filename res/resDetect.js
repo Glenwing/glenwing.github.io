@@ -77,7 +77,7 @@ function resDetect () {
         resScale = pxRatio;
     }
     else if (engine == 'Blink') {
-        if (window.outerWidth == window.innerWidth + 16) {
+        if (window.outerWidth == window.innerWidth + 16 || UA.indexOf('mobi') != -1) {
             // This condition indicates 100% zoom but with a non-maximized window
             zoom_raw = Decimal(1);
             zoom_tol_above = Decimal(0);
