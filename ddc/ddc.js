@@ -808,33 +808,33 @@ function ddcParseURL() {
 
 function ddcLoad() {
     global_DescriptionRegistry = { // Used for associating HTML files for loading detailed descriptions
-        'INPUT_SIZE':       './DescriptionFiles/Description_DiagonalSize.html',
-        'INPUT_HRES':       './DescriptionFiles/Description_InputHres.html',
-        'INPUT_VRES':       './DescriptionFiles/Description_InputVres.html',
-        'INPUT_HRES2':      './DescriptionFiles/Description_InputHres2.html',
-        'INPUT_VRES2':      './DescriptionFiles/Description_InputVres2.html',
+        'INPUT_SIZE':       'DescriptionFiles/Description_DiagonalSize.html',
+        'INPUT_HRES':       'DescriptionFiles/Description_InputHres.html',
+        'INPUT_VRES':       'DescriptionFiles/Description_InputVres.html',
+        'INPUT_HRES2':      'DescriptionFiles/Description_InputHres2.html',
+        'INPUT_VRES2':      'DescriptionFiles/Description_InputVres2.html',
     
-        'selectRatio':      './DescriptionFiles/Description_Ratio.html',
-        'selectTotalPx':    './DescriptionFiles/Description_TotalPixels.html',
-        'selectPxDensity':  './DescriptionFiles/Description_PixelDensity.html',
-        'selectPxPitch':    './DescriptionFiles/Description_PixelPitch.html',
-        'selectDiag':       './DescriptionFiles/Description_DiagonalSize.html',
-        'selectWidth':      './DescriptionFiles/Description_Width.html',
-        'selectHeight':     './DescriptionFiles/Description_Height.html',
-        'selectArea':       './DescriptionFiles/Description_Area.html',
+        'selectRatio':      'DescriptionFiles/Description_Ratio.html',
+        'selectTotalPx':    'DescriptionFiles/Description_TotalPixels.html',
+        'selectPxDensity':  'DescriptionFiles/Description_PixelDensity.html',
+        'selectPxPitch':    'DescriptionFiles/Description_PixelPitch.html',
+        'selectDiag':       'DescriptionFiles/Description_DiagonalSize.html',
+        'selectWidth':      'DescriptionFiles/Description_Width.html',
+        'selectHeight':     'DescriptionFiles/Description_Height.html',
+        'selectArea':       'DescriptionFiles/Description_Area.html',
     
-        'selectDiag2':      './DescriptionFiles/Description_Diag_MatchingHeight.html',
-        'selectWidth2':     './DescriptionFiles/Description_Width_MatchingHeight.html',
-        'selectHeight2':    './DescriptionFiles/Description_Height_MatchingHeight.html',
-        'selectPxDensity2': './DescriptionFiles/Description_PixelDensity_Matching.html',
-        'selectRatio2':     './DescriptionFiles/Description_Ratio_Matching.html',
+        'selectDiag2':      'DescriptionFiles/Description_Diag_MatchingHeight.html',
+        'selectWidth2':     'DescriptionFiles/Description_Width_MatchingHeight.html',
+        'selectHeight2':    'DescriptionFiles/Description_Height_MatchingHeight.html',
+        'selectPxDensity2': 'DescriptionFiles/Description_PixelDensity_Matching.html',
+        'selectRatio2':     'DescriptionFiles/Description_Ratio_Matching.html',
     
-        'selectDiag3':      './DescriptionFiles/Description_Diag_MatchingDensity.html',
-        'selectWidth3':     './DescriptionFiles/Description_Width_MatchingDensity.html',
-        'selectHeight3':    './DescriptionFiles/Description_Height_MatchingDensity.html',
-        'selectPxDensity3': './DescriptionFiles/Description_PixelDensity_Matching.html',
-        'selectRatio3':     './DescriptionFiles/Description_Ratio_Matching.html',
-        'selectIdealRes':   './DescriptionFiles/Description_IdealResolution.html',
+        'selectDiag3':      'DescriptionFiles/Description_Diag_MatchingDensity.html',
+        'selectWidth3':     'DescriptionFiles/Description_Width_MatchingDensity.html',
+        'selectHeight3':    'DescriptionFiles/Description_Height_MatchingDensity.html',
+        'selectPxDensity3': 'DescriptionFiles/Description_PixelDensity_Matching.html',
+        'selectRatio3':     'DescriptionFiles/Description_Ratio_Matching.html',
+        'selectIdealRes':   'DescriptionFiles/Description_IdealResolution.html',
     };
 
     var unit_btn = document.getElementById('UNIT_BTN');
@@ -851,15 +851,15 @@ function ddcLoad() {
         var rows = tables[a].children[0].children;
         for (var b = 0; b < rows.length; b++) {
             if (rows[b].classList.contains('selectable') != -1) {
-                rows[b].addEventListener('click', function (event) { selectRow(event.currentTarget); updateDDC(); });
-                rows[b].addEventListener('mouseenter', function (event) { if (global_selectedElement == '') { loadDescription(event.currentTarget, updateDDC); }});
+                rows[b].addEventListener('click', function (event) { selectRow(event.currentTarget, function () { updateDDC(); }); });
+                rows[b].addEventListener('mouseenter', function (event) { if (global_selectedElement == '') { loadDescription(event.currentTarget, function () { updateDDC(); }); }});
                 rows[b].addEventListener('mouseleave', function () { clearDescription(); });
             }
         }
     }
     var inputFields = [$('#INPUT_SIZE')[0], $('#INPUT_HRES')[0], $('#INPUT_VRES')[0], $('#INPUT_HRES2')[0], $('#INPUT_VRES2')[0]];
     for (var a = 0; a < inputFields.length; a++) {
-        inputFields[a].addEventListener('mouseenter', function (event) { if (global_selectedElement == '') { loadDescription(event.currentTarget, updateDDC); }});
+        inputFields[a].addEventListener('mouseenter', function (event) { if (global_selectedElement == '') { loadDescription(event.currentTarget, function () { updateDDC(); }); }});
         inputFields[a].addEventListener('mouseleave', function () { clearDescription(); });
         inputFields[a].addEventListener('input', function () { updateDDC(); } );
     }

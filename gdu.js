@@ -302,28 +302,33 @@ document.addEventListener('keydown', function(event) {
 });
 
 var loadDescription = function (el, callback) {
-    console.log('Load Description for ID ' + el.id);
+    //console.log('Load Description for ID ' + el.id);
     if ($(el).data('descriptionCache') === undefined) {
-        console.log('Description loading from URL: ' + global_selectedPage + '/' + global_DescriptionRegistry[el.id]);
+        //console.log('Description loading from URL: ' + global_selectedPage + '/' + global_DescriptionRegistry[el.id]);
         $('#description').load(global_selectedPage + '/' + global_DescriptionRegistry[el.id], function() {
-            console.log('Finished loading page');
+            //console.log('Finished loading page');
             $(el).data('descriptionCache', $('#description').html());
             $(el).data('descriptionScript', global_DescriptionFunction);
-            if (callback !== undefined) { console.log('Executing callback function'); callback(); }
-            //global_DescriptionFunction();
+            if (callback !== undefined) {
+                //console.log('Executing callback function');
+                callback();
+            }
         });
     }
     else {
-        console.log('Description loading from cache');
+        //console.log('Description loading from cache');
         $('#description').html($(el).data('descriptionCache'));
         if ($(el).data('descriptionScript') !== undefined) {
             global_DescriptionFunction = $(el).data('descriptionScript');
         }
         else {
-            console.log('Description script was undefined, setting blank function')
+            //console.log('Description script was undefined, setting blank function')
             global_DescriptionFunction = function () { return; }
         }
-        if (callback !== undefined) { console.log('Executing callback function'); callback(); }
+        if (callback !== undefined) {
+            //console.log('Executing callback function');
+            callback();
+        }
     }
 }
 

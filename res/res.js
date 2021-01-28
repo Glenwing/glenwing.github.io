@@ -219,8 +219,9 @@ function resLoad() {
     for (var a = 0; a < resResultTableRows.length; a++) {
         if (resResultTableRows[a].classList.contains('selectable') != -1) {
             resResultTableRows[a].addEventListener('click', function (event) {
-                selectRow(event.currentTarget);
-                global_DescriptionFunction();
+                selectRow(event.currentTarget, function () {
+                    global_DescriptionFunction();
+                });
             });
             resResultTableRows[a].addEventListener('mouseenter', function (event) {
                 if (global_selectedElement == '') {
