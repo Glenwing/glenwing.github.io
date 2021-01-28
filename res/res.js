@@ -102,7 +102,7 @@ function updateRes() {
     }
 
     //$('#RESULT_UA').html(navigator.userAgent);
-    $('#RESULT_BROWSER').html(engine);
+    $('#RESULT_ENGINE').html(engine);
 
     if (engine === 'Blink') {
         $('#textFill_Blink_1').html(LongDivide(os.times(100), 1, {p: 0, approx:''} ) + '%');
@@ -130,7 +130,6 @@ function updateRes() {
         $('#mainText_Blink').css('display', 'none');
         $('#mainText_GeckoEdgeWebKit').css('display', 'block');        
     }
-
 }
 
 /*
@@ -200,23 +199,27 @@ function clear_resDescription() {
 
 function resLoad() {
     global_DescriptionRegistry = { // Used for associating HTML files for loading detailed descriptions
-        'selectWindowScreenWidth':  'DescriptionFiles/Description_WS_Width.html',
-        'selectWindowScreenHeight': 'DescriptionFiles/Description_WS_Height.html',
-        'selectPxRatio':            'DescriptionFiles/Description_Px_Ratio.html',
+        'selectWindowScreenWidth':  'DescriptionFiles/Description_window.screen.width.html',
+        'selectWindowInnerWidth':   'DescriptionFiles/Description_window.innerWidth.html',
+        'selectWindowOuterWidth':   'DescriptionFiles/Description_window.outerWidth.html',
+        'selectWindowScreenHeight': 'DescriptionFiles/Description_window.screen.height.html',
+        'selectPxRatio':            'DescriptionFiles/Description_window.devicePixelRatio.html',
         'selectZoomRatio':          'DescriptionFiles/Description_Zoom_Ratio.html',
         'selectOSRatio':            'DescriptionFiles/Description_OS_Ratio.html',
+        'selectViewportRatio':      'DescriptionFiles/Description_VP_Ratio.html',
         'selectCalculatedWidth':    'DescriptionFiles/Description_Calc_Width.html',
         'selectToleranceWidth':     'DescriptionFiles/Description_Tol_Width.html',
         'selectCalculatedHeight':   'DescriptionFiles/Description_Calc_Height.html',
         'selectToleranceHeight':    'DescriptionFiles/Description_Tol_Height.html',
+        'selectEngine':             'DescriptionFiles/Description_Engine.html',
     };
 
     // Fills the elements on the page with the event listeners necessary for the mouseover descriptions to work
     var resResultTableRows = document.getElementById('resResultTable_1').children[0].children;
     for (var a = 0; a < resResultTableRows.length; a++) {
         if (resResultTableRows[a].classList.contains('selectable') != -1) {
-            resResultTableRows[a].addEventListener('click', function (event) { selectRow(event.currentTarget); });
-            resResultTableRows[a].addEventListener('mouseenter', function (event) { if (global_selectedElement == '') { loadDescription(event.currentTarget); global_DescriptionFunction(); }});
+            resResultTableRows[a].addEventListener('click', function (event) { selectRow(event.currentTarget); global_DescriptionFunction(); });
+            resResultTableRows[a].addEventListener('mouseenter', function (event) { if (global_selectedElement == '') { loadDescription(event.currentTarget, function () { global_DescriptionFunction(); }) }});
             resResultTableRows[a].addEventListener('mouseleave',  function () { clearDescription() });
             resResultTableRows[a].dataset.descriptionFilepath = global_DescriptionRegistry[resResultTableRows[a].id];
             resResultTableRows[a].dataset.descriptionCache = '';

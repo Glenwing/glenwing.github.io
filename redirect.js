@@ -23,13 +23,13 @@ function frameLoadPage(sidebarID, directoryName, suffix) {
         }
     }
     if ($('#' + sidebarID).data('pageCache') === '') {
-        console.log('Loading new page');
+        //console.log('Loading new page');
         $('#MainWindow').load('./' + directoryName + '/' + directoryName + '.html', function () {
             $('#' + sidebarID).data('pageCache', $('#MainWindow').html());
         });
     }
     else {
-        console.log('Loading page from cache');
+        //console.log('Loading page from cache');
         $('#MainWindow').html($.parseHTML($('#' + sidebarID).data('pageCache')));
         pageLoadFunction = $('#' + sidebarID).data('onLoad');
         pageLoadFunction();
