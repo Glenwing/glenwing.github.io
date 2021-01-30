@@ -199,11 +199,11 @@ global_katexOptions = {
     }
 };
 
-katex.oldRender = katex.render;
+/* katex.oldRender = katex.render;
 katex.render = function (expression, baseNode, options) {
     katex.oldRender(expression, baseNode, options);
     baseNode.innerHTML = baseNode.innerHTML.replaceAll('<span class="mord">µ</span>', '<span class="mord" style="font-family:Latin Modern Serif">µ</span>');
-}
+} */
 
 
 function activateMatchmaker() {
