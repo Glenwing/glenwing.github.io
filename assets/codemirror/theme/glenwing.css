@@ -1,0 +1,62 @@
+/**
+ *	@package    glenwing theme
+ *	@version    1.0.0
+ *	@author		  Inter-Net PRO
+ *	@link       https://inter-net.pro
+ *	@github     https://github.com/Inter-Net-Pro/Theme-VSCode-Dark
+ */
+.cm-s-glenwing span.cm-meta {color: #3F9CCA}
+.cm-s-glenwing span.cm-number {color: #B5CEA8}
+.cm-s-glenwing span.cm-number {color: #89B511}
+.cm-s-glenwing span.cm-keyword {color: #3F9CCA;}
+.cm-s-glenwing span.cm-def {color:#9CDCFE}
+.cm-s-glenwing span.cm-variable {color: #DDD6A3}
+.cm-s-glenwing span.cm-variable-2 {color: #9CDCFE}
+.cm-s-glenwing span.cm-variable-3,
+.cm-s-glenwing span.cm-type {color: #A9B7C6}
+.cm-s-glenwing span.cm-property {color: #9CDCFE}
+.cm-s-glenwing span.cm-operator {color: #D4D4D4}
+.cm-s-glenwing span.cm-string {color: #CE9178}
+.cm-s-glenwing span.cm-string {color: #CE8349}
+.cm-s-glenwing span.cm-string-2 {color: #6A8759}
+.cm-s-glenwing span.cm-comment {color: #6A9955}
+.cm-s-glenwing span.cm-link {color: #287BDE}
+.cm-s-glenwing span.cm-atom {color: #3F9CCA}
+.cm-s-glenwing span.cm-error {color: #BC3F3C}
+.cm-s-glenwing span.cm-tag {color: #3F9CCA}
+.cm-s-glenwing span.cm-attribute {color: #9CDCFE}
+.cm-s-glenwing span.cm-qualifier {color: #D7BA7D}
+.cm-s-glenwing span.cm-bracket {color: #808080}
+
+.cm-s-glenwing.CodeMirror {
+    background: #1A1A1A;
+    color: #E9E9E9;
+}
+.cm-s-glenwing .CodeMirror-cursor {border-left: 1px solid #BEBEBE;}
+.CodeMirror-activeline-background {background: #3A3A3A;}
+.cm-s-glenwing div.CodeMirror-selected {background: #1E496C}
+.cm-s-glenwing .CodeMirror-gutters {
+    background: #222222;
+    border-right: 1px solid #404040;
+    color: #606366;
+    padding-right: 5px;
+}
+.cm-s-glenwing span.cm-builtin {color: #A9B7C6;}
+.cm-s-glenwing {
+    font-family: 'Inconsolata', 'Consolas', 'Courier New', monospace, serif;
+    font-weight: 400;
+    font-size: 1.1rem;
+    line-height: 125%;
+}
+.cm-s-glenwing .CodeMirror-matchingbracket {background-color: #3B514D; color: yellow !important;}
+
+.CodeMirror-hints.glenwing {
+  font-family: 'Inconsolata', 'Consolas', 'Courier New', monospace;
+  color: #9C9E9E;
+  background-color: #3B3E3F !important;
+}
+
+.CodeMirror-hints.glenwing .CodeMirror-hint-active {
+  background-color: #494D4E !important;
+  color: #9C9E9E !important;
+}
